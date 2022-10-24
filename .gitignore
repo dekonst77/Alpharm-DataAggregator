@@ -1,0 +1,8 @@
+/.vs/DataAggregator/v16/
+/packages/
+/DataAggregator.Core/bin/
+/DataAggregator.Core/obj/
+/DataAggregator.Domain/bin/
+/DataAggregator.Domain/obj/
+/DataAggregator.Web/bin/
+/DataAggregator.Web/obj/
