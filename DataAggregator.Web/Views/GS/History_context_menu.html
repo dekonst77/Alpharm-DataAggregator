@@ -1,0 +1,110 @@
+﻿<div style="z-index: 1;width: 550px;" class="context-menu-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+        </div>
+        <div class="panel-body">
+            <div class="row padding1" ng-show="IsGSwork">
+                <div class="col-md-3 padding1">
+                    <label>Комментарии</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Comment('');">Очистить</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Comment('ЛПУ');">ЛПУ</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Comment('нет адреса');">нет адреса</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Comment('Склад');">Склад</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Comment('ИНН нет в ГС');">ИНН нет в ГС</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Comment('ветаптека');">ветаптека</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row padding1" ng-show="IsGSwork">
+                <div class="col-md-3 padding1">
+                    <label>Статус</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Status(0);">Убрать</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Status(5);">Мусор (shift+x)</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Status(2);">На заведение (shift+z)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row padding1" ng-show="IsGSwork">
+                <div class="col-md-3 padding1">
+                    <label>Категория</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Category(10);">Аптеки</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Category(20);">Дистрибъюторы</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_Category(30);">ЛПУ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row padding1" ng-show="IsTypeClient">
+                <div class="col-md-3 padding1">
+                    <label>Тип Получателя</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="History_Set_TypeClients('');">Убрать</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_TypeClients('РОЗН');">РОЗН</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_TypeClients('ОПТ');">ОПТ</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_TypeClients('ПРОЧ');">ПРОЧ</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_TypeClients('НД');">НД</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row padding1" ng-show="IsGSwork">
+                <div class="col-md-3 padding1">
+                    <label>Действия</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="History_Copy();">Копировать (shift+c)</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Paste();">Вставить (shift+v)</button>
+                            <button type="button" class="btn btn-default" ng-click="History_SetGSId(-55);">Принудительно Красивый ИД</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Clear();">Зачистить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row padding1" ng-show="IsGSwork">
+                <div class="col-md-3 padding1">
+                    <label>Действия</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="History_Set_CheckStat(1);">Кривой адрес</button>
+                            <button type="button" class="btn btn-default" ng-click="History_Set_CheckStat(10);">Проверено</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row padding1" ng-show="IsGSwork">
+                <div class="col-md-3 padding1">
+                    <label>!Внимание!</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="GS_add_from_History_coding();">Добавить в ГС</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

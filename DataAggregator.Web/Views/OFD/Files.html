@@ -1,0 +1,61 @@
+﻿<div ng-controller="OFDController" ng-init="Init_Files();" cg-busy="dataLoading" ng-cloak class="fullHeight" ng-style="">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style type="text/css">
+
+        .myGrid {
+            min-height: 100%;
+        }
+
+        .fullHeight {
+            height: 100%;
+            padding: 1px;
+        }
+
+        .fullHeightGrid {
+            height: 85%;
+            padding: 1px;
+        }
+    </style>
+
+    <div class="panel panel-default fullHeight">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <p class="input-group ap-required">
+                        <input type="text"
+                               name="files_dt"
+                               ng-blur="setDateValueNullIfEmpty($event)"
+                               ng-change=""
+                               class="form-control"
+                               ng-model-options="{ timezone: 'UTC' }"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="files_dt.Value"
+                               is-open="files_dt.Opened"
+                               placeholder="{{'PERIOD_END' | translate}}"
+                               datepicker-options="{minMode: 'day', showWeeks: false }"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="files_dt.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-1 padding3">
+                    <button class="btn btn-success btn-sm" ng-click="Files_show()"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body fullHeightGrid">
+            <ui-grid-control options="Grid_Files.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+        </div>
+    </div>
+</div>
+

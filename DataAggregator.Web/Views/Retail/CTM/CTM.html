@@ -1,0 +1,28 @@
+﻿<div ng-controller="CTMController" cg-busy="dataLoading" ng-init="Init();" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+
+                <div class="row form-group">
+                    <div class="col-md-1 padding3">
+                        <select name="period" ng-class="{'has-error': Supplier.$invalid}" required class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
+                    </div>
+
+                    <button class="btn btn-success btn-sm" type="button" ng-click="Search()" ng-disabled="currentperiod==null">
+                        <span class="glyphicon glyphicon-search" data-translate="BUTTONS.SELECT"></span>
+                    </button>
+                    <div class="btn btn-info btn-sm" ngf-select="Network_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <span class="glyphicon glyphicon-upload" data-translate="BUTTONS.IMPORT"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel" data-context-menu="Views/Retail/CTM/CTM_context_menu.html">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+    </div>
+
+</div>

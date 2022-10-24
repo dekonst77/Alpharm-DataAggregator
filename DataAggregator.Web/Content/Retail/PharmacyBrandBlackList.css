@@ -1,0 +1,11 @@
+﻿.pharmacy-brand-black-list .btn-file input[type="file"] {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    cursor: inherit;
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}

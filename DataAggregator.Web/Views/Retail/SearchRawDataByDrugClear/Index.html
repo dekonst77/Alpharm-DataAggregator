@@ -1,0 +1,94 @@
+﻿<div ng-controller="SearchRawDataByDrugClearController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <form name="filterForm" novalidate>
+                <div class="form-group row">
+
+                    <div class="col-md-2">
+                        <label data-translate="PERIOD_START"></label>
+                        <p class="input-group ap-required">
+                            <input name="startDate"
+                                   type="text"
+                                   readonly
+                                   required
+                                   value-comparer="filter.endDate"
+                                   value-comparer-type="<="
+                                   class="form-control"
+                                   uib-datepicker-popup="{{format}}"
+                                   ng-model="filter.startDate"
+                                   is-open="popupStartDate.opened"
+                                   placeholder="{{'PERIOD_START' | translate}}"
+                                   datetimepicker-neutral-timezone
+                                   datepicker-options="{minMode: 'month'}"
+                                   datepicker-mode="'month'" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openStartDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                        <div class="has-error help-block" ng-if="filterForm.startDate.$invalid">
+                            <small ng-if="filterForm.startDate.$error.valueComparer" data-translate="ERROR.PERIOD"></small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label data-translate="PERIOD_END"></label>
+                        <p class="input-group ap-required">
+                            <input name="endDate"
+                                   type="text"
+                                   readonly
+                                   required
+                                   class="form-control"
+                                   uib-datepicker-popup="{{format}}"
+                                   ng-model="filter.endDate"
+                                   is-open="popupEndDate.opened"
+                                   placeholder="{{'PERIOD_END' | translate}}"
+                                   datetimepicker-neutral-timezone
+                                   datepicker-options="{minMode: 'month'}"
+                                   datepicker-mode="'month'" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openEndDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label data-translate="RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.DRUG_CLEAR_IDS"></label>
+                        <input name="drugClearIds"
+                               type="text"
+                               class="form-control"
+                               ng-model="filter.drugClearIds"
+                               ng-model-options="{debounce: 500}"
+                               value-ids
+                               placeholder="{{'RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.DRUG_CLEAR_IDS' | translate}}">
+                        <div class="has-error help-block">
+                            <small ng-if="filterForm.drugClearIds.$error.valueIds" data-translate="ERROR.IDS_FIELD"></small>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label data-translate="RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.ORIGINAL_DRUG_NAME"></label>
+                        <input name="drugName"
+                               type="text"
+                               class="form-control"
+                               ng-model="filter.drugName"
+                               placeholder="{{'RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.ORIGINAL_DRUG_NAME' | translate}}">
+                    </div>
+
+                    <div class="col-md-1">
+                        <br />
+                        <button type="button" class="btn btn-primary" ng-click="search()" ng-disabled="filterForm.$invalid" data-translate="BUTTONS.SEARCH"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="rawDataByDrugClearGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>
+

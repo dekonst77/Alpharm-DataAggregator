@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0506ed09-66b8-4f7a-8996-7e77a4c49246" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:64004/RetailFileService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="RetailFileService.disco" MetadataType="Disco" ID="5257ffce-2108-421d-a179-7f5d5de806ad" SourceId="1" SourceUrl="http://localhost:64004/RetailFileService.svc?disco" />
+    <MetadataFile FileName="RetailFileService.xsd" MetadataType="Schema" ID="cea20fa2-5c25-405f-99d1-dd60bf16524a" SourceId="1" SourceUrl="http://localhost:64004/RetailFileService.svc?xsd=xsd2" />
+    <MetadataFile FileName="RetailFileService1.xsd" MetadataType="Schema" ID="6767ac2a-61b7-4e83-a12c-60a38a4599e4" SourceId="1" SourceUrl="http://localhost:64004/RetailFileService.svc?xsd=xsd1" />
+    <MetadataFile FileName="RetailFileService2.xsd" MetadataType="Schema" ID="a01800dc-1d64-4ca8-9ae4-c03bad881149" SourceId="1" SourceUrl="http://localhost:64004/RetailFileService.svc?xsd=xsd0" />
+    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="896fe4c7-2a99-4ee9-badd-8517e7971f7d" SourceId="1" SourceUrl="http://localhost:64004/RetailFileService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

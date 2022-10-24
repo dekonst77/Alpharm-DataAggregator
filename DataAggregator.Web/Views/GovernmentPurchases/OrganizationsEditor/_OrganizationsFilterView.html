@@ -1,0 +1,84 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Фильтр организаций</h3>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Id</label>
+                <input type="text" ng-model="filter.Id" ng-enter="ok()" class="form-control" autofocus>
+            </div>
+            <div class="col-md-6">
+                <label>ИНН</label>
+                <input type="text" ng-model="filter.Inn" ng-enter="ok()" class="form-control" autofocus>
+            </div>
+            <div class="col-md-6">
+                <label>Тип организации</label>
+                <input type="text" ng-model="filter.OrganizationType" ng-enter="ok()" uib-typeahead="organizationType as organizationType.Name for organizationType in filter.organizationTypes | filter:$viewValue | limitTo:8" typeahead-select-on-exact="true" typeahead-editable="false" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-6">
+                <input type="checkbox" id="onlyEmptyTypeCbx" ng-model="filter.OnlyEmptyType"><label for="onlyEmptyTypeCbx">Только пустой тип организации</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Полное наименование</label>
+                <input type="text" ng-model="filter.FullName" ng-enter="ok()" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Наименование</label>
+                <input type="text" ng-model="filter.ShortName" ng-enter="ok()" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Федеральный округ</label>
+                <div popover-placement="bottom" uib-popover="{{filter.FederalDistrict.displayValue}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                    <multi-select ng-model="filter.FederalDistrict" ap-label="" class="multi-select-control"></multi-select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label>Субъект федерации</label>
+                <div popover-placement="bottom" uib-popover="{{filter.FederationSubject.displayValue}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                    <multi-select ng-model="filter.FederationSubject" ap-label="" class="multi-select-control"></multi-select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" id="is_LO" ng-model="filter.is_LO"><label for="is_LO">ЛО</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" id="is_CP" ng-model="filter.is_CP"><label for="is_CP">ЦП</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" id="is_Actual" ng-model="filter.is_Actual"><label for="is_Actual">Без связаных</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" id="OnlyEmptyRegion" ng-model="filter.OnlyEmptyRegion"><label for="OnlyEmptyRegion">Только пустой регион</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" id="OnlyDrugsLinked" ng-model="filter.OnlyDrugsLinked"><label for="OnlyDrugsLinked">Только связанные с ЛС</label>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-warning float-left" type="button" ng-click="clearAll()" data-translate="BUTTONS.CLEAR"></button>
+        <button class="btn btn-primary" type="button" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>
+

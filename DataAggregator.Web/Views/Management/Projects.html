@@ -1,0 +1,50 @@
+﻿<div ng-controller="ProjectController" ng-init="Project_Init();" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style>
+        .modify {
+            color: red;
+        }
+    </style>
+    <div class="auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="row">
+            <div class="col-md-3 padding3">
+                <div class="panel panel-default no-padding">
+                    <div class="panel-heading no-padding">
+                        <button class="btn btn-success btn-sm" ng-click="ProjectNew(0);"><span class="glyphicon glyphicon-plus-sign">Новый</span></button>
+                        <button class="btn btn-success btn-sm" ng-click="ProjectNew(1);" ng-disabled="!Project_IsRowSelection"><span class="glyphicon glyphicon-plus-sign">Клонировать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="ProjectSave();" ng-disabled="!Project_NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                    <div class="panel-body no-padding auto-item-panel">
+                        <div></div>
+                        <ui-grid-control options="Grid_Project.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+                    </div>
+                </div>
+                <!--<ui-grid-control options="Grid_Project.Options" class="ui-grid-enable-content-selection myGrid" style="height:100%"></ui-grid-control>-->
+            </div>
+            <div class="col-md-9 padding3">
+                <div class="panel panel-default no-padding">
+                    <div class="panel-heading no-padding">
+                        <button class="btn btn-success btn-sm" ng-click="StepNew();" ng-disabled="!IsEditProject(currentProject)"><span class="glyphicon glyphicon-plus-sign">Новый</span></button>
+                        <button class="btn btn-success btn-sm" ng-click="StepDelete();" ng-disabled="!IsEditProject(currentProject)"><span class="glyphicon glyphicon-plus-sign">Удалить</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="StepSave();" ng-disabled="!Step_NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                    <div class="panel-body no-padding auto-item-panel">
+                        <ui-grid-control options="Grid_Step.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div>
+            <ui-grid-control options="Grid_History.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+        </div>
+    </div>
+    </div>

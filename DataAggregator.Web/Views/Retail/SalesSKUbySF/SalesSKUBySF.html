@@ -1,0 +1,112 @@
+﻿<div ng-controller="SalesSKUBySFController" cg-busy="{promise:dataLoading, message:message}" ng-init="SalesSKUbySF_Init();" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <style>
+        .initialdata {
+            background-color: rgba(201, 201, 201, 1.0);
+        }
+
+        .calculatedata {
+            background-color: rgba(255, 242, 204, 1.0);
+        }
+
+        .ofddata {
+            background-color: rgba(237, 237, 237, 1.0);
+        }
+
+        .ecomdata {
+            background-color: rgba(180, 198, 231, 1.0);
+        }
+
+        .distrdata {
+            background-color: #e82b17;
+        }
+
+        .totalsum {
+            background-color: rgba(198, 224, 180, 1.0);
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .row_1 {
+            background-color: navajowhite;
+        }
+
+        .row_2 {
+            background-color: palegoldenrod;
+        }
+
+        .row_total {
+            background-color: lightcyan;
+            font-weight: bold;
+        }
+
+        .editable {
+            background-color: green;
+        }
+
+        li {
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+
+            <div class="row">
+
+                <div class="col-md-6 col-lg-5 padding3">
+
+                    <div class="col-md-3 col-lg-3 padding3">
+                        <select name="period" ng-class="{'has-error': Supplier.$invalid}" required class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"> </select>
+                    </div>
+
+                    <div class="col-md-9 col-lg-9 padding3">
+                        <div ng-dropdown-multiselect="" options="selectByRegionData" selected-model="selectByGroupModel" extra-settings="selectByGroupSettings" translation-texts="translation" events="selectByEvents"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-7 padding3">
+                    <div class="btn-group col-md-3 col-lg-3 padding3" role="group">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="SalesSKUbySF_Search();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-refresh"> Выбрать</span> </button>
+                        <!--<button type="button" class="btn btn-warning btn-sm" ng-disabled="!inactive" ng-click=""> <span class="glyphicon glyphicon-floppy-disk"> Сохранить</span> </button>-->
+                        <button type="button" class="btn btn-info btn-sm" ng-click="SalesSKUbySF_To_Excel();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-upload"> Экспорт</span> </button>
+                        <div class="btn btn-info btn-sm" ng-disabled="inactive" ngf-select="SalesSKUbySF_from_Excel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"> <span class="glyphicon glyphicon-download"> Импорт</span> </div>
+                    </div>
+
+                    <div class="btn-group col-md-2 col-lg-2 padding3">
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Отчёты <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li ng-if="IsSelectedPeriod()">
+                                <a ng-href="" data-translate="Рейтинги по РФ и СФ (СКЮ и Корп)" ng-click="Ratings_To_Excel();"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="btn-group col-md-7 col-lg-7 padding3" role="group">
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="Grid.NeedSave" ng-click="RecalcDistrData();"> <span class="glyphicon glyphicon-flash"> ДО применить</span> </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="Grid.NeedSave" ng-click="RecalcInitialData();"> <span class="glyphicon glyphicon-flash"> AlphaBitSums применить</span> </button>
+                        <button class="btn btn-danger btn-sm" ng-click="RecalcOFDData();"> <span class="glyphicon glyphicon-scale"> ОФД применить</span> </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="Grid.NeedSave" ng-click="RecalcCalculatedData();"> <span class="glyphicon glyphicon-flash"> Пересчитать</span> </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+    </div>
+
+</div>
+
+

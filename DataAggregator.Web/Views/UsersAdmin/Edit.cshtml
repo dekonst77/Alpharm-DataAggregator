@@ -1,0 +1,127 @@
+﻿@model DataAggregator.Web.Models.EditUserViewModel
+
+@{
+    ViewBag.Title = "Управление пользователями: редактирование пользователя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <script>
+        angular.lowercase = angular.$$lowercase;
+    </script>
+@section PartHeader
+{
+    <link href="~/Scripts/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+    <script src="~/Scripts/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker({
+                format: "dd.mm.yyyy",
+                language: "ru"
+            });
+        });
+
+        function lockedChanged(val) {
+            if (val) {
+                var today = new Date();
+                var month = ((today.getMonth() + 1) < 10) ? ("0" + (today.getMonth() + 1)) : (today.getMonth() + 1);
+                var day = today.getDate() < 10 ? ("0" + today.getDate()) : today.getDate();
+                var year = today.getFullYear();
+
+                $("#LockDate")[0].value = day + "." + month + "." + year;
+            } else {
+                $("#LockDate")[0].value = "";
+            }
+        }
+    </script>
+}
+
+<h4>Редактирование пользователя</h4>
+
+<div id="page-block" style="height: 95%; overflow-y: auto">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr/>
+            @Html.ValidationSummary("", new { @class = "text-error" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.Surname, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.MiddleName, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.Locked, new { @class = "control-label col-md-5" })
+                        <div class="col-md-5">
+                            @Html.CheckBoxFor(m => m.Locked, new { @class = "form-control", @style = "width: 13px", @onchange = "lockedChanged(this.checked);" })
+                        </div>
+                        @Html.LabelFor(model => model.LockDate, new { @class = "control-label col-md-5" })
+                        <div class="col-md-5">
+                            @Html.TextBoxFor(m => m.LockDate, new { @class = "form-control datepicker", @id = "LockDate" })
+                        </div>
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.MultipleAuthentication, new { @class = "control-label col-md-5" })
+                        <div class="col-md-5">
+                            @Html.CheckBoxFor(m => m.MultipleAuthentication, new { @class = "form-control", @style = "width: 13px" })
+                        </div>
+                        @Html.LabelFor(model => model.DepartmentId, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(m => m.DepartmentId, Model.Departments, "-- Выберите подразделение --", new { @class = "form-control" })
+                        </div>
+                    </div>                               
+                    <div class="col-md-6">
+                        @Html.Label("Роли")
+                        @foreach(var cat in Model.RolesList.Select(s => s.Category).Distinct())
+                        {
+                        <div class="row">
+                            @Html.Label(cat, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10"></div>
+                            @foreach (var item in Model.RolesList.Where(w => w.Category == cat).OrderBy(o => o.Name))
+                            {
+                                var disabled = item.Name == "Admin" || item.Name == "UserManager";
+                        <label>
+                            <input type="checkbox" name="SelectedRole" value="@item.Name" checked="@item.Selected" disabled="@disabled" class="checkbox-inline" />
+                            @item.Name (@item.Description)
+                        </label>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Сохранить" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Назад к списку пользователей", "Index")
+    </div>
+</div>

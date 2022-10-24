@@ -1,0 +1,145 @@
+﻿<div ng-controller="ClientsController" cg-busy="dataLoading" ng-init="ReportInit();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style>
+        .modify {
+            color: red;
+        }
+
+        .myGrid {
+            min-height: 100%;
+        }
+
+        .fullHeight {
+            height: 100%;
+            padding: 1px;
+        }
+
+        .fullHeightGrid {
+            height: 85%;
+            padding: 1px;
+        }
+    </style>
+    <div class="panel panel-default fullHeight" style="margin-bottom:1px;">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6 padding3">
+                    <button class="btn btn-warning btn-sm" ng-click="Report_save();" ng-disabled="!NeedSave_Report"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    <button class="btn btn-primary btn-sm" ng-click="Report_New();"><span class="glyphicon glyphicon-plus-sign">Новый</span></button>
+                    <button class="btn btn-danger btn-sm" ng-click="Report_Delete();"><span class="glyphicon glyphicon-plus-sign">Удалить</span></button>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-md-1 padding3">
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item.Value for item in list_Rep_Type track by item.Id" ng-model="currentReport.Rep_TypeId"></select>
+                </div>
+                <div class="col-md-1 padding3">
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item.Value for item in list_Workers track by item.Id" ng-model="currentReport.WorkerId"></select>
+                </div>
+            </div>-->
+        </div>
+        <div class="panel-body fullHeightGrid">
+            <ui-grid-control options="Grid_Report.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal_Period">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Периодичность рассылки{{Period_cur}}</h4>
+                </div>
+                <div class="modal-body" style="height:400px">
+                    <div>
+                        <div class="btn-group">
+                            <label>
+                                <input type="checkbox" ng-model="week[0]">{{weekP[0]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="week[1]">{{weekP[1]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="week[2]">{{weekP[2]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="week[3]">{{weekP[3]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="week[4]">{{weekP[4]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="week[5]">{{weekP[5]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="week[6]">{{weekP[6]}}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="btn-group">
+                            <label>
+                                <input type="checkbox" ng-model="month[0]">{{monthP[0]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="month[1]">{{monthP[1]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="month[2]">{{monthP[2]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="month[3]">{{monthP[3]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="month[4]">{{monthP[4]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="month[5]">{{monthP[5]}}
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-model="month[6]">{{monthP[6]}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="modal_Period_Save();">Save changes</button>
+                </div>
+            </div><!-- /.модальное окно-Содержание -->
+        </div><!-- /.модальное окно-диалог -->
+    </div><!-- /.модальное окно -->
+
+    <div class="modal fade" id="modal_Text">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{rep_param_cur_param}}</h4>
+                </div>
+                <div class="modal-body" style="height:500px">
+                    <textarea ng-model="m_value" type="text" style="height:300px;width:100%"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="modal_Text_Save();">Save changes</button>
+                </div>
+            </div><!-- /.модальное окно-Содержание -->
+        </div><!-- /.модальное окно-диалог -->
+    </div><!-- /.модальное окно -->
+</div>
+

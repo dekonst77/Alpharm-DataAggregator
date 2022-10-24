@@ -1,0 +1,208 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="GS_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="row">
+                        <div class="col-md-5 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.common" ng-change="" placeholder="ИНН, Наименование">
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.adress" ng-change="" placeholder="адрес">
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.IDS" ng-change="" placeholder="ГС ид">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.BrickId" ng-change="" placeholder="БрикИд">
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.NetworkName" ng-change="" placeholder="Имя сети в периоде">
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.PHids" ng-change="" placeholder="PharmacyId">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 padding3">
+                            
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.PharmacyBrand" ng-change="" placeholder="Бренд аптеки">
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.OperationMode" ng-change="" placeholder="Режим работы">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isNotChecked" ng-change="">Не проверенные
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isNew" ng-change="">Пустые
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isCloseOFD" ng-change="">Закрылись ОФД
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isCloseAlphaBit" ng-change="">Закрылись АБ
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.BrickError" ng-change="">БрикОшибка
+                    </label>
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isDoubleA" ng-change="">Дубли PharmacyId
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isLicExists" ng-change="">Активные Лицензии
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isCall" ng-change="">На Прозвон
+                    </label>
+                </div>
+                <div class="col-md-1 padding3">
+                    <p class="input-group">
+                        <input type="text"
+                               name="DT_filter"
+                               class="form-control padding1"
+                               ng-model-options="{ timezone: 'UTC' }"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="DT_filter.Value"
+                               is-open="DT_filter.Opened"
+                               placeholder="{{'дата' | translate}}"
+                               datepicker-options="{minMode: 'day', showWeeks: false }"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="DT_filter.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isDateAddLic" ng-change="">Даты Доб. лицензий
+                    </label>
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>Период</label>
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
+
+                </div>
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="GS_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="GS_save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <button class="btn btn-info btn-sm" ng-click="GS_ToExcel();" ng-disabled="Grid.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить</span></button>
+                        <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ngf-select="GS_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button in-roles="GS_Reestr" class="btn btn-success btn-sm" ng-disabled="Grid.NeedSave" ng-click="GS_restore_From_changelog();"><span class="glyphicon glyphicon-repeat">Восстановить GSId</span></button>
+                        <button in-roles="GS_Reestr" class="btn btn-success btn-sm" ng-disabled="Grid.NeedSave" ng-click="GS_SetEmpty();"><span class="glyphicon glyphicon-flash">Проставить пустые</span></button>
+                    </div>
+                </div>
+                </div>
+                <span style="font-size:10px">работают - (-3m: {{AGG.isExists_p3}} / -2m: {{AGG.isExists_p2}} / -1m: {{AGG.isExists_p1}} / {{AGG.isExists}})</span>
+            </div>
+    </div>
+
+    <div id="grid-block" data-context-menu="Views/GS/gs_context_menu.html" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+    <div class="modal fade" id="modal_periods">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{reestr_line__header}}</h4>
+                </div>
+                <div class="modal-body" style="height:700px">
+                    <ui-grid-control options="reestr_line_Grid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="GS_periods_Save();">Save changes</button>
+                </div>
+            </div><!-- /.модальное окно-Содержание -->
+        </div><!-- /.модальное окно-диалог -->
+    </div><!-- /.модальное окно -->
+
+    <div class="modal fade" id="modal_Calls">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{calls_header}}</h4>
+                </div>
+                <div class="modal-body" style="height:600px">
+                    <ui-grid-control options="Calls_Grid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="Calls_Save();">Save changes</button>
+                </div>
+            </div><!-- /.модальное окно-Содержание -->
+        </div><!-- /.модальное окно-диалог -->
+    </div><!-- /.модальное окно -->
+
+    <div class="modal fade" id="modal_GS_Edit">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{calls_header}}</h4>
+                </div>
+                <div class="modal-body" style="height:600px">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="modal_GS_Edit_Save();">Save changes</button>
+                </div>
+            </div><!-- /.модальное окно-Содержание -->
+        </div><!-- /.модальное окно-диалог -->
+    </div><!-- /.модальное окно -->
+</div>

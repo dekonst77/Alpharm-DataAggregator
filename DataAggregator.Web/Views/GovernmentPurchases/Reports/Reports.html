@@ -1,0 +1,17 @@
+﻿<div ng-controller="ReportsController" cg-busy="loading" ng-cloak class="mass-fixes-data">
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn btn-primary" type="button" ng-click="openFilterDialog()" data-translate="BUTTONS.FILTER"></button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" type="button" ng-click="openChangeDialog()" data-translate="BUTTONS.CHANGE"></button>
+        </div>
+        <div class="col-md-10">
+            <span>{{superText}}</span>
+        </div>
+    </div>
+    <div id="content">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>
+

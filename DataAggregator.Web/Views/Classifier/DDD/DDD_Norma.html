@@ -1,0 +1,18 @@
+﻿<div ng-controller="DDDController" cg-busy="dataLoading" ng-init="DDD_Norma_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="DDD_Norma_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-info btn-sm" ng-click="DDD_Norma_Add();"><span class="glyphicon glyphicon-search">Добавить</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="DDD_Norma_save();" ng-disabled="!Grid_DDD_Norma.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid_DDD_Norma.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

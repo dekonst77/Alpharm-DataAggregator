@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <button class="close" type="button" ng-click="$dismiss()">&times;</button>
+    <H4 style="margin:0">{{headerText}}</H4>
+</div>
+<div class="modal-body">
+    <p ng-bind-html="messageText"></p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$close()" data-translate="BUTTONS.YES"></button>
+    <button class="btn btn-primary" type="button" ng-click="$dismiss('no')" data-translate="BUTTONS.NO"></button>
+    <button class="btn btn-danger" type="button" ng-click="$dismiss()" data-translate="BUTTONS.CANCELLATION"></button>
+</div>

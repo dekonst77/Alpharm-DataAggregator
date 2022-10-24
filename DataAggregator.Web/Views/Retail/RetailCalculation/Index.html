@@ -1,0 +1,52 @@
+﻿<div ng-controller="RetailCalculationController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <uib-tabset active="active">
+            <uib-tab heading="Выпуск Ритейла" select="setTabIndex(0)">
+            </uib-tab>
+
+            <uib-tab heading="История" select="setTabIndex(1)">
+            </uib-tab>
+        </uib-tabset>
+
+        <div ng-if="currentTabIndex == 0">
+            <ng_form name="fileInfoForm">
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        <date-period period="filter.date" ng-required="true"></date-period>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <button type="button" class="btn btn-primary" ng-click="startPeriod()" ng-disabled="!canStartPeriod() || fileInfoForm.$invalid" data-translate="RETAIL.RETAIL_CALCULATION.START_PERIOD"></button>
+                        <button type="button" class="btn btn-primary" ng-click="endPeriod()" ng-disabled="!canEndPeriod() || fileInfoForm.$invalid" data-translate="RETAIL.RETAIL_CALCULATION.END_PERIOD"></button>
+                    </div>
+                    <div class="col-md-2">
+                        <br />
+                        <button type="button" class="btn btn-success" ng-click="runProcess() || fileInfoForm.$invalid" ng-disabled="!canStart()" data-translate="RETAIL.RETAIL_CALCULATION.START_ACTION"></button>
+                    </div>
+                    <div class="col-md-2">
+                        <br />
+                        <button type="button" class="btn btn-warning" ng-click="stopProcess() || fileInfoForm.$invalid" ng-disabled="!canStop()" data-translate="RETAIL.RETAIL_CALCULATION.STOP_ACTION"></button>
+                    </div>
+                </div>
+            </ng_form>
+
+        </div>
+
+        <div ng-if="currentTabIndex == 1">
+            Панель истории
+        </div>
+
+    </div>        
+
+        <div ng-if="currentTabIndex == 0" class="auto-item-panel">
+            <ui-grid-control options="dataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
+        <div ng-if="currentTabIndex == 1" class="auto-item-panel">
+            <ui-grid-control options="historyGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
+    </div>
+
+

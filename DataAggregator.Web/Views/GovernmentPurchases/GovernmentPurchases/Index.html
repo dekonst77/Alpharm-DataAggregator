@@ -1,0 +1,990 @@
+﻿<div cg-busy="purchasesInWorkLoading" ng-init="LoadSPR();" ng-controller="GovernmentPurchasesController" ng-cloak class="government-purchases base">
+    <style>
+        .IsPriceByPart {
+            color:fuchsia;
+        }
+    </style>
+    <p>
+        <button type="button" class="btn btn-primary" disabled ng-disabled="!canGetPurchases" ng-click="getPurchases()">Забрать закупки</button>
+        <button type="button" class="btn btn-primary" in-roles="GSupplierResult" disabled ng-disabled="!canGetPurchases" ng-click="getPurchasesSupplierResult()">Забрать протоколы</button>
+        <button type="button" class="btn btn-primary" disabled ng-disabled="!canGetPurchases" ng-click="getPurchasesWithContracts(0)">Забрать контракты</button>
+        <button type="button" class="btn btn-primary" in-roles="GOperator" disabled ng-disabled="!canGetPurchases" ng-click="getPurchasesWithContracts(1)">KK</button>
+        <button type="button" class="btn btn-primary" in-roles="GOperator,GOperatorRemote" disabled ng-disabled="!canGetPurchases" ng-click="getPurchasesWithContracts(2)">PDF</button>
+        <button type="button" class="btn btn-primary" in-roles="GOperator" disabled ng-disabled="!canGetPurchases" ng-click="getIsLaterPurchases()">Забрать отложенные закупки</button>
+        <button type="button" class="btn btn-primary" in-roles="GOperatorRemote,GOperator" disabled ng-disabled="!canGetPurchases" ng-click="getPurchasesByFilter()">Поиск закупок</button>
+        <button type="button" class="btn btn-primary" disabled ng-disabled="!canSetPurchases" ng-click="setPurchases()">Вернуть закупки</button>
+
+        <button type="button" class="btn btn-primary" style="float:right" in-roles="GManager" disabled ng-disabled="selectPurchase_id==0" ng-click="getLog(selectPurchase_id)">Лог изменений</button>
+        <button type="button" class="btn btn-primary" style="float:right" in-roles="GManager" disabled ng-disabled="!canGetPurchases" ng-click="CreateNewPurchase();">Создать Закупку</button>
+    </p>
+
+    <div style="overflow-y: auto;height: 750px">
+        <uib-accordion close-others="false">
+
+            <div uib-accordion-group ng-class="purchasesGrid.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Закупки в работе: {{purchasesGrid.Options.data.length}} строк">
+                <div id="purchaseGrid">
+                    <ui-grid-control options="purchasesGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+
+            <div uib-accordion-group ng-class="selectedPurchase.Id > 0 ? 'panel-default' : 'panel-danger'" heading="Описание закупки {{selectedPurchase.Number}} {{objectsReadyGrid.Options.data.length > 0 ? 'Готово' : ''}}">
+                <div class="container-fluid">
+                    <div class="row form-group">
+                        <div class="col-md-4 padding3">
+                            <label>Последнее изменение</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.LastChangedUser" disabled />
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <label>Примечание</label>
+                            <div popover-placement="top" uib-popover="{{selectedPurchase.Comment}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                                <input type="text" id="purchaseComment" maxlength="300" class="form-control" ng-model="selectedPurchase.Comment" ng-class="{highlightInput: selectedPurchase.Comment.length > 0}" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GOperator,GManager')" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <label>Номер закупки</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Number" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" />
+                        </div>
+                        <div class="col-md-1 padding3">
+                            <br />
+                            <a href="{{selectedPurchase.Url}}" target="governmentLink">ссылка</a>
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <br />
+                            <button type="button" class="btn btn-primary" ng-show="!selectedPurchaseIsEdited" ng-disabled="selectedPurchase == null" ng-click="editPurchaseInfo()">Редактировать описание закупки</button>
+                            <button type="button" class="btn btn-primary" ng-show="selectedPurchaseIsEdited" ng-disabled="selectedPurchase == null || !canSavePurchase()" ng-click="savePurchaseInfo()">Сохранить описание закупки</button>
+
+                            <!-- Кнопка удаления закупки -->
+                            <button type="button"
+                                    class="btn btn-danger"
+                                    ng-show="selectedPurchaseIsEdited && (isInRoles('GDelete,Admin'))"
+                                    ng-disabled="selectedPurchase == null"
+                                    title="Удалить"
+                                    ng-click="deletePurchaseAsk()">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12 no-padding">
+                            <label>Наименование объекта закупки</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Name" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GOperator,GManager')" />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-1 padding3">
+                            <label>Тип ФЗ</label>
+                            <select class="form-control" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-options="item as item.Name for item in LawTypeList track by item.Id" ng-model="selectedPurchase.LawType"></select>
+                        </div>
+                        <div class="col-md-1 padding3">
+                            <label>Источник</label>
+                            <select class="form-control" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-options="item as item.Name for item in SourceList track by item.Id" ng-model="selectedPurchase.Source"></select>
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <!--<label popover-placement="right" uib-popover="Способ определения поставщика (подрядчика, исполнителя)" popover-trigger="'mouseenter'" popover-append-to-body="true">Способ определения поставщика...</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Method.Name" disabled />-->
+                            <label>Способ определения поставщика (подрядчика, исполнителя)</label>
+                            <select class="form-control" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-options="item as item.Name for item in MethodList track by item.Id" ng-model="selectedPurchase.Method"></select>
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <label>Наименование эл. площадки</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.SiteName" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" />
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <label>Адрес эл. площадки</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.SiteURL" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" />
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <label>URL</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Url" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" />
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-9 no-padding">
+
+                            <div class="row form-group">
+                                <div class="col-md-2 padding3">
+                                    <label>Этап закупки</label>
+                                    <select class="form-control" disabled ng-options="item as item.Name for item in stageList track by item.Id" ng-model="selectedPurchase.Stage"></select>
+                                </div>
+                                <div class="col-md-4 padding3">
+                                    <label>Номер типового контракта</label>
+                                    <input type="text" class="form-control" ng-model="selectedPurchase.StandartContractNumber.Name" disabled />
+                                </div>
+                                <div class="col-md-1 padding3">
+                                    <label>Раздел</label>
+                                    <select class="form-control" ng-options="item.Name for item in purchaseClassList.DictionaryData" ng-model="purchaseClassList.selected" ng-disabled="!selectedPurchaseIsEdited"></select>
+                                </div>
+                                <div class="col-md-5 padding3">
+                                    <label>Основание для заключения контракта</label>
+                                    <input type="text" class="form-control" ng-model="selectedPurchase.ConclusionReason" ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-2 padding3">
+                                    <datetime ng-model="selectedPurchase.DateBegin" ap-label="Дата начала подачи заявок" format="dd.MM.yyyy HH:mm" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GOperator,GManager')"></datetime>
+                                </div>
+                                <div class="col-md-2 padding3">
+                                    <datetime ng-model="selectedPurchase.DateEndFirstParts" ap-label="Дата окончания подачи заявок" format="dd.MM.yyyy HH:mm" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GOperator,GManager')"></datetime>
+                                </div>
+                                <div class="col-md-2 padding3">
+                                    <datetime ng-model="selectedPurchase.DateEnd" ap-label="Дата окончания процедуры" format="dd.MM.yyyy HH:mm" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GOperator,GManager')"></datetime>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 padding3">
+                                    <label>Характер</label>
+                                    <select class="form-control" ng-disabled="!(selectedPurchaseIsEdited && (selectedPurchase_Start.Nature.Id===null || !isInRoles('GOperatorRemote')))" ng-change="changeNature()" ng-options="item as item.Name for item in natureList track by item.Id" ng-model="selectedPurchase.Nature"></select>
+                                </div>
+                                <div class="col-md-3 padding3">
+                                    <label>Категория</label>
+                                    <select class="form-control" disabled ng-options="item as item.Name for item in categoryList track by item.Id" ng-model="selectedPurchase.Category"></select>
+                                </div>
+                                <div class="col-md-3 padding3">
+                                    <label>Характер.Подраздел</label>
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-change="changeNature_L2()" ng-options="item as item.Name for item in natureList_L2 track by item.Id" ng-model="selectedPurchase.Nature_L2"></select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6 padding3">
+                                    <label>Закупку осуществляет</label>
+                                    <input type="text" class="form-control" ng-model="selectedPurchase.WhoIsPurchasing" disabled />
+                                </div>
+                                <div class="col-md-6 padding3">
+                                    <label>Тип организации</label>
+                                    <input type="text" class="form-control" ng-model="selectedPurchase.Customer.OrganizationType.Name" disabled />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3" in-roles="GManager,Admin,GOperator)">
+
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <label>Характер</label>
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <label>П.Характер</label>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <label>{{selectedPurchase.PurchaseNatureMixed.totalPercentage}}%</label>
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <label>{{selectedPurchase.PurchaseNatureMixed.totalSum | number : fractionSize}}Сумма</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="ФЛ" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(14) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.FlNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.flPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.flSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="РЛ" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(16) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.RlNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.rlPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.rlSum"
+                                           valid-number ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="Больницы" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(3) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.BlNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.blPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.blSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="РЦП" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(8) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.RcpNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.rcpPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.rcpSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="ФЦП" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="true" ng-options="item as item.Name for item in natureList_L2_AR(7) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.FcpNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.fcpPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.fcpSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="ВМП" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(20) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.BmpNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.bmpPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.bmpSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="Паллиат.помощь 427, 428" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="true" ng-options="item as item.Name for item in natureList_L2_AR(22) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.PalliativeCareNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.palliativeCarePercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.palliativeCareSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="Амбулаторно-поликлинические учреждения" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(5) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.apuNature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.apuPercentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.apuSum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 no-padding">
+                                    <input type="text" class="form-control" value="Фармация (223-ФЗ)" disabled />
+                                </div>
+                                <div class="col-md-4 no-padding">
+                                    <select class="form-control" ng-disabled="!selectedPurchaseIsEdited" ng-options="item as item.Name for item in natureList_L2_AR(1) track by item.Id" ng-model="selectedPurchase.PurchaseNatureMixed.fz223Nature_L2Id"></select>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.fz223Percentage"
+                                           valid-number
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                                <div class="col-md-3 no-padding">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="selectedPurchase.PurchaseNatureMixed.fz223Sum"
+                                           valid-number
+                                           ng-model-options="{debounce: 3000}"
+                                           ng-disabled="!selectedPurchaseIsEdited" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+                        <div class="col-md-1 no-padding" ng-dblclick="LinkOrganization(selectedPurchase.Customer.Id);">
+                            <label popover-placement="right" uib-popover="id организации, осуществляющей закупку" popover-trigger="'mouseenter'" popover-append-to-body="true">id закупщик</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Customer.Id" disabled />
+                        </div>
+                        <div class="col-md-9 no-padding">
+                            <label>Сокращенное наименование организации, осуществляющей закупку</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Customer.ShortName" disabled />
+                        </div>
+                        <div class="col-md-2 no-padding">
+                            <br />
+                            <button type="button" class="btn btn-primary" ng-disabled="!selectedPurchaseIsEdited" ng-click="changePurchaseCustomer()" data-translate="BUTTONS.CHANGE"></button>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12 no-padding">
+                            <label>Полное наименование организации, осуществляющей закупку</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Customer.FullName" disabled />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4  padding3">
+                            <label>Региональный уровень организации, осуществляющей закупку</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.Customer.Region" disabled />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row form-group">
+                        <label>КБК / КОСГУ / Сумма / Бюджет / Год финансирования</label>
+                        <div class="form-inline paymentBlock" ng-repeat="p in selectedPurchase.Payment">
+                            <input type="text" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-model="p.KBK" class="form-control" />
+                            <input type="text" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-model="p.KOSGU" class="form-control" />
+                            <input type="number" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-model="p.Sum" class="form-control" />
+                            <select class="form-control" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-options="item as item.Name for item in PaymentTypeList track by item.Id" ng-model="p.PaymentType"></select>
+                            <select class="form-control" ng-disabled="!selectedPurchaseIsEdited || !isInRoles('GManager')" ng-options="item as item.Name for item in paymentYearList track by item.Id" ng-model="p.PaymentYear"></select>
+                            <!--<button type="button" class="btn btn-primary" ng-disabled="!selectedPurchaseIsEdited" ng-click="removePaymentInfo($index)" data-translate="BUTTONS.DELETE"></button>-->
+                        </div>
+                        <!--<button type="button" class="btn btn-primary" ng-disabled="!selectedPurchaseIsEdited" ng-click="addPaymentInfo()">Добавить строку</button>-->
+                        <hr />
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12 no-padding">
+                            <label popover-placement="right" popover-trigger="'mouseenter'" popover-append-to-body="true">Сроки поставки товара или завершения работы либо график оказания услуг</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.DeliveryTime" disabled />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label>Дата с / Дата по / Кол-во / Период</label>
+                        <div class="form-inline deliveryTimeInfoBlock" ng-repeat="dti in selectedPurchase.DeliveryTimeInfo">
+                            <div class="input-group">
+                                <input id="dateStart"
+                                       type="text"
+                                       class="form-control"
+                                       uib-datepicker-popup="{{format}}"
+                                       ng-model-options="{ timezone: 'UTC' }"
+                                       ng-model="dti.DateStart"
+                                       is-open="dti.StartOpened"
+                                       datepicker-options="dti.DateStartOptions"
+                                       ng-change="dti.changeMinAndMaxDates()"
+                                       ng-disabled="!selectedDeliveryIsEdited()"
+                                       ng-readonly="!isInRoles('GOperator,GManager')" />
+                                <span class="input-group-btn">
+                                    <button type="button"
+                                            class="btn btn-default"
+                                            ng-click="dti.StartOpen()"
+                                            ng-disabled="!selectedDeliveryIsEdited()">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                -
+                            </div>
+                            <div class="input-group">
+                                <input type="text" ng-disabled="!selectedDeliveryIsEdited()" ng-model="dti.DayPlus" class="form-control" ng-change="dti.ChangeDays();" style="width:60px" />
+                            </div>
+                            <div class="input-group">
+                                -
+                            </div>
+                            <div class="input-group">
+                                <input id="dateEnd"
+                                       type="text"
+                                       class="form-control"
+                                       uib-datepicker-popup="{{format}}"
+                                       ng-model-options="{ timezone: 'UTC' }"
+                                       ng-model="dti.DateEnd "
+                                       is-open="dti.EndOpened"
+                                       ng-change="dti.changeMinAndMaxDates()"
+                                       datepicker-options="dti.DateEndOptions"
+                                       ng-disabled="!selectedDeliveryIsEdited()"
+                                       ng-readonly="!isInRoles('GOperator,GManager')" />
+                                <span class="input-group-btn">
+                                    <button type="button"
+                                            class="btn btn-default"
+                                            ng-click="dti.EndOpen()"
+                                            ng-disabled="!selectedDeliveryIsEdited()">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <span>: {{(dti.DateEnd - dti.DateStart)/(1000*60*60*24) | number : 0}} дней &nbsp;&nbsp;</span>
+                            <input type="text" ng-disabled="!selectedDeliveryIsEdited()" ng-model="dti.Count" class="form-control" />
+                            <select class="form-control" ng-disabled="!selectedDeliveryIsEdited()" ng-options="item as item.Name for item in deliveryTimePeriodList track by item.Id" ng-model="dti.DeliveryTimePeriod"></select>
+                            <button type="button" class="btn btn-primary" ng-disabled="!selectedDeliveryIsEdited()" ng-click="removeDeliveryTimeInfo($index)" data-translate="BUTTONS.DELETE"></button>
+                        </div>
+                        <button type="button" class="btn btn-primary" ng-disabled="!selectedDeliveryIsEdited()" ng-click="addDeliveryTimeInfo()">Добавить период поставки</button>
+                    </div>
+                    <hr />
+                    <div class="row form-group">
+                        <div class="col-md-12 no-padding">
+                            <label popover-placement="right" uib-popover="Обоснование начальной (максимальной) цены контракта" popover-trigger="'mouseenter'" popover-append-to-body="true">Обоснование нач. цены контракта</label>
+                            <input type="text" class="form-control" ng-model="selectedPurchase.PriceJustification" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="lotsGrid.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" cg-busy="lotsLoading" heading="Лоты закупки: {{lotsGrid.Options.data.length}} строк">
+                <div id="lotGrid"   style="height: 200px">
+                    <ui-grid-control options="lotsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="PlanGsGrid.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" cg-busy="LoadPlanGs" heading="Планы закупки  {{PlanGCount}}">
+                <div id="PlanGGrid"  style="height: 200px">
+                    <ui-grid-control options="PlanGsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+
+            <div uib-accordion-group ng-class="selectedLot.Id>0 ? 'panel-default' : 'panel-danger'" heading="Описание лота {{selectedLot.Number}}">
+                <div class="container-fluid">
+                    <div class="row form-group">
+                        <div class="col-md-2 padding3">
+                            <label>Номер лота</label>
+                            <input type="text" class="form-control" ng-model="selectedLot.Number" disabled />
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <label popover-placement="right" uib-popover="Начальная (максимальная) цена контракта" popover-trigger="'mouseenter'" popover-append-to-body="true">Нач. цена контракта</label>
+                            <div>
+                                <input type="text" id="selectedLotSumInput" class="form-control" ng-disabled="!selectedLotIsEdited" ng-model="selectedLot.Sum" awnum="sum">
+                            </div>
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <label>Последнее изменение</label>
+                            <input type="text" class="form-control" ng-model="selectedLot.LastChangedUser" disabled />
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <br />
+                            <button type="button" class="btn btn-primary" ng-show="!selectedLotIsEdited" ng-disabled="selectedLot == null" ng-click="editLotInfo()">Редактировать описание лота</button>
+                            <button type="button" class="btn btn-primary" ng-show="selectedLotIsEdited" ng-disabled="selectedLot == null" ng-click="saveLotInfo()">Сохранить описание лота</button>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12 no-padding">
+                            <label>Источник финансирования</label>
+                            <input type="text" class="form-control" ng-model="selectedLot.SourceOfFinancing" disabled />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-10 padding3">
+                            <label>Финансирование</label>
+                            <input type="text" class="form-control" ng-model="selectedLot.FundingString" disabled />
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <br />
+                            <button type="button" class="btn btn-primary" ng-disabled="!(selectedLotIsEdited && (selectedLot_Start.FundingString==='' || !isInRoles('GOperatorRemote')))" ng-click="editFunding()">Редактировать финансирование</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div uib-accordion-group ng-class="objectsReadyGrid.Options.data.length > 0 ?  'panel-default': 'panel-danger'" cg-busy="objectsLoading" heading="Объекты закупки {{ObjectsStatus()}}">
+                <div class="row form-group">
+                    <div class="col-md-4 padding3">
+                        <label>Последнее изменение</label>
+                        <input type="text" class="form-control" ng-model="selectedLot.LastChangedObjectsUser" disabled />
+                    </div>
+                </div>
+                <uib-tabset>
+                    <uib-tab heading="Данные с сайта" select="purchasesObjectsTab=0">
+                        <div style="height: 50px; margin-top: 5px">
+                            <div class="row">
+                                <div class="col-md-1 padding3">
+                                    <input type="button" class="btn btn-success" value="Использовать для ТЗ" ng-click="copyObjectsToReady()" ng-disabled="!objectsIsEdited || !isInRoles('GManager, GOperator')" />
+                                </div>
+
+                                <div class="col-md-2 col-md-offset-9">
+                                    <button type="button" class="btn btn-primary" ng-show="!objectsIsEdited" ng-disabled="selectedLot == null || !isMayEditPurObject" ng-click="editObjectsReady()">Редактировать объекты закупки</button>
+                                    <button type="button" class="btn btn-primary" ng-show="objectsIsEdited" ng-disabled="selectedLot == null || checkObject()" ng-click="saveObjectsReady()">Сохранить объекты закупки</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="purchasesObjectsTab == 0" style="height: 390px">
+                            <ui-grid-control options="objectsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="Техническое задание" select="purchasesObjectsTab=1">
+
+                        <div style="height: 50px; margin-top: 5px">
+                            <div class="row">
+                                <div class="col-md-2 padding3">
+                                    <div class="btn btn-info btn-sm" ng-disabled="!objectsIsEdited" ngf-select="UploadPurchaseTemplate($files)" multiple accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-folder-open">Загрузить из шаблона</span></div>
+                                </div>
+
+                                <div class="col-md-2 padding3">
+                                    <input class="btn btn-success" ng-click="downloadPurchaseTemplate()" value="Шаблон" />
+                                </div>
+
+                                <div class="col-md-2 padding3">
+                                    <button type="button" class="btn btn-primary" ng-disabled="!objectsIsEdited || !objectsReadyGrid.getSelectedItem() || objectsReadyGrid.getSelectedItem() == 0" ng-click="changeObjectReadyReceiver()">Изменить получателя</button>
+                                </div>
+
+                                <div class="col-md-1 padding3">
+                                    <button type="button" class="btn btn-success" ng-disabled="!objectsIsEdited || !objectsReadyGrid.getSelectedItem() || objectsReadyGrid.getSelectedItem() == 0" ng-click="copyObjectReady()">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" ng-disabled="!objectsIsEdited || !objectsReadyGrid.getSelectedItem() || objectsReadyGrid.getSelectedItem() == 0" ng-click="removeObjectReady()">
+                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 padding3">
+                                    <!--<button type="button" class="btn btn-danger" ng-click="test()">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>-->
+                                    <div class="ui-grid-cell-contents" ng-class="{whiteOnRed: objectsReadyGrid_Sum() > 0 && objectsReadyGrid_Sum().toFixed(2) != selectedLot.Sum.toFixed(2) }">Сумма: {{objectsReadyGrid_Sum() | number:2 }}, разница с лотом: {{objectsReadyGrid_Sum() - selectedLot.Sum | number:2}} </div>
+                                </div>
+                                <div class="col-md-2 padding3">
+                                    <button type="button" class="btn btn-primary" ng-show="!objectsIsEdited" ng-disabled="selectedLot == null  || !isMayEditPurObject" ng-click="editObjectsReady()">Редактировать объекты закупки</button>
+                                    <button type="button" class="btn btn-primary" ng-show="objectsIsEdited" ng-disabled="selectedLot == null || checkObject()" ng-click="saveObjectsReady()">Сохранить объекты закупки</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="purchasesObjectsTab == 1" style="height: 390px">
+                            <ui-grid-control options="objectsReadyGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+
+            <div uib-accordion-group ng-class="supplierResult.Id>0 ? 'panel-default' : 'panel-danger'" cg-busy="contractsLoading" heading="Результат определения поставщика {{ROPStatus()}}" in-roles="GSupplierResult">
+
+                <ng_form name="supplierResultForm">
+
+                    <div class="container-fluid no-padding">
+                        <div class="row form-group no-padding">
+                            <div class="col-md-4 no-padding">
+                                <label>Последнее изменение</label>
+                                <input type="text" class="form-control" ng-model="supplierResult.LastChangedUser" disabled />
+                            </div>
+                            <div class="col-md-6 no-padding">
+                                <label>Победитель</label>
+                                <input type="text" class="form-control" disabled ng-model="supplierResult.Winner.Name" />
+                            </div>
+                            <div class="col-md-1 no-padding">
+                                Сумма лота: {{selectedLot.Sum}}
+                            </div>
+                            <div class="col-md-1 no-padding">
+                                <button type="button" class="btn btn-primary" ng-show="!selectedSupplierResultIsEdited" ng-disabled="selectedLot == null" ng-click="editSupplierResultInfo()" style="width:100%">Редактировать</button>
+                                <button type="button" class="btn btn-primary" ng-show="selectedSupplierResultIsEdited" ng-disabled="selectedLot == null || !canSaveSupplierResult() || supplierResultForm.$invalid" ng-click="saveSupplierResultInfo()" style="width: 100%">Сохранить</button>
+                            </div>
+                        </div>
+
+                        <div class="row form-group no-padding">
+                            <div class="col-md-1 no-padding">
+                                <label>Статус лота</label>
+                                <select class="form-control"
+                                        ng-options="item as item.Name for item in lotStatusList track by item.Id"
+                                        ng-model="supplierResult.LotStatus"
+                                        ng-change="changeLotStatus()"
+                                        ng-disabled="!selectedSupplierResultIsEdited"
+                                        required=""></select>
+
+                            </div>
+                            <div class="col-md-2 no-padding">
+                                <label>Этап закупки</label>
+                                <select class="form-control" ng-options="item as item.Name for item in stageList track by item.Id" ng-model="selectedPurchase.Stage" ng-disabled="!selectedSupplierResultIsEdited"></select>
+                            </div>
+                            <div class="col-md-1 no-padding">
+                                <label>Номер протокола</label>
+                                <input type="text" class="form-control" ng-disabled="!selectedSupplierResultIsEdited" ng-model="supplierResult.ProtocolNumber" />
+                            </div>
+                            <div class="col-md-1 no-padding">
+                                <label>Дата протокола</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="form-control"
+                                           name="protocolDate"
+                                           ng-class="{'has-error': supplierResultForm.protocolDate.$invalid}"
+                                           uib-datepicker-popup="dd.MM.yyyy"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           ng-model="supplierResult.ProtocolDate"
+                                           is-open="srDate.Opened"
+                                           ng-disabled="!selectedSupplierResultIsEdited"
+                                           datepicker-options="srDate.DateOptions" />
+                                    <span class="input-group-btn">
+                                        <button type="button"
+                                                class="btn btn-default"
+                                                ng-click="srDate.Opened = !srDate.Opened"
+                                                ng-disabled="!selectedSupplierResultIsEdited">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1 no-padding">
+                                <button type="button" class="btn btn-xs btn-info" ng-show="selectedSupplierResultIsEdited" ng-click="SupplierResult_setNumberDate()">Проставить номер и дату</button>
+                            </div>
+
+                            <div class="col-md-2 no-padding">
+                                <a href="{{selectedPurchase.Url}}" target="governmentLink">ссылка</a>
+                                <label>
+                                    <input type="checkbox" class="form-inline" ng-disabled="!selectedSupplierResultIsEdited" ng-model="supplierResult.ForCheck" />
+                                    На проверку
+                                </label>
+                            </div>
+                            <div class="col-md-3 no-padding">
+                                <label style="color:red">{{supplierResultError}}</label>
+                            </div>
+                            <div class="col-md-1 no-padding" in-roles="GOperator,GManager,Admin">
+                                <button type="button"
+                                        style="width: 100%"
+                                        class="btn btn-primary"
+                                        ng-disabled="(selectedLot == null) || selectedSupplierResultIsEdited"
+                                        ng-click="askCreateContract()">
+                                    Создать контракт
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row form-group no-padding">
+
+                            <div class="row no-padding"
+                                 ng-repeat="item in supplierResult.SupplierList| orderBy: 'Number':false">
+
+                                <div class="panel no-padding">
+                                    <div class="panel-heading no-padding">
+                                        Участник {{item.Number}} <span ng-if="item.Number == 1">Победитель</span> "{{item.SupplierRaw.Name}}"
+                                    </div>
+                                    <div class="panel-body no-padding">
+                                        <div class="col-md-1 no-padding">
+                                            <label>Id</label>
+                                            <input type="text" class="form-control" disabled ng-model="item.Supplier.Id" />
+                                        </div>
+
+                                        <div class="col-md-2 no-padding">
+                                            <label>Инн</label>
+                                            <input type="text" class="form-control" disabled ng-model="item.Supplier.INN" />
+                                        </div>
+
+                                        <div class="col-md-4 no-padding">
+                                            <label>Название</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" disabled ng-model="item.Supplier.Name" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-secondary" type="button" ng-click="searchSupplier(item)" ng-disabled="!selectedSupplierResultIsEdited"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1 no-padding">
+                                            <label>Сумма {{100*(item.Sum-selectedLot.Sum)/selectedLot.Sum | number:0}}%</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   ng-disabled="!selectedSupplierResultIsEdited"
+                                                   ng-model="item.Sum"
+                                                   awnum="sum"
+                                                   ng-class="{'wrongSum' : item.Number == 1 && item.Sum > selectedLot.Sum}" />
+                                        </div>
+                                        <div class="col-md-2 no-padding">
+                                            <label></label>
+                                            <div class="input-group">
+                                                <button class="btn btn-secondary" ng-disabled="!selectedSupplierResultIsEdited" type="button" ng-click="supplierChangeSum(item)"> <span class="glyphicon glyphicon-ruble"></span> </button>
+                                                <button class="btn btn-secondary"
+                                                        ng-disabled="!selectedSupplierResultIsEdited"
+                                                        type="button"
+                                                        ng-click="clear(item)">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+
+                                                <button class="btn btn-secondary" ng-disabled="!selectedSupplierResultIsEdited" type="button" ng-click="supplierChangeNumber(item)"> <span class="glyphicon glyphicon-sort"></span> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </ng_form>
+            </div>
+
+            <div uib-accordion-group ng-class="contractsGrid.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" cg-busy="contractsLoading" heading="Контракты лота: {{contractsGrid.Options.data.length}} строк">
+                <div id="contractGrid" style="height: 300px">
+                    <ui-grid-control options="contractsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+
+            <div uib-accordion-group ng-class="selectedContract.Id>0 ? 'panel-default' : 'panel-danger'" heading="Описание контракта {{selectedContract.ReestrNumber}} {{contractObjectsReadyGrid.Options.data.length > 0 ? 'Готово' : ''}}">
+                <div class="container-fluid">
+                    <div class="row form-group">
+                        <div class="col-md-2 no-padding">
+                            <label>Реестровый номер</label>
+                            <input type="text" class="form-control" ng-disabled="!selectedContractIsEdited" ng-model="selectedContract.ReestrNumber" />
+                        </div>
+                        <div class="col-md-1 no-padding">
+                            <label popover-placement="right" uib-popover="Цена контракта" popover-trigger="'mouseenter'" popover-append-to-body="true">Цена контракта</label>
+                            <div>
+                                <input type="text" id="selectedContractSumInput" class="form-control" ng-disabled="!selectedContractIsEdited" ng-model="selectedContract.Sum" awnum="sum">
+                            </div>
+                        </div>
+                        <div class="col-md-1 no-padding">
+                            <label popover-placement="right" uib-popover="Фактически оплачено" popover-trigger="'mouseenter'" popover-append-to-body="true">Фактически оп</label>
+                            <div>
+                                <input type="text" id="selectedContractActuallyPaidInput" class="form-control" ng-disabled="!selectedContractIsEdited" ng-model="selectedContract.ActuallyPaid" awnum="sum">
+                            </div>
+                        </div>
+                        <div class="col-md-1 no-padding">
+                            <label popover-placement="right" uib-popover="Статус" popover-trigger="'mouseenter'" popover-append-to-body="true">Статус</label>
+                            <div>
+                                <!--<input type="text" class="form-control" ng-disabled="!selectedContractIsEdited" ng-model="selectedContract.ContractStatus.Id">-->
+                                <select name="ContractStatusId" ng-disabled="!selectedContractIsEdited"
+                                        class="form-control" ng-options="item as item.Name for item in ContractStatus track by item.Id" ng-model="selectedContract.ContractStatus"></select>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3 no-padding">
+                            <label>Последнее изменение</label>
+                            <input type="text" class="form-control" ng-model="selectedContract.LastChangedUser" disabled />
+                        </div>
+                        <div class="col-md-2 no-padding">
+                            <br />
+                            <button type="button" class="btn btn-primary" ng-show="!selectedContractIsEdited" ng-disabled="selectedContract == null" ng-click="editContractInfo()">Редактировать описание контракта</button>
+                            <button type="button" class="btn btn-primary" ng-show="selectedContractIsEdited" ng-disabled="selectedContract == null" ng-click="saveContractInfo()">Сохранить описание контракта</button>
+                        </div>
+                        <div class="col-md-1 no-padding">
+                            <br />
+                            <a href="{{selectedContract.Url}}" target="governmentLink">ссылка</a>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 padding3">
+                            <datetime ng-model="selectedContract.ConclusionDate" ap-label="Дата заключения" format="dd.MM.yyyy" ng-disabled="!selectedContractIsEdited || !isInRoles('GManager')"></datetime>
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <datetime ng-model="selectedContract.DateBegin" ap-label="Дата начала исполнения" format="dd.MM.yyyy" ng-disabled="!selectedContractIsEdited || !isInRoles('GManager')"></datetime>
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <datetime ng-model="selectedContract.DateEnd" ap-label="Дата окончания исполнения" format="dd.MM.yyyy" ng-disabled="!selectedContractIsEdited || !isInRoles('GManager')"></datetime>
+                        </div>
+                        <div class="col-md-6">
+                            <textarea type="text" class="form-control" ng-model="selectedContract.change_reason" disabled ></textarea>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-1 no-padding" ng-dblclick="LinkOrganization(selectedContract.ReceiverId);">
+                            <label>Id Получатель</label>
+                            <input type="text" class="form-control" ng-model="selectedContract.ReceiverId" disabled />
+                        </div>
+                        <div class="col-md-9 no-padding">
+                            <label>Получатель</label>
+                            <input type="text" class="form-control" ng-model="selectedContract.Receiver" disabled />
+                        </div>
+                        <div class="col-md-2 no-padding">
+                            <br />
+                            <button type="button" class="btn btn-primary"
+                                    ng-disabled="!selectedContractIsEdited"
+                                    ng-click="changeContractReceiver()">
+                                Изменить получателя
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3 padding3">
+                            <label ng-repeat="item in ContractKK">
+                                <input type="radio" style="margin-left:15px;" ng-model="selectedContract.KK" ng-value="item.Id" name="color-picker"  ng-disabled="!selectedContractIsEdited" disabled/>
+                                {{item.Name}}  
+                            </label>
+                        </div>
+                        <div class="col-md-3 padding3">
+                            Сумма лотa / сумма всех контрактов: {{selectedPurchase.LotContractCoefficient}}
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <span ng-show="selectedPurchase.ContractDataWasUsed">Используется для ГС</span>
+                        </div>
+                        <div class="col-md-3 padding3" in-roles="GManager">
+                            <label>
+                                <input type="checkbox" class="form-inline" ng-disabled="!selectedContractIsEdited" ng-model="selectedPurchase.UseContractData" disabled />
+                                Контракт для ГС
+                            </label>
+                        </div>
+                    </div>
+                    <div id="idContractPaymentStageGrid" style="height: 200px" ng-show="ContractPaymentStageGrid.Options.data.length>0">
+                        <ui-grid-control options="ContractPaymentStageGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                    </div>
+                    <div id="idContractPaymentStageGrid_new" style="height: 200px" ng-show="ContractPaymentStageGrid_new.Options.data.length>0">
+                        <label>Новые данные не применены</label><button class="btn btn-danger btn-sm" in-roles="GManager" ng-show="!selectedContractIsEdited" ng-click="KBK_set(1);" data-translate="КБК Переписать"></button>
+                        <ui-grid-control options="ContractPaymentStageGrid_new.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                    </div>
+                </div>
+            </div>
+
+            <div uib-accordion-group ng-class="contractObjectsReadyGrid.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" cg-busy="contractObjectsLoading" heading="Объекты контракта {{ContractObjectsStatus()}}">
+
+                <div class="row form-group panel-">
+                    <div class="col-md-2">
+                        <label>Последнее изменение</label>
+                        <input type="text" class="form-control" ng-model="selectedContract.LastChangedObjectsUser" disabled />
+                    </div>
+                    <div class="col-md-10">
+                        <textarea class="form-control" ng-model="selectedContract.change_objects" disabled ></textarea>
+                    </div>
+                </div>
+
+                <uib-tabset>
+                    <uib-tab heading="Данные с сайта" select="contractObjectsTab=0">
+                        <div style="height: 50px; margin-top: 5px">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="button" class="btn btn-success" value="Использовать для ТЗ" ng-click="copyContractObjectsToReady()" ng-disabled="!contractObjectsIsEdited || !isInRoles('GManager, GOperator')" />
+                                </div>
+
+                                <div class="col-md-2 col-md-offset-9">
+                                    <button type="button" class="btn btn-primary" ng-show="!contractObjectsIsEdited" ng-disabled="selectedContract == null || !isMayEditContactObj" ng-click="editContractObjectsReady()">Редактировать объекты контракта</button>
+                                    <button type="button" class="btn btn-primary" ng-show="contractObjectsIsEdited" ng-disabled="selectedContract == null || checkContractObject()" ng-click="saveContractObjectsReady()">Сохранить объекты контракта</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="contractObjectsTab == 0" style="height: 390px">
+                            <ui-grid-control options="contractObjectsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="Техническое задание (История)" select="contractObjectsTab=1">
+
+                        <div style="height: 50px; margin-top: 5px">
+                            <div class="row">
+                                <div class="col-md-2 padding3">
+                                    <input type="button" class="btn btn-success" value="Использовать для ТЗ" ng-click="copyContractObjectsHistoryToReady()" ng-disabled="!contractObjectsIsEdited" />
+                                </div>
+                                <div class="col-md-8 padding3">
+                                    <div class="ui-grid-cell-contents" ng-class="{whiteOnRed: contractObjectsReadyHistoryGrid_Sum() > 0 && contractObjectsReadyHistoryGrid_Sum().toFixed(2) != selectedContract.Sum.toFixed(2) }">Сумма: {{contractObjectsReadyHistoryGrid_Sum() | number:2 }}, разница с лотом: {{contractObjectsReadyHistoryGrid_Sum() - selectedContract.Sum | number:2}} </div>
+                                </div>
+                                <div class="col-md-2 padding3">
+                                    <button type="button" class="btn btn-primary" ng-show="!contractObjectsIsEdited" ng-disabled="selectedContract == null || !isMayEditContactObj" ng-click="editContractObjectsReady()">Редактировать объекты контракта</button>
+                                    <button type="button" class="btn btn-primary" ng-show="contractObjectsIsEdited" ng-disabled="selectedContract == null || checkContractObject()" ng-click="saveContractObjectsReady()">Сохранить объекты контракта</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="contractObjectsTab == 1" style="height: 390px">
+                            <ui-grid-control options="contractObjectsReadyHistoryGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="Техническое задание" select="contractObjectsTab=2" style="background-color:lightgreen !important;">
+
+                        <div style="height: 50px; margin-top: 5px">
+                            <div class="row">
+                                <div class="col-md-2 padding3">
+                                    <div class="btn btn-info btn-sm" ng-disabled="!contractObjectsIsEdited" ngf-select="UploadContractTemplate($files)" multiple accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-folder-open">Загрузить из шаблона</span></div>
+                                </div>
+
+                                <div class="col-md-2 padding3">
+                                    <input class="btn btn-success" ng-click="downloadContractTemplate()" value="Шаблон" />
+                                </div>
+
+                                <div class="col-md-1 padding3">
+                                    <button type="button" class="btn btn-success" ng-disabled="!contractObjectsIsEdited || !contractObjectsReadyGrid.getSelectedItem() || contractObjectsReadyGrid.getSelectedItem() == 0" ng-click="copyContractObjectReady()">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" ng-disabled="!contractObjectsIsEdited || !contractObjectsReadyGrid.getSelectedItem() || contractObjectsReadyGrid.getSelectedItem() == 0" ng-click="removeContractObjectReady()">
+                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="col-md-3 padding3">
+
+                                    <div class="ui-grid-cell-contents" ng-class="{whiteOnRed: contractObjectsReadyGrid_Sum() > 0 && contractObjectsReadyGrid_Sum().toFixed(2) != selectedContract.Sum.toFixed(2) }">Сумма: {{contractObjectsReadyGrid_Sum() | number:2 }}, разница с лотом: {{contractObjectsReadyGrid_Sum() - selectedContract.Sum | number:2}} </div>
+                                </div>
+                                <div class="col-md-2 padding3">
+
+                                    <button type="button" class="btn btn-primary" ng-show="!contractObjectsIsEdited" ng-disabled="selectedContract == null || !isMayEditContactObj" ng-click="editContractObjectsReady()">Редактировать объекты контракта</button>
+                                    <button type="button" class="btn btn-primary" ng-show="contractObjectsIsEdited" ng-disabled="selectedContract == null || checkContractObject()" ng-click="saveContractObjectsReady()">Сохранить объекты контракта</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="contractObjectsTab == 2" style="height: 390px">
+                            <ui-grid-control options="contractObjectsReadyGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="Исполнение контракта" select="contractObjectsTab=3" style="background-color:lightblue !important;">
+                        <div ng-if="contractObjectsTab == 3" style="height: 390px">
+                            <ui-grid-control options="contractstageObjectsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+
+            </div>
+
+        </uib-accordion>
+    </div>
+</div>  

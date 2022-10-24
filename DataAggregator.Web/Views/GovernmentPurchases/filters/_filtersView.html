@@ -1,0 +1,289 @@
+﻿
+    <div class="modal-header">
+        <h3 class="modal-title">Фильтр</h3>
+    </div>
+    <div cg-busy="filterLoading" ng-cloak class="modal-body classifier-editor">
+        <form name="filterForm">
+            <div class="container-fluid">
+
+
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Id закупки</label>
+                        <input type="text" ng-model="filter.Purchase_Id" class="form-control">
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>Раздел</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.PurchaseClass track by item.Id" ng-model="filter.Purchase_PurchaseClass"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Номер закупки</label>
+                        <input type="text" ng-model="filter.Purchase_Number" class="form-control">
+                    </div>
+                    <div class="col-md-3 padding3">
+                        <label>Регион Заказчика</label>
+                        <input type="text" ng-model="filter.Purchase_Customer_FederationSubject" uib-typeahead="FederationSubject for FederationSubject in filterarray.FederationSubject | filter:$viewValue | limitTo:8" typeahead-on-select="federationSubjectSelected($item)" typeahead-select-on-exact="true" class="form-control">
+                    </div>
+                    <div class="col-md-3 padding3">
+                        <label>ФО Заказчика</label>
+                        <input type="text" ng-model="filter.Purchase_Customer_FederalDistrict" uib-typeahead="FederalDistrict for FederalDistrict in filterarray.FederalDistrict | filter:$viewValue | limitTo:8" typeahead-on-select="federationSubjectSelected($item)" typeahead-select-on-exact="true" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Номер лота</label>
+                        <input type="text" ng-model="filter.Lot_Id" class="form-control">
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>Заказчик (полное наименование)</label>
+                        <input type="text" ng-model="filter.Purchase_Customer_name" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Date_begin</label>
+                        <div class="row">
+                            <div class="col-md-6 padding3">
+                                <p class="input-group ap-required">
+                                    <input type="text"
+                                           name="Purchase_DateBegin_start"
+                                           ng-blur="setDateValueNullIfEmpty($event)"
+                                           ng-change="setDate('Purchase_DateBegin_start',Purchase_DateBegin_start.Value,$event)"
+                                           class="form-control"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           uib-datepicker-popup="{{format}}"
+                                           on-open-focus="true"
+                                           ng-model="Purchase_DateBegin_start.Value"
+                                           is-open="Purchase_DateBegin_start.Opened"
+                                           placeholder="{{'PERIOD_END' | translate}}"
+                                           datepicker-options="{minMode: 'day', showWeeks: false }"
+                                           datepicker-mode="'day'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="Purchase_DateBegin_start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-6 padding3">
+                                <p class="input-group ap-required">
+                                    <input type="text"
+                                           name="Purchase_DateBegin_end"
+                                           ng-blur="setDateValueNullIfEmpty($event)"
+                                           ng-change="setDate('Purchase_DateBegin_end',Purchase_DateBegin_end.Value,$event)"
+                                           class="form-control"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           uib-datepicker-popup="{{format}}"
+                                           on-open-focus="true"
+                                           ng-model="Purchase_DateBegin_end.Value"
+                                           is-open="Purchase_DateBegin_end.Opened"
+                                           placeholder="{{'PERIOD_END' | translate}}"
+                                           datepicker-options="{minMode: 'day', showWeeks: false }"
+                                           datepicker-mode="'day'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="Purchase_DateBegin_end.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>ИНН Заказчика</label>
+                        <input type="text" ng-model="filter.Purchase_Customer_INN" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Date_end</label>
+                        <div class="row">
+                            <div class="col-md-6 padding3">
+                                <p class="input-group ap-required">
+                                    <input type="text"
+                                           name="Purchase_DateEnd_start"
+                                           ng-blur="setDateValueNullIfEmpty($event)"
+                                           ng-change="setDate('Purchase_DateEnd_start',Purchase_DateEnd_start.Value,$event)"
+                                           class="form-control"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           uib-datepicker-popup="{{format}}"
+                                           on-open-focus="true"
+                                           ng-model="Purchase_DateEnd_start.Value"
+                                           is-open="Purchase_DateEnd_start.Opened"
+                                           placeholder="{{'PERIOD_END' | translate}}"
+                                           datepicker-options="{minMode: 'day', showWeeks: false }"
+                                           datepicker-mode="'day'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="Purchase_DateEnd_start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-6 padding3">
+                                <p class="input-group ap-required">
+                                    <input type="text"
+                                           name="Purchase_DateEnd_end"
+                                           ng-blur="setDateValueNullIfEmpty($event)"
+                                           ng-change="setDate('Purchase_DateEnd_end',Purchase_DateEnd_end.Value,$event)"
+                                           class="form-control"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           uib-datepicker-popup="{{format}}"
+                                           on-open-focus="true"
+                                           ng-model="Purchase_DateEnd_end.Value"
+                                           is-open="Purchase_DateEnd_end.Opened"
+                                           placeholder="{{'PERIOD_END' | translate}}"
+                                           datepicker-options="{minMode: 'day', showWeeks: false }"
+                                           datepicker-mode="'day'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="Purchase_DateEnd_end.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>Тип учреждения Заказчика</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.OrganizationType track by item.Id" ng-model="filter.Purchase_Customer_OrganizationType"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Наименование закупки</label>
+                        <input type="text" ng-model="filter.Purchase_Name" class="form-control">
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>Id Заказчика</label>
+                        <input type="text" ng-model="filter.Purchase_CustomerId" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Категория</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.category track by item.Id" ng-model="filter.Purchase_Category"></select>
+                        <!--<input type="text" ng-model="filter.Purchase_CategoryName" class="form-control">-->
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>Регион Получателя</label>
+                        <input type="text" ng-model="filter.PurchaseObjectReady_Receiver_FederationSubject" uib-typeahead="FederationSubject for FederationSubject in filterarray.FederationSubject | filter:$viewValue | limitTo:8" typeahead-on-select="federationSubjectSelected($item)" typeahead-select-on-exact="true" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Характер</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.nature track by item.Id" ng-model="filter.Purchase_Nature"></select>
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>Получатель (полное наименование)</label>
+                        <input type="text" ng-model="filter.PurchaseObjectReady_Receiver_Name" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Характер.Подраздел</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.nature_L2 track by item.Id" ng-model="filter.Purchase_Nature_L2"></select>
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>ИНН Получателя</label>
+                        <input type="text" ng-model="filter.PurchaseObjectReady_Receiver_INN" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Источник финансирования</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.funding track by item.Id" ng-model="filter.LotFunding_Funding"></select>
+                    </div>
+                    <!--<div class="col-md-6 padding3">
+                        <label>Тип учреждения Получателя</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.OrganizationType track by item.Id" ng-model="filter.PurchaseObjectReady_Receiver_OrganizationType"></select>
+                    </div>-->
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Период поставки</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.DeliveryTimePeriod track by item.Id" ng-model="filter.DeliveryTimeInfo_DeliveryTimePeriod"></select>
+                     </div>
+                    <div class="col-md-6 padding3">
+                        <label>Id Получателя</label>
+                        <input type="text" ng-model="filter.PurchaseObjectReady_ReceiverId" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>КБК</label>
+                        <input type="text" ng-model="filter.Payment_KBK" class="form-control">
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>
+                            <input type="checkbox" class="form-inline" ng-model="filter.Not_Is_Recipient" />
+                            Не может быть Получателем
+                        </label>
+                        <label>
+                            <input type="checkbox" class="form-inline" ng-model="filter.isPurchaseObjectReady" />
+                            c заполненным тех.заданием
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 padding3">
+                        <label>Статус лота</label>
+                        <select class="form-control" ng-options="item as item.Name for item in filterarray.LotStatus track by item.Id" ng-model="filter.SupplierResult_LotStatus"></select>
+                    </div>
+                    <div class="col-md-6 padding3">
+                        <label>по логу изменений</label>
+                        <div class="row">
+                            <div class="col-md-4 padding3">
+                                <p class="input-group ap-required">
+                                    <input type="text"
+                                           name="TriggerLog_When_start"
+                                           ng-blur="setDateValueNullIfEmpty($event)"
+                                           ng-change="setDate('TriggerLog_When_start',TriggerLog_When_start.Value,$event)"
+                                           class="form-control"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           uib-datepicker-popup="{{format}}"
+                                           on-open-focus="true"
+                                           ng-model="TriggerLog_When_start.Value"
+                                           is-open="TriggerLog_When_start.Opened"
+                                           placeholder="{{'PERIOD_END' | translate}}"
+                                           datepicker-options="{minMode: 'day', showWeeks: false }"
+                                           datepicker-mode="'day'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="TriggerLog_When_start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-4 padding3">
+                                <p class="input-group ap-required">
+                                    <input type="text"
+                                           name="TriggerLog_When_end"
+                                           ng-blur="setDateValueNullIfEmpty($event)"
+                                           ng-change="setDate('TriggerLog_When_end',TriggerLog_When_end.Value,$event)"
+                                           class="form-control"
+                                           ng-model-options="{ timezone: 'UTC' }"
+                                           uib-datepicker-popup="{{format}}"
+                                           on-open-focus="true"
+                                           ng-model="TriggerLog_When_end.Value"
+                                           is-open="TriggerLog_When_end.Opened"
+                                           placeholder="{{'PERIOD_END' | translate}}"
+                                           datepicker-options="{minMode: 'day', showWeeks: false }"
+                                           datepicker-mode="'day'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="TriggerLog_When_end.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-4 padding3">
+                                <select class="form-control" ng-options="item as item for item in filterarray.TriggerLogNames track by item.Id" ng-model="filter.TriggerLog_What"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <button class="btn btn-primary" type="button" ng-disabled="filterForm.$invalid" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+            <button class="btn btn-warning" type="button" ng-click="clear(1)" data-translate="BUTTONS.CLEAR"></button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+        </div>
+    </div>

@@ -1,0 +1,156 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Поиск закупок</h3>
+</div>
+<div class="modal-body government-purchases get-purchases-by-filter" cg-busy="purchasesFilterLoading" id="getPurchasesByFilterForm">
+
+    <div class="row">
+        <div class="col-md-12">
+            <label>Id</label>
+            <input class="form-control" type="text" ng-model="filter.id"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Номер закупки</label>
+            <input class="form-control" type="text" ng-model="filter.number" />
+        </div>
+        <div class="col-md-6">
+            <label>Номер контракта</label>
+            <input class="form-control" type="text" ng-model="filter.reestrnumber" />
+        </div>
+    </div>
+    <div class="row" in-roles="GOperator,GManager,Admin">
+        <div class="col-md-12">
+            <label>Пользователь, последним изменявший описание закупки</label>
+            <input type="text" ng-model="filter.lastChangedPurchaseUser.selectedName" ng-change="filter.lastChangedPurchaseUser.textChange()" class="form-control"
+                   uib-typeahead="user.FullName for user in filter.lastChangedPurchaseUser.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.lastChangedPurchaseUser.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+    </div>
+    <div class="row" in-roles="GOperator,GManager,Admin">
+        <div class="col-md-12">
+            <label>Пользователь, последним изменявший описание лота</label>
+            <input type="text" ng-model="filter.lastChangedLotUser.selectedName" ng-change="filter.lastChangedLotUser.textChange()" class="form-control"
+                   uib-typeahead="user.FullName for user in filter.lastChangedLotUser.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.lastChangedLotUser.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+    </div>
+    <div class="row" in-roles="GOperator,GManager,Admin">
+        <div class="col-md-12">
+            <label>Пользователь, последним изменявший ТЗ</label>
+            <input type="text" ng-model="filter.lastChangedObjectReadyUser.selectedName" ng-change="filter.lastChangedObjectReadyUser.textChange()" class="form-control"
+                   uib-typeahead="user.FullName for user in filter.lastChangedObjectReadyUser.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.lastChangedObjectReadyUser.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label>Дата объявления закупки</label>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       uib-datepicker-popup
+                       ng-model="filter.dateStart.Value"
+                       ng-model-options="{ timezone: 'UTC' }"
+                       is-open="filter.dateStart.Opened"
+                       max-date="filter.dateEnd.Value"
+                       readonly />
+                <span class="input-group-btn">
+                    <button type="button"
+                            class="btn btn-default"
+                            ng-click="filter.dateStart.Open()"
+                            popover-placement="right"
+                            uib-popover="Дата объявления начиная с "
+                            popover-trigger="'mouseenter'"
+                            popover-append-to-body="true">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       uib-datepicker-popup
+                       ng-model="filter.dateEnd.Value"
+                       ng-model-options="{ timezone: 'UTC' }"
+                       is-open="filter.dateEnd.Opened"
+                       min-date="filter.dateStart.Value"
+                       init-date="now"
+                       readonly />
+                <span class="input-group-btn">
+                    <button type="button"
+                            class="btn btn-default"
+                            ng-click="filter.dateEnd.Open()"
+                            popover-placement="right"
+                            uib-popover="Дата объявления по "
+                            popover-trigger="'mouseenter'"
+                            popover-append-to-body="true">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Название закупки</label>
+            <input class="form-control" type="text" ng-model="filter.name" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Характер</label>
+            <select class="form-control" ng-options="item.Name for item in filter.nature.DictionaryData" ng-model="filter.nature.selected"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Финансирование</label>
+            <select class="form-control" ng-options="item.Name for item in filter.funding.DictionaryData" ng-model="filter.funding.selected"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Раздел</label>
+            <select class="form-control" ng-options="item.Name for item in filter.purchaseClass.DictionaryData" ng-model="filter.purchaseClass.selected"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Федеральный округ</label>
+            <input type="text" ng-model="filter.federalDistrict.selectedName" ng-change="filter.federalDistrict.textChange()" class="form-control"
+                   uib-typeahead="federalDistrict for federalDistrict in filter.federalDistrict.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.federalDistrict.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+        <div class="col-md-6">
+            <label>Субьект федерации</label>
+            <input type="text" ng-model="filter.federationSubject.selectedName" ng-change="filter.federationSubject.textChange()" class="form-control"
+                   uib-typeahead="federationSubject for federationSubject in filter.federationSubject.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.federationSubject.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Район</label>
+            <input type="text" ng-model="filter.district.selectedName" ng-change="filter.district.textChange()" class="form-control"
+                   uib-typeahead="district for district in filter.district.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.district.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+        <div class="col-md-6">
+            <label>Город</label>
+            <input type="text" ng-model="filter.city.selectedName" ng-change="filter.city.textChange()" class="form-control"
+                   uib-typeahead="city for city in filter.city.DictionaryData | filter:$viewValue | limitTo:8"
+                   typeahead-on-select="filter.city.setSelected($item)" typeahead-select-on-exact="true">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="float-right">
+        <button class="btn btn-success" type="button" ng-click="save()">Забрать закупки</button>
+        <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

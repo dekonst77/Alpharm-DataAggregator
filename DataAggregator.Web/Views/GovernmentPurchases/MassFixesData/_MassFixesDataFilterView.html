@@ -1,0 +1,160 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Фильтр</h3>
+</div>
+<div class="modal-body" cg-busy="filterLoading">
+    <form name="filterForm">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Номер закупки</label>
+                    <input type="text" ng-model="filter.PurchaseNumber" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label>Регион получателя</label>
+                    <input type="text" ng-model="filter.ReceiverFederationSubject" uib-typeahead="regionName for regionName in federationSubjects | filter:$viewValue | limitTo:8" typeahead-on-select="federationSubjectSelected($item)" typeahead-select-on-exact="true" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    Date_begin
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label data-translate="PERIOD_START"></label>
+                    <p class="input-group ap-required">
+                        <input name="DateBeginStart"
+                               type="text"
+                               ng-change="setDateBeginEnd()"
+                               ng-blur="setDateValueNullIfEmpty($event)"
+                               value-comparer="filter.DateBeginEnd.Value"
+                               value-comparer-type="<="
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="filter.DateBeginStart.Value"
+                               is-open="filter.DateBeginStart.Opened"
+                               placeholder="{{'PERIOD_START' | translate}}"
+                               datepicker-options="{minMode: 'day', showWeeks: false}"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateBeginStart.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <div class="has-error help-block" ng-if="filterForm.DateBeginStart.$invalid">
+                        <small ng-if="filterForm.DateBeginStart.$error.valueComparer" data-translate="ERROR.PERIOD"></small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label data-translate="PERIOD_END"></label>
+                    <p class="input-group ap-required">
+                        <input type="text"
+                               name="DateBeginEnd"
+                               ng-blur="setDateValueNullIfEmpty($event)"
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="filter.DateBeginEnd.Value"
+                               is-open="filter.DateBeginEnd.Opened"
+                               placeholder="{{'PERIOD_END' | translate}}"
+                               datepicker-options="{minMode: 'day', showWeeks: false }"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateBeginEnd.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <label>Наименование получателя</label>
+                    <input type="text" ng-model="filter.ReceiverName" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    Date_end
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label data-translate="PERIOD_START"></label>
+                    <p class="input-group ap-required">
+                        <input name="DateEndStart"
+                               type="text"
+                               ng-change="setDateEndEnd()"
+                               ng-blur="setDateValueNullIfEmpty($event)"
+                               value-comparer="filter.DateEndEnd.Value"
+                               value-comparer-type="<="
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="filter.DateEndStart.Value"
+                               is-open="filter.DateEndStart.Opened"
+                               placeholder="{{'PERIOD_START' | translate}}"
+                               datetimepicker-neutral-timezone
+                               datepicker-options="{minMode: 'day', showWeeks: false}"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateEndStart.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <div class="has-error help-block" ng-if="filterForm.DateEndStart.$invalid">
+                        <small ng-if="filterForm.DateEndStart.$error.valueComparer" data-translate="ERROR.PERIOD"></small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label data-translate="PERIOD_END"></label>
+                    <p class="input-group ap-required">
+                        <input type="text"
+                               name="DateEndEnd"
+                               ng-blur="setDateValueNullIfEmpty($event)"
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="filter.DateEndEnd.Value"
+                               is-open="filter.DateEndEnd.Opened"
+                               placeholder="{{'PERIOD_END' | translate}}"
+                               datetimepicker-neutral-timezone
+                               datepicker-options="{minMode: 'day', showWeeks: false}"
+                               datepicker-mode="'day'"
+                               min-date="filter.DateEndStart.value"
+                               init-date="now" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateEndEnd.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <label>ИНН получателя</label>
+                    <input type="text" ng-model="filter.ReceiverINN" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Категория</label>
+                    <input type="text" ng-model="filter.CategoryName" uib-typeahead="categoryName for categoryName in categoryNames | filter:$viewValue | limitTo:8" typeahead-on-select="districtSelected($item)" typeahead-select-on-exact="true" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label>Id получателя</label>
+                    <input type="text" ng-model="filter.ReceiverId" class="form-control" awnum="int">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Характер</label>
+                    <input type="text" ng-model="filter.NatureName" uib-typeahead="natureName for natureName in natureNames | filter:$viewValue | limitTo:8" typeahead-on-select="districtSelected($item)" typeahead-select-on-exact="true" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label>Источник финансирования</label>
+                    <input type="text" ng-model="filter.FundingName" uib-typeahead="fundingName for fundingName in fundingNames | filter:$viewValue | limitTo:8" typeahead-on-select="citySelected($item)" typeahead-select-on-exact="true" class="form-control">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-disabled="filterForm.$invalid" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>
+

@@ -1,0 +1,66 @@
+﻿<div ng-controller="RaspredelenieController" cg-busy="dataLoading" ng-init="Raspredelenie_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .clBefore {
+            background-color: red;
+        }
+
+        .clAfter {
+            background-color: green;
+        }
+    </style>
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-disabled="!(CurrentRaspredelenie.Id>0)" ng-click="Raspredelenie_search();"> <span class="glyphicon glyphicon-search">Выбрать</span> </button>
+                        <button class="btn btn-warning btn-sm" ng-click="Raspredelenie_save();" ng-disabled="!Grid_Raspredelenie.NeedSave"> <span class="glyphicon glyphicon-save">Сохранить</span> </button>
+                        <button class="btn btn-warning btn-sm" ng-click="Raspredelenie_Create();" ng-disabled="(CurrentRaspredelenie.Id>0)"> <span class="glyphicon glyphicon-plus">Создать новое</span> </button>
+                        <button class="btn btn-warning btn-sm" ng-click="Raspredelenie_Update();" ng-disabled="!(CurrentRaspredelenie.Id>0)"> <span class="glyphicon glyphicon-refresh">Досчитать</span> </button>
+                        <button class="btn btn-warning btn-sm" ng-click="Raspredelenie_Close();" ng-disabled="!(CurrentRaspredelenie.Id>0)"> <span class="glyphicon glyphicon-stop">Закрыть</span> </button>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <select name="Raspredelenies"
+                            class="form-control" ng-options="item as item.Name for item in Raspredelenies track by item.Id" ng-model="CurrentRaspredelenie" ng-disabled="IsLoad"></select>
+                </div>
+                <div class="col-md-4 padding3">
+                    <label>
+                        <input name="filtercommon" type="text" class="form-control" ng-model="CurrentRaspredelenie.Name" ng-change="" ng-disabled="IsLoad">
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="date" class="form-control" ng-model="CurrentRaspredelenie.Date_Begin" ng-change="" ng-disabled="IsLoad">
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="date" class="form-control" ng-model="CurrentRaspredelenie.Date_End" ng-change="" ng-disabled="IsLoad">
+                    </label>
+                </div>
+                <div class="col-md-2 padding3">
+                    <select name="Raspredelenies"
+                            class="form-control" ng-options="item as item.Name for item in Tables track by item.Id" ng-model="CurrentRaspredelenie.Table" ng-disabled="IsLoad"></select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+        <size_main>
+            <!--<size_nav resizable r-directions="['right']">
+            </size_nav>-->
+            <div class="size_content">
+                <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                    <div id="drug-grid-block" cg-busy="drugLoading" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="Grid_Raspredelenie.Options" class="ui-grid-enable-content-selection"> </ui-grid-control>
+                    </div>
+                </div>
+                <div class="size_row">
+                    <div style="width:100%">
+                        <div id="classifier-grid-block" cg-busy="classifierLoading" class="auto-item-panel" style="width:100%">
+                            <ui-grid-control options="Grid_Classifier.Options" class="ui-grid-enable-content-selection"> </ui-grid-control>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </size_main>
+
+

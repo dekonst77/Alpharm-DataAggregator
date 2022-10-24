@@ -1,0 +1,101 @@
+﻿#classifier-grid-block .yellow {
+    background: #ffff66 !important;
+}
+
+#goods-grid-block .green {
+    background: rgb(204, 255, 204) !important;
+}
+
+#goods-grid-block .green.selected {
+    background: darkseagreen !important;
+}
+
+#category-stat-grid-block .for-adding {
+    background: #E2EFDA;
+}
+
+#goods-grid-block .ui-grid-row,
+#goods-grid-block .ui-grid-cell {
+height: 20px;
+font-size: 14px;
+line-height: 10px;
+}
+
+
+#classifier-grid-block .ui-grid-row,
+#classifier-grid-block .ui-grid-cell {
+height: 20px;
+font-size: 14px;
+line-height: 10px;
+}
+
+#search-filter-line {
+    margin: 0;
+    padding: 3px 5px;
+    border-width: 2px 0px;
+    border-style: solid;
+    border-color: #264283;
+}
+
+#goods-grid-block table,
+#classifier-grid-block table {
+    width: 100%;
+}
+
+#goods-grid-block thead,
+#classifier-grid-block thead {
+    background-color: #337ab7;
+    color: #ffffff;
+}
+
+#goods-grid-block td,
+#goods-grid-block th,
+#classifier-grid-block td,
+#classifier-grid-block th {
+    border: 1px solid #ccddff;
+}
+
+#goods-grid-block th,
+#goods-grid-block td,
+#classifier-grid-block th,
+#classifier-grid-block td {
+    /*Исправлен баг не позволяющий выделять 1 символ в ячейке*/
+    padding-left: 5px !important;
+}
+
+#goods-grid-block td,
+#classifier-grid-block td {
+    /*В гриде все записи в 1 строчку*/
+    white-space: nowrap;
+}
+
+.systematization-goods-systematization textarea.form-control {
+    height: 25px;
+    padding: 2px;
+}
+
+.systematization-goods-systematization .multi-select-control .form-control {
+    height: 25px;
+}
+
+.systematization-goods-systematization .multi-select-control .btn {
+    padding-top: 1px;
+    padding-bottom: 2px;
+}
+
+.systematization-goods-systematization {
+    
+    textarea.form-control {
+    height: 25px;
+    padding: 2px;
+    }
+    .multi-select-control {
+        .form-control {
+            height: 25px;
+        }
+        .btn {
+            padding-top: 1px;
+            padding-bottom: 2px;
+        }
+    }
+}

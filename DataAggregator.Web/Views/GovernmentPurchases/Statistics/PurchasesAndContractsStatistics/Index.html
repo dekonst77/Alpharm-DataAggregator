@@ -1,0 +1,79 @@
+﻿<div ng-controller="PurchasesAndContractsStatisticsController" cg-busy="loadingDictionary" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <form name="filterForm" novalidate>
+                <div class="row  form-group">
+                    <div class="col-md-2">
+                        <label data-translate="PERIOD_START"></label>
+                        <p class="input-group ap-required">
+                            <input name="startDate"
+                                   type="text"
+                                   ng-required="true"
+                                   value-comparer="filter.dateEnd.Value"
+                                   value-comparer-type="<="
+                                   class="form-control"
+                                   uib-datepicker-popup="{{format}}"
+                                   on-open-focus="true"
+                                   ng-model="filter.dateStart.Value"
+                                   is-open="filter.dateStart.Opened"
+                                   placeholder="{{'PERIOD_START' | translate}}"
+                                   datepicker-options="{minMode: 'day', showWeeks: false}"
+                                   datepicker-mode="'day'" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="filter.dateStart.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                        <div class="has-error help-block" ng-if="filterForm.startDate.$invalid">
+                            <small ng-if="filterForm.startDate.$error.valueComparer" data-translate="ERROR.PERIOD"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label data-translate="PERIOD_END"></label>
+                        <p class="input-group ap-required">
+                            <input type="text"
+                                   name="endDate"
+                                   ng-required="true"
+                                   class="form-control"
+                                   uib-datepicker-popup="{{format}}"
+                                   on-open-focus="true"
+                                   ng-model="filter.dateEnd.Value"
+                                   is-open="filter.dateEnd.Opened"
+                                   placeholder="{{'PERIOD_END' | translate}}"
+                                   datepicker-options="{minMode: 'day', showWeeks: false}"
+                                   datepicker-mode="'day'"
+                                   min-date="filter.datestart.value"
+                                   init-date="now" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="filter.dateEnd.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>
+                                    <input type="radio" class="form-inline" ng-model="filter.statisticsObject" value="Purchases" ng-change='objectChange(filter.statisticsObject)' /> Закупки
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>
+                                    <input type="radio" class="form-inline" ng-model="filter.statisticsObject" value="Contracts" ng-change='objectChange(filter.statisticsObject)' /> Контракты
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-success" type="button" ng-click="filter.getStatistics()">{{'BUTTONS.LOAD_DATA' | translate}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="statisticsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>

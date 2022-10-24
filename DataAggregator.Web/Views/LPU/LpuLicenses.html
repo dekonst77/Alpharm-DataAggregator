@@ -1,0 +1,78 @@
+﻿<div ng-controller="LPULicensesController" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="row">
+                        <div class="col-md-5 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.Name" ng-change="" placeholder="ИНН, Наименование">
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="адрес">
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.LPUId" ng-change="" placeholder="LPUId">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.BrickId" ng-change="" placeholder="БрикИд">
+                        </div>                       
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.PointId" ng-change="" placeholder="PointId">
+                        </div>
+                    </div>                   
+                </div>               
+     
+                
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <button class="btn btn-info btn-sm" ng-click="ToExcel();" ng-disabled="Grid.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить</span></button>
+                        <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ngf-select="FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                    </div>                  
+                </div>
+            </div>
+           
+        </div>
+    </div>
+
+    <div id="grid-block"  class="auto-item-panel">  <!--data-context-menu="Views/LPU/lpu_context_menu.html"-->
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

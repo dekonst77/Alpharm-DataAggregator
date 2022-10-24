@@ -1,0 +1,22 @@
+﻿<div ng-controller="MainController" ng-cloak style="margin: 10px">
+
+    <div>
+        <h4 data-translate="MAIN.ACCOUNT.TITLE"></h4>
+        <a href="/Account/Manage" data-translate="MAIN.CHANGE_PASSWORD"></a>
+    </div>
+
+    <div in-roles="Admin,UserManager">
+        <h4 data-translate="MAIN.ADMINISTRATION"></h4>
+        <div>
+            <a href="/UsersAdmin" data-translate="MAIN.MANAGE_USER.TITLE"></a>
+        </div>
+
+        <div>
+            <a href="/#/DepartmentDictionary" data-translate="MAIN.DEPARTMENT_DICTIONARY.TITLE"></a>
+        </div>
+
+        <div>
+            <a href="/#/GlobalQuery">Редактор отчетов</a>
+        </div>
+    </div>
+</div>

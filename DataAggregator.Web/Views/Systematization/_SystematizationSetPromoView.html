@@ -1,0 +1,20 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Акция</h3>
+</div>
+<form ng-submit="save()" name="promoForm">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <input type="text" class="form-control" ng-model="promoValue" ng-keydown="checkValue($event)" ng-class="{'has-error' : !checkPromoValueIsValid()}" autofocus />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="float-left">
+            <button class="btn btn-primary" type="submit" ng-disabled="!checkPromoValueIsValid()" data-translate="BUTTONS.SAVE"></button>
+        </div>
+        <div>
+            <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CLOSE"></button>
+        </div>
+    </div>
+</form>

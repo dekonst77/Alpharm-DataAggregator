@@ -1,0 +1,10 @@
+<div class="modal-header">
+    <button class="close" type="button" ng-click="$dismiss()">&times;</button>
+    <H4 style="margin:0">{{headerText}}</H4>
+</div>
+<div class="modal-body">
+    <p ng-bind-html="messageText"></p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="$close()" data-translate="BUTTONS.OK"></button>
+</div>

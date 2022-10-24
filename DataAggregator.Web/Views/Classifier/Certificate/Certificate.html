@@ -1,0 +1,43 @@
+﻿<div ng-controller="CertificateController" cg-busy="dataLoading" ng-init="Certificate_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-warning btn-sm" ng-click="Certificate_save();" ng-disabled="!Grid_Certificate.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <!--<div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-danger btn-sm" ng-click="Certificate_delete();"><span class="glyphicon glyphicon-search">Удалить</span></button>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="auto-item-panel">
+        <uib-accordion close-others="false">
+
+            <div uib-accordion-group ng-class="Grid_Certificate.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Сертификат" is-open="true">
+                <div id="Grid_Certificate" style="height:300px">
+                    <ui-grid-control options="Grid_Certificate.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_FV.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Формы выпуска" is-open="true">
+                <div id="Grid_FV" style="height:300px">
+                    <ui-grid-control options="Grid_FV.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_SubstRaw.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Фармацевтическая субстанция" is-open="true">
+                <div id="Grid_SubstRaw" style="height:300px">
+                    <ui-grid-control options="Grid_SubstRaw.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_ManufactureWay.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Сведения о стадиях производства" is-open="true">
+                <div id="Grid_ManufactureWay" style="height:300px">
+                    <ui-grid-control options="Grid_ManufactureWay.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+        </uib-accordion>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿<div ng-controller="PharmacyBrandBlackListController" cg-busy="loading" ng-cloak class="pharmacy-brand-black-list auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn btn-info" ngf-select="UploadFromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Импортировать из Excel</span></div>
+                        <button type="button" class="btn btn-primary" ng-click="exportToExcel()">Экспортировать в Excel</button>
+                        <button type="button" class="btn btn-primary" ng-click="openDeleteDialog()" ng-disabled="!(blackListGridApi.selection.getSelectedRows().length > 0)" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="blackListGrid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+</div>

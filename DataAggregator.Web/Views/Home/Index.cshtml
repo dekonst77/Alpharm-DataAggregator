@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PartHeader
+{
+
+    @Scripts.Render("~/bundles/Main")
+    @Scripts.Render("~/Views/Main/markup")
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Scripts.Render("~/bundles/Global")
+        @Styles.Render("~/Content/Systematization/css")
+        @Styles.Render("~/Content/Classifier/css")
+    }
+
+    @if (User.IsInRole("SOperator"))
+    {
+        @Scripts.Render("~/bundles/Systematization")
+        @Scripts.Render("~/Views/Systematization/markup")
+    }
+    @if (User.IsInRole("SPharmacist"))
+    {
+        @Scripts.Render("~/Views/Classifier/markup")
+        @Scripts.Render("~/bundles/Classifier")
+    }
+    @if (User.IsInRole("GOperator") || User.IsInRole("GOperatorRemote"))
+    {
+        @Styles.Render("~/Content/GovernmentPurchases/css")
+        @Scripts.Render("~/bundles/GovernmentPurchases")
+        @Scripts.Render("~/Views/GovernmentPurchases/markup")
+    }
+
+    @if (User.IsInRole("RManager") || User.IsInRole("RBoss") || User.IsInRole("Ecom"))
+    {
+        @Styles.Render("~/Content/Retail/css")
+        @Scripts.Render("~/bundles/Retail")
+        @Scripts.Render("~/Views/Retail/markup")
+    }
+    @if (User.IsInRole("OFD_View"))
+    {
+        @Styles.Render("~/Content/OFD/css")
+        @Scripts.Render("~/bundles/OFD")
+        @Scripts.Render("~/Views/OFD/markup")
+    }
+
+    @if (User.IsInRole("GS_View"))
+    {
+        @Scripts.Render("~/bundles/GS")
+    }
+
+    @if (User.IsInRole("UserManager"))
+    {
+        @Scripts.Render("~/bundles/Management")
+    }
+
+    @if (User.IsInRole("Project"))
+    {
+        @Scripts.Render("~/bundles/Projects")
+    }
+
+    @if (User.IsInRole("Clients"))
+    {
+        @Scripts.Render("~/bundles/Clients")
+        @Scripts.Render("~/Views/Clients/markup")
+    }
+    @if (User.IsInRole("DistrRep_Main"))
+    {
+        @Scripts.Render("~/bundles/DistrRep")
+        @Scripts.Render("~/Views/DistrRep/markup")
+
+    }
+
+    @if (User.IsInRole("LPU_view"))
+    {
+        @Scripts.Render("~/bundles/LPU")
+        @Scripts.Render("~/Content/LPU/css")
+        
+    }
+
+}
+
+
+
+<div ng-view style="height:100%"></div>

@@ -1,0 +1,49 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Фильтр</h3>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <!--<div class="row">
+            <div class="col-md-6">
+                <label>LKCU</label>
+                <input type="text" ng-model="dialogData.LKCU" class="form-control">
+            </div>
+        </div>-->
+        <div class="row">
+            <div class="col-md-6">
+                <label>DrugId</label>
+                <input type="text" ng-model="dialogData.DrugId" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Торговое наименование</label>
+                <input type="text" ng-model="dialogData.TradeName" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>PackerId</label>
+                <input type="text" ng-model="dialogData.PackerId" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Упаковщик</label>
+                <input type="text" ng-model="dialogData.Packer" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>OwnerTradeMarkId</label>
+                <input type="text" ng-model="dialogData.OwnerTradeMarkId" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Производитель</label>
+                <input type="text" ng-model="dialogData.OwnerTradeMark" class="form-control">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

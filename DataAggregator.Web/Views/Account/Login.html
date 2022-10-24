@@ -1,0 +1,36 @@
+﻿<div ng-controller="LoginController" cg-busy="loading" ng-cloak id="content">
+
+    <div class="col-sm-8">
+        <h4>Войти</h4>
+        <hr>
+
+        <form class="form-horizontal" name="loginForm">
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="Name">Логин</label>
+                <div class="col-sm-11">
+                    <input class="form-control" ng-model="model.name" data-val="true" data-val-required="Требуется поле Логин." id="Name" name="Name" type="text" value="">
+                    <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="Password">Пароль</label>
+                <div class="col-sm-11">
+                    <input class="form-control" ng-model="model.password" data-val="true" data-val-required="Требуется поле Пароль." id="Password" name="Password" type="password">
+                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-11">
+                    <input ng-model="model.rememberMe" data-val="true" id="RememberMe" name="RememberMe" type="checkbox" value="true">
+                    <label for="RememberMe">Запомнить меня?</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-3">
+                    <button type="button" class="btn btn-success" ng-click="login()">Войти</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,66 @@
+﻿<div ng-controller="ClientsController" cg-busy="dataLoading" ng-init="CompaniesInit();" ng-cloak class="fullHeight" ng-style="">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style>
+        .modify {
+            color: red;
+        }
+        .myGrid {
+            min-height: 100%;
+        }
+
+        .fullHeight {
+            height: 100%;
+            padding: 1px;
+        }
+
+        .fullHeightGrid {
+            height: 85%;
+            padding: 1px;
+        }
+    </style>
+    <div class="row fullHeight">
+        <div class="col-md-6 padding1 fullHeight">
+            <div class="panel panel-default fullHeight" style="margin-bottom:1px;">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4 padding3">
+                            <input type="text" class="form-control" ng-model="filter_Companies.common" ng-change="">
+                        </div>
+                        <div class="col-md-6 padding3">
+                            <button class="btn btn-success btn-sm" ng-click="Companies_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                            <button class="btn btn-warning btn-sm" ng-click="Companies_save();" ng-disabled="!NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                            <button class="btn btn-primary btn-sm" ng-click="Companies_New();"><span class="glyphicon glyphicon-plus-sign">Новая компания</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body fullHeightGrid">
+                    <ui-grid-control options="Grid_Companies.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 padding1 fullHeight">
+            <div class="panel panel-default fullHeight" style="margin-bottom:1px;">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-6 padding3">
+                            <button class="btn btn-warning btn-sm" ng-click="Workers_save();" ng-disabled="!NeedSave_Worker"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                            <button class="btn btn-primary btn-sm" ng-click="Workers_New();"><span class="glyphicon glyphicon-plus-sign">Новый сотрудник</span></button>
+                        </div>
+                    </div> 
+                </div>
+                <div class="panel-body fullHeightGrid">
+                    <ui-grid-control options="Grid_Workers.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

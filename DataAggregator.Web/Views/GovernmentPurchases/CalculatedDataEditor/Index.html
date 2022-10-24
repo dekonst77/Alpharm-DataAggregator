@@ -1,0 +1,22 @@
+﻿<div ng-controller="CalculatedDataEditorController" cg-busy="loading" ng-cloak class="auto-grid-parent calculated-data-editor base" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <label>Номера закупок через запятую</label>
+            <div style="width: 50%; display: inline-block;">
+                <input type="text" ng-model="requestString" class="form-control">
+            </div>
+            <button class="btn btn-primary" type="button" ng-click="getData()" data-translate="BUTTONS.GET_DATA"></button>
+            <button class="btn btn-primary" type="button" ng-click="openFilterDialog()" data-translate="BUTTONS.FILTER"></button>
+
+            <button class="btn btn-primary float-right" type="button" ng-click="clearAvgPrice()">Очистка средних цен</button>
+            <button class="btn btn-primary float-right" type="button" ng-click="recalculateObjectsEI()">пересчет по ед измерения</button>
+            <button class="btn btn-primary float-right" type="button" ng-click="recalculateObjects()" data-translate="BUTTONS.RECALCULATE"></button>
+        </div>
+    </div>
+    
+    <div data-context-menu="Views/GovernmentPurchases/CalculatedDataEditor/CalculatedDataEditorContextMenu.html" class="auto-item-panel">
+        <ui-grid-control options="calculatedDataEditorGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+
+</div>

@@ -1,0 +1,43 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{action == 'add' ? 'Добавление новой группы' : action == 'edit' ? 'Редактирование группы' : ''}}</h3>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Id</label>
+                <input type="text" ng-model="dialogData.Id" disabled class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Имя группы</label>
+                <input type="text" ng-model="dialogData.GroupName" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Источник</label>
+                <select ng-model="dialogData.Source" ng-options="source.Name for source in sources track by source.Id" class="form-control"></select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Имена файлов</label>
+                <div style="height: 150px">
+                    <ui-grid-control options="groupFilesGrid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label>Имя файла для добавления</label>
+                <input type="text" ng-model="dialogData.GroupFileNameToAdd" class="form-control"><br />
+                <button class="btn btn-primary" type="button" ng-click="addGroupFile()" data-translate="BUTTONS.ADD"></button><br /><br />
+                <button class="btn btn-primary" type="button" ng-click="removeGroupFile()" data-translate="BUTTONS.DELETE"></button><br /><br />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

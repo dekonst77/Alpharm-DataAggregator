@@ -1,0 +1,16 @@
+﻿<div ng-controller="CountCheckController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <date-period period="filter.date" ng-required="true"></date-period>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="countCheckGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿<div ng-controller="KBKController" cg-busy="dataLoading" ng-init="KBK_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        
+
+        .AlphaBitSums {
+            background-color: green;
+        }
+
+        .Fix {
+            background-color: yellow;
+        }
+
+        .ОФД {
+            background-color: orange;
+        }
+
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="KBK_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="KBK_save();" ng-disabled="!NeedSave()"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="auto-item-panel">
+        <uib-accordion close-others="true">
+
+            <div uib-accordion-group ng-class="Grid_KBK.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="КБК">
+                <div id="purchaseGrid" data-context-menu="Views/GovernmentPurchases/KBK_ContextMenu1.html" style="height:600px">
+                    <ui-grid-control options="Grid_KBK.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_KBK_Main_Rasp.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Код главного распорядителя">
+                <div id="purchaseGrid">
+                    <ui-grid-control options="Grid_KBK_Main_Rasp.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_KBK_ZS.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Целевая Статья">
+                <div id="purchaseGrid">
+                    <ui-grid-control options="Grid_KBK_ZS.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_KBK_Razdel.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Код раздела">
+                <div id="purchaseGrid">
+                    <ui-grid-control options="Grid_KBK_Razdel.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_KBK_Razdel2.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Код подраздела">
+                <div id="purchaseGrid">
+                    <ui-grid-control options="Grid_KBK_Razdel2.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div uib-accordion-group ng-class="Grid_KBK_KodVidRashod.Options.data.length > 0 ? 'panel-default' : 'panel-danger'" heading="Код вида расходов">
+                <div id="purchaseGrid">
+                    <ui-grid-control options="Grid_KBK_KodVidRashod.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+        </uib-accordion>
+</div>
+    </div>

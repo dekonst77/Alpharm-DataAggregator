@@ -1,0 +1,86 @@
+﻿<div cg-busy="sourceLoading" ng-controller="RetailTemplatesController" ng-cloak class="retail-template">
+
+    <div id="source-block">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="btnGrid">
+                    <button type="button" class="btn btn-success" ng-click="addSource()" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-danger" ng-click="removeSource()" ng-disabled="selectedSource == null" data-translate="BUTTONS.DELETE"></button>
+                </div>
+                <div cg-busy="templatesLoading" class="uiGridControl">
+                    <ui-grid-control options="gridSourcesOptions" class="ui-grid-header-wrap-text"></ui-grid-control>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="btnGrid">
+                    <button type="button" class="btn btn-success" ng-click="addTemplate()" ng-disabled="selectedSource == null" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-danger" ng-click="removeTemplate()" ng-disabled="selectedTemplate == null" data-translate="BUTTONS.DELETE"></button>
+                </div>
+                <div cg-busy="templatesLoading" class="uiGridControl">
+                    <ui-grid-control options="gridTemplatesOptions" class="ui-grid-header-wrap-text"></ui-grid-control>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-block" id="header-menu-block">
+        <div>
+            <button type="button" class="btn btn-success" ng-click="addField()" ng-disabled="selectedTemplate == null">Добавить колонку</button>
+            <button type="button" class="btn btn-warning" ng-click="refreshTemplate()" ng-disabled="selectedTemplate == null">Восстановить</button>
+            <button type="button" class="btn btn-primary" ng-click="saveTemplate()" ng-disabled="selectedTemplate == null" data-translate="BUTTONS.SAVE"></button>
+        </div>
+    </div>
+
+    <div class="page-block" id="template-block" cg-busy="templateFieldLoading">
+        <div ui-tree id="tree-root" data-drag-enabled="false">
+            <ol ui-tree-nodes="" ng-model="templateData" data-horizontal="">
+                <li ng-repeat="node in templateData" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+            </ol>
+        </div>
+    </div>
+
+
+
+
+    <script type="text/ng-template" id="nodes_renderer.html">
+        <div class="tree-node tree-node-content">
+
+            <div class="tree-node-content">
+
+                <div class="form-group">
+
+                    <select class="form-control" ng-model="node.FieldName" ng-if="node.Childs.length == 0" required>
+                        <option ng-selected="{{node.FieldName == field.FieldName}}"
+                                ng-repeat="field in  templateFieldName"
+                                value="{{field.FieldName}}">
+                            {{field.Description}}
+                        </option>
+                    </select>
+                    <input type="text" class="form-control" value="Групповое поле" disabled ng-if="node.Childs.length > 0" required />
+
+
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="название" ng-model="node.ColumnNameInFile" />
+                </div>
+                <a class="pull-left btn btn-success btn-xs" data-nodrag ng-click="move(this,'left')" ng-if="!checkFirst(this)"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                <a class="pull-left btn btn-success btn-xs" data-nodrag ng-click="move(this,'right')" ng-if="!checkEnd(this)"><span class="glyphicon glyphicon-arrow-right"></span></a>
+                <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)"><span class="glyphicon glyphicon-remove"></span></a>
+                <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="addField(this)"><span class="glyphicon glyphicon-plus"></span></a>
+
+            </div>
+
+
+
+        </div>
+        <ol ui-tree-nodes ng-model="node.Childs" ng-class="{hidden: collapsed}" data-horizontal>
+            <li ng-repeat="node in node.Childs" ui-tree-node ng-include="'nodes_renderer.html'">
+            </li>
+        </ol>
+    </script>
+
+
+</div>
+
+
+

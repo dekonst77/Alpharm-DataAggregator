@@ -1,0 +1,24 @@
+﻿<div style="z-index: 1;width: 550px;" class="context-menu-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+        </div>
+        <div class="panel-body">            
+            <div class="row padding1">
+                <div class="col-md-3 padding1">
+                    <label>Товаро-Движение</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="DistrRep_RawData_Set_DistributionType(NULL,'');">Убрать</button>
+                            <button ng-repeat="item in spr_DistributionType" type="button" class="btn btn-default btn-xs" ng-click="DistrRep_RawData_Set_DistributionType(item.code,item.Status);">
+                                {{item.Status}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

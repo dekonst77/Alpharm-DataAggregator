@@ -1,0 +1,56 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Забор данных</h3>
+</div>
+<div class="modal-body" cg-busy="filterLoading">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Федеральный округ</label>
+                <input type="text" ng-change="federalDistrictChanged()" ng-model="selectedRegion.FederalDistrict" uib-typeahead="regionName.Name for regionName in regions.federalDistricts | filter:$viewValue | limitTo:8" typeahead-on-select="federalDistrictSelected($item)" typeahead-select-on-exact="true" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Субъект федерации</label>
+                <input type="text" ng-change="federationSubjectChanged()" ng-model="selectedRegion.FederationSubject" uib-typeahead="regionName.Name for regionName in regions.federationSubjects | filter:$viewValue | limitTo:8" typeahead-on-select="federationSubjectSelected($item)" typeahead-select-on-exact="true" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Район</label>
+                <input type="text" ng-change="districtChanged()" ng-model="selectedRegion.District" uib-typeahead="regionName.Name for regionName in regions.districts | filter:$viewValue | limitTo:8" typeahead-on-select="districtSelected($item)" typeahead-select-on-exact="true" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label>Город</label>
+                <input type="text" ng-change="cityChanged()" ng-model="selectedRegion.City" uib-typeahead="regionName.Name for regionName in regions.cities | filter:$viewValue | limitTo:8" typeahead-on-select="citySelected($item)" typeahead-select-on-exact="true" class="form-control">
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                <label>Торговое наименование</label>
+                <input type="text" ng-change="drugChanged()" ng-model="selectedDrug.Drug" uib-typeahead="data.Value for data in searchDictionary($viewValue,'tradeName')" typeahead-on-select="drugSelected($item)" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label>Производитель</label>
+                <input type="text" ng-change="ownerTradeMarkChanged()" ng-model="selectedDrug.OwnerTradeMark" uib-typeahead="data.Value for data in searchDictionary($viewValue,'ownerTradeMark')" typeahead-on-select="ownerTradeMarkSelected($item)" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label>Упаковщик</label>
+                <input type="text" ng-change="packerChanged()" ng-model="selectedDrug.Packer" uib-typeahead="data.Value for data in searchDictionary($viewValue,'packer')" typeahead-on-select="packerSelected($item)" class="form-control">
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <date-period period="filter.date" ng-required="true"></date-period>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>
+
+

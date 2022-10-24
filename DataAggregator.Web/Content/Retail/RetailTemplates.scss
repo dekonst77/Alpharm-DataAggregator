@@ -1,0 +1,32 @@
+﻿.retail-template {
+    .angular-ui-tree-node,
+    .angular-ui-tree-placeholder,
+    .angular-ui-tree-nodes,
+    .angular-ui-tree {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .tree-node {
+        border: 1px solid #dae2ea;
+        background: #f8faff;
+    }
+
+    #source-block {
+        //height: 400px;
+        overflow: hidden;
+    }
+
+    #template-block {
+        overflow-y: auto;
+        height: auto;
+    }
+
+    #header-menu-block {
+        height: 50px;
+    }
+
+    div.btnGrid {
+        margin: 5px 0px;
+    }
+}

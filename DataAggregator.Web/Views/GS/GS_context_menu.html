@@ -1,0 +1,115 @@
+﻿<div class="panel panel-primary context-menu" style="width: 500px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>PharmacyId</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="PharmacyId_new();">Выдать Новый</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>GSId</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="GS_Clone();">ПроДублировать</button>
+                        <button type="button" class="btn btn-default" ng-click="Calls_Add();">На Прозвон</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>ГС</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger" ng-click="GS_delete();">Удалить</button>
+                        <button type="button" class="btn btn-warning" ng-click="GS_Merge();">Объединить</button>
+                        <button type="button" class="btn btn-success" in-roles="GS_Boss" ng-click="GS_Control();">Готово</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Точка</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="YandexAddress();">По Адресу</button>
+                        <button type="button" class="btn btn-default" ng-click="YandexKoor();">По Координатам</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-5 padding1">
+                <label>Существуют в ({{currentperiod}})</label>
+            </div>
+            <div class="col-md-5 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" ng-click="GS_IsExists(0,true);">Да</button>
+                        <button type="button" class="btn btn-danger" ng-click="GS_IsExists(0,false);">Нет</button>
+                        <button type="button" class="btn btn-info" ng-click="GS_IsExists(0,null);">Пусто</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-5 padding1">
+                <label>Существуют с ({{Get_currentperiod(currentperiod,-1)}})</label>
+            </div>
+            <div class="col-md-5 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" ng-click="GS_IsExists(-1,true);">Да</button>
+                        <button type="button" class="btn btn-danger" ng-click="GS_IsExists(-1,false);">Нет</button>
+                        <button type="button" class="btn btn-info" ng-click="GS_IsExists(-1,null);">Пусто</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-5 padding1">
+                <label>Существуют с ({{Get_currentperiod(currentperiod,-2)}})</label>
+            </div>
+            <div class="col-md-5 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" ng-click="GS_IsExists(-2,true);">Да</button>
+                        <button type="button" class="btn btn-danger" ng-click="GS_IsExists(-2,false);">Нет</button>
+                        <button type="button" class="btn btn-info" ng-click="GS_IsExists(-2,null);">Пусто</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-5 padding1">
+                <label>Существуют с ({{Get_currentperiod(currentperiod,-3)}})</label>
+            </div>
+            <div class="col-md-5 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" ng-click="GS_IsExists(-3,true);">Да</button>
+                        <button type="button" class="btn btn-danger" ng-click="GS_IsExists(-3,false);">Нет</button>
+                        <button type="button" class="btn btn-info" ng-click="GS_IsExists(-3,null);">Пусто</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿.ui-grid-header-cell-primary-focus,
+.ui-grid-header-cell-label {
+    text-align: center;
+}
+
+.ui-grid-header-wrap-text
+.ui-grid-header-cell-primary-focus,
+.ui-grid-header-wrap-text
+.ui-grid-header-cell-label {
+    white-space:initial;
+}
+
+.ui-grid-invisible {
+    display:none;
+}
+.ui-grid-modify {
+    color: red;
+}
+.ui-grid-center {
+    margin: 0 !important;
+    text-align: center;
+    width: 100% !important;
+    padding: 5px 5px 5px 5px !important;
+}
+.ui-grid-true {
+    background-color: lightgreen;
+    display: block!important;
+    text-align:center;
+}
+.ui-grid-false {
+    background-color: lightpink;
+    display: block !important;
+    text-align: center;
+}
+.ui-grid-null {
+    background-color: lightskyblue;
+    display: block !important;
+    text-align: center;
+}
+
+.ui-grid-enable-content-selection .ui-grid-disable-selection {
+    -webkit-user-select: inherit;
+    -khtml-user-select: inherit;
+    -moz-user-select: inherit;
+    -ms-user-select: inherit;
+    user-select: inherit;
+}

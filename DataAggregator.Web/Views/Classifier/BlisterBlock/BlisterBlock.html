@@ -1,0 +1,17 @@
+﻿<div ng-controller="BlisterBlockController" cg-busy="dataLoading" ng-init="BlisterBlock_Init();" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <button type="button" class="btn btn-warning btn-sm" ng-disabled="!Grid_BlisterBlock.NeedSave" ng-click="BlisterBlock_Save();"><span class="glyphicon glyphicon glyphicon-floppy-save"> Сохранить</span></button>
+                    <button type="button" class="btn btn-danger btn-sm" ng-disabled="!Grid_BlisterBlock.NeedSave" ng-click="BlisterBlock_Undo();"><span class="glyphicon glyphicon glyphicon-floppy-remove"> Отменить</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid_BlisterBlock.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+    </div>
+
+</div>

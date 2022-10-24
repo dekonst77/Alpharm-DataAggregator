@@ -1,0 +1,604 @@
+﻿<div ng-controller="ClassifierEditorController as ctrl" cg-busy="classifierLoading" ng-cloak class="classifier-editor">
+
+    <ng_form name="classifierEditor">
+
+        <script type="text/ng-template" id="_icon.html">
+            <div>
+                <img src="/Content/Icons/IsOther.png" class="img-rounded" ng-show="!row.entity.Used" />
+            </div>
+        </script>
+        <script type="text/ng-template" id="_iconIsBlockedRC.html">
+            <div>
+                <img src="/Content/Icons/cross.png" class="img-tbl" ng-show="row.entity.IsBlockedRC" />
+            </div>
+        </script>
+        <script type="text/ng-template" id="_rowClassifierTemplate.html">
+            <div>
+                <div class="ui-grid-cell" ng-class=" {selected : row.isSelected}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" ui-grid-cell></div>
+            </div>
+        </script>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-1">Про регистрацию</div>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-9" ng-class="{'has-error' : !checkCertificate()}">
+
+                        <div class="row">
+
+                            <div class="col-md-1">
+                                Без РУ <input type="checkbox"
+                                              ng-model="classifier.WithoutRegistrationCertificate" />
+                            </div>
+
+
+                            <div style="width: 200px;" class="col-md-1">
+                                <label>Сертификат</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control tight" ng-model="classifier.RegistrationCertificate.Number" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-success" ng-click="searchRegCert()">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="width: 150px;" class="col-md-1">
+                                <label>Дата регистрации</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control tight"
+                                           uib-datepicker-popup
+                                           ng-model="classifier.RegistrationCertificate.DatePickerRegistrationDate.Value"
+                                           is-open="classifier.RegistrationCertificate.DatePickerRegistrationDate.Opened" readonly />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-sm" ng-click="classifier.RegistrationCertificate.DatePickerRegistrationDate.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="width: 150px;" class="col-md-1">
+                                <label>Дата окончания</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control tight"
+                                           uib-datepicker-popup
+                                           ng-model="classifier.RegistrationCertificate.DatePickerExpDate.Value"
+                                           is-open="classifier.RegistrationCertificate.DatePickerExpDate.Opened" readonly />
+                                    <span class="input-group-btn">
+                                        <button type="button"
+                                                class="btn btn-default"
+                                                ng-click="classifier.RegistrationCertificate.DatePickerExpDate.Open()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="width: 150px;" class="col-md-1">
+                                <label>Дата перерег.</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control tight"
+                                           uib-datepicker-popup
+                                           ng-model="classifier.RegistrationCertificate.DatePickerReissueDate.Value"
+                                           is-open="classifier.RegistrationCertificate.DatePickerReissueDate.Opened" readonly />
+                                    <span class="input-group-btn">
+                                        <button type="button"
+                                                class="btn btn-default"
+                                                ng-click="classifier.RegistrationCertificate.DatePickerReissueDate.Open()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="width: 150px;" class="col-md-1">
+                                <label>Срок введ. в ГО</label>
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="classifier.RegistrationCertificate.CirculationPeriod.Value"
+                                       ng-change="clearId(classifier.RegistrationCertificate.CirculationPeriod)"
+                                       uib-typeahead="data.Value for data in searchDictionary($viewValue,'circulationPeriod')"
+                                       typeahead-on-select="setId($item,classifier.RegistrationCertificate.CirculationPeriod)"
+                                       typeahead-select-on-exact="true">
+                            </div>
+
+                            <div style="width: 100px;" class="col-md-1">
+                                <button class="btn btn-danger" ng-click="clearCert(item)" data-translate="BUTTONS.CLEAR"></button>
+                            </div>
+
+                            <div style="width: 100px;" class="col-md-1">
+                                <button class="btn btn-success" ng-click="changeCert()" ng-show="isEditor" ng-disabled="!classifier.RegistrationCertificate.Id" data-translate="BUTTONS.CHANGE"></button>
+                            </div>
+
+                            <div class="col-md-2">
+                                Блокировка РУ <input type="checkbox" ng-model="classifier.RegistrationCertificate.IsBlocked" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>
+                            НЕ Использовать <input type="checkbox" ng-model="classifier.Used" ng-true-value="false" ng-false-value="true" />
+                        </label>
+                        <input name="tradeName" type="text" class="form-control" ng-model="classifier.Comment">
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-1">Поле ТН</div>
+                    <!--<div class="col-md-1"><input type="text" class="form-control" ng-model="InnerCods.DrugId" readonly></div>-->
+                    <!--<div class="col-md-1">
+                       Код DrugId: {{InnerCods.DrugId}}
+                    </div>-->
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-2 padding3">
+                        <label>Торговое наименование</label>
+                        <input name="tradeName2"
+                               ng-class="{'has-error': classifierEditor.tradeName.$invalid}"
+                               required
+                               type="text"
+                               class="form-control"
+                               ng-model="classifier.TradeName.Value"
+                               ng-change="clearId(classifier.TradeName); clearRegistrationCertificate();changeTradeName();"
+                               uib-typeahead="data.Value for data in searchDictionary($viewValue,'tradeName')"
+                               typeahead-on-select="setId($item,classifier.TradeName)"
+                               typeahead-select-on-exact="true"
+                               autocomplete="new-password">
+                    </div>
+                    <div class="col-md-2 padding3">
+                        <label>Бренд</label>
+                        <input name="Brand" ng-class="{'has-error': classifierEditor.Brand.$invalid}"
+                               required
+                               type="text"
+                               class="form-control"
+                               ng-model="classifier.Brand.Value"
+                               ng-change="clearId(classifier.Brand);"
+                               uib-typeahead="data.Value for data in searchDictionary($viewValue,'Brand')"
+                               typeahead-on-select="setId($item,classifier.Brand)"
+                               typeahead-select-on-exact="true">
+                    </div>
+                    <div class="col-md-2 padding3">
+                        <label>Лекарственная форма</label>
+                        <input name="formProduct"
+                               ng-class="{'has-error': classifierEditor.formProduct.$invalid}"
+                               required
+                               type="text"
+                               class="form-control"
+                               ng-model="classifier.FormProduct.Value"
+                               ng-change="clearId(classifier.FormProduct);changeListATS();"
+                               ng-blur="loadNfcList(null, $event)"
+                               uib-typeahead="data.Value for data in searchDictionary($viewValue,'formProduct')"
+                               typeahead-on-select="setId($item,classifier.FormProduct);loadNfcList($item, $event)"
+                               typeahead-select-on-exact="true"
+                               autocomplete="false">
+                    </div>
+
+                    <div class="col-md-2 padding3">
+                        <label>Комплектация</label>
+                        <input name="equipment"
+                               ng-class="{'has-error': classifierEditor.equipment.$invalid}"
+                               type="text"
+                               class="form-control"
+                               ng-model="classifier.Equipment.Value"
+                               ng-change="clearId(classifier.Equipment);"
+                               uib-typeahead="data.Value for data in searchDictionary($viewValue,'Equipment')"
+                               typeahead-on-select="setId($item,classifier.Equipment)"
+                               typeahead-select-on-exact="true">
+                    </div>
+
+                    <div class="col-md-1 padding3">
+                        <label>NFC</label>
+                        <select name="nfc" ng-class="{'has-error': classifierEditor.nfc.$invalid}" required ng-change="checkNfc()" class="form-control" ng-options="item as item.DisplayValue for item in nfcList track by item.Id" ng-model="classifier.Nfc"></select>
+                    </div>
+
+                    <div class="col-md-1 padding3">
+                        <label>Фасовка</label>
+                        <input name="consumerPackingCount"
+                               ng-class="{'has-error': classifierEditor.consumerPackingCount.$invalid}"
+                               required
+                               type="text"
+                               class="form-control"
+                               ng-model="classifier.ConsumerPackingCount">
+                    </div>
+
+                    <div class="col-md-1 padding3">
+                        <label>Тип</label>
+                        <select name="drugType" ng-class="{'has-error': classifierEditor.drugType.$invalid}" required ng-change="clearRegistrationCertificate()"
+                                class="form-control" ng-options="item as item.Value for item in drugTypeList track by item.Id" ng-model="classifier.DrugType"></select>
+
+                    </div>
+
+                    <div class="col-md-1 padding3">
+                        <div class="row container-fluid padding3">
+
+                            <button class="btn btn-success btn-xs" ng-click="addRealPacking()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+
+                            <div ng-repeat="item in classifier.RealPackingList" style="display: inline-block; margin-left: 0px; margin-top: 10px">
+                                <div ng-mouseenter="item.canRemove = true" ng-mouseleave="item.canRemove = false">
+                                    <div style="width: 34px; display: inline-block;">
+                                        <input type="text" ng-model="item.RealPackingCount" class="form-control padding3" style="display: inline; width: 34px" placeholder="Упаковка" name="realPacking_{{$index}}" ng-class="{'has-error': classifierEditor.realPacking_{{$index}}.$invalid}" required ng-pattern="integerPattern">
+                                    </div>
+
+                                    <button class="btn btn-danger btn-xs" type="button" ng-show="item.canRemove" ng-click="removeRealPacking(item)"><span class="glyphicon glyphicon-remove"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row container-fluid">
+
+                        <button class="btn btn-success btn-xs" ng-click="addInn()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+
+                        <div ng-repeat="item in classifier.InnGroupDosage" style="display: inline-block; margin-left: 5px; margin-top: 10px">
+
+                            <div ng-mouseenter="item.canRemove = true" ng-mouseleave="item.canRemove = false" style="width: 200px">
+                                <input name="inn_{{$index}}" ng-class="{'has-error': classifierEditor.inn_{{$index}}.$invalid}" required
+                                       type="text" ng-model="item.INN.Value" ng-change="clearId(item.INN); clearRegistrationCertificate();changeListATS();" uib-typeahead="data.Value for data in searchDictionary($viewValue,'inn')" class="form-control" typeahead-on-select="setId($item,item.INN)" typeahead-select-on-exact="true" style="display: inline; width: 170px" placeholder="МНН"
+                                       popover-placement="top" uib-popover="{{item.INN.Value}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                                <div style="width: 170px; display: inline-block;">
+                                    <input type="text" replacecommas ng-model="item.DosageCount" class="form-control" style="display: inline; width: 65px" placeholder="Дозировка">
+                                    <input type="text" replacecommas ng-model="item.Dosage.Value" ng-change="clearId(item.Dosage)" uib-typeahead="data.Value for data in searchDictionary($viewValue,'dosage')" class="form-control" typeahead-on-select="setId($item,item.Dosage)" typeahead-select-on-exact="true" style="display: inline; width: 100px" placeholder="ед. изм.">
+                                </div>
+
+                                <button class="btn btn-danger btn-xs" type="button" ng-show="item.canRemove" ng-click="removeInn(item)"><span class="glyphicon glyphicon-remove"></span></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>МНН</label>
+                            &nbsp
+                            <input type="checkbox" ng-model="classifier.IsCompound" class="ng-valid"> Состав
+                            &nbsp
+                            <input type="checkbox" ng-model="classifier.IsCompoundBAA" class="ng-valid"> Состав БАД
+                            &nbsp
+                            <input type="checkbox" ng-model="classifier.UseShortDescription" class="ng-valid"> использовать укороченное описание дозировки
+                            <input type="text" class="form-control" ng-model="classifier.InnGroupDosageDescription" readonly>
+                        </div>
+                        <div class="col-md-3" uib-tooltip="{{GenericListToolTip}}">
+                            <label>Дженерик</label>
+                            <select name="GENERIC"
+                                    class="form-control"
+                                    ng-options="item as item.Value for item in GenericList track by item.Id"
+                                    ng-model="classifier.Generic">
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Стадии производства</label>
+                            <select name="ProductionStage"
+                                    class="form-control"
+                                    ng-options="item as item.Value for item in ProductionStageList track by item.Id"
+                                    ng-model="classifier.ProductionStage"
+                                    ng-change="selectProductionStage()">
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="Localization">Локализация</label>
+                            <select id="Localization"
+                                    name="Localization"
+                                    ng-class="{'has-error': classifierEditor.Localization.$invalid}"
+                                    required
+                                    ng-change="checkProductionLocalization()"
+                                    class="form-control"
+                                    ng-options="item as item.Value for item in LocalizationListFilter track by item.Id"
+                                    ng-model="classifier.ProductionLocalization">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: inline-block; width: 100%; margin-top: 5px">
+                        <label style="display: inline-block;">Дозировка действующего вещества в объеме</label>
+                        <input type="text" replacecommas class="form-control" ng-model="classifier.DosageValueCount" placeholder="Дозировка" style="display: inline-block; width: 65px" />
+                        <input type="text" replacecommas ng-model="classifier.DosageValue.Value" ng-change="clearId(classifier.DosageValue)" uib-typeahead="data.Value for data in searchDictionary($viewValue,'dosage')" class="form-control" typeahead-on-select="setId($item,classifier.DosageValue)" typeahead-select-on-exact="true" placeholder="ед. изм." style="display: inline-block; width: 100px" />
+
+                        <label style="display: inline-block;">Общий объем</label>
+                        <input type="text" replacecommas class="form-control" ng-model="classifier.TotalVolumeCount" placeholder="Дозировка" style="display: inline-block; width: 65px" />
+                        <input type="text" replacecommas ng-model="classifier.TotalVolume.Value" ng-change="clearId(classifier.TotalVolume)" uib-typeahead="data.Value for data in searchDictionary($viewValue,'dosage')" class="form-control" typeahead-on-select="setId($item,classifier.TotalVolume)" typeahead-select-on-exact="true" placeholder="ед. изм." style="display: inline-block; width: 100px" />
+
+                        <label>Дозировка</label>
+                        <input type="text" class="form-control" ng-model="classifier.DosageGroupDescription" style="display: inline-block; width: 1000px" readonly>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-1 padding3" style="text-align:right">
+                        <label>ATCWho</label>
+                    </div>
+                    <div class="col-md-3 padding3">
+
+                        <input type="text"
+                               name="ATCWho"
+                               required
+                               validate
+                               dictionaryrequiredid="{{classifier.ATCWho.Id}}"
+                               ng-model="classifier.ATCWho.Value"
+                               ng-focus="onFocus($event)"
+                               ng-class="{'has-error': classifierEditor.ATCWho.$invalid}"
+                               emptyTypeahead
+                               ng-change="clearId(classifier.ATCWho)"
+                               uib-typeahead="data.Value for data in getListATCWho($viewValue)"
+                               class="form-control"
+                               typeahead-on-select="setId($item,classifier.ATCWho)"
+                               typeahead-select-on-exact="true"
+                               typeahead-min-length="0"
+                               typeahead-show-hint="true"
+                               placeholder="ATCWHo"
+                               autocomplete="new-password">
+
+                    </div>
+                    <div class="col-md-1 padding3" style="text-align:right">
+                        <label>ATCEphmra</label>
+                    </div>
+                    <div class="col-md-3 padding3">
+
+                        <input type="text"
+                               name="ATCEphmra"
+                               required
+                               validate
+                               dictionaryrequiredid="{{classifier.ATCEphmra.Id}}"
+                               ng-model="classifier.ATCEphmra.Value"
+                               ng-focus="onFocus($event)"
+                               ng-class="{'has-error': classifierEditor.ATCEphmra.$invalid}"
+                               emptyTypeahead
+                               ng-change="clearId(classifier.ATCEphmra)"
+                               uib-typeahead="data.Value for data in getListATCEphmra($viewValue)"
+                               class="form-control"
+                               typeahead-on-select="setId($item,classifier.ATCEphmra)"
+                               typeahead-select-on-exact="true"
+                               typeahead-min-length="0"
+                               typeahead-show-hint="true"
+                               placeholder="ATCEphmra"
+                               autocomplete="new-password">
+                    </div>
+                    <div class="col-md-1 padding3">
+                        <label>
+                            <input type="checkbox" ng-model="classifier.IsOtc" ng-change="checkRx('Otc')" /> - это Otc
+                        </label>
+                    </div>
+                    <div class="col-md-3 padding3">
+                        <label>Ср. год.</label>
+                        <input type="text"
+                               replacecommas
+                               readonly
+                               ng-model="classifier.RegistrationCertificate.StorageLife"
+                               class="form-control"
+                               style="display: inline; width: 150px"
+                               placeholder="Ср. годности">
+                        <label>Цена</label>
+                        <input type="text"
+                               readonly
+                               replacecommas
+                               ng-class="{  'PriceVed':classifier.PriceSourceId == 1,
+                                            'PriceEtalon':classifier.PriceSourceId == 2}"
+                               ng-model=" classifier.Price"
+                               class="form-control"
+                               style="display: inline; width: 100px"
+                               placeholder="Цена">
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-1 padding3"
+                         style="text-align: right">
+                        <label>FTG</label>
+                    </div>
+
+                    <div class="col-md-3 padding3">
+
+                        <input type="text"
+                               name="FTG"
+                               required
+                               validate
+                               dictionaryrequiredid="{{classifier.FTG.Id}}"
+                               ng-model="classifier.FTG.Value"
+                               ng-focus="onFocus($event)"
+                               ng-class="{'has-error': classifierEditor.FTG.$invalid}"
+                               emptyTypeahead
+                               ng-change="clearId(classifier.FTG)"
+                               uib-typeahead="data.Value for data in getListFTG($viewValue)"
+                               class="form-control"
+                               typeahead-on-select="setId($item,classifier.FTG)"
+                               typeahead-select-on-exact="true"
+                               typeahead-min-length="0"
+                               typeahead-show-hint="true"
+                               placeholder="FTG"
+                               autocomplete="new-password">
+                    </div>
+
+                    <div class="col-md-1 padding3"
+                         style="text-align: right">
+                        <label>ATCBaa</label>
+                    </div>
+
+                    <div class="col-md-3 padding3">
+
+                        <input type="text"
+                               name="ATCBaa"
+                               required
+                               validate
+                               dictionaryrequiredid="{{classifier.ATCBaa.Id}}"
+                               ng-model="classifier.ATCBaa.Value"
+                               ng-focus="onFocus($event)"
+                               ng-class="{'has-error': classifierEditor.ATCBaa.$invalid}"
+                               emptyTypeahead
+                               ng-change="clearId(classifier.ATCBaa,classifier.ATCBaa.Value)"
+                               uib-typeahead="data.Value for data in getListATCBaa($viewValue)"
+                               class="form-control"
+                               typeahead-on-select="setId($item,classifier.ATCBaa)"
+                               typeahead-select-on-exact="true"
+                               typeahead-min-length="0"
+                               typeahead-show-hint="true"
+                               placeholder="ATCBaa"
+                               autocomplete="new-password">
+                    </div>
+
+                    <div class="col-md-1 padding3">
+                        <label>
+                            <input type="checkbox" ng-model="classifier.IsRx" ng-change="checkRx('Rx')" /> - это Rx
+                        </label>
+                    </div>
+                    <div class="col-md-3 padding3">
+                        <label>
+                            <input type="checkbox" ng-model="classifier.IsExchangeable" ng-change="checkExRef('IsExchangeable')" /> - Взаимозаменяемый
+                        </label>
+                        <label>
+                            <input type="checkbox" ng-model="classifier.IsReference" ng-change="checkExRef('IsReference')" /> - Референтный
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Поле Упаковка</div>
+                <div class="panel-body">
+                    <div style="height: 150px">
+                        <ui-grid-control options="classifierPackingGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                    </div>
+                    <ng-form name="classifierPackingForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Первичная упаковка</label>
+                                <input name="primaryPacking" ng-class="{'has-error': classifierPackingForm.primaryPacking.$invalid}" required
+                                       type="text" class="form-control" ng-model="currentPacking.PrimaryPacking.Value" ng-change="clearId(currentPacking.PrimaryPacking)" uib-typeahead="data.Value for data in searchDictionary($viewValue,'pack')" typeahead-on-select="setId($item,currentPacking.PrimaryPacking)" typeahead-select-on-exact="true">
+                            </div>
+                            <div class="col-md-4">
+                                <label>Потребительская упаковка</label>
+                                <input name="consumerPacking" ng-class="{'has-error': classifierPackingForm.consumerPacking.$invalid}" required
+                                       type="text" class="form-control" ng-model="currentPacking.ConsumerPacking.Value" ng-change="clearId(currentPacking.ConsumerPacking)" uib-typeahead="data.Value for data in searchDictionary($viewValue,'pack')" typeahead-on-select="setId($item,currentPacking.ConsumerPacking)" typeahead-select-on-exact="true">
+                            </div>
+                            <div class="col-md-2">
+                                <label>Количество в первичной упаковке</label>
+                                <input name="countInPrimaryPacking" ng-class="{'has-error': classifierPackingForm.countInPrimaryPacking.$invalid}" required ng-pattern="decimalPattern"
+                                       type="text" class="form-control" ng-model="currentPacking.CountInPrimaryPacking">
+                            </div>
+                            <div class="col-md-2">
+                                <label>Количество первичных упаковок</label>
+                                <input name="countPrimaryPacking" ng-class="{'has-error': classifierPackingForm.countPrimaryPacking.$invalid}" required ng-pattern="decimalPattern"
+                                       type="text" class="form-control" ng-model="currentPacking.CountPrimaryPacking">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Комплектность</label>
+                                <input type="text" class="form-control" ng-model="currentPacking.PackingDescription">
+                            </div>
+                            <div class="col-md-2 col-md-offset-4">
+                                <br />
+                                <button class="btn btn-success" ng-click="addClassifierPacking()" ng-disabled="classifierPackingForm.$invalid">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button class="btn btn-danger" ng-click="removeClassifierPacking()">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </ng-form>
+                </div>
+            </div>
+            <div class="panel panel-default" cg-busy="{promise:dataLoading, message:message}">
+                <div class="panel-heading">Информация о производителе</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label>Код DrugId</label>
+                            <input type="text" class="form-control" ng-model="InnerCodsShow.DrugId" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <label>Код</label>
+                            <input type="text" class="form-control" ng-model="InnerCodsShow.OwnerTradeMarkId" readonly>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Правообладатель</label>
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="classifier.OwnerTradeMark.Value"
+                                   ng-change="clearId(classifier.OwnerTradeMark); clearRegistrationCertificate(); clearKey('OwnerTradeMarkId')"
+                                   uib-typeahead="data.Value for data in searchDictionary($viewValue,'ownerTradeMark')"
+                                   typeahead-on-select="setId($item,classifier.OwnerTradeMark)"
+                                   typeahead-select-on-exact="true">
+                        </div>
+                        <div class="col-md-1">
+                            <label>Код</label>
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="InnerCodsShow.PackerId"
+                                   readonly>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Упаковщик</label>
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="classifier.Packer.Value"
+                                   ng-change="clearId(classifier.Packer); clearKey('PackerId');"
+                                   uib-typeahead="data.Value for data in searchDictionary($viewValue,'packer')"
+                                   typeahead-on-select="setId($item, classifier.Packer); setLocalization(classifier.Packer);"
+                                   typeahead-select-on-exact="true">
+                        </div>
+                        <div class="col-md-1">
+                            <label>Код</label>
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="InnerCodsShow.OnwerRegistrationCertificateId"
+                                   readonly>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Владелец РУ</label>
+                            <input type="text" class="form-control"
+                                   ng-model="classifier.RegistrationCertificate.OwnerRegistrationCertificate.Value"
+                                   ng-change="clearId(classifier.RegistrationCertificate.OwnerRegistrationCertificate); clearRegistrationCertificate(); clearKey('OnwerRegistrationCertificateId')"
+                                   uib-typeahead="data.Value for data in searchDictionary($viewValue,'OwnerRegistrationCertificate')"
+                                   typeahead-on-select="setId($item,classifier.RegistrationCertificate.OwnerRegistrationCertificate)"
+                                   typeahead-select-on-exact="true">
+                        </div>
+                        <div class="col_md-1">
+                            <button class="btn btn-success btn-sm" ng-click="NewManufacturer()" data-translate="BUTTONS.ADD">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-success btn-sm" ng-click="ShowHistory()" ng-disabled="!canShowHistory()" data-translate="BUTTONS.HISTORY">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-1">Поиск</div>
+                        <div class="col-md-3">
+                            <button class="btn btn-default  btn-sm" ng-click="CheckClassifier();" ng-disabled="!canAdd() || classifierEditor.$invalid" data-translate="BUTTONS.CHECK"></button>
+                            <button class="btn btn-default  btn-sm" ng-show="!isEditor" ng-click="AddClassifierAsk()" ng-disabled="!canAdd() || classifierEditor.$invalid" data-translate="BUTTONS.ADD"></button>
+                            <button class="btn btn-default  btn-sm" ng-show="isEditor" ng-click="EditClassifier()" ng-disabled="!canAdd() || classifierEditor.$invalid" data-translate="BUTTONS.CHANGE"></button>
+                        </div>
+                        <div class="col-md-1 col-md-offset-7">
+                            <button class="btn btn-success btn-sm" ng-click="searchClassifier()"><span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ui-grid-control options="classifierGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+        </div>
+    </ng_form>
+</div>

@@ -1,0 +1,51 @@
+﻿
+
+<div ng-controller="DistrRepController"  ng-init="DistrRep_Rules_Init();"cg-busy="dataLoading"  ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <ng_form name="RulesForm">
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        <label>Компания</label>
+                        <select name="Company"
+                                class="form-control"
+                                ng-options="item as item.Company for item in filterList.CompanyList track by item.Id"
+                                required
+                                ng-model="filter.Company"></select>
+                    </div>
+
+
+                </div>
+            </ng_form>            
+        </div>
+    </div>
+
+
+    <div class="panel-body">
+        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+            <li class="active"><a data-target="#Rules_Clients" data-toggle="tab">Исключения</a></li>
+            <li><a data-target="#Rules_Region" data-toggle="tab">В разработке</a></li>
+         
+        </ul>
+        <div id="my-tab-content" class="tab-content">
+            <div class="tab-pane active" id="Rules_Clients">
+                <br>
+                <button type="button" class="btn btn-success" ng-click="AddRules_Clients()" data-translate="BUTTONS.ADD"></button>
+                <button type="button" class="btn btn-danger" ng-click="removeRules_Clients()" ng-disabled="selectedRules_Clients == null" data-translate="BUTTONS.DELETE"></button>
+                <ui-grid-control options="Rules_Clients_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+            </div>
+            <div class="tab-pane" id="Rules_Region">
+                <h1>В разработке</h1>
+               
+            </div>
+            
+        </div>
+       
+
+
+
+
+    </div>
+
+</div>

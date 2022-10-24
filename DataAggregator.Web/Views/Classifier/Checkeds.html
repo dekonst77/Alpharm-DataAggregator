@@ -1,0 +1,65 @@
+﻿<div ng-controller="CheckedController" cg-busy="dataLoading" ng-init="Checked_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Checked_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Checked_save();" ng-disabled="!Grid_Checked.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-5 padding3">
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.ToBlock" ng-change="">На блокирование
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.IsBrick" ng-change="">ОФД без Аудита
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.isOther" ng-change="">ДОП
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel" data-context-menu="_contextMenu.html">
+        <ui-grid-control options="Grid_Checked.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+    <script type="text/ng-template" id="_contextMenu.html">
+        <div class="panel panel-primary context-menu" style="width: 800px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row padding1">
+                    <div class="col-md-3 padding1">
+                        <label>Запрос на блокирование</label>
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ToBlockUsed(true);">Установить</button>
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ToBlockUsed(false);">Снять</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding1">
+                    <div class="col-md-3 padding1">
+                        <label>Проставить массово</label>
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="IsSTM(true);">Установить СТМ</button>
+                                <button type="button" class="btn btn-default btn_ok" ng-click="IsSTM(false);">Снять СТМ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </script>
+</div>

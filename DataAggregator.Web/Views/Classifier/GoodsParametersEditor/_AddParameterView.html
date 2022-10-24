@@ -1,0 +1,18 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Добавить</h3>
+</div>
+<div class="modal-body modal-body-small">
+    <div class="row">
+        <div class="col-md-2">
+            <label>Название</label>
+        </div>
+        <div class="col-md-10">
+            <input type="text" ng-model="newValue" class="form-control" required ng-enter="save()" autofocus />
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="!newValue" data-translate="BUTTONS.OK"></button>
+    <button class="btn btn-danger" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+</div>

@@ -1,0 +1,21 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Объединение поставщиков</h3>
+</div>
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-md-3">Выберите Id, к которому нужно объединить</div>
+        <div class="col-md-7">
+            <select class="form-control" ng-options="o as o for o in supplierIdList" ng-model="resultSupplierId"></select>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="save()" data-translate="BUTTONS.SAVE"></button>
+    </div>
+    <div>
+        <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CLOSE"></button>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="History_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <select name="top"
+                            class="form-control" ng-options="item as item.Status for item in spr_Tops track by item.code" ng-model="filter.spr_top"></select>
+                    <select name="DataSourceType"
+                            class="form-control" ng-options="item as item.Status for item in spr_DataSourceType track by item.code" ng-model="filter.spr_DataSourceType"></select>
+                </div>
+                <div class="col-md-1 padding3">
+                    <select name="Source_client"
+                            class="form-control" ng-options="item as item.Status for item in spr_Source_client track by item.code" ng-model="filter.spr_Source_client"></select>
+                    <select name="DataSource"
+                            class="form-control" ng-options="item as item.Status for item in spr_DataSource track by item.code" ng-model="filter.spr_DataSource"></select>
+                </div>
+                <div class="col-md-1 padding3">
+                    <select name="Category"
+                            class="form-control" ng-options="item as item.Status for item in spr_Category track by item.code" ng-model="filter.spr_Category"></select>
+                    <select name="Status"
+                            class="form-control" ng-options="item as item.Status for item in spr_Status track by item.code" ng-model="filter.spr_Status"></select>
+                </div>
+                <div class="col-md-1 padding3">
+                    <input name="text" type="text" class="form-control" ng-model="filter.INN" ng-change="" placeholder="ИНН">
+                    <input name="text" type="text" class="form-control" ng-model="filter.NetworkName" ng-change="" placeholder="Имя Сети">
+                    <!--<select name="NetworkName"
+        class="form-control" ng-options="item as item.Status for item in spr_NetworkName track by item.code" ng-model="filter.spr_NetworkName"></select>-->
+                </div>
+                <div class="col-md-1 padding3">
+                    <input name="text" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="Адрес">
+                    <input name="PharmacyIDs" type="text" class="form-control" ng-model="filter.Ids" ng-change="" placeholder="Id">
+                </div>
+                <div class="col-md-1 padding3">
+                    <!--<input name="text" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="Адрес">-->
+                    <select name="Spec"
+                            class="form-control" ng-options="item as item.Status for item in spr_Spec track by item.code" ng-model="filter.spr_Spec"></select>
+                    
+                    <select name="Comments"
+                            class="form-control" ng-options="item as item.Status for item in spr_Comments track by item.code" ng-model="filter.spr_Comments"></select>
+
+                </div>
+                <div class="col-md-2 padding3">
+                    <input name="GSIDs" type="text" class="form-control" ng-model="filter.GSIDs" ng-change="" placeholder="GSId">
+                    <input name="PharmacyIDs" type="text" class="form-control" ng-model="filter.PharmacyIDs" ng-change="" placeholder="PharmacyId">
+                </div>
+
+                <div class="col-md-4 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="History_GetData();" ng-disabled="HaveData&&!IsOnline"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="History_SetData(0);" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="History_SetData(1);" ng-show="!IsOnline" ng-disabled="!HaveData"><span class="glyphicon glyphicon-save">Вернуть</span></button>
+                        <button class="btn btn-danger btn-sm" ng-click="History_ToExcel();" ng-show="!IsOnline" ng-disabled="!HaveData"><span class="glyphicon glyphicon-save">Выгрузить</span></button>
+                        <div class="btn btn-info btn-sm" ng-show="!IsOnline" ng-disabled="!HaveData" ngf-select="History_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                        <button class="btn btn-warning btn-sm" ng-click="History_ReSync();" ng-disabled="Grid.NeedSave"><span class="glyphicon glyphicon-flash">Перестянуть поля</span></button>
+                    </div>
+                    <br />
+                        <select name="Users" ng-show="!IsOnline"
+                                class="form-control" style="width:200px;display:inline-block;" ng-options="item as item.Status for item in spr_Users track by item.code" ng-model="UsersCL"></select>
+                        <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click="History_SetOtherData();"><span class="glyphicon glyphicon-backward">Сдать</span></button>
+                </div>
+                </div>
+        </div>
+    </div>
+
+    <div id="grid-block" data-context-menu="Views/GS/History_context_menu.html" class="auto-item-panel" style="padding: 2px;height: calc(60% - 35px)">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+
+    <div id="grid-block" class="auto-item-panel" style="height: 40%; padding: 2px">
+        <div class="row">
+            <div class="col-md-3 padding3">
+                <input name="mSearch_text" type="text" class="form-control" ng-model="Search_text" ng-change="" placeholder="поиск в справочнике">
+            </div>
+            <div class="col-md-1 padding3">
+                <button class="btn btn-danger btn-sm" ng-click="History_classifier_Search_btn();" ng-disabled="!HaveData"><span class="glyphicon glyphicon-search">Искать</span></button>
+            </div>
+        </div>
+            <ui-grid-control options="Grid_SPR.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+        </div>
+    </div>

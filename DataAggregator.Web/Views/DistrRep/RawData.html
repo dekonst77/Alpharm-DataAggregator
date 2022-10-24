@@ -1,0 +1,76 @@
+﻿<div ng-controller="DistrRepController" ng-init="DistrRep_RawData_Init();" cg-busy="dataLoading"   ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .modify {
+            color: red;
+        }
+
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <select name="top"
+                            class="form-control" ng-options="item.code as item.Status for item in spr_Tops" ng-model="filter.top"></select>
+                    <select name="DataSourceType"
+                            class="form-control" ng-options="item.code as item.Status for item in spr_DataSourceType" ng-model="filter.DataSourceTypeId"></select>
+                </div>
+                <div class="col-md-1 padding3">
+                    <select name="Comp"
+                            class="form-control" ng-options="item.code as item.Status for item in spr_Comp" ng-model="filter.CompanyId"></select>
+                    <select name="DataSource"
+                            class="form-control" ng-options="item.code as item.Status for item in spr_DataSource" ng-model="filter.DataSourceId"></select>
+                </div>
+                <div class="col-md-1 padding3">
+                    <!--<input name="text" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="Адрес">-->
+                    <select name="Spec"
+                            class="form-control" ng-options="item.code as item.Status for item in spr_Spec" ng-model="filter.Spec"></select>
+                </div>
+                <div class="col-md-2 padding3">
+                    <input name="Search_text" type="text" class="form-control" ng-model="filter.Search_text" ng-change="" placeholder="Search_text">
+                </div>
+
+                <div class="col-md-4 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="DistrRep_RawData_ShowData();" ><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="DistrRep_RawData_SetData();" ng-disabled="!NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" data-context-menu="Views/DistrRep/RawData_ContextMenu.html" class="auto-item-panel" style="padding: 2px;">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

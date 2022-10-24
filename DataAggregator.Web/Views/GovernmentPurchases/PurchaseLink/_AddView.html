@@ -1,0 +1,48 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Добавление</h3>
+</div>
+<form name="addForm" ng-submit="save()">
+    <div class="modal-body">
+        <div class="row form-group">
+            <div class="col-md-2 col-md-offset-1 text-right">
+                Номер закупки
+            </div>
+            <div class="col-md-8">
+                <input type="text" ng-model="purchaseNumber" ng-required="true" class="form-control" autofocus />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2 col-md-offset-1 text-right">
+                Тип ФЗ
+            </div>
+            <div class="col-md-8">
+                <select class="form-control" ng-model="lawTypeId" ng-required="true" 
+                        ng-options="item.Id as item.Name for item in lawTypesList"></select>
+            </div>
+        </div>
+        <div class="row form-group" ng-show="objectType==='Contracts'">
+            <div class="col-md-2 col-md-offset-1 text-right">
+                Номер контракта
+            </div>
+            <div class="col-md-8">
+                <input type="text" ng-model="reestrNumber" ng-required="objectType==='Contracts'" class="form-control" />
+            </div>
+        </div>
+        <div class="row form-group" ng-show="objectType!=='Contracts'">
+            <div class="col-md-2 col-md-offset-1 text-right">
+                Ссылка
+            </div>
+            <div class="col-md-8">
+                <input type="text" ng-model="purchaseUrl" ng-required="objectType!=='Contracts'" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="float-left">
+            <button class="btn btn-primary" type="submit" ng-disabled="!addForm.$valid" data-translate="BUTTONS.SAVE"></button>
+        </div>
+        <div>
+            <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CLOSE"></button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,72 @@
+﻿<div ng-controller="OrganizationsEditorController" cg-busy="[loading, updating]" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Organization_search();"><span class="glyphicon glyphicon-search">Фильтр</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Organization_save();" ng-disabled="!organizationsGrid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" type="button" ng-click="CreateNew()">Новая</button>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="openChangeRegionDialog()" ng-disabled="selectedRows == undefined || selectedRows.length === 0">Регион</button>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="openChangeRegionOfLocalizationDialog()" ng-disabled="selectedRows == undefined || selectedRows.length === 0" data-translate="BUTTONS.CHANGE_REGION_OF_LOCALIZATION">Регион Локализации</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel" id="organizations-grid-block" data-context-menu="_contextMenu.html">
+        <ui-grid-control options="organizationsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+    <script type="text/ng-template" id="_contextMenu.html">
+<div class="panel panel-primary context-menu" style="width: 800px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Комманды</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <button type="button" class="btn btn-default btn_ok btn-sm" ng-click="SetNature(null);">Убрать Характер</button>
+                <button class="btn btn-success btn-sm" type="button" ng-click="openMergeDialog()" ng-disabled="selectedRows == undefined || selectedRows.length < 2">Объединить</button>
+            </div>
+<div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Характер</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <ul class="no-padding" style="list-style-type:none">
+                    <li ng-repeat="cat in Category | orderBy:'Name'" class="no-padding">
+                        <label class="label_category">{{cat.Name}}</label>
+
+                        <div class="btn-group btn-group-xs">
+                <button ng-repeat="nat in Nature | filter:cat.Name | orderBy:'Name'" type="button" class="btn btn-primary btn-xs"
+                        ng-click="SetNature(nat.Id)" data-translate="{{nat.NameMini}}">{{nat.NameMini}}</button>
+            </div>
+                    </li>
+                </ul>
+            </div>
+ </div>
+
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Тип организации</label>
+            </div>
+            <div class="col-md-9 padding1">
+                        <div class="btn-group btn-group-xs">
+                <button ng-repeat="item in OrganizationTypes | orderBy:'Name'" type="button" class="btn btn-primary btn-xs"
+                        ng-click="SetOrganizationTypes(item.Id)" data-translate="{{item.Name}}"></button>
+            </div>
+            </div>
+ </div>
+
+        </div>
+    </div>
+</div>
+
+    </script>
+</div>

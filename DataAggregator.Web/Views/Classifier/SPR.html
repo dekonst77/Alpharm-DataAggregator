@@ -1,0 +1,76 @@
+﻿<div ng-controller="SPRController" cg-busy="dataLoading" ng-init="SPR_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .modify {
+            color: red;
+        }
+
+        .AlphaBitSums {
+            background-color: green;
+        }
+
+        .Fix {
+            background-color: yellow;
+        }
+
+        .ОФД {
+            background-color: orange;
+        }
+
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-7 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="SPR_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="SPR_save();" ng-disabled="!Grid_SPR.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-2 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-danger btn-sm" ng-click="SPR_delete();"><span class="glyphicon glyphicon-search">Удалить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-2 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn btn-info btn-sm" ng-disabled="Grid_SPR.NeedSave" ngf-select="SPR_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">из Excel</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel" data-context-menu="Views/Classifier/SPR_context_menu.html" >
+        <ui-grid-control options="Grid_SPR.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿<div ng-controller="CalcRunnerController" cg-busy="loading" ng-cloak>
+    <div class="container-fluid">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                Гос закупки
+            </div>
+            <div class="panel-body">
+                <job job-Title="ГЗ расчёт" job-Server="s-sql1" job-Name="GovernmentPurchases_Start_Full"></job>
+                <label> Запись в логе: {{TransferData}} </label>
+
+                <job job-Title="Экспресс расчёт" job-Server="s-sql1" job-Name="GovernmentPurchases_Start_Express"></job>
+            </div>
+        </div>
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Гос сегмент
+            </div>
+            <div class="panel-body">
+                <div in-roles="GCreateExternalShipment,Admin">
+                    <job job-Title="Больницы расчёт" job-Server="s-sql1" job-Name="GovernmentPurchases_CreateExternalShipmentDatabase"></job>
+                    <label>
+                        Использовать <input type="checkbox" ng-model="ShipmentChecked" ng-change="SetChecked(ShipmentChecked)" ng-disabled="!ShipmentCreated" />
+                    </label>
+                    </br>
+                    <label> Запись в логе: {{ShipmentStatusLog}} </label>
+                </div>
+
+                <br />
+                <div class="row" in-roles="GCreateExternalShipment,Admin">
+                    <div class="col-md-2">
+                        <button style="width: 100%" class="btn btn-primary" type="button" ng-click="CreateExternalShipmentDatabase_startNight()">
+                            Включить/Выключить Запуск Ночью
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <label> Текущий параметр : {{CreateExternalShipmentDatabase_startNight_value}} </label>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <!--<div class="col-md-2">
+        <button ng-disabled="calcStatus.QlikJobDisabled > 0"
+                style="width: 100%" class="btn btn-primary" type="button" ng-click="QlikJob()">
+            Переложить ГС Тест в клиентский Qlik
+        </button>
+    </div>-->
+                    <job job-Title="Переложить ГС Тест в клиентский Qlik" job-Server="s-sql1" job-Name="GovernmentPurchases_GS_Qlik"></job>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Запуск обмена данных с провизорами
+            </div>
+            <div class="panel-body">
+                <job job-Title="Отдать провизорам" job-Server="s-sql1" job-Name="GovernmentPurchases_ToProvizor"></job>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Поиск
+            </div>
+            <div class="panel-body">
+                <job job-Title="ПоискПоСайту" job-Server="s-sql1" job-Name="GovernmentPurchases_zakupki.gov.ru"></job>
+                <job job-Title="ПоискПоСайту_Иные" job-Server="s-sql1" job-Name="GovernmentPurchases_ПоискПоСайту_Иные"></job>
+            </div>
+        </div>
+
+    </div>
+</div>

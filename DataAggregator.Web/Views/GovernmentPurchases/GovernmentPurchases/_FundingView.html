@@ -1,0 +1,63 @@
+﻿<td class="modal-body">
+
+<div id="fundingBlock" class="government-purchases funding">
+    <div>{{sourceOfFinancing}}</div>
+
+    <br/>
+
+    <table id="fundingTable" class="table table-condensed">
+        <tr>
+            <td><b>Бюджеты</b></td>
+        </tr>
+        <tr ng-repeat="f in fundingList | filter:{ IsBudget: true }">
+            <td>
+                <label>{{f.InternalName}}</label>
+            </td>
+            <td>
+                <label>{{f.Code}}</label>
+            </td>
+            <td>
+                <input type="checkbox" ng-repeat="fc in f.CheckedList track by $index" ng-model="fc.Checked"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td><b>Внебюджетные средства</b></td>
+        </tr>
+        <tr ng-repeat="f in fundingList | filter:{ IsNotBudget: true }">
+            <td>
+                <label>{{f.InternalName}}</label>
+            </td>
+            <td>
+                <label>{{f.Code}}</label>
+            </td>
+            <td>
+                <input type="checkbox" ng-repeat="fc in f.CheckedList track by $index" ng-model="fc.Checked"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td><b>Бюджетные перемещения</b></td>
+        </tr>
+        <tr ng-repeat="f in fundingList | filter:{ IsTransfer: true }">
+            <td>
+                <label>{{f.InternalName}}</label>
+            </td>
+            <td>
+                <label>{{f.Code}}</label>
+            </td>
+            <td>
+                <input type="checkbox" ng-repeat="fc in f.CheckedList track by $index" ng-model="fc.Checked"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="save()" data-translate="BUTTONS.SAVE"></button>
+    </div>
+    <div>
+        <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CLOSE"></button>
+    </div>
+</div>

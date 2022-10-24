@@ -1,0 +1,67 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Перенос правила между регионами</h3>
+</div>
+<div class="modal-body" cg-busy="loading">
+
+    <div class="row">
+
+        <div class="col-md-11">
+            <p>
+                <b>Регион:</b>
+                {{regionInfo}}
+            </p>
+            <p>
+                <b>С:</b>
+                {{model.rule.GoodsId > 0 ? "GOP:" : ""}} {{model.rule.GoodsId}} {{model.rule.OwnerTradeMarkId}} {{model.rule.PackerId}}
+                {{model.rule.TopCountFrom > 0 ? "TOP:" : ""}} {{model.rule.TopCountFrom}}
+                <br/>
+                {{model.rule.FullGoodsDescription}}
+            </p>
+            <p>
+                <b>На:</b> {{model.rule.DistributionGoodsId > 0 ? "GOP:" : ""}} {{model.rule.DistributionGoodsId}} {{model.rule.DistributionOwnerTradeMarkId}} {{model.rule.DistributionPackerId}}
+                {{model.rule.TopCountTo > 0 ? "TOP:" : ""}} {{model.rule.TopCountTo}}
+                <br/>
+                {{model.rule.DistributionFullGoodsDescription}}
+            </p>
+            <p>
+                <b>Продажи:</b> {{model.rule.SellingSumPart}}
+            </p>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-md-8">
+            <input type="text"
+                   class="form-control"
+                   ng-model="model.CurrentRegion"
+                   placeholder="Регион"
+                   ng-change="setRegion(null)"
+                   uib-typeahead="data.Region for data in searchRegion($viewValue)"
+                   typeahead-select-on-exact="true"
+                   typeahead-on-select="setRegion($item)"
+                   typeahead-no-results="noResults">            
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" ng-click="copyRule()" ng-disabled="!canCopyRule()" data-translate="BUTTONS.COPY"></button>
+        </div>
+    </div>
+
+    <div>
+        <div ng-repeat="rule in model.NewRules">
+            <hr/>
+            <p>
+                Правило {{rule.Id}} ; Регион: {{rule.Region}}
+            </p>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-warning" type="button" ng-click="Close()" data-translate="BUTTONS.CLOSE"></button>
+    </div>
+</div>

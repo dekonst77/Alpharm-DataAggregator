@@ -1,0 +1,12 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <button style="width: 100%" class="btn"
+                ng-class="{'btn-success' : StatusId==10,'btn-danger' : StatusId==0,'btn-primary' : StatusId==1,'btn-warning' : StatusId===3,'btn-info' : StatusId==-1}" type="button"
+                ng-click="Go(1);">
+            {{jobTitle}}
+        </button>
+    </div>
+    <div class="col-md-6">
+        {{Status}}
+    </div>
+</div>

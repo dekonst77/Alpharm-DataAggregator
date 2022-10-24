@@ -1,0 +1,77 @@
+﻿<div class="modal-header">
+        <h3 class="modal-title">Поиск для обработки</h3>
+</div>
+<div class="modal-body classifier-editor">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Торговое наименование</label>
+                <input autofocus type="text" ng-model="classifierFilter.tradeName" ng-change="changeCheck('tradeName')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'tradeName')" class="form-control" typeahead-on-select="setId($item,'tradeNameId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+            <div class="col-md-6">
+                <label>Производитель</label>
+                <input type="text" ng-model="classifierFilter.ownerTradeMark" ng-change="changeCheck('ownerTradeMark')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'ownerTradeMark')" class="form-control" typeahead-on-select="setId($item,'ownerTradeMarkId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>МНН</label>
+                <input type="text" ng-model="classifierFilter.innGroup" ng-change="changeCheck('innGroup')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'innGroup')" class="form-control" typeahead-on-select="setId($item,'innGroupId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+            <div class="col-md-6">
+                <label>Упаковщик</label>
+                <input type="text" ng-model="classifierFilter.packer" ng-change="changeCheck('packer')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'packer')" class="form-control" typeahead-on-select="setId($item,'packerId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Форма выпуска</label>
+                <input type="text" ng-model="classifierFilter.formProduct" ng-change="changeCheck('formProduct')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'formProduct')" class="form-control" typeahead-on-select="setId($item,'formProductId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+            <div class="col-md-6">
+                <label>Номер РУ</label>
+                <input type="text" ng-model="classifierFilter.registrationNumber" class="form-control" ng-enter="pressTypeaHeadEnter()">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Дозировка</label>
+                <input type="text" ng-model="classifierFilter.dosageGroup" ng-change="changeCheck('dosageGroup')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'dosageGroup')" class="form-control" typeahead-on-select="setId($item,'dosageGroupId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+            <div class="col-md-6">
+                <label>ClassifierId</label>
+                <input type="text" autocomplete="off" ng-model="classifierFilter.classifierId" class="form-control" ng-enter="pressEnter()">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Фасовка</label>
+                <input type="text" ng-model="classifierFilter.consumerPackingCount" class="form-control" ng-enter="pressEnter()">
+            </div>
+            <div class="col-md-6">
+                <label>
+                    Всё <input type="checkbox" class="form-control" ng-model="classifierFilter.used" ng-true-value="null" ng-false-value="1">
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>DrugId</label>
+                <input type="text" autocomplete="off" ng-model="classifierFilter.DrugId" class="form-control" ng-enter="pressEnter()">
+            </div>
+            <div class="col-md-6">
+                <label>OwnerTradeMarkId</label>
+                <input type="text" autocomplete="off" ng-model="classifierFilter.ownerTradeMarkId" class="form-control" ng-enter="pressEnter()">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-default" type="button" ng-click="clear()" data-translate="BUTTONS.CLEAR"></button>
+    </div>
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="!CanSearch()" data-translate="BUTTONS.SEARCH"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+﻿<div ng-controller="ClassificationGenericController"cg-busy="loading"  ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <select  name="Generic"
+                                 class="form-control"
+                                 ng-options="item.Value for item in genericList  track by item.Id"
+                                 ng-model="generic"></select>
+
+                        <span class="input-group-btn">
+                            <button class="btn btn-default"
+                                    type="button"
+                                    ng-click="setGeneric()" ng-disabled="!canSetGeneric()">
+                                <span class="glyphicon glyphicon-link"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+               
+            
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control id="genericGrid"
+                         options="genericGrid.Options"
+                         class="ui-grid-enable-content-selection">
+        </ui-grid-control>
+    </div>
+</div>

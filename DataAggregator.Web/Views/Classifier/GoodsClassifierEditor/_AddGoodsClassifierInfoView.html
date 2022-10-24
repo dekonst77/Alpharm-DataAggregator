@@ -1,0 +1,40 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{headerText}}</h3>
+</div>
+<div class="modal-body modal-body-big classifier-editor">
+    <div class="row">
+        <div class="col-md-6">
+            <label>Торговое наименование</label>
+            <input type="text" ng-model="classifierInfo.GoodsTradeName.Value" class="form-control" readonly
+                   ng-class="{classifierChanged : classifierInfo.GoodsTradeName.Id == 0}" />
+        </div>
+        <div class="col-md-6">
+            <label>Бренд</label>
+            <input type="text" ng-model="classifierInfo.GoodsBrand.Value" class="form-control" readonly
+                   ng-class="{classifierChanged : classifierInfo.GoodsBrand.Id == 0}" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Форма выпуска</label>
+            <input type="text" ng-model="classifierInfo.GoodsDescription" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Код правообладателя</label>
+            <input type="text" ng-model="classifierInfo.OwnerTradeMarkId" class="form-control" readonly
+                   ng-class="{classifierChanged : classifierInfo.OwnerTradeMarkId == 0}" />
+        </div>
+        <div class="col-md-6">
+            <label>Код упаковщика</label>
+            <input type="text" ng-model="classifierInfo.PackerId" class="form-control" readonly
+                   ng-class="{classifierChanged : classifierInfo.PackerId == 0}" />
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="cancel()" ng-if="canCancel" data-translate="BUTTONS.CANCEL"></button>
+    <button class="btn btn-success" type="button" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+</div>

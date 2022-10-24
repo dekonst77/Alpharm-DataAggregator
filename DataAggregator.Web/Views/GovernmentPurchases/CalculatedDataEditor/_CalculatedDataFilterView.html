@@ -1,0 +1,183 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Фильтр расчетных данных</h3>
+</div>
+<form name="filterForm" ng-submit="ok()" class="calculated-data-editor filter-view">
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-6">
+                    <!--<label>Id закупки</label>-->
+                    <input type="text" ng-model="filter.PurchaseId" class="form-control" placeholder="Id закупки" />
+                </div>
+                <div class="col-md-3">
+                    <!--<label>ClassifierId</label>-->
+                    <input type="text" ng-model="filter.ClassifierId" class="form-control" placeholder="ClassifierId" />
+                </div>
+                <div class="col-md-3">
+                    <!--<label>DrugId</label>-->
+                    <input type="text" ng-model="filter.DrugId" class="form-control" placeholder="DrugId" />
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-6">
+                    <!--<label>Производитель</label>-->
+                    <input type="text"
+                           ng-model="filter.OwnerTradeMark"
+                           uib-typeahead="otm.Value for otm in filter.ManufacturerList | filter:$viewValue | limitTo:8"
+                           typeahead-select-on-exact="true"
+                           class="form-control" placeholder="Производитель" />
+                </div>
+                <div class="col-md-6">
+                    <!--<label>--><!--OwnerTradeMarkId--><!--</label>-->
+                    <input type="text" ng-model="filter.OwnerTradeMarkId" class="form-control" placeholder="OwnerTradeMarkId" />
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-6">
+                    <!--<label>Упаковщик</label>-->
+                    <input type="text"
+                           ng-model="filter.Packer"
+                           uib-typeahead="otm.Value for otm in filter.ManufacturerList | filter:$viewValue | limitTo:8"
+                           typeahead-select-on-exact="true"
+                           class="form-control" placeholder="Упаковщик" />
+                </div>
+                <div class="col-md-6">
+                    <!--<label>Код упаковщика</label>-->
+                    <input type="text" ng-model="filter.PackerId" class="form-control" placeholder="Код упаковщика" />
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-6">
+                    <!--<label>Номер закупки</label>-->
+                    <input type="text" ng-model="filter.PurchaseNumber" class="form-control" placeholder="Номер закупки" />
+                </div>
+                <div class="col-md-6">
+                    <!--<label>МНН</label>-->
+                    <input type="text" ng-model="filter.INNGroup" class="form-control" placeholder="МНН" />
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-3">
+                    <!--<label data-translate="PERIOD_START"></label>-->
+                    <p class="input-group ap-required">
+                        <input name="purchaseDateBeginStart"
+                               type="text"
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="filter.PurchaseDateBeginStart.Value"
+                               is-open="filter.PurchaseDateBeginStart.Opened"
+                               datepicker-options="{minMode: 'day', showWeeks: false}"
+                               datepicker-mode="'day'" placeholder="Период с" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="filter.PurchaseDateBeginStart.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <div class="has-error help-block" ng-if="filterForm.purchaseDateBeginStart.$invalid">
+                        <small ng-if="filterForm.purchaseDateBeginStart.Value.$error.valueComparer" data-translate="ERROR.PERIOD"></small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!--<label data-translate="PERIOD_END"></label>-->
+                    <p class="input-group ap-required">
+                        <input type="text"
+                               name="purchaseDateBeginEnd"
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="filter.PurchaseDateBeginEnd.Value"
+                               is-open="filter.PurchaseDateBeginEnd.Opened"
+                               datepicker-options="{minMode: 'day', showWeeks: false}"
+                               datepicker-mode="'day'"
+                               min-date="filter.PurchaseDateBeginStart.value"
+                               init-date="now" placeholder="Период по" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="filter.PurchaseDateBeginEnd.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <div class="has-error help-block" ng-if="dateEndIsMoreThanDateBegin()">
+                        <small data-translate="ERROR.PERIOD"></small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!--<label></label>-->
+                    <input type="text" ng-model="filter.DrugTradeName" class="form-control" placeholder="Торговое наименование">
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-3">
+                    <!--<label></label>-->
+                    <div popover-placement="bottom" uib-popover="{{filter.Nature.displayValue}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <multi-select placeholder="Характер" ng-model="filter.Nature" ap-label="" class="multi-select-control"></multi-select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!--<label></label>-->
+                    <div popover-placement="bottom" uib-popover="{{filter.Category.displayValue}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <multi-select placeholder="Категория" ng-model="filter.Category" ap-label="" class="multi-select-control"></multi-select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!--<label></label>-->
+                    <input type="text" ng-model="filter.DrugDescription" class="form-control" placeholder="Описание препарата" />
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-6">
+                    <!--<label></label>-->
+                    <div popover-placement="bottom" uib-popover="{{filter.FederalDistrict.displayValue}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <multi-select placeholder="Федеральный округ" ng-model="filter.FederalDistrict" ap-label="" class="multi-select-control"></multi-select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" ng-model="filter.ObjectReadyName" class="form-control" placeholder="Имя об." />
+                </div>
+            </div>
+            <div class="row" style="padding-top:3px;">
+                <div class="col-md-6">
+                    <div popover-placement="bottom" uib-popover="{{filter.FederationSubject.displayValue}}" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <multi-select placeholder="Субъект федерации" ng-model="filter.FederationSubject" ap-label="" class="multi-select-control"></multi-select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" ng-model="filter.GoodsCategoryName" class="form-control" placeholder="Категория Доп" />
+                </div>
+            </div>
+            <div class="row row-eq-height" style="padding-top:3px;">
+                <div class="col-md-6 no-padding">
+                    <label><input type="checkbox" class="form-inline" ng-model="filter.VNC" /> ВНЦ </label>
+                </div>
+                <div class="col-md-6 no-padding" ng-class="{'red-border': !filter.includePurchases && !filter.includeContracts}">
+                    <div class="row row-eq-height" style="min-height: 100%; position: absolute; top: 0;">
+                        <div class="col-md-4 no-padding" style="min-height: 100%;">
+                            <div class="row" style="min-height: 50%; position: relative;">
+                                <div class="col-md-12" style="position: absolute; bottom: 0;">
+                                    <label><input type="checkbox" class="form-inline" ng-model="filter.includePurchases" /> Закупки </label>
+                                </div>
+
+                            </div>
+                            <div class="row" style="min-height: 50%; position: relative;">
+                                <div class="col-md-12" style="position: absolute; bottom: 0;">
+                                    <label><input type="checkbox" class="form-inline" ng-model="filter.includeContracts" /> Контракты </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 vertical-align">
+                            <label ng-show="!filter.includePurchases && !filter.includeContracts" style="color: red;">Выберите хотя бы 1 вариант!</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="float-left">
+            <button class="btn btn-default" type="button" ng-click="clearFilter()" data-translate="BUTTONS.CLEAR"></button>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit" ng-disabled="filterForm.$invalid || dateEndIsMoreThanDateBegin() || (!filter.includePurchases && !filter.includeContracts)" data-translate="BUTTONS.OK"></button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+        </div>
+    </div>
+</form>
+

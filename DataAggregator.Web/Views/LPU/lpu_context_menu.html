@@ -1,0 +1,51 @@
+﻿<div class="panel panel-primary context-menu" style=" min-width:300px;"  >
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия: <span class="badge">{{Grid.selectedRows().length}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-4 padding1">
+                Отделение:
+            </div>
+            <div class="col-md-8 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#AddDepModal" ng-disabled="Grid.NeedSave||Grid.selectedRows() == undefined || Grid.selectedRows().length > 1 || Grid.selectedRows()[0].IsDepartment>0">Добавить</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-12 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <!--  <button type="button" class="btn btn-danger" ng-click="LPU_delete();">Удалить</button>-->
+                        <!--    <button type="button" class="btn btn-warning" ng-click="LPU_Merge();">Объединить</button>-->
+                        <div ng-show="Grid.NeedSave">Сначала сохраните изменения <br /></div>
+                        <div ng-show="Grid.selectedRows() == undefined || Grid.selectedRows().length < 2">Выберите 2 и более записи <br /></div>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="getMergeList()" data-toggle="modal" data-target="#MergeModal" ng-disabled="Grid.NeedSave||Grid.selectedRows() == undefined || Grid.selectedRows().length < 2">Объединить</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-4 padding1">
+                ЛПУ:
+            </div>
+            <div class="col-md-8 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#AddLPUModal">Добавить ЛПУ</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

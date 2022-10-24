@@ -1,0 +1,82 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="SummsNetwork_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .AlphaBitSums {
+            background-color: green;
+        }
+
+        .OFDSums {
+            background-color: orange;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+
+        .row_1 {
+            background-color: navajowhite;
+        }
+
+        .row_2 {
+            background-color: palegoldenrod;
+        }
+
+        .row_total {
+            background-color: lightcyan;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-6 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="SummsNetwork_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <!--<button type="button" class="btn btn-warning btn-sm" ng-disabled="!NeedSave" ng-click="SummsNetwork_Save();"><span class="glyphicon glyphicon-floppy-disk">Сохранить</span></button>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>
+                        <input name="IsWithAnket" type="checkbox" class="" ng-model="IsWithAnket" ng-change="">Только с Анкетами
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

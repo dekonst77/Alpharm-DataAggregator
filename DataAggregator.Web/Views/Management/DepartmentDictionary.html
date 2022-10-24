@@ -1,0 +1,60 @@
+﻿<div ng-controller="DepartmentDictionaryController" cg-busy="loading" ng-cloak>
+
+    <div class="panel-default panel">
+        
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-9" >
+                    <div class="col-md-12 no-padding">
+                        
+                        <div class="col-md-4">
+                            <label data-translate="COMMON.NAME"></label>
+                            <input type="text" class="form-control" ng-model="currentItem.Name" ng-disabled="!editMode">
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label data-translate="COMMON.SHORT_NAME"></label>
+                            <input type="text" class="form-control" ng-model="currentItem.ShortName" ng-disabled="!editMode">
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label class="control-label" data-translate="COMMON.MANAGER"></label>
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="managerDisplayValue"
+                                   ng-change="managerChanged()"
+                                   uib-typeahead="user.Value for user in users | filter:$viewValue"
+                                   typeahead-on-select="managerChanged($item)"
+                                   typeahead-editable="false"
+                                   typeahead-select-on-exact="true"
+                                   ng-disabled="!editMode"
+                                   placeholder="{{'COMMON.MANAGER' | translate}}">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="!canCreate()" ng-click="createItem()" data-translate="BUTTONS.CREATE"></button>
+                        <button class="btn btn-primary" ng-disabled="!canEdit()" ng-click="editItem()" data-translate="BUTTONS.EDIT"></button>
+                        <button class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveItem()" data-translate="BUTTONS.SAVE"></button>
+                        <button class="btn btn-primary" ng-disabled="!canCancel()" ng-click="cancelEditing()" data-translate="BUTTONS.CANCEL"></button>
+                    </div>
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="!canClearFields()" ng-click="clearFields()" data-translate="BUTTONS.CLEAR_FIELDS"></button> 
+                        <button class="btn btn-danger btn-delete-field" ng-disabled="!canDelete()" ng-click="deleteItem()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="height: 700px;" ng-class="{'disabled': editMode}">
+            <ui-grid-control options="departmentDictionaryGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,37 @@
+﻿<div ng-controller="RetailReportController" cg-busy="loading" ng-cloak style="height:97%">
+
+    <div class="row" style="height:10%">
+        <div class="col-md-6">
+            <label> Отчет</label>
+            <multiselect class="input-xlarge multiselect" ng-model="filter.selectedReports" options="p.Id as p.Name for p in filter.reports" check-all-label="Выбрать всё" uncheck-all-label="Снять всё"
+                         header="Выбрать отчеты" selected-header="Выбранные значения" multiple="true" required
+                         enable-filter="true" filter-placeholder="Фильтр">
+            </multiselect>
+        </div>
+        <div class="col-md-2">
+            <date-period period="filter.date" ng-required="true"></date-period>
+        </div>
+        <div class="col-md-1">
+            <div class="input-group">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="filter.SendSelf" />Только себе
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-3">
+            <br />
+            <button type="button" class="btn btn-primary" ng-click="add()" ng-disabled="!canAdd()" data-translate="BUTTONS.ADD"></button>
+            <button type="button" class="btn btn-primary" ng-click="stopReport()" ng-disabled="!canRemove()" data-translate="BUTTONS.DELETE"></button>
+        </div>
+    </div>
+
+    <div class="row" style="height:90%">
+        <ui-grid-control options="reportGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+
+
+</div>

@@ -1,0 +1,80 @@
+﻿<div ng-controller="ManufacturerController" cg-busy="ManufacturerLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-1">
+                    <button class="btn btn-warning btn-sm" ng-click="ManufactureEdit(true,false)" data-translate="BUTTONS.ADD"></button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="ManufactureEdit(false,false)" data-translate="BUTTONS.CHANGE"></button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-danger btn-sm" ng-click="ManufactureDelete()" data-translate="Удалить"></button>
+                </div>
+                <div class="col-md-1">Поиск</div>
+                <div class="col-md-5">
+                    <input name="filter" type="text" class="form-control" ng-model="classifier.filter" ng-change="">
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-success btn-sm" ng-click="searchManufacture()"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-1">
+                    <label>Код</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-model="classifier.Id"
+                           readonly>
+                </div>
+
+                <div class="col-md-5">
+                    <label>Компания</label>
+                    <input name="Value" ng-class="{'has-error': Manufacturer.Value.$invalid}" required
+                           type="text" class="form-control" ng-model="classifier.Value"
+                           uib-typeahead="data.Value for data in searchDictionary($viewValue,'Manufacturer')">
+                </div>
+                <div class="col-md-4">
+                    <label>Корпорация</label>
+                    <input name="Corporation" ng-class="{'has-error': Manufacturer.Corporation.$invalid}" required
+                           type="text" class="form-control" ng-model="classifier.Corporation_Value" typeahead-on-select="changeCorporation($item)"
+                           uib-typeahead="data.Value for data in searchDictionary($viewValue,'Corporation')">
+                </div>
+                <div class="col-md-2">
+                    <label>Страна</label>
+                    <select name="Country" ng-class="{'has-error': Manufacturer.Country.$invalid}" required
+                            class="form-control" ng-options="item as item.DisplayValue for item in CountryList track by item.Id"
+                            typeahead-on-select="setId($item,classifier.Country)"
+                            ng-model="classifier.Country"></select>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    English
+                </div>
+
+                <div class="col-md-5">
+                    <input name="Value" ng-class="{'has-error': Manufacturer.Value_eng.$invalid}" required
+                           type="text" class="form-control" ng-model="classifier.Value_eng"
+                           uib-typeahead="data.Value for data in searchDictionary($viewValue,'Manufacturer_eng')">
+                </div>
+                <div class="col-md-4">
+                    <input name="Corporation" ng-class="{'has-error': Manufacturer.Corporation_Value.$invalid}" required
+                           type="text" class="form-control" ng-model="classifier.Corporation_Value_eng" typeahead-on-select="changeCorporation($item)"
+                           uib-typeahead="data.Value_eng for data in searchDictionary($viewValue,'Corporation_eng')">
+                </div>
+                <div class="col-md-2">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="classifierGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>

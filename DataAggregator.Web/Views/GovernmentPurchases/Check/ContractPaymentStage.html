@@ -1,0 +1,55 @@
+﻿<div ng-controller="CheckContractController" cg-busy="dataLoading" ng-init="ContractPaymentStage_Init();" ng-cloak class="fullHeight" ng-style="">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style type="text/css">
+        .myGrid {
+            min-height: 100%;
+        }
+
+        .fullHeight {
+            height: 100%;
+            padding: 1px;
+        }
+
+        .fullHeightGrid {
+            height: 85%;
+            padding: 1px;
+        }
+    </style>
+    <div class="panel panel-default fullHeight">
+        <div class="panel-heading">
+            <h4 style="padding-left: 5px" data-translate="Проверка по сайту - КБК"></h4>
+            <div class="row">
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="KBK_set(1);" data-translate="КБК Переписать"></button>
+                </div>
+                <div class="col-md-1">
+                    <select name="Nature"
+                            class="form-control" ng-options="item as item.Name for item in spr_Nature track by item.Id" ng-model="Nature"></select>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="SetNature()" data-translate="Сменить Характер"></button>
+                </div>
+                <div class="col-md-1">
+                    <select name="Funding"
+                            class="form-control" ng-options="item as item.Name for item in spr_Funding track by item.Id" ng-model="Funding"></select>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="SetFunding()" data-translate="Сменить Финансирование"></button>
+                </div>
+            </div>
+        </div>
+        <div class="auto-item-panel fullHeightGrid">
+            <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+        </div>
+    </div>
+
+
+</div>

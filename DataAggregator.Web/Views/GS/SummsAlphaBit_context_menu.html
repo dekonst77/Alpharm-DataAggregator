@@ -1,0 +1,53 @@
+﻿<div class="panel panel-primary context-menu" style="width: 500px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Комментарии</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('');">Очистить</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Дубль');">Дубль</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Низкие продажи');">Низкие продажи</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Высокие продажи');">Высокие продажи</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Закрыта');">Закрыта</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Маркетинг');">Маркетинг</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Оптика');">Оптика</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Опт.');">Опт.</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('Льгота');">Льгота</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_Comment('ДопАсна');">ДопАсна</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Доп</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_SetLastSellingSum();">применять продажи из столбца с дополнительной загрузкой</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Отметка об использовании</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_IsUse(null,true,0);">Использовать</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsAlphaBit_IsUse(null,false,0);">Убрать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+﻿.government-purchases {
+    &.base {
+        #purchaseComment.highlightInput {
+            background-color: #f08080;
+        }
+
+        .panel-default > .panel-heading {
+            background-color: #50bb50;
+            color: white;
+        }
+
+        .has-error {
+            border-color: red;
+        }
+
+        .widthcell {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        .wrongSum {
+            background-color: red;
+        }
+
+        #purchaseGrid {
+            height: 250px;
+        }
+
+        #lotGrid {
+            height: 242px
+        }
+
+        .deliveryTimeInfoBlock {
+            margin: 5px 0;
+        }
+
+        .btn-file input[type="file"] {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            cursor: inherit;
+            min-height: 100%;
+            min-width: 100%;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            text-align: right;
+            top: 0;
+        }
+
+        .whiteOnRed {
+            background-color: Red;
+            color: White
+        }
+    }
+
+    &.funding{
+        &#fundingBlock {
+            margin: 0 15px;
+        }
+        #fundingTable td {
+            padding: 0;
+        }
+    }
+
+    &.get-purchases-by-filter {
+        overflow-y: auto;
+        height: 600px;
+
+        &#getPurchasesByFilterForm .row {
+            margin-bottom: 10px;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+﻿<div ng-controller="PriceRuleEditorController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <date-period period="filter.date" ng-required="true"></date-period>
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <button type="button" class="btn btn-primary" ng-click="addPriceRule()" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-primary" ng-click="editPriceRule()" ng-disabled="!canEdit()" data-translate="BUTTONS.CHANGE"></button>
+                    <button type="button" class="btn btn-primary" ng-click="deletePriceRule()" ng-disabled="!canEdit()" data-translate="BUTTONS.DELETE"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="priceRuleListGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+</div>
+

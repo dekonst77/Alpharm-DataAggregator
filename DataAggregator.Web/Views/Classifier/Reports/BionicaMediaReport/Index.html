@@ -1,0 +1,34 @@
+﻿<div ng-controller="BionicaMediaReportController" cg-busy="loadingDictionary" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-1 vertical-bottom">
+                    <date-period period="filter.periodDate" ng-model="filter.periodDate" ng-change="getReport()"></date-period>
+                </div>
+                <div class="col-md-2 vertical-bottom">
+                    <button class="btn btn-success" type="button" ng-click="exportAllToCsv()" ng-disabled="filter.periodDate==null" data-translate="BUTTONS.EXPORT_TO_CSV"></button>
+                </div>
+                <div class="col-md-2 vertical-bottom">
+                    <multi-select ng-model="filter.tradeName" ap-label="TRADE_NAME"></multi-select>
+                </div>
+                <div class="col-md-2 vertical-bottom">
+                    <multi-select ng-model="filter.ownerTradeMark" ap-label="OWNER_TRADE_MARK"></multi-select>
+                </div>
+                <div class="col-md-2 vertical-bottom">
+                    <multi-select ng-model="filter.packer" ap-label="PACKER"></multi-select>
+                </div>
+                <div class="col-md-1 vertical-bottom">
+                    <button class="btn btn-success" type="button" ng-click="getReport()" ng-disabled="filter.periodDate==null" data-translate="BUTTONS.LOAD_DATA"></button>
+                </div>
+                <div class="col-md-1 vertical-bottom">
+                    <button class="btn btn-danger" type="button" ng-click="filter.clear()" ng-disabled="!filter.canBeCleared()" data-translate="BUTTONS.CLEAR"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="report-grid-block" class="auto-item-panel">
+        <ui-grid-control options="reportGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿<div ng-controller="ATCBaaController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCEphmra1">ATC БАД 1</label>
+                        <div id="ATCEphmra1" class="form-inline full-width">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc1.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc1.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCEphmra2">ATC БАД 2</label>
+                        <div id="ATCEphmra2" class="form-inline full-width">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc2.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc2.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCEphmra3">ATC БАД 3</label>
+                        <div id="ATCEphmra3" class="form-inline full-width">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc3.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc3.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="add()" data-translate="BUTTONS.ADD"></button>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="change()" data-translate="BUTTONS.CHANGE"></button>
+                        <button class="btn btn-danger" ng-disabled="newValue.length == 0" ng-click="delete()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="clearField()" data-translate="BUTTONS.CLEAR_FIELDS"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="gridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>
+
+

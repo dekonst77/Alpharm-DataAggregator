@@ -1,0 +1,29 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Перенос данных из другого периода</h3>
+</div>
+<div class="modal-body modal-body-big" style="height: 700px" cg-busy="periodCopyLoading">
+
+    <div class="row" style="height: 10%">
+
+        <div class="col-md-6">
+            <span> Для переноса данных в  "{{Item.PeriodName}}" выберите период из которого переносить </span>
+        </div>
+        <div class="col-md-3">
+            <label class="checkbox"><input type="checkbox" name="optradio" ng-model="Item.WithRewrite">Перезаписать существующие федеральные льготы</label>
+        </div>
+    </div>
+
+
+    <div class="row" style="height: 90%">
+        <ui-grid-control options="gridPeriodOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+ 
+    <div>
+        <button class="btn btn-success" ng-disabled="!CanCopyPeriod()" ng-click="CopyPeriod()">Перенести</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CLOSE"></button>
+    </div>
+</div>

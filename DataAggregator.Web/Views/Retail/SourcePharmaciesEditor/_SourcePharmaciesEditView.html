@@ -1,0 +1,104 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{action == 'add' ? 'Добавление новой аптеки' : action == 'edit' ? 'Редактирование аптек' : ''}}</h3>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Id</label>
+                <input type="text" ng-model="dialogData.Id" disabled class="form-control">
+            </div>
+            <div class="col-md-3">
+                <input type="checkbox" ng-model="fieldsToSave.IsSingle" ng-disabled="action == 'add'">
+                <label>Одиночная</label>
+                <input type="checkbox" ng-model="dialogData.IsSingle" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <input type="checkbox" ng-model="fieldsToSave.Use" ng-disabled="action == 'add'">
+                <label>Используется</label>
+                <input type="checkbox" ng-model="dialogData.Use" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.SourceName" ng-disabled="action == 'add'">
+                <label>Название источника</label>
+                <input type="text" ng-model="dialogData.SourceName" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.SourceNameDetailed" ng-disabled="action == 'add'">
+                <label>Название источника (детально)</label>
+                <input type="text" ng-model="dialogData.SourceNameDetailed" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.EntityName" ng-disabled="action == 'add'">
+                <label>Юрлицо</label>
+                <input type="text" ng-model="dialogData.EntityName" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.PharmacyName" ng-disabled="action == 'add'">
+                <label>Название аптеки</label>
+                <input type="text" ng-model="dialogData.PharmacyName" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.PharmacyNumber" ng-disabled="action == 'add'">
+                <label>Номер аптеки</label>
+                <input type="text" ng-model="dialogData.PharmacyNumber" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.NetName" ng-disabled="action == 'add'">
+                <label>Название сети</label>
+                <input type="text" ng-model="dialogData.NetName" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.Address" ng-disabled="action == 'add'">
+                <label>Адрес</label>
+                <input type="text" ng-model="dialogData.Address" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.FiasGuid" ng-disabled="action == 'add'">
+                <label>FiasGuid</label>
+                <input type="text" ng-model="dialogData.FiasGuid" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.TargetPharmacyId" ng-disabled="action == 'add'">
+                <label>TargetPharmacyId</label>
+                <input type="number" ng-model="dialogData.TargetPharmacyId" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.SourcePharmacyGroup" ng-disabled="action == 'add'">
+                <label>Группа</label>
+                <select ng-model="dialogData.SourcePharmacyGroup" ng-options="group.GroupName for group in availableGroups track by group.Id" class="form-control"></select>
+            </div>
+        </div>
+        <div class="row" ng-hide="data.length > 1">
+            <div class="col-md-6">
+                <input type="checkbox" ng-model="fieldsToSave.FileNames" ng-disabled="action == 'add'">
+                <label>Файлы</label>
+                <div style="height: 150px">
+                    <ui-grid-control options="filesGrid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label>Имя файла для добавления</label>
+                <input type="text" ng-model="dialogData.FileNameToAdd" class="form-control"><br />
+                <button class="btn btn-primary" type="button" ng-click="addFile()" data-translate="BUTTONS.ADD"></button><br /><br />
+                <button class="btn btn-primary" type="button" ng-click="removeFile()" data-translate="BUTTONS.DELETE"></button><br /><br />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{headerText}}</h3>
+</div>
+
+<div class="modal-body modal-body-big" cg-busy="classifierLoading">
+
+    <label ng-show="model.OnlyCertBlock">
+        Изменяем только блокировку сертификата регистрации
+    </label>
+
+    <div ng-show="!model.OnlyCertBlock">
+        <label>
+            <input type="checkbox" ng-model="model.ChangeDrugIdCheck" ng-change="ChangeDrugId()" /> Изменить с новым DrugId
+        </label>
+
+        <div ng-show="model.NeedMerge">
+
+            <label ng-show="!model.CanMerge">
+                Нельзя объединять в пределах одного DrugId
+            </label>
+
+            <label ng-show="model.CanMerge">
+                <input type="checkbox" ng-model="model.MergeCheck" ng-change="ChangeMerge()" /> Объеденить с существующим DrugId {{model.DrugDescription}}
+            </label>
+        </div>
+
+        <label ng-show="!model.NeedMerge">
+            <input type="checkbox" ng-model="model.SaveClassifierIdCheck" ng-change="ChangeSaveClassifierId()" /> Сохранить ClassifierId
+        </label>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="cancel()" ng-if="canCancel" data-translate="BUTTONS.CANCEL"></button>
+    <button class="btn btn-success" type="button" ng-click="ok()" ng-disabled="CanSave()" data-translate="BUTTONS.CHANGE"></button>
+</div>

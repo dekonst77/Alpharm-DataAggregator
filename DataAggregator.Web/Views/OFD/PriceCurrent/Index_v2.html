@@ -1,0 +1,50 @@
+﻿<div ng-controller="PriceCurrentController_v2"
+     cg-busy="loading"
+     ng-cloak
+     class="auto-grid-parent"
+     ng-style="{'padding-top': topPartSize.height}">       
+
+    <div class="panel panel-default auto-item-top-part"
+         auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-1">
+                    <button style="width: 100%" class="btn btn-primary" type="button" ng-click="update()">
+                        Обновить
+                    </button>
+                </div>
+                <div class="col-md-1">
+                    <label>
+                        <input type="checkbox" ng-model="showAll" ng-change="ChangeShow">
+                        Показать всё
+                    </label>
+                </div>
+                <div class="col-md-1">
+                    <button style="width: 100%" class="btn btn-primary" type="button" ng-click="runCalcCurrentPrice()" ng-disabled="form.IsRun">
+                        Посчитать
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <label> Статус работы: {{form.Status}} </label>
+                </div>
+                <div class="col-md-2">
+                    <date-period period="form.date" ng-required="true" ap-label=""></date-period>
+                </div>
+                <div class="col-md-1">
+                    <button style="width: 100%" class="btn btn-primary" type="button" ng-click="currentPriceCopyToEtalonPrice()" ng-disabled="form.IsRun">
+                        Перенести цены
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel"
+         cg-busy="IsRuning"
+         data-context-menu="Views/OFD/PriceCurrent/PriceCurrentContextMenu.html">
+        <ui-grid-control options="priceGrid"
+                         class="ui-grid-header-wrap-text PriceCurrent ui-grid-enable-content-selection"
+                         ng-disabled="form.IsRun">
+        </ui-grid-control>
+    </div>
+</div>

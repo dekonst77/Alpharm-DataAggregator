@@ -1,0 +1,23 @@
+﻿@model bool
+
+@{
+    ViewBag.Title = "Подтверждение email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="content">
+
+    @if (Model)
+    {
+        <div>
+            Email подтвержден. @Html.ActionLink("Войдите на сайт.", "Login", "Account", routeValues: null, htmlAttributes: new {id = "loginLink"})
+        </div>
+    }
+    else
+    {
+        <div>
+            Произошла ошибка.
+        </div>  
+    }
+
+</div>

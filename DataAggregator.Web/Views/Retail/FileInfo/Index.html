@@ -1,0 +1,36 @@
+﻿<div ng-controller="FileInfoController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <ng_form name="fileInfoForm">
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        <label>Источник</label>
+                        <select name="source"
+                                class="form-control"
+                                ng-options="item as item.Name for item in filterList.SourceList track by item.Id"
+                                required
+                                ng-model="filter.Source"></select>
+                    </div>
+                    <div class="col-md-2">
+                        <date-period period="filter.date" ng-required="true"></date-period>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <button type="button" class="btn btn-primary" ng-click="getInfo()" ng-disabled="fileInfoForm.$invalid" data-translate="BUTTONS.UPDATE"></button>
+                        <button type="button" class="btn btn-primary" ng-click="checkFiles()" ng-disabled="fileInfoForm.$invalid">Проверить файлы</button>
+                        <button type="button" class="btn btn-info" ng-click="getErrorInfo()" ng-disabled="!canShowError()">Показать все ошибки</button>
+                        <button type="button" class="btn btn-info" ng-click="sendToClassification()">На обработку</button>
+                    </div>
+                    <div class="col-md-2">
+                        <br />
+                        <button type="button" class="btn btn-warning" ng-click="reloadFiles()" ng-disabled="!canReload()">Перегрузить</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteFiles()" ng-disabled="!canDelete()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </ng_form>
+        </div>
+    </div>
+    <div class="auto-item-panel">
+        <ui-grid-control options="fileInfoGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+</div>

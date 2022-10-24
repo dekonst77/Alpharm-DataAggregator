@@ -1,0 +1,26 @@
+﻿<div ng-controller="DistributionKeyWordsController" cg-busy="loadingDictionary" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <button class="btn btn-success" ng-click="edit()" ng-disabled="selectedKeyWord == undefined || selectedKeyWord.length !== 1 || selectedKeyWord[0].DateEnd !== null" data-translate="BUTTONS.EDIT"></button>
+                    <button class="btn btn-success" ng-click="add()" data-translate="BUTTONS.ADD"></button>
+                    <button class="btn btn-success" ng-click="delete()" ng-disabled="deleteBtnDisabled" data-translate="BUTTONS.DELETE"></button>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-change="getKeyWordsList()" ng-model="onlyActive"/>Только действующие записи
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="list-grid-block" class="auto-item-panel">
+        <ui-grid-control options="listGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>

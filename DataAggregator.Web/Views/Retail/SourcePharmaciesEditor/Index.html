@@ -1,0 +1,28 @@
+﻿<div ng-controller="SourcePharmaciesEditorController" cg-busy="loading" ng-cloak>
+    <uib-accordion close-others="false">
+        <div uib-accordion-group class="panel-default" heading="Редактирование справочника аптек">
+            <p>
+                <button type="button" class="btn btn-primary" ng-click="addNewPharmacy()" data-translate="BUTTONS.ADD"></button>
+                <button type="button" class="btn btn-primary" ng-click="editSelectedPharmacies()" ng-disabled="canEdit()" data-translate="BUTTONS.EDIT"></button>
+                <button type="button" class="btn btn-primary" ng-click="deleteSelectedPharmacies()" ng-disabled="canEdit()" data-translate="BUTTONS.DELETE"></button>
+                <button type="button" class="btn btn-primary" ng-click="mergeSelectedPharmacies()" ng-disabled="canMerge()" data-translate="BUTTONS.MERGE"></button>
+            </p>
+            
+            <div style="height: 700px">
+                <ui-grid-control options="sourcePharmaciesGrid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+        </div>
+
+        <div uib-accordion-group class="panel-default" heading="Редактирование групп">
+            <p>
+                <button type="button" class="btn btn-primary" ng-click="addNewGroup()" data-translate="BUTTONS.ADD"></button>
+                <button type="button" class="btn btn-primary" ng-click="editSelectedGroups()" ng-disabled="canEditGroup()" data-translate="BUTTONS.EDIT"></button>
+                <button type="button" class="btn btn-primary" ng-click="deleteSelectedGroups()" ng-disabled="canEditGroup()" data-translate="BUTTONS.DELETE"></button>
+            </p>
+            
+            <div style="height: 700px">
+                <ui-grid-control options="groupsGrid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+        </div>
+    </uib-accordion>
+</div>

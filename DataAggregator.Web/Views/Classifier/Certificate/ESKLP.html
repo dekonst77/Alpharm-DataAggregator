@@ -1,0 +1,129 @@
+﻿<div ng-controller="CertificateController" cg-busy="dataLoading" ng-init="ESKLP_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="ESKLP_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="ESKLP_save();" ng-disabled="!Grid_ESKLP.NeedSave && !Grid_Classifier.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-5 padding3">
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="IsEmpty" ng-change="">Не проставленные
+                    </label>
+                    <label>
+                        <input name="filtercommon" type="checkbox" class="" ng-model="IsOnlyEX" ng-change="">Актуальные
+                    </label>
+                    <label>
+                        <input type="text"  ng-model="Text" placeholder="Текст" class="form-control" ng-enter="ESKLP_search()" />
+                    </label>
+                </div>
+                <div class="col-md-5 padding3">
+                    <label style="font-size:small">
+                        клик по РУ - выбор из Классификатора;
+                        ДвойнойКлик по классфикатору - простановка Paker;
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <size_main>
+        <div class="size_content">
+            <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                <div class="size_row" id="esklp_tbl" resizable r-directions="['right']" r-flex="true" style="width: 30%">
+                    <div id="drug-grid-block" cg-busy="drugLoading" data-context-menu="_contextMenu.html" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="Grid_ESKLP.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                    </div>
+                </div>
+                <div class="size_row" id="esklp_view" style="width: 100%">
+                    <div class="row" style="width: 100%">
+                        <div class="col-md-2 padding3">
+                            <div class="btn-group" role="group" aria-label="ClassifierPacking act">
+                                <button class="btn btn-primary btn-sm" ng-click="ESKLP_ClassifierPacking_save(false);"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-warning btn-sm" ng-click="ESKLP_ClassifierPacking_save(true);"><span class="glyphicon glyphicon-plus-sign"></span></button>
+                                <button class="btn btn-danger btn-sm" ng-click="ESKLP_ClassifierPacking_delete(true);"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                            </div>
+                            <h5>РУ: <span style="color:red">{{CurrentRowESKLP.RuNumber}}</span></h5>
+                            <h5>ТН: <span style="color:red">{{CurrentRowESKLP.TradeName}}</span></h5>
+                            <h5>МНН: <span style="color:red">{{CurrentRowESKLP.NormINN}}</span></h5>
+                        </div>
+                        <div class="col-md-7 padding3">
+                            <h5>Нормализованная лекарственная форма: <span style="color:red">{{CurrentRowESKLP.NormFV}}</span></h5>
+                            <h5>Нормализованная дозировка: <span style="color:red">{{CurrentRowESKLP.NormDosage}}</span></h5>
+                            <h5>Наименование единицы измерения лекарственного препарата: <span style="color:red">{{CurrentRowESKLP.EI}}</span></h5>
+                            <h5>Кол-во ЕИ ЛП  во вторичной (потребительской) упаковке: <span style="color:red">{{CurrentRowESKLP.AmountEISecond}}</span></h5>
+                            <h5>Первичная упаковка Кол-во лекарственной формы: <span style="color:red">{{CurrentRowESKLP.FirstAmount}}</span></h5>
+                            <h5>Первичная упаковка Наименование: <span style="color:red">{{CurrentRowESKLP.FirstFV}}</span></h5>
+                            <h5>Вторичная (потребительская) упаковка Кол-во первичных упаковок: <span style="color:red">{{CurrentRowESKLP.SecondAmount}}</span></h5>
+                            <h5>Вторичная (потребительская) упаковка Наименование: <span style="color:red">{{CurrentRowESKLP.SecondFV}}</span></h5>
+                            <h5>Комплектность вторичной (потребительской) упаковки: <span style="color:red">{{CurrentRowESKLP.SecondFVAdd}}</span></h5>
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <h5>РУ Владелец: <span style="color:red">{{CurrentRowESKLP.RuOwner}}</span></h5>
+                            <h5>РУ Страна: <span style="color:red">{{CurrentRowESKLP.RuCountry}}</span></h5>
+                            <h5>Производитель Наименование: <span style="color:red">{{CurrentRowESKLP.Manufacturer}}</span></h5>
+                            <h5>Производитель Страна: <span style="color:red">{{CurrentRowESKLP.ManufacturerCountry}}</span></h5>
+                            <h5>Производитель Адрес: <span style="color:red">{{CurrentRowESKLP.ManufacturerAddress}}</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="size_row">
+                <div style="width:100%">
+                    <div id="classifier-grid-block" cg-busy="classifierLoading" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="Grid_Classifier.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </size_main>
+    <script type="text/ng-template" id="_contextMenu.html">
+        <div class="panel panel-primary context-menu" style="width: 400px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row padding1">
+                    <div class="col-md-3 padding1">
+                        <label>Флаг</label>
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ESKLP_setFlagAll(0);">в обработку</button>
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ESKLP_setFlagAll(5);">нет в реестре/ГО</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding1">
+                    <div class="col-md-3 padding1">
+                        <label>Простановка</label>
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ESKLP_reset();">Отвязать</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding1">
+                    <div class="col-md-3 padding1">
+                        <label>Актуальность</label>
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ESKLPIsActual(true);">Да</button>
+                                <button type="button" class="btn btn-default btn_ok" ng-click="ESKLPIsActual(false);">Нет</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </script>
+</div>

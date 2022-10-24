@@ -1,0 +1,41 @@
+﻿<div ng-controller="DDDController" cg-busy="dataLoading" ng-init="StandardUnits_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="StandardUnits_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="StandardUnits_save();" ng-disabled="!Grid_StandardUnits.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel" data-context-menu="_contextMenu.html">
+        <ui-grid-control options="Grid_StandardUnits.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+    <script type="text/ng-template" id="_contextMenu.html">
+        <div class="panel panel-primary context-menu" style="width: 800px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row padding1">
+                    <div class="row padding1">
+                        <div class="col-md-3 padding1">
+                            <label>EI</label>
+                        </div>
+                        <div class="col-md-9 padding1">
+                            <div class="btn-group btn-group-xs">
+                                <button ng-repeat="item in EI | orderBy:'Value'" type="button" class="btn btn-primary btn-xs"
+                                        ng-click="StandardUnitsSet(item.Id)" data-translate="{{item.Value}}"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </script>
+</div>

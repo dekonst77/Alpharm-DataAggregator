@@ -1,0 +1,24 @@
+﻿<div ng-controller="MaskController" cg-busy="maskLoading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>                     
+                        <button class="btn btn-primary" ng-click="Refresh()" data-translate="BUTTONS.UPDATE"></button>                      
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">       
+
+        <div ng-style="gridStyle" style="height:100%">
+            <ui-grid-control options="gridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+      
+    </div>
+</div>
+

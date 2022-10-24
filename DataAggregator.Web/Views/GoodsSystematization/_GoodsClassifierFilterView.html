@@ -1,0 +1,64 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Поиск для обработки</h3>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Торговое наименование</label>
+                <input type="text" ng-model="classifierFilter.GoodsTradeName" ng-change="changeCheck('goodsTradeName')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'goodsTradeName')" class="form-control" typeahead-on-select="setId($item,'goodsTradeNameId')" typeahead-select-on-exact="true" ng-enter="pressTypeAheadEnter()" typeahead-no-results="noResults" autofocus>
+            </div>
+            <div class="col-md-6">
+                <label>Производитель</label>
+                <input type="text" ng-model="classifierFilter.OwnerTradeMark" ng-change="changeCheck('ownerTradeMark')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'ownerTradeMark')" class="form-control" typeahead-on-select="setId($item,'ownerTradeMarkId')" typeahead-select-on-exact="true" ng-enter="pressTypeAheadEnter()" typeahead-no-results="noResults">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Описание препарата</label>
+                <input type="text" ng-model="classifierFilter.GoodsDescription" ng-change="changeCheck('goodsDescription')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'goodsDescription')" class="form-control" typeahead-on-select="setId($item,'goodsDescriptionId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+            <div class="col-md-6">
+                <label>Упаковщик</label>
+                <input type="text" ng-model="classifierFilter.Packer" ng-change="changeCheck('packer')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'packer')" class="form-control" typeahead-on-select="setId($item,'packerId')" typeahead-select-on-exact="true" ng-enter="pressTypeAheadEnter()" typeahead-no-results="noResults">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>GoodsId</label>
+                <input type="text" autocomplete="off" ng-model="classifierFilter.GoodsId" class="form-control" ng-enter="pressEnter()" awnum="int">
+            </div>
+            <div class="col-md-6">
+                <label>OwnerTradeMarkId</label>
+                <input type="text" autocomplete="off" ng-model="classifierFilter.OwnerTradeMarkId" class="form-control" ng-enter="pressEnter()">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox_All" ng-model="classifierFilter.Used">
+                    <label class="form-check-label" for="inlineCheckbox_All">Всё</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox_ToRetail" ng-model="classifierFilter.ToRetail">
+                    <label class="form-check-label" for="inlineCheckbox_ToRetail">Обязательно к простановке</label>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label>Код упаковщика</label>
+                <input type="text" autocomplete="off" ng-model="classifierFilter.PackerId" class="form-control" ng-enter="pressEnter()">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-default" type="button" ng-click="clear()" data-translate="BUTTONS.CLEAR"></button>
+    </div>
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="!CanSearch()" data-translate="BUTTONS.SEARCH"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

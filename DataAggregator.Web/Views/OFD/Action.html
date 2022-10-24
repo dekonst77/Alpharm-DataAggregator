@@ -1,0 +1,45 @@
+﻿<div ng-controller="OFDController" ng-init="Init_Action();" cg-busy="dataLoading" ng-cloak class="fullHeight" ng-style="">
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Проверка на ФТП загрузка и обработка файлов от поставщиков
+            </div>
+            <div class="panel-body">
+                <job job-Title="Запуск Дневные" job-Server="s-sql4" job-Name="OFD_job_ftp_upload"></job>
+                <job job-Title="Запуск мес/квартал" job-Server="s-sql4" job-Name="OFD_job_ftp_upload_MonthQuart"></job>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Отдать Данные провизорам
+            </div>
+            <div class="panel-body">
+                <job job-Title="Запуск" job-Server="s-sql4" job-Name="OFD_tovar_to_Provisor"></job>
+                <!--<job job-Title="Запуск Гидра" job-Server="s-sql4" job-Name="Hydra_55"></job>-->
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Подготовить Агрегаты
+            </div>
+            <div class="panel-body">
+                <job job-Title="Неделя - Запуск расчёта и выгрузки на тест Click" job-Server="s-sql4" job-Name="OFD_AGG_TEST"></job>
+                <job job-Title="Неделя - Выгрузка на клиента Click" job-Server="s-sql4" job-Name="OFD_AGG_client"></job>
+                <job job-Title="ЕжеДневная БД - Расчёт/Выгрузка на клиента" job-Server="s-sql4" job-Name="OFD_AGG_daily"></job>
+                <job job-Title="ИД расчёт+тест" job-Server="s-sql4" job-Name="OFD_AGG_DI"></job>
+                <job job-Title="ИД Клиентам" job-Server="s-sql4" job-Name="OFD_AGG_DI_client"></job>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                4СС
+            </div>
+            <div class="panel-body">
+                <job job-Title="Запуск расчёта и выгрузки НА ТЕСТ Клик" job-Server="s-sql4" job-Name="OFD_4SC"></job>
+                <job job-Title="Выгрузка НА ТЕСТ Клик" job-Server="s-sql4" job-Name="OFD_4SC_ClickTest"></job>
+                <job job-Title="Выгрузки с ТЕСТ на Клиента" job-Server="s-sql4" job-Name="OFD_4SC_Client"></job>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿<div ng-controller="GlobalController" cg-busy="dataLoading" ng-init="query_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-warning btn-sm" ng-click="query_Add();" ng-disabled="CurrentSourceId==0"><span class="glyphicon glyphicon-plus-sign">Добавить</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="query_Save();" ng-disabled="!Grid_query.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <size_main>
+        <size_nav resizable r-directions="['right']">
+            <ul>
+                <li ng-repeat="item in Area">
+                    <button class="btn btn-sm" style="width:100%" ng-class="{'btn-success':CurrentArea==item,'btn-info':CurrentArea!=item}" ng-click="SetFilterArea(item);">{{item}}</button>
+                </li>
+            </ul>
+        </size_nav>
+        <div class="size_content">
+            <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                <div id="Grid_query1" style="width:100%">
+                    <ui-grid-control options="Grid_query.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div class="size_row">
+                <textarea id="yr" style="height:100%;width:100%" ng-model="CurrentRow.entity.Query" onkeyup="textChange()"></textarea>
+            </div>
+            <div class="size_row">
+                <textarea id="yr" style="height:100%;width:100%" ng-model="CurrentRow.entity.Filters" onkeyup="textChange()"></textarea>
+            </div>
+        </div>
+    </size_main>
+</div>

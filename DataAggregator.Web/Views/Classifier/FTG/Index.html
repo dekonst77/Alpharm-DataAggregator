@@ -1,0 +1,28 @@
+﻿<div ng-controller="FtgController" cg-busy="ftgLoading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label for="ftgValue">ФТГ</label>
+                        <input type="text" class="form-control" id="ftgValue" placeholder="" ng-model="ftg.Value">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="add()" data-translate="BUTTONS.ADD"></button>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="change()" data-translate="BUTTONS.CHANGE"></button>
+                        <button class="btn btn-danger" ng-disabled="newValue.length == 0" ng-click="delete()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-grid">
+        <ui-grid-control options="gridOptions"></ui-grid-control>
+    </div>
+
+</div>

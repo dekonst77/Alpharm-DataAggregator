@@ -1,0 +1,36 @@
+﻿<div ng-controller="VEDController" cg-busy="[vedLoading, vedTradeNameLoading]" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <button class="btn btn-primary" ng-click="ChangeData()">{{ShowAll ? 'Показать ЖНВЛП' : 'Показать всё'}}</button>
+                        <button class="btn btn-primary" ng-click="Refresh()" data-translate="BUTTONS.UPDATE"></button>
+                        <button class="btn btn-danger" ng-click="openPeriod()">Изменить периоды</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <uib-tabset active="active">
+            <uib-tab heading="МНН" select="setTabIndex(0)">
+            </uib-tab>
+
+            <uib-tab heading="Торговое наименование" select="setTabIndex(1)">
+            </uib-tab>
+        </uib-tabset>
+    </div>
+
+    <div class="auto-item-panel">      
+        
+        <div ng-if="currentTabIndex == 0" ng-style="gridStyle" style="height:100%">
+            <ui-grid-control options="gridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+        <div ng-if="currentTabIndex == 1" ng-style="gridStyle" style="height:100%">
+            <ui-grid-control options="gridTradeNameOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+    </div>
+</div>
+

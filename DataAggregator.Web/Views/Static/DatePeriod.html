@@ -1,0 +1,17 @@
+<label ng-hide="apLabel === ''" data-translate="{{apLabel}}"></label>
+<span class="input-group" ng-class="{'ap-required':ngRequired}" style="width: 100%; display: block; padding-right: 39px">
+    <input name="date" style="width: 100%; display: inline; float: none"
+           type="text"
+           readonly
+           ng-required="ngRequired"
+           class="form-control"
+           uib-datepicker-popup="{{format}}"
+           ng-model="period"
+           is-open="popupDate.opened"
+           placeholder="{{placeholder | translate}}"
+           datepicker-options="{minMode: 'month'}"
+           datepicker-mode="'month'" />
+    <span class="input-group-btn" style="position: absolute; top: 0; right: 0; width: 39px">
+        <button type="button" class="btn btn-default" ng-click="openDate()" ng-disabled="ngDisabled"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+</span>

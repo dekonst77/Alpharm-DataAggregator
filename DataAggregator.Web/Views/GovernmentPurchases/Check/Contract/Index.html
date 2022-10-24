@@ -1,0 +1,56 @@
+﻿<div ng-controller="CheckContractController" cg-busy="dataLoading" ng-init="contract_Init();"  ng-cloak class="fullHeight" ng-style="">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style type="text/css">
+        .myGrid {
+            min-height: 100%;
+        }
+
+        .fullHeight {
+            height: 100%;
+            padding: 1px;
+        }
+
+        .fullHeightGrid {
+            height: 85%;
+            padding: 1px;
+        }
+    </style>
+    <div class="panel panel-default fullHeight">        
+        <div class="panel-heading">
+            <h4 style="padding-left: 5px" data-translate="Проверка по сайту - контракты"></h4>
+            <div class="row">
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="Contract_check_Set_check('Contract_check_Set_check_sum',0)" data-translate="Сумма убрать"></button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="Contract_check_Set_check('Contract_check_Set_check_sum',1)" data-translate="Сумма применить"></button>
+                </div>
+                <!--<div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="Contract_check_Set_check('Contract_check_Set_check_ActuallyPaid',0)" data-translate="Фактически убрать"></button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="Contract_check_Set_check('Contract_check_Set_check_ActuallyPaid',1)" data-translate="Фактически применить"></button>
+                </div>-->
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="Contract_check_Set_check('Contract_check_Set_ContractObject',0)" data-translate="ТЗ убрать"></button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default btn-sm" ng-click="Contract_check_Set_check('Contract_check_Set_ContractObject',1)" data-translate="ТЗ применить"></button>
+                </div>
+            </div>
+        </div>
+        <div class="auto-item-panel fullHeightGrid">
+            <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection myGrid" ></ui-grid-control>
+        </div>
+    </div>
+
+    
+</div>

@@ -1,0 +1,374 @@
+﻿html, body {
+    height: 100%;
+}
+
+html {
+    overflow:  auto;
+}
+
+label {
+    font-weight: normal !important;
+}
+.padding1 {
+    padding: 1px;
+}
+#page-block {
+    height: 100%;
+}
+.img-tbl {
+    width: 15px;
+    height: 15px;
+}
+.wide-dialog .modal-dialog {
+  width: 1200px; 
+}
+
+.modal-giant {
+    width: 80%;
+}
+
+/* Диалоги - начало */
+.modal-full {
+    width: calc(100% - 10px);
+}
+
+/* Диалоги - конец */
+
+.homeButton {
+    background: url("../Icons/Home.png") no-repeat center;
+    background-size: cover;
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+
+#outer-content-block {
+    height: 100%;
+    width: 100%;
+}
+
+#inner-content-block {
+    height: 100%;
+    width: 100%;
+    padding: 3px;
+}
+
+.page-block {
+    margin: 10px;
+}
+
+
+.selected {
+    background-color: #ccddff !important;
+
+}
+
+.center-modal {
+    position: fixed;
+    top: 0%;
+    left: 18.5%;
+    z-index: 1050;
+    width: 80%;
+    height: 97%;
+    margin-left: -10%;
+}
+.GovernmentPurchases {
+    color: brown !important;
+}
+.GS {
+    color: darkgreen !important;
+}
+.Prov {
+    color: darkorchid !important;
+}
+.Distr {
+    color: darkorange !important;
+}
+.modal-body-big {
+    height: 700px;
+    overflow-y: scroll;
+}
+
+.modal-title {
+    text-align: center; 
+    color: red;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.modal-footer button {
+    min-width: 70px;
+}
+
+/* запретить выделение */
+.disableSelection {
+    /**
+     * Для эксплорера
+     */
+    -ms-user-select: none;
+    /**
+     * Для мозилы
+     */
+    -moz-user-select: none;
+    /**
+     * Для конкверора
+     */
+    -khtml-user-select: none;
+    /**
+     * Для Сафари и Хрома
+     */
+    -webkit-user-select: none;
+}
+
+
+
+
+/* Navbar CSS*/
+.navbar-default {
+  background-color: #3465a7;
+  border-color: #264283;
+}
+.navbar-default .navbar-brand {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-text {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: #264283;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #264283;
+}
+.navbar-default .navbar-toggle {
+  border-color: #264283;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #264283;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ecf0f1;
+}
+.navbar-default .navbar-link {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-link:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: #264283;
+  }
+}
+
+/* Скрыть кнопку очистки даты */
+.ap-required .btn-group .btn-danger.btn
+{
+    display: none;
+}
+
+
+/* Выделить красным элемент управления при ошибке */
+input.ng-invalid,
+select.ng-invalid{
+    border: 1px solid red;
+}
+
+
+/* Выделить красным текст сообщение об ошибке в блоке валидации */
+.has-error.help-block {
+    color: red;
+}
+
+/* Пункты меню всегда на верхнем уровне чтобы была всегда возможность выбрать их даже при крутилке загрузчика */
+.navbar-nav .dropdown-menu {
+    z-index: 9999;
+}
+
+
+/* Организация подменю */
+.dropdown-submenu {
+    position:relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top:0;
+    left:100%;
+    margin-top:-6px;
+    margin-left:-1px;
+    -webkit-border-radius:0 6px 6px 6px;
+    -moz-border-radius:0 6px 6px 6px;
+    border-radius:0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+    display:block;
+}
+.dropdown-submenu>a:after {
+    display:block;
+    content:" ";
+    float:right;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+    border-width:5px 0 5px 5px;
+    border-left-color:#cccccc;
+    margin-top:5px;
+    margin-right:-10px;
+}
+.dropdown-submenu:hover>a:after {
+    border-left-color:#ffffff;
+}
+.dropdown-submenu.pull-left {
+    float:none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left:-100%;
+    margin-left:10px;
+    -webkit-border-radius:6px 0 6px 6px;
+    -moz-border-radius:6px 0 6px 6px;
+    border-radius:6px 0 6px 6px;
+}
+
+.nav.navbar-nav li:hover {
+    cursor: pointer;
+}
+
+
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.padding3 {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+.padding_menu_item {
+    display: inline;
+    padding: 3px 3px 3px 15px !important;
+}
+
+
+/* Для грида - автовыравнивание */
+.auto-grid {
+    height: 100%;
+    padding: 3px;
+}
+.fullscreen {
+    height: 98%;
+    padding: 0;
+    margin: 0;
+}
+.auto-item-panel {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.auto-item-top-part {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index:100;
+}
+
+.auto-grid-parent {
+    height: 100%;
+    position: relative;
+}
+
+
+.k-filter-row th, .k-grid-header th.k-header {
+    text-align: center;
+    white-space: normal;
+}
+
+.k-grid-header th.k-header {
+    vertical-align: middle;
+}
+
+.vertical-bottom {
+    display: inline-block;
+    vertical-align: bottom !important;
+    float: none;
+}
+
+.full-width {
+    width: 100%
+}
+
+
+
+.grid-block .green {
+    background: rgb(204, 255, 204) !important;
+}
+.grid-block .green.selected {
+    background: darkseagreen !important;
+}
+.grid-block_sm .ui-grid-row,
+.grid-block_sm .ui-grid-cell {
+    height: 20px;
+    font-size: 14px;
+    line-height: 10px;
+}
+
+.grid-block table {
+    width: 100%;
+}
+.grid-block thead {
+    background-color: #337ab7;
+    color: #ffffff;
+}
+.grid-block td,
+.grid-block th{
+    border: 1px solid #ccddff;
+}
+.grid-block th,
+.grid-block td {
+    /*--Исправлен баг не позволяющий выделять 1 символ в ячейке*/
+    padding-left: 5px !important;
+}
+.grid-block td{
+    /*В гриде все записи в 1 строчку*/
+    white-space: nowrap;
+}

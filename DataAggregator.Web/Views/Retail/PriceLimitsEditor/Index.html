@@ -1,0 +1,25 @@
+﻿<div ng-controller="PriceLimitsEditorController" cg-busy="loading" ng-cloak>
+    
+    <div class="panel panel-default" style="height: 95px;margin-bottom:0">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <date-period period="filter.date" ng-required="true"></date-period>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button type="button" class="btn btn-primary" ng-click="duplicatePrices()" ng-disabled="!(priceRangesGrid.options.customCellSelect.selectedRows.length >= 2)" data-translate="BUTTONS.DUPLICATE_PRICES"></button>
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <button type="button" class="btn btn-primary" ng-click="clearPrices()" ng-disabled="!(priceRangesGrid.options.customCellSelect.selectedRows.length >= 1)" data-translate="BUTTONS.CLEAR_PRICES"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 800px;">
+        <ui-grid-control options="priceRangesGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>

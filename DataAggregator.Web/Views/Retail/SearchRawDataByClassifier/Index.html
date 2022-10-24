@@ -1,0 +1,59 @@
+﻿<div ng-controller="SearchRawDataByClassifierController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            
+            <ng-form name="filterForm">
+                <div class="row form-group">
+                
+                    <div class="col-md-2">
+                        <date-period period="filter.dateStart" ap-label="PERIOD_START" ng-required="true"></date-period>
+                    </div>
+
+                    <div class="col-md-2">
+                        <date-period period="filter.dateEnd" ap-label="PERIOD_END" ng-required="true"></date-period>
+                    </div>
+
+                    <div class="col-md-2">
+                        <multi-select ng-model="filter.region" ap-label="REGION"></multi-select>
+                    </div>
+                
+                    <div class="col-md-2">
+                        <multi-select ng-model="filter.tradeName" ap-label="TRADE_NAME"></multi-select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <multi-select ng-model="filter.brand" ap-label="BRAND"></multi-select>
+                    </div>
+                
+                    <div class="col-md-2">
+                        <multi-select ng-model="filter.classifier" ap-label="DOP"></multi-select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label data-translate="DETAILING"></label>
+                        <select class="form-control" ng-options="item as item.Name for item in detailingList track by item.Id" ng-model="filter.detailing"></select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label data-translate="RETAIL.SEARCH_RAW_DATA_BY_CLASSIFIER.PERIOD_DETAILING.NAME"></label>
+                        <select class="form-control" ng-options="item as item.Name for item in periodDetailingList track by item.Id" ng-model="filter.periodDetailing"></select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <br/>
+                        <button type="button" class="btn btn-primary" ng-click="search()" ng-disabled="!canSearch(filterForm)" data-translate="BUTTONS.SEARCH"></button>
+                    </div>
+
+                </div>
+            </ng-form>
+
+        </div>
+    </div>
+    
+    <div class="auto-item-panel">
+        <ui-grid-control options="rawDataByClassifierGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>
+

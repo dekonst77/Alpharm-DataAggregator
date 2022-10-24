@@ -1,0 +1,473 @@
+﻿<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand и toggle сгруппированы для лучшего отображения на мобильных дисплеях -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand homeButton" href="/"></a>
+        </div>
+
+        <!-- Соберите навигационные ссылки, формы, и другой контент для переключения -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+                <!--Классификация ЛС-->
+                <li class="dropdown" in-roles="SBoss,SOperator,SPharmacist">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="CLASSIFIER.TITLE"></span><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="SBoss,SOperator,SPharmacist"><a ng-href="/#/Systematization/DrugGoodClassifier" data-translate="SYSTEMATIZATION.SYSTEMATIZATION.TITLE"></a></li>
+                        <li in-roles="SBoss,SOperator,SPharmacist"><a ng-href="/#/Systematization/PeriodsSettings" data-translate="SYSTEMATIZATION.PERIODS_SETTINGS.TITLE"></a></li>
+                        <li in-roles="SBoss"><a ng-href="/#/Systematization/PrioritetWords">Приоритетные слова</a></li>
+                        <li in-roles="SBoss"><a ng-href="/#/Systematization/Raspredelenie">Распределение</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss,SOperator,SPharmacist" class="divider"></li>
+
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/ClassifierEditor" data-translate="CLASSIFIER.CLASSIFIER_EDITOR.TITLE"></a></li>
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/ClassifierEditor/Edit" data-translate="CLASSIFIER.CLASSIFIER_EDITOR_CHANGE.TITLE"></a></li>
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/GoodsClassifierEditor" data-translate="CLASSIFIER.GOODS_CLASSIFIER_EDITOR.TITLE"></a></li>
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/GoodsClassifierEditor/Edit" data-translate="CLASSIFIER.GOODS_CLASSIFIER_EDITOR_CHANGE.TITLE"></a></li>
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/Mask" data-translate="CLASSIFIER.MASK.TITLE"></a></li>
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/DataChangeExcel" data-translate="Обмен через Excel"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss,SPharmacist" class="divider"></li>
+
+                        <li in-roles="SBoss,SPharmacist"><a ng-href="/#/Classifier/Manufacturer/Edit" data-translate="CLASSIFIER.Manufacturer_EDITOR_CHANGE.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss,SPharmacist" class="divider"></li>
+
+                        <li in-roles="SBoss,SOperator,SPharmacist"><a ng-href="/#/Systematization/GoodsSystematization" data-translate="SYSTEMATIZATION.GOODS_SYSTEMATIZATION.TITLE"></a></li>
+                        <li in-roles="SBoss"><a ng-href="/#/Classifier/GoodsCategoryEditor" data-translate="CLASSIFIER.GOODS_CATEGORY_EDITOR.TITLE"></a></li>
+                        <li in-roles="SBoss"><a ng-href="/#/Classifier/GoodsParametersEditor" data-translate="CLASSIFIER.GOODS_PARAMETERS_EDITOR.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss,SOperator,SPharmacist" class="divider"></li>
+
+                        <li in-roles="SBoss,SPharmacist" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1">DDD</a>
+                            <ul class="dropdown-menu">
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/DDD_Norma">DDD Норма</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/DDD">DDD</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/StandardUnits">Standard Units</a></li>
+                            </ul>
+                        </li>
+
+                        <li in-roles="SPharmacist" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1">Сертификаты</a>
+                            <ul class="dropdown-menu">
+                                <li in-roles="SPharmacist"><a ng-href="/#/Classifier/Certificates">Сертификаты ГРЛС</a></li>
+                                <li in-roles="SPharmacist"><a ng-href="/#/Classifier/Subtance">Субстанции</a></li>
+                                <li in-roles="SPharmacist"><a ng-href="/#/Classifier/MnfWay">Стадии производства</a></li>
+
+                                <!--разделитель-->
+                                <li in-roles="SBoss,SPharmacist" class="divider"></li>
+
+                                <li in-roles="SPharmacist"><a ng-href="/#/Classifier/ESKLP">ЕСКЛП</a></li>
+
+                                <!--разделитель-->
+                                <li in-roles="SBoss,SPharmacist" class="divider"></li>
+
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=grls&name=ChemicalSPR&type=t3">Химическое наименование</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=ManufacturerClear&type=t1">Производитель площадка</a></li>
+                            </ul>
+                        </li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss,SOperator,SPharmacist" class="divider"></li>
+
+                        <li in-roles="SBoss,SPharmacist" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1">Справочники</a>
+                            <ul class="dropdown-menu">
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=TradeName&type=t1">ТН</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Brand&type=t4">Бренд</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=INN&type=t1">МНН</a></li>
+                                <!--<li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Dosage&type=t1">Дозировка</a></li>-->
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Equipment&type=t1">Equipment</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=FormProduct&type=t1">FormProduct</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=FTG&type=t1">FTG</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Packing&type=t1">Packing</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Dosage&type=t1">Dosage</a></li>
+
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Manufacturer&type=t1">Manufacturer</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=Corporation&type=t1">Corporation</a></li>
+
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=ATCWho&type=t2">ATCWho Список</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=ATCEphmra&type=t2">ATCEphmra Список</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=ATCBaa&type=t2">ATC Бад</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=Classifier&name=NFC&type=t2">NFC Список</a></li>
+
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/FTG" data-translate="CLASSIFIER.FTG.TITLE"></a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/ATCWho" data-translate="CLASSIFIER.ATC_WHO.TITLE"></a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/ATCEphmra" data-translate="CLASSIFIER.ATC_EPHMRA.TITLE"></a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/ATCBAA" data-translate="CLASSIFIER.ATC_BAA.TITLE"></a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/NFC" data-translate="CLASSIFIER.NFC.TITLE"></a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/GENERIC" data-translate="CLASSIFIER.GENERIC.TITLE"></a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SQA" data-translate="CLASSIFIER.SQA.TITLE"></a></li>
+                            </ul>
+                        </li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss" class="divider"></li>
+
+                        <li in-roles="SBoss"><a ng-href="/#/Classifier/VED" data-translate="CLASSIFIER.VED.TITLE"></a></li>
+                        <li in-roles="SBoss"><a ng-href="/#/Classifier/FederalBenefit" data-translate="CLASSIFIER.FEDERAL_BENEFIT.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss" class="divider"></li>
+
+                        <li in-roles="SBoss"><a ng-href="/#/Classifier/DataTransfer" data-translate="CLASSIFIER.DATA_TRANSFER.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss" class="divider"></li>
+
+                        <li in-roles="SBoss,SPharmacist" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1" data-translate="REPORTS.TITLE"></a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-href="/#/Classifier/BionicaMediaReport" data-translate="CLASSIFIER.REPORT_BIONICA_MEDIA.TITLE"></a></li>
+                                <li ng-repeat="item_rep in DAM_Prov_report">
+                                    <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" data-translate="{{item_rep.Name}}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!--разделитель-->
+                        <li in-roles="SBoss" class="divider"></li>
+
+                        <li in-roles="SBoss"><a ng-href="/#/Classifier/ClassifierRelease" data-translate="CLASSIFIER.CLASSIFIER_RELEASE.TITLE"></a></li>
+
+                    </ul>
+                </li>
+
+                <!--Госзакупки-->
+                <li class="dropdown" in-roles="GManager,GOperator,GOperatorRemote">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="GOVERNMENT_PURCHASES.TITLE"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="GManager,GOperator"><a ng-href="/#/GovernmentPurchases/PurchaseLink" data-translate="GOVERNMENT_PURCHASES.PURCHASE_LINK.TITLE"></a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/DistributionKeyWords" data-translate="GOVERNMENT_PURCHASES.DISTRIBUTION_KEY_WORDS.TITLE"></a></li>
+                        <li in-roles="GManager,GOperator"><a ng-href="/#/GovernmentPurchases/DistributionWork" data-translate="GOVERNMENT_PURCHASES.DISTRIBUTION_WORK.TITLE"></a></li>
+                        <li in-roles="GManager,GOperator"><a ng-href="/#/GovernmentPurchases/ContractDistributionWork" data-translate="GOVERNMENT_PURCHASES.CONTRACT_DISTRIBUTION_WORK.TITLE"></a></li>
+                        <li in-roles="GManager" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1" data-translate="Проверка по сайту"></a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-href="/#/GovernmentPurchases/Check/Contract" data-translate="Проверка контрактов"></a></li>
+                                <li><a ng-href="/#/GovernmentPurchases/Check/ContractPaymentStage" data-translate="Проверка КБК"></a></li>
+                            </ul>
+                        </li>
+                        <li in-roles="GManager" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1" data-translate="Справочники"></a>
+                            <ul class="dropdown-menu">
+                                <li in-roles="GManager"><a ng-href="/#/Classifier/SPR?db=GovernmentPurchases&shema=dbo&name=spr_SiteName&type=t3">Наименование эл. площадки</a></li>
+                            </ul>
+                        </li>
+                        <li in-roles="GManager"><a ng-href="/#/Global?name=dictMethod" data-translate="Сопоставление Методов"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GManager,GOperator" class="divider"></li>
+
+                        <li in-roles="GManager,GOperator,GOperatorRemote"><a ng-href="/#/GovernmentPurchases/GovernmentPurchases"><span class="glyphicon glyphicon-briefcase" style="padding-right:10px;"></span>Редактирование закупок</a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/OrganizationsEditor"><span class="glyphicon glyphicon-phone-alt" style="padding-right:10px;"></span>Организации</a></li>
+                        <li in-roles="GOperator"><a ng-href="/#/GovernmentPurchases/OrganizationRaw"><span class="glyphicon glyphicon-phone-alt" style="padding-right:10px;color:red"></span>Организации Обработка</a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/Suppliers" data-translate="GOVERNMENT_PURCHASES.SUPPLIERS.TITLE"></a></li>
+                        <li in-roles="GOperator"><a ng-href="/#/GovernmentPurchases/MassFixesData" data-translate="GOVERNMENT_PURCHASES.MASS_FIXES_DATA.TITLE"></a></li>
+                        <li in-roles="GManager,GOperator"><a ng-href="/#/GovernmentPurchases/DeliveryTime" data-translate="Пустые периоды поставки"></a></li>
+                        <li in-roles="GManager"><a ng-href="/#/Global?name=ClassBlocked" data-translate="Блокированные строчки"></a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/KBK">KBK</a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/Budjet">Бюджеты</a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/AutoNature">Авто - Характер</a></li>
+
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/HandMadePosition">Ручной ввод данных - вакцины</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GManager,GOperator,GOperatorRemote,Admin" class="divider"></li>
+
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/ObjectsToObjectsReady" data-translate="GOVERNMENT_PURCHASES.OBJECTS_TO_OBJECTS_READY.TITLE"></a></li>
+                        <li in-roles="GManager"><a ng-href="/#/Global?name=AutoCorrectAmountInfo" data-translate="Типы пересчета ед измерения"></a></li>
+                        <li in-roles="GManager"><a ng-href="/#/Global?name=AutoCorrectDosageRecount" data-translate="Таблица пересчета"></a></li>
+                        <!--<li in-roles="GManager"><a ng-href="/#/Global?name=ClassKofPriceGZ" data-translate="Коэффициент средней цены"></a></li>-->
+                        <!--разделитель-->
+                        <li in-roles="GManager" class="divider"></li>
+
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/CalcRunner" data-translate="GOVERNMENT_PURCHASES.CALC_RUNNER.TITLE"></a></li>
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/CalculatedDataEditor" data-translate="GOVERNMENT_PURCHASES.CALCULATED_DATA_EDITOR.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GManager" class="divider"></li>
+
+                        <li in-roles="GManager,GOperator" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1"><span class="glyphicon glyphicon-folder-open" style="padding-right:10px;"></span>Отчёты</a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-href="/#/GovernmentPurchases/DrugIdWithMinMaxPriceReport" data-translate="GOVERNMENT_PURCHASES.REPORT_DRUG_ID_WITH_MIN_MAX_PRICE.TITLE"></a></li>
+                                <li><a ng-href="/#/GovernmentPurchases/WrongPricesReport" data-translate="GOVERNMENT_PURCHASES.REPORT_WRONG_PRICES.TITLE"></a></li>
+                                <li><a ng-href="/#/GovernmentPurchases/NotExportedToExternalPurchasesReport" data-translate="GOVERNMENT_PURCHASES.REPORT_NOT_EXPORTED_TO_EXTERNAL_PURCHASES.TITLE"></a></li>
+
+                                <li><a ng-href="/#/GovernmentPurchases/Reports">Отчёты</a></li>
+                                <li in-roles="GManager" class="divider"></li>
+                                <li ng-repeat="item_rep in DAM_GZ_report">
+                                    <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" data-translate="{{item_rep.Name}}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li in-roles="GManager,GOperator" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1" data-translate="STATISTICS.TITLE"></a>
+                            <ul class="dropdown-menu">
+                                <li><a ng-href="/#/GovernmentPurchases/PurchasesAndContractsStatistics" data-translate="GOVERNMENT_PURCHASES.STATISTICS_PURCHASES_AND_CONTRACTS.TITLE"></a></li>
+                            </ul>
+                        </li>
+
+                        <!--разделитель-->
+                        <li in-roles="GManager" class="divider"></li>
+
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/PurchasesFound" data-translate="GOVERNMENT_PURCHASES.PURCHASES_FOUND.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GManager" class="divider"></li>
+
+                        <li in-roles="GManager"><a ng-href="/#/GovernmentPurchases/ClientKeywords" data-translate="GOVERNMENT_PURCHASES.CLIENT_KEYWORDS.TITLE"></a></li>
+                    </ul>
+                </li>
+
+                <!--Розница-->
+                <li class="dropdown" in-roles="RBoss,RManager,Ecom">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="RETAIL.TITLE"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="RBoss"><a ng-href="/#/Retail/RetailTemplates" data-translate="RETAIL.RETAIL_TEMPLATES_TITLE"></a></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/FileInfo" data-translate="RETAIL.FILE_INFO_TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/SourcePharmaciesEditor" data-translate="RETAIL.SOURCE_PHARMACIES_EDITOR_TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/PharmacyBrandBlackList" data-translate="RETAIL.PHARMACY_BRAND_BLACK_LIST_TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/PriceLimitsEditor" data-translate="RETAIL.PRICE_LIMITS_EDITOR_TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/CountCheck" data-translate="RETAIL.COUNT_CHECK_TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/PriceRuleEditor" data-translate="RETAIL.PRICE_RULE_EDITOR_TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/CountRuleEditor" data-translate="RETAIL.COUNT_RULE_EDITOR.TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/MarkupDefaultEditor" data-translate="RETAIL.MARKUP_DEFAULT_EDITOR_TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/GoodsPriceRuleEditor" data-translate="RETAIL.GOODS_PRICE_RULE_EDITOR.TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/GoodsCountRuleEditor" data-translate="RETAIL.GOODS_COUNT_RULE_EDITOR.TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/GoodsCountRuleFullVolumeEditor" data-translate="RETAIL.GOODS_COUNT_RULE_EDITOR.FULL_VOLUME_TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/SearchRawDataByDrugClear" data-translate="RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/SearchRawDataByClassifier" data-translate="RETAIL.SEARCH_RAW_DATA_BY_CLASSIFIER.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/SearchRawDataByGoodsClassifier" data-translate="RETAIL.SEARCH_RAW_DATA_BY_CLASSIFIER.GOODS_TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/RetailReport" data-translate="RETAIL.REPORT.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/RetailCalculation" data-translate="RETAIL.RETAIL_CALCULATION.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="Ecom" class="divider"></li>
+
+                        <li in-roles="Ecom"><a ng-href="/#/Retail/Ecom_Coefficient">Ecom Коэфициенты</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager,Ecom" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager,Ecom"><a ng-href="/#/Retail/CTM" data-translate="RETAIL.RETAIL_CTM.TITLE"></a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="RBoss,RManager,Ecom" class="divider"></li>
+
+                        <li in-roles="RBoss,RManager,Ecom"><a ng-href="/#/Retail/SalesSKUbySF" data-translate="RETAIL.RETAIL_SALESSKUBYSF.TITLE"></a></li>
+                    </ul>
+                </li>
+
+                <!--Ген совокупность-->
+                <li class="dropdown" in-roles="GS">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="GS.TITLE"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="GS_View"><a ng-href="/#/GS/Licenses" class="padding_menu_item"> <span class="glyphicon glyphicon-briefcase" style="padding-right:10px;"></span>Лицензии</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/base_address" class="padding_menu_item"><span class="glyphicon glyphicon-home" style="padding-right:10px;"></span>Адреса для базы</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GS_View" class="divider"></li>
+
+                        <li in-roles="GS_View"><a ng-href="/#/GS/GS" class="padding_menu_item"><span class="glyphicon glyphicon-shopping-cart" style="padding-right:10px;"></span>Генеральная совокупность</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/Point" class="padding_menu_item"><span class="glyphicon glyphicon-eye-open" style="padding-right:10px;"></span>PharmacyId</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GS_Summs" class="divider"></li>
+
+                        <li in-roles="GS_Summs"><a ng-href="/#/GS/SummsAlphaBit" class="padding_menu_item"><span class="glyphicon glyphicon-ruble" style="padding-right:10px;"></span>Суммы АльфаБит</a></li>
+                        <li in-roles="GS_Summs"><a ng-href="/#/GS/SummsOFD" class="padding_menu_item"><span class="glyphicon glyphicon-ruble" style="padding-right:10px;"></span>Суммы ОФД</a></li>
+                        <li in-roles="GS_Summs"><a ng-href="/#/GS/SummsPeriod" class="padding_menu_item"><span class="glyphicon glyphicon-ruble" style="padding-right:10px;"></span>Основной Расчёт</a></li>
+                        <li in-roles="GS_Summs"><a ng-href="/#/GS/SummsRegion" class="padding_menu_item"><span class="glyphicon glyphicon-globe" style="padding-right:10px;"></span>Суммы Регионов</a></li>
+                        <li in-roles="GS_Summs"><a ng-href="/#/GS/SummsNetwork" class="padding_menu_item"><span class="glyphicon glyphicon-th-list" style="padding-right:10px;"></span>Сети Тотал</a></li>
+                        <li in-roles="GS_Summs"><a ng-href="/#/GS/SummsAnket" class="padding_menu_item"><span class="glyphicon glyphicon-th-list" style="padding-right:10px;"></span>Суммы Анкеты</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GS_Brick" class="divider"></li>
+
+                        <li in-roles="GS_Brick"><a ng-href="/#/GS/Bricks" class="padding_menu_item"><span class="glyphicon glyphicon-road" style="padding-right:10px;"></span>Брики</a></li>
+                        <li in-roles="GS_Brick"><a ng-href="/#/GS/Bricks_Region" class="padding_menu_item"><span class="glyphicon glyphicon-road" style="padding-right:10px;"></span>Регионы</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="LPU_view" class="divider"></li>
+
+                        <li in-roles="LPU_view"><a ng-href="/#/LPU/LPU" class="padding_menu_item"><span class="glyphicon" style="padding-right:10px;"></span>ЛПУ</a></li>
+                        <li in-roles="LPU_view"><a ng-href="/#/LPU/LPUPoint" class="padding_menu_item"><span class="glyphicon" style="padding-right:10px;"></span>ЛПУ Адреса</a></li>
+                        <li in-roles="LPU_view"><a ng-href="/#/LPU/LPULicenses" class="padding_menu_item"><span class="glyphicon" style="padding-right:10px;"></span>ЛПУ Лицензии</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/Organization_without_INN" class="padding_menu_item"><span class="glyphicon glyphicon-phone-alt" style="padding-right:10px;"></span>Организации без ИНН</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GS_View" class="divider"></li>
+
+                        <li in-roles="GS_View"><a ng-href="/#/GS/Organization" class="padding_menu_item"><span class="glyphicon glyphicon-phone-alt" style="padding-right:10px;"></span>Организации</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/DistributorBranch" class="padding_menu_item"><span class="glyphicon glyphicon-gift" style="padding-right:10px;"></span>Дистрибьюторы</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/OperationMode" class="padding_menu_item"><span class="glyphicon glyphicon-time" style="padding-right:10px;"></span>Режим Работы</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/Network" class="padding_menu_item"><span class="glyphicon glyphicon-compressed" style="padding-right:10px;"></span>Карточки АС</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/NetworkBrand" class="padding_menu_item"><span class="glyphicon glyphicon-screenshot" style="padding-right:10px;"></span>Бренды Сетей</a></li>
+
+                        <!--разделитель-->
+                        <li in-roles="GS_History" class="divider"></li>
+
+                        <li in-roles="GS_History"><a ng-href="/#/GS/History" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг точек</a></li>
+
+                        <li in-roles="GS_History"><a ng-href="/#/GS/History?TypeClient=1" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг Онлайн</a></li>
+
+                        <li class="divider"></li>
+
+                        <li ng-repeat="item_rep in DAM_GS_report">
+                            <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" data-translate="{{item_rep.Name}}"></a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--Клиенты-->
+                <li class="dropdown" in-roles="Clients">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Клиенты"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="Clients_Manager"><a ng-href="/#/Clients/Companies" data-translate="Компании"></a></li>
+                        <!--<li in-roles="Clients_Manager"><a ng-href="/#/Clients/Workers" data-translate="Сотрудники компаний"></a></li>-->
+                        <!--<li in-roles="Clients_Reports"class="divider"></li>-->
+                        <!--<li in-roles="Clients_Reports"><a ng-href="/#/Clients/Reports" data-translate="Рассылаемые отчёты"></a></li>-->
+                    </ul>
+                </li>
+
+                <!--ДистрибОтчёты-->
+                <li class="dropdown" in-roles="DistrRep_Main">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="ДистрибОтчёты"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/EditSource" data-translate="Редактор источников и шаблонов"></a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/DataFiles" data-translate="Загрузка Файлов"></a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/HistoryGS" data-translate="Справочник Аптек"></a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/TovarActions" data-translate="Корректировка товародвижения"></a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/Rules" data-translate="Правила: Исключения"></a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/CompanyPeriod" class="padding_menu_item"><span class="glyphicon glyphicon-calendar" style="padding-right:10px;"></span>Периоды для публикации</a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/GS/History?TypeClient=1" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг ТД</a></li>
+                        <li in-roles="DistrRep_Main"><a ng-href="/#/DistrRep/RawData" class="padding_menu_item"><span class="glyphicon glyphicon-queen" style="padding-right:10px;"></span>Посчитанные данные</a></li>
+                        <li in-roles="SBoss" class="divider"></li>
+                        <li in-roles="DistrRep_Main" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1" data-translate="REPORTS.TITLE"></a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="item_rep in DAM_Distr_report">
+                                    <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" data-translate="{{item_rep.Name}}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--Проекты-->
+                <li class="dropdown" in-roles="Project">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Проекты"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="Project"><a ng-href="/#/Projects" data-translate="Проекты"></a></li>
+                    </ul>
+                </li>
+
+                <!--ОФД-->
+                <li class="dropdown" in-roles="OFD_View">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="ОФД"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/Logs" class="padding_menu_item"> <span class="glyphicon glyphicon-eye-open" style="padding-right:10px;"></span>Логи Действий</a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/Action" class="padding_menu_item"> <span class="glyphicon glyphicon-flash" style="padding-right:10px;"></span>Действия</a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/Files" class="padding_menu_item"> <span class="glyphicon glyphicon-folder-open" style="padding-right:10px;"></span>Файлы</a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/Report" class="padding_menu_item"> <span class="glyphicon glyphicon-envelope" style="padding-right:10px;"></span>Отчёты</a></li>
+
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/Periods" class="padding_menu_item"> <span class="glyphicon glyphicon-calendar" style="padding-right:10px;"></span>Периоды Дней</a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/Periods_4SC" class="padding_menu_item"> <span class="glyphicon glyphicon-calendar" style="padding-right:10px;"></span>Периоды 4CC</a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/PeriodsWK" class="padding_menu_item"> <span class="glyphicon glyphicon-calendar" style="padding-right:10px;"></span>Периоды Недель</a></li>
+
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/PriceCurrent" data-translate="OFD.PRICE_ETALON.TITLE" style="display:inline"></a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/PriceCurrent_v2" data-translate="OFD.PRICE_ETALON.TITLE_v2" style="display:inline"></a></li>
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/PriceEtalon" data-translate="OFD.PRICE_HISTORY.TITLE" style="display:inline"></a></li>
+
+                        <li in-roles="OFD_Boss" class="divider"></li>
+
+                        <li in-roles="OFD_Boss"><a ng-href="/#/OFD/Aggregated_All_Edit" class="padding_menu_item"> <span class="glyphicon glyphicon-envelope" style="padding-right:10px;"></span>Редактор Агрегатов</a></li>
+                        <li in-roles="OFD_Boss"><a ng-href="/#/OFD/4S_Data_All_Edit" class="padding_menu_item"> <span class="glyphicon glyphicon-envelope" style="padding-right:10px;"></span>Редактор 4CC</a></li>
+                    </ul>
+                </li>
+
+                <!--Отчёты-->
+                <li class="dropdown" ng-if="isAuthenticated()">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Отчёты"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="item_rep in DAM_GZ_report">
+                            <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
+                            </a>
+                        </li>
+
+                        <li ng-repeat="item_rep in DAM_GS_report">
+                            <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
+                            </a>
+                        </li>
+                        <li ng-repeat="item_rep in DAM_Prov_report">
+                            <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
+                            </a>
+                        </li>
+
+                        <li ng-repeat="item_rep in DAM_Distr_report">
+                            <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-if="isAuthenticated()">
+                    <a href="\">{{getUserName()}}</a>
+                </li>
+                <li ng-if="isAuthenticated()">
+                    <a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Выйти</a>
+                </li>
+                <li ng-if="!isAuthenticated()">
+                    <a href="/#/Login"><span class="glyphicon glyphicon-log-in"></span> Войти</a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

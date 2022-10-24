@@ -1,0 +1,117 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Поиск для обработки</h3>
+</div>
+<div class="modal-body modal-body-big">
+    <div id="scrollArea" cg-busy="filterLoading">
+
+        <div style="text-align: center">
+            <label>Количество</label>
+            <input type="text" ng-model="filter.Count" />
+        </div>
+
+        <div>Категории</div>
+        <div id="category-stat-grid-block" style="padding: 2px; height: 300px">
+            <ui-grid-control options="categoryStatGridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+
+        <div>Статистика</div>
+        <div id="user-stat-grid-block" style="padding: 2px;height: 300px">
+            <ui-grid-control options="userStatGridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+
+        <button class="btn btn-primary" type="button" ng-click="collapse()">
+            Фильтры
+            <span class="glyphicon"
+                  ng-class="{'glyphicon-chevron-right': isCollapsed,
+                                         'glyphicon-chevron-down': !isCollapsed}"></span>
+        </button>
+
+        <div ng-if="!isCollapsed">
+            <div class="well well-lg">
+                <div class="row">
+                    <div class="col-md-4">
+                        Код товара
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.GoodsId" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        По коду правообладателя
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.OwnerTradeMarkId" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        По коду упаковщика
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.PackerId" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        Исходные данные содержат
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.Text" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        Препарат
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.Goods" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        Производитель
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.Manufacturer" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        По внутреннему коду
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" ng-model="additionalFilter.DrugClearId" class="form-control" ng-enter="checkOk()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="update()" ng-disabled="false" data-translate="BUTTONS.UPDATE"></button>
+    </div>
+    <div>
+        <button class="btn btn-success" type="button" ng-click="ok()" ng-disabled="!canSearch()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>
+
+<script type="text/ng-template" id="_rowGoodsFilterView.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class="{'for-adding' : row.entity.ForAdding}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>               
+            </div>
+        </div>
+</script>

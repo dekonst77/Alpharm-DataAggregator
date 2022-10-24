@@ -1,0 +1,135 @@
+﻿<div ng-controller="DistrRepController" ng-init="DistrRep_DataFiles_Init();" cg-busy="dataLoading"  ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <ng_form name="fileInfoForm">
+                <div class="row form-group">
+                    <div class="col-md-1">
+                        <label>Проект</label>
+                        <select name="Project"
+                                class="form-control"
+                                ng-options="item as item.ProjectName for item in filterList.ProjectList track by item.Id"
+                                required
+                                ng-model="filter.Project"></select>
+                    </div>
+                    <div class="col-md-1">
+                        <label>Компания</label>
+                        <select name="Company"
+                                ng-disabled="!filter.Project"
+                                class="form-control"
+                                ng-options="item as item.Company for item in Companylist track by item.Id"                                   
+                                required
+                                ng-model="filter.Company"></select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Источник</label>
+                        <select name="DataSource"
+                                class="form-control"
+                                ng-options="item as item.Name for item in filterList.DataSourceList track by item.Id"
+                                required
+                                ng-model="filter.DataSource"></select>
+                    </div>
+                    <div class="col-md-1">
+                        <date-period period="filter.date" ng-required="true"></date-period>
+                    </div>
+                    <div class="col-md-5">
+                        <br />
+
+                        <button type="button" class="btn btn-primary" ng-click="getInfo()" ng-disabled="fileInfoForm.$invalid" data-translate="BUTTONS.UPDATE"></button>
+                        <button type="button" class="btn btn-primary" ng-click="checkFiles()" ng-disabled="fileInfoForm.$invalid">Проверить новые</button>
+                        <button type="button" class="btn btn-primary" ng-click="uploadFiles()" ng-disabled="fileInfoForm.$invalid">Загрузить</button>
+                        <button type="button" class="btn btn-info" ng-click="sendToClassification()" ng-disabled="fileInfoForm.$invalid">Обработка</button>
+                        <div class="btn-group">
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-disabled="fileInfoForm.$invalid">
+                                    Экспорт
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li> <a href="" ng-click="fromAPI()">Забрать из API(ОФД)</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="" ng-click="toFtp()">Выложить на FTP(ОФД)</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="" ng-click="toQlik()">В Qlik Test</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="" ng-click="toQlikProd()">В Qlik Prod</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-disabled="fileInfoForm.$invalid">
+                                    Отчеты
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="" ng-click="getTaskList()" data-toggle="modal" data-target="#StatusModal">Статусы</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="" ng-click="GetReportSheet_ToExcel()">Отчет по листам</a></li>
+                                    <li><a href="" ng-click="GetReportSheet_top15_ToExcel()" ng-disabled="fileInfoForm.$invalid">Отчет по листам топ 15</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <br />
+                        <button type="button" class="btn btn-warning" ng-click="reloadFiles()" ng-disabled="!canReload()">Перегрузить</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteFiles()" ng-disabled="!canDelete()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </ng_form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="StatusModal" tabindex="-1" role="dialog" aria-labelledby="StatusModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" style="width:100%;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="StatusModalLabel">Статусы</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ui-grid-control options="TaskList_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+                </div>
+                <div class="modal-footer">
+                   
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body fullHeightGrid">
+        <ui-grid-control options="FileInfo_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+        <ui-grid-control options="FileInfo_Grid_Detail.Options" class="ui-grid-enable-content-selection myGrid" ng-hide="filter.Project.Id!=1"></ui-grid-control>
+        <ui-grid-control options="FileInfo_Grid_Detail_6FP.Options" class="ui-grid-enable-content-selection myGrid" ng-hide="filter.Project.Id!=2"></ui-grid-control>
+    </div>
+
+</div>
+<script>
+/*
+ * cg-busy="dataLoading" 
+   <div class="panel panel-default fullHeight">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <p class="input-group ap-required">
+
+                    </p>
+                </div>
+                <div class="col-md-1 padding3">
+                    <button class="btn btn-success btn-sm" ng-click="Files_show()"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </div>
+        </div>
+ 
+
+<button type="button" class="btn btn-info" ng-click="getErrorInfo()" ng-disabled="!canShowError()">Все ошибки</button>
+<button type="button" class="btn btn-info" ng-click="toQlik()">В Qlik Test</button>
+ */
+
+</script>

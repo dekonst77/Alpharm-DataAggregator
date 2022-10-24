@@ -1,0 +1,229 @@
+﻿
+<div class="modal-header">
+    <h3 class="modal-title">Создание контракта</h3>
+</div>
+
+<div class="modal-body" style="overflow-y: auto; height: 600px;" cg-busy="createLoading">
+
+
+    <ng_form name="contractField">
+
+        <div class="container-fluid">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <label data-translate="COMMON_GRID.REESTR_NUMBER"></label>
+                    <input type="text"
+                           name="reestrNumber"
+                           ng-class="{'has-error': contractField.reestrNumber.$invalid}"
+                           required
+                           class="form-control"
+                           ng-model="contract.ReestrNumber" />
+                </div>
+
+                <div class="col-md-3">
+                    <label data-translate="COMMON_GRID.CONTRACT_NUMBER"></label>
+                    <div>
+                        <input type="text"
+                               class="form-control"
+                               ng-model="contract.ContractNumber">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label data-translate="CREATE_CONTRACT.URL"></label>
+                    <div>
+                        <input type="text"
+                               class="form-control"
+                               ng-model="contract.Url">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label data-translate="CREATE_CONTRACT.SUM"></label>
+                    <div>
+                        <input type="text"
+                               class="form-control"
+                               ng-model="contract.Sum"
+                               awnum="sum">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label data-translate="CREATE_CONTRACT.ACTUALLY_PAID"></label>
+                    <div>
+                        <input type="text"
+                               class="form-control"
+                               ng-model="contract.ActuallyPaid"
+                               awnum="sum">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label data-translate="COMMON_GRID.CONTRACT_STATUS"></label>
+                    <select class="form-control"
+                            name="contractStatus"
+                            ng-class="{'has-error': contractField.contractStatus.$invalid}"
+                            ng-options="item as item.Name for item in contractStatusList track by item.Id"
+                            ng-model="contract.ContractStatus"
+                            required></select>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label data-translate="CREATE_CONTRACT.CONTRACT_CONCLUSIONDATE"></label>
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               name="conclusionDate"
+                               ng-class="{'has-error': contractField.conclusionDate.$invalid}"
+                               uib-datepicker-popup="dd.MM.yyyy"
+                               ng-model="contract.ConclusionDate"
+                               required
+                               is-open="conclusionDate.Opened"
+                               datepicker-options="conclusionDate.DateOptions" />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="conclusionDate.Opened = !conclusionDate.Opened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+
+                    <label data-translate="CREATE_CONTRACT.CONTRACT_BEGINDATE"></label>
+
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               name="dateBeginDate"
+                               ng-class="{'has-error': contractField.dateBeginDate.$invalid}"
+                               uib-datepicker-popup="dd.MM.yyyy"
+                               ng-model="contract.DateBegin"
+                               required
+                               is-open="dateBeginDate.Opened"
+                               datepicker-options="dateBeginDate.DateOptions" />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="dateBeginDate.Opened = !dateBeginDate.Opened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <label data-translate="CREATE_CONTRACT.CONTRACT_ENDDATE"></label>
+
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               name="dateEndDate"
+                               ng-class="{'has-error': contractField.dateEndDate.$invalid}"
+                               uib-datepicker-popup="dd.MM.yyyy"
+                               ng-model="contract.DateEnd"
+                               required
+                               is-open="dateEndDate.Opened"
+                               datepicker-options="dateEndDate.DateOptions" />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="dateEndDate.Opened = !dateEndDate.Opened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-9">
+                    <label data-translate="COMMON_GRID.RECEIVER"></label>
+                    <input type="text"
+                           name="receiver"
+                           class="form-control"
+                           ng-class="{'has-error': contractField.receiver.$invalid}"
+                           required
+                           ng-model="contract.Receiver"
+                           disabled />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <button data-translate="BUTTONS.CHANGE"
+                            type="button"
+                            class="btn btn-primary"
+                            ng-click="changeContractReceiver()">
+                        Изменить
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label data-translate="COMMON_GRID.SUPPLIER"> </label> "{{contract.SupplierRaw.Name}}"
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-1">
+                    <label>Id</label>
+                    <input type="text"
+                           name="supplierId"
+                           class="form-control"
+                           ng-class="{'has-error': contractField.supplierId.$invalid}"
+                           ng-required="contract.Supplier.Id  == 0"
+                           disabled
+                           ng-model="contract.Supplier.Id" />
+                </div>
+                <div class="col-md-2">
+                    <label>Инн</label>
+                    <input type="text"
+                           name="supplierInn"
+                           class="form-control"
+                           ng-class="{'has-error': contractField.supplierInn.$invalid}"
+                           ng-required="contract.Supplier.Id == 0"
+                           disabled
+                           ng-model="contract.Supplier.INN" />
+                </div>
+                <div class="col-md-9">
+                    <label>Название</label>
+                    <div class="input-group">
+                        <input type="text"
+                               name="supplierName"
+                               class="form-control"
+                               ng-class="{'has-error': contractField.supplierName.$invalid}"
+                               ng-required="contract.Supplier.Id == 0"
+                               disabled
+                               ng-model="contract.Supplier.Name" />
+                        <span class="input-group-btn">
+                            <button class="btn" type="button" ng-click="searchSupplier(item)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+<div class="modal-footer">
+    <div class="float-right">
+        <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="contractField.$invalid" data-translate="BUTTONS.CREATE"></button>
+        <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+
+</div>
+
+    </ng_form>
+
+</div>

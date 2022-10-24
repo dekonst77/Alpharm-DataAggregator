@@ -1,0 +1,35 @@
+﻿<div class="panel panel-primary context-menu" style="width: 600px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Комманды</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <button type="button" class="btn btn-default btn_ok" ng-click="KBK_NatureSet(null);">Убрать Характер</button>
+                <button type="button" class="btn btn-default btn_ok" ng-click="KBK_Nature_L2Set(null);">Убрать ПодХарактер</button>
+                <button type="button" class="btn btn-default btn_ok" ng-click="editFunding(null);">Финансирование</button>
+            </div>
+            <div class="col-md-3 padding1">
+                <label>Характер</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <ul class="no-padding" style="list-style-type:none">
+                    <li ng-repeat="cat in Category | orderBy:'Name'" class="no-padding">
+                        <label class="label_category">{{cat.Name}}</label>
+
+                        <div class="btn-group btn-group-xs">
+                            <button ng-repeat="nat in Nature | filter:cat.Name | orderBy:'Name'" type="button" class="btn btn-primary btn-xs"
+                                    ng-click="KBK_NatureSet(nat.Id)">
+                                {{nat.NameMini}}
+                            </button>
+            </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿<div ng-controller="GoodsSystematizationController" ng-cloak class="auto-grid-parent systematization-goods-systematization" ng-style="{'padding-top': topPartSize.height}">
+
+    <div id="goods-grid-block" cg-busy="goodsLoading" data-context-menu="Views/GoodsSystematization/GoodsSystematizationContextMenu.html" style="padding: 2px;height: calc(60% - 10px - 35px)">
+        <ui-grid-control options="goodsGridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+
+    <div id="search-filter-line" style="height:35px">
+        <div class="row">
+            <div class="col-md-10">
+                <ul class="list-inline">
+                    <li ng-repeat="item in filterDescription"><b>{{item.Name}}</b>:{{item.Value}}</li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary float-right btn-xs" ng-click='searchGoodsClassifier()'>Поиск по справочнику</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="classifier-grid-block" cg-busy="classifierLoading" style="height: 40%; padding: 2px">
+        <ui-grid-control options="goodsClassifierGridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+    
+    <div id="header-menu-block" style="position: absolute; top: 0; left: 0; right: 0" auto-size-saver="topPartSize">
+        <div class="row">
+            <div class="col-md-5 no-padding">
+                <button type="button" class="btn btn-primary btn-xs" ng-click="getGoods()" ng-disabled="canGetGoods()" data-translate="BUTTONS.GET_DATA"></button>
+                <button type="button" class="btn btn-primary btn-xs" ng-click="setGoods()" ng-disabled="canSetGoods()" data-translate="BUTTONS.RETURN_DATA"></button>
+                Всего <b>{{goodsCount}}</b>, привязано <b>{{goodsCompleteCount}}</b>, нет <b>{{goodsCount - goodsCompleteCount}}</b>
+            </div>
+            <div class="col-md-2">
+                <div style="display: inline" data-translate="SYSTEMATIZATION.STATUS.NAME"></div>
+                <div style="display: inline-block; width: 150px">
+                    <multi-select ng-model="filter.status" ap-label="" class="multi-select-control"></multi-select>
+                </div>
+            </div>
+            <div class="col-md-5 no-padding">
+                <textarea ng-shift-f="shiftF()" ng-enter="shiftF()" class="form-control" readonly>{{selectedRowText}}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="_rowGoodsTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, green : row.entity.HasChanges}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="_rowGoodsClassifierTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected}"
+                 ng-dblclick="grid.appScope.setClassifierToGoods(row.entity)"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>               
+            </div>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="_icon.html">
+        <div>
+            <img src="/Content/Icons/Add.png" class="img-rounded" ng-show="row.entity.ForAdding" title="На заведение" />
+        </div>
+    </script>
+</div>

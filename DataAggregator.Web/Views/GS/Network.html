@@ -1,0 +1,60 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="Network_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="Network_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button type="button" class="btn btn-warning btn-sm" ng-disabled="!Grid_Network.NeedSave" ng-click="Network_Save();"><span class="glyphicon glyphicon-floppy-disk">Сохранить</span></button>
+                        <div class="btn btn-info btn-sm" ngf-select="Network_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                    </div>
+                </div>
+                <div class="col-md-9 padding3">
+                    shift+e - заменить Ассоциацию;
+                    shift+v - добавить Ассоциацию;
+                    shift+d - убрать Ассоциацию;
+                    shift+r - добавить Франшизу;
+                    shift+f - убрать Франшизу;
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control-tree options="Grid_Network.Options" 
+                         class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control-tree>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="Bricks_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <label>код</label>
+                    <input name="FilterBricks_ids" type="text" class="form-control" ng-model="FilterBricks.ids" ng-change="">
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>фильтр</label>
+                    <input name="FilterBricks_common" type="text" class="form-control" ng-model="FilterBricks.common" ng-change="">
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>почтовый индекс</label>
+                    <input name="FilterBricks_post_index" type="text" class="form-control" ng-model="FilterBricks.post_index" ng-change="">
+                </div>
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Bricks_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Bricks_save();" ng-disabled="!Bricks_Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+
+                        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(7);" ng-disabled="!Bricks_Grid.IsRowSelection"><span class="glyphicon glyphicon-plus-sign">7 ур.</span></button>
+                        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(6);" ng-disabled="!Bricks_Grid.IsRowSelection"><span class="glyphicon glyphicon-plus-sign">6 ур.</span></button>
+                        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(5);" ng-disabled="!Bricks_Grid.IsRowSelection"><span class="glyphicon glyphicon-plus-sign">5 ур.</span></button>
+                        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(50);" ng-disabled="!Bricks_Grid.IsRowSelection"><span class="glyphicon glyphicon-plus-sign">5 ур.(без продолжения)</span></button>
+                        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(4);" ng-disabled="!Bricks_Grid.IsRowSelection"><span class="glyphicon glyphicon-plus-sign">4 ур.</span></button>
+                        <!--<button class="btn btn-primary btn-sm" ng-click="Bricks_New(3);" ng-disabled="true"><span class="glyphicon glyphicon-plus-sign">3 ур.</span></button>
+        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(2);" ng-disabled="true"><span class="glyphicon glyphicon-plus-sign">2 ур.</span></button>
+        <button class="btn btn-primary btn-sm" ng-click="Bricks_New(1);" ng-disabled="true"><span class="glyphicon glyphicon-plus-sign">1 ур.</span></button>-->
+                        <button class="btn btn-danger btn-sm" ng-click="Bricks_Delete();" ng-disabled="!Bricks_Grid.IsRowSelection"><span class="glyphicon glyphicon-save">Удалить</span></button>
+
+                        <button class="btn btn-warning btn-sm" ng-click="Bricks_ToExcel();" ng-disabled="Bricks_Grid.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить</span></button>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="Bricks_Grid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>
+

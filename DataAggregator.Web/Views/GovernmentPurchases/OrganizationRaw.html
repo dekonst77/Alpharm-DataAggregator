@@ -1,0 +1,43 @@
+﻿<div ng-controller="OrganizationRawController" cg-busy="dataLoading" ng-init="OrganizationRaw_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <label>
+                        <input name="filters.IsNotReady" type="checkbox" class="" ng-model="filters.IsNotReady" ng-change="">Не проверенные
+                    </label>
+                </div>
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="OrganizationRaw_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="OrganizationRaw_save();" ng-disabled="!Grid_Raw.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-5 padding3">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel" style="padding: 2px;height: calc(60% - 35px)">
+        <ui-grid-control options="Grid_Raw.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+
+    <div id="grid-block" class="auto-item-panel" style="height: 40%; padding: 2px">
+        <div class="row">
+
+            <div class="col-md-3 padding3">
+                <input name="mSearch_text" type="text" class="form-control" ng-model="Search_text" ng-change="" placeholder="поиск в справочнике">
+            </div>
+            <div class="col-md-1 padding3">
+                <button class="btn btn-danger btn-sm" ng-click="Organization_search_AC(Search_text);"><span class="glyphicon glyphicon-search">Искать</span></button>
+            </div>
+            <div class="col-md-2 padding3">
+                <label>
+                    <input name="filtersClass.isLS" type="checkbox" class="" ng-model="filtersClass.isLS" ng-change="">Только связанные с ЛС
+                </label>
+            </div>
+        </div>
+        <ui-grid-control options="Grid_SPR.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

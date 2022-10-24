@@ -1,0 +1,114 @@
+﻿<div ng-controller="LPUPointController" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-7 padding3">
+                    <div class="row">
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="адрес">
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.BrickId" ng-change="" placeholder="БрикИд">
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.PointId" ng-change="" placeholder="PointId">
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.SF" ng-change="" placeholder="СФ">
+                        </div>
+                        <div class="col-md-3 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.City" ng-change="" placeholder="НП">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1 padding3">
+                    <div class="row">
+                        <div class="col-md-12 padding3" style="font-size: small;vertical-align: middle;">
+                            <input name="filtercommon" type="checkbox" ng-model="filter.IsGPS" ng-change="" placeholder="Пустые GPS"> Пустые GPS
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 padding3" style="font-size: small;vertical-align: middle;">
+                            <input name="filtercommon" type="checkbox" ng-model="filter.IsLPU" ng-change="" placeholder="Без связи с ЛПУ"> Без связи с ЛПУ
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="row">
+                        <div class="col-md-12 padding3" style="font-size: small;vertical-align: middle;">
+                            <input name="filtercommon" type="checkbox" ng-model="filter.Double" ng-change="" placeholder="Дубли"> Дубли
+                        </div>
+                    </div>                  
+                </div>
+
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Save();" ng-disabled="!GridLPUPoint.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <!-- <button class="btn btn-info btn-sm" ng-click="ToExcel();" ng-disabled="GridLPUPoint.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить в Excel</span></button>-->
+                        <div class="btn btn-info btn-sm" ngf-select="FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Из Excel</span></div>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+            </div>
+
+    <size_main>
+        <div class="size_content">
+            <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                <div id="grid-lpupoint-block" data-context-menu="Views/LPU/lpu_point_context_menu.html" class="auto-item-panel" style="width:100%">
+                    <ui-grid-control options="GridLPUPoint.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+
+                </div>
+            </div>
+            <div class="size_row">
+                <div style="width:100%">
+                    <div id="grid-lpu-block" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="GridLPU.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </size_main>
+
+
+
+
+
+</div>

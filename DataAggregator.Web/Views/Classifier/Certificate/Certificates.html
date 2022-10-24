@@ -1,0 +1,25 @@
+﻿<div ng-controller="CertificateController" cg-busy="dataLoading" ng-init="Certificates_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-3 padding3">
+                        <input name="filtercommon" type="text" class="form-control" ng-model="searchText" ng-change="" placeholder="Поиск">
+                </div>
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Certificates_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Certificates_save();" ng-disabled="!Grid_Certificates.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <!--<div class="col-md-5 padding3">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button class="btn btn-danger btn-sm" ng-click="Certificate_delete();"><span class="glyphicon glyphicon-search">Удалить</span></button>
+        </div>
+    </div>-->
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid_Certificates.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

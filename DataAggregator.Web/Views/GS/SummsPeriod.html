@@ -1,0 +1,102 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="SummsPeriod_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .AlphaBitSums {
+            background-color: green;
+        }
+        .Fix {
+            background-color: yellow;
+        }
+        .ОФД {
+            background-color: orange;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-6 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="SummsPeriod_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button type="button" class="btn btn-warning btn-sm" ng-disabled="!Grid.NeedSave" ng-click="SummsPeriod_Save();"><span class="glyphicon glyphicon-floppy-disk">Сохранить</span></button>
+                        <button type="button" class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ng-click="SummsPeriod_To_Excel();"><span class="glyphicon glyphicon-download">Экспорт</span></button>
+                        <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ngf-select="SummsPeriod_from_Excel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Импорт</span></div>
+                    </div>
+                </div>
+                <div class="col-md-4 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="Grid.NeedSave" ng-click="SummsPeriod_AlphaBitSums_Set('SummsPeriod');"><span class="glyphicon glyphicon-flash">AlphaBitSums применить</span></button>
+                        <button class="btn btn-danger btn-sm" ng-click="SummsPeriod_OFD_Set('SummsPeriod');"><span class="glyphicon glyphicon-scale">ОФД применить</span></button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="Grid.NeedSave" ng-click="SummsPeriod_Recalc('SummsPeriod');"><span class="glyphicon glyphicon-flash">Пересчитать</span></button>
+                    </div>
+                </div>
+
+                <div class="col-md-2 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="Grid.NeedSave" ng-click="SummsPeriod_SetOUT();"><span class="glyphicon glyphicon-globe">Выпустить</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>
+                        <input name="IsNoSumms" type="checkbox" class="" ng-model="IsNoSumms" ng-change="">Нет Сумм (за последние 3 месяца)
+                    </label>
+                    <label>
+                        <input name="IsNeed" type="checkbox" class="" ng-model="IsNeed" ng-change="">Только нужное (было в течении года)
+                    </label>
+                </div>
+                <div class="col-md-2 padding3">
+                    <select name="filterinGS" ng-model="FilterP">
+                        <option id="" value="">Не важно</option>
+                        <option id="summ_Big" value="summ_Big">Сверх продажи</option>
+                        <option id="summ_Small" value="summ_Small">Сверх малые</option>
+                    </select>
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>
+                        <input name="filtercommon" type="text" class="form-control" ng-model="NetworkName" ng-change="" placeholder="Имя сети в периоде">
+                    </label>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    <div id="grid-block" data-context-menu="Views/GS/SummsPeriod_context_menu.html" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

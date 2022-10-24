@@ -1,0 +1,300 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Поиск для обработки</h3>
+</div>
+<div class="modal-body modal-body-big">
+    <div id="scrollArea" cg-busy="filterLoading">
+
+        <div class="container-fluid" style="overflow-y: auto">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Количество</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" ng-model="filter.Count" />
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <button class="btn btn-primary" type="button" ng-click="collapse_user()">
+                    Сотрудники
+                    <span class="glyphicon"
+                          ng-class="{'glyphicon-chevron-right': isCollapsed_user,
+                                         'glyphicon-chevron-down': !isCollapsed_user}"></span>
+                </button>
+                <table class="table table-condensed">
+
+                    <thead>
+                        <tr>
+                            <th style="width: 40%">Наименование</th>
+                            <th style="width: 15%"><button class="btn-link" style="border: 0px;padding-left: 0px" type="button" ng-click="CheckAll()">{{checkedAll ? "Снять всё" : "Выбрать всё"}}</button>
+                            <th style="width: 15%">В работу</th>
+                            <th style="width: 15%">В работе</th>
+                            <th style="width: 15%">Готово</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr ng-repeat="robot in filter.RobotStat">
+                            <td>{{robot.Name}}</td>
+                            <td>
+                                <input type="checkbox" style="width:100%;" ng-model="robot.IsChecked" ng-enter="CheckOk()">
+                            </td>
+                            <td>0</td>
+                            <td>{{robot.InWorkCount}}</td>
+                            <td>{{robot.ReadyCount}}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Данные в обработку</td>
+                            <td>
+                                <input type="checkbox" style="width:100%;" ng-model="filter.DrugClearWorkStat.IsChecked" ng-enter="CheckOk()">
+                            </td>
+                            <td>{{filter.DrugClearWorkStat.ToWorkCount}}</td>
+                            <td>{{filter.DrugClearWorkStat.InWorkCount}}</td>
+                            <td>{{filter.DrugClearWorkStat.ReadyCount}}</td>
+                        </tr>
+
+
+
+                        <tr ng-repeat="user in filter.UserWorkStat" ng-if="!isCollapsed_user">
+                            <td>{{user.FullName}}</td>
+                            <td>
+                                <input type="checkbox" style="width:100%;" ng-model="user.IsChecked" ng-enter="CheckOk()">
+                            </td>
+                            <td>0</td>
+                            <td>{{user.InWorkCount}}</td>
+                            <td>{{user.ReadyCount}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><b>Тип данных</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr ng-repeat="item in filter.DataTypeStat">
+                            <td>{{item.FullName}}</td>
+                            <td>
+                                <input type="checkbox" style="width:100%;" ng-model="item.IsChecked" ng-enter="CheckOk()">
+                            </td>
+                            <td>{{item.ToWorkCount}}</td>
+                            <td>{{item.InWorkCount}}</td>
+                            <td>{{item.ReadyCount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%">По дате</th>
+                            <th style="width: 15%"></th>
+                            <th style="width: 15%">В работу</th>
+                            <th style="width: 15%">Заведение</th>
+                            <th style="width: 15%">Проверка</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item_ds in filter.DateStat">
+                            <td>{{item_ds.date}}</td>
+                            <td>
+                                <input type="checkbox" style="width:100%;" ng-model="item_ds.IsChecked" ng-enter="CheckOk()">
+                            </td>
+                            <td>{{item_ds.ToWorkCount}}</td>
+                            <td>{{item_ds.ToAddingCount}}</td>
+                            <td>{{item_ds.ToCheckingCount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn btn-primary" type="button" ng-click="collapse_AF()">
+                Фильтры
+                <span class="glyphicon"
+                      ng-class="{'glyphicon-chevron-right': isCollapsed_AF,
+                                         'glyphicon-chevron-down': !isCollapsed_AF}"></span>
+            </button>
+            <div ng-if="!isCollapsed_AF">
+                <div class="well well-lg">
+                    <div class="row">
+                        <div class="col-md-4">
+                            DrugId
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.DrugId" class="form-control" placeholder="DrugId" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            GoodsId
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.GoodsId" class="form-control" placeholder="GoodsId" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            По коду владельцу РУ
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.OwnerRegistrationCertificateId" placeholder="OwnerRegistrationCertificateId" class="form-control disabled" ng-enter="CheckOk()" disabled />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            По коду правообладателя
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.OwnerTradeMarkId" class="form-control" placeholder="OwnerTradeMarkId" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            По коду упаковщика
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.PackerId" class="form-control" placeholder="PackerId" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            Исходные данные содержат
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.Text" class="form-control" placeholder="Text" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            Препарат
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.TradeName" class="form-control" placeholder="TradeName" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            Производитель
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.Manufacturer" class="form-control" placeholder="Manufacturer" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            По внутреннему коду
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.DrugClearId" class="form-control" placeholder="DrugClearId" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            По Коду ГосЗакупки
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" ng-model="filter.Additional.GZ_code" class="form-control" placeholder="GZ_code" ng-enter="CheckOk()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="btn btn-primary" type="button" ng-click="collapse_Category()">
+                Категории
+                <span class="glyphicon"
+                      ng-class="{'glyphicon-chevron-right': isCollapsed_Category,
+                                         'glyphicon-chevron-down': !isCollapsed_Category}"></span>
+            </button>
+            <div ng-if="!isCollapsed_Category">
+                <div class="well well-lg">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%">
+                                    Категория
+                                    <input type="text" ng-model="categoryFilter">
+                                </th>
+                                <th style="width: 20%">Раздел</th>
+                                <th style="width: 10%">В работу</th>
+                                <th style="width: 10%">Заведение</th>
+                                <th style="width: 10%">Проверка</th>
+                                <th style="width: 10%">Готово</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item_ds in filter.CategoryStat | filter: {CategoryName : categoryFilter} ">
+                                <td>
+                                    <label>
+                                        <input type="checkbox" ng-model="item_ds.IsChecked" ng-enter="CheckOk()">
+                                        {{item_ds.CategoryName}}
+                                    </label>
+                                </td>
+                                <td>
+                                    {{item_ds.SectionName}}
+                                </td>
+                                <td>{{item_ds.ToWorkCount}}</td>
+                                <td>{{item_ds.ToAddingCount}}</td>
+                                <td>{{item_ds.ToCheckingCount}}</td>
+                                <td>{{item_ds.IsReadyCount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <button class="btn btn-primary" type="button" ng-click="collapse_PrioritetStat()">
+                Приоритетный разбор
+                <span class="glyphicon"
+                      ng-class="{'glyphicon-chevron-right': isCollapsed_PrioritetStat,
+                                         'glyphicon-chevron-down': !isCollapsed_PrioritetStat}"></span>
+            </button>
+            <div ng-if="!isCollapsed_PrioritetStat">
+                <div class="well well-lg">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%">Правило</th>
+                                <th style="width: 20%">Готовность</th>
+                                <th style="width: 20%">Прочее</th>
+                                <th style="width: 20%">Кол-во</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item_ds in filter.PrioritetStat">
+                                <td>
+                                    <label>
+                                        <input type="checkbox" ng-model="item_ds.IsChecked" ng-enter="CheckOk()">
+                                        {{item_ds.RuleName}}
+                                    </label>
+                                </td>
+                                <td>{{item_ds.isReady}}</td>
+                                <td>{{item_ds.IsOther}}</td>
+                                <td>{{item_ds.Count}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="update()" ng-disabled="updateStatLockCount > 0" data-translate="BUTTONS.UPDATE"></button>
+    </div>
+    <div>
+        <button class="btn btn-success" type="button" ng-click="ok()" ng-disabled="!CanSearch()" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+   
+    
+</div>

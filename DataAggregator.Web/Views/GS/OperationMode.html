@@ -1,0 +1,64 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="spr_OperationMode_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+
+        .Red {
+            background-color: red;
+        }
+
+        .AlphaBitSums {
+            background-color: green;
+        }
+
+        .Fix {
+            background-color: yellow;
+        }
+
+        .OFDSums {
+            background-color: orange;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-6 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="spr_OperationMode_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button type="button" class="btn btn-warning btn-sm" ng-disabled="!Grid.NeedSave" ng-click="spr_OperationMode_save();"><span class="glyphicon glyphicon-floppy-disk">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

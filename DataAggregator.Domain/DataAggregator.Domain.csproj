@@ -1,0 +1,617 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E1FB4DB9-8D77-4DAF-9D8C-39B5698C4DC2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataAggregator.Domain</RootNamespace>
+    <AssemblyName>DataAggregator.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test_debag|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test_debag\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test_debag|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Test_debag\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test_debag|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Test_debag\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.5.0.1\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.5.0.2\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BulkInsert\BulkInsert.cs" />
+    <Compile Include="BulkInsert\Extensions.cs" />
+    <Compile Include="BulkInsert\GenericListDataReader.cs" />
+    <Compile Include="DAL\ClassifierHistoryView.cs" />
+    <Compile Include="DAL\DataAnalyzerContext.cs" />
+    <Compile Include="DAL\DataLoaderContext.cs" />
+    <Compile Include="DAL\DataReportContext.cs" />
+    <Compile Include="DAL\DistrContext.cs" />
+    <Compile Include="DAL\EcomContext.cs" />
+    <Compile Include="DAL\GoodsDataContext.cs" />
+    <Compile Include="DAL\ExternalDataRetailContext.cs" />
+    <Compile Include="DAL\GovernmentPurchasesContext.cs" />
+    <Compile Include="DAL\GovernmentPurchasesLoaderContext.cs" />
+    <Compile Include="DAL\DataAggregatorContext.cs" />
+    <Compile Include="DAL\GRLSContext.cs" />
+    <Compile Include="DAL\GSContext.cs" />
+    <Compile Include="DAL\OFDContext.cs" />
+    <Compile Include="DAL\QlikExportContext.cs" />
+    <Compile Include="DAL\RetailCalculationContext.cs" />
+    <Compile Include="DAL\RetailTransitContext.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Model\Common\DictionaryDescriptionItem.cs" />
+    <Compile Include="Model\ControlALG\ControlALG.cs" />
+    <Compile Include="Model\DataAggregator\Projects.cs" />
+    <Compile Include="Model\DataReport\DataReport.cs" />
+    <Compile Include="Model\Distr\DistrModel.cs" />
+    <Compile Include="Model\DrugClassifier\Certificate.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ATCBaa.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\BionicaMediaReport.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\BlisterBlock.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ClassificationGeneric.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Corporation.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Country.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Equipment.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Function\GetLocalizationByManufacturerTable.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Generic.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Localization.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Mask.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\NFC.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ExternalViewAllPeriod.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\RegistrationCertificateClassification.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\SQA.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\BlisterBlockView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\ClassifierEditorFilterView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\ClassifierPacking_BlisterBlock.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\MaskView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\ProductionInfoEtalonPriceView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\SQAView.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsProductionInfoParameter.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\ParameterGroup.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\Parameter.cs" />
+    <Compile Include="Model\DrugClassifier\Rasp.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\DateStat.cs" />
+    <Compile Include="Model\EtalonPrice\PriceCurrent_v2.cs" />
+    <Compile Include="Model\Ecom\Ecom.cs" />
+    <Compile Include="Model\EtalonPrice\PriceCurrent.cs" />
+    <Compile Include="Model\EtalonPrice\PriceCurrentView_v2.cs" />
+    <Compile Include="Model\EtalonPrice\PriceCurrentView.cs" />
+    <Compile Include="Model\GoodsData\CalcInfo.cs" />
+    <Compile Include="Model\GoodsData\CountRuleFullVolume.cs" />
+    <Compile Include="Model\GoodsData\GoodsCountRuleFullVolumeView.cs" />
+    <Compile Include="Model\GoodsData\GoodsCountRuleView.cs" />
+    <Compile Include="Model\GoodsData\GoodsCountRule.cs" />
+    <Compile Include="Model\GoodsData\GoodsPriceRuleListView.cs" />
+    <Compile Include="Model\GoodsData\GoodsPriceRule.cs" />
+    <Compile Include="Model\GoodsData\QueryModel\GoodsCalcRuleModel.cs" />
+    <Compile Include="Model\GoodsData\GoodsClassifier\GoodsExternalView.cs" />
+    <Compile Include="Model\GoodsData\RegionPM12View.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\proxy\ProxyErrorLog.cs" />
+    <Compile Include="Model\GovernmentPurchases\Contract_check_view.cs" />
+    <Compile Include="Model\GovernmentPurchases\GovernmentPurchases.cs" />
+    <Compile Include="Model\GovernmentPurchases\HandMadePosition.cs" />
+    <Compile Include="Model\GovernmentPurchases\KBK.cs" />
+    <Compile Include="Model\GovernmentPurchases\Source.cs" />
+    <Compile Include="Model\GovernmentPurchases\StoredProcedures\NotExportedToExternalLots.cs" />
+    <Compile Include="Model\GovernmentPurchases\TriggerLog.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\OrganizationView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\View.cs" />
+    <Compile Include="Model\GS\licenses_roszdravnadzor.cs" />
+    <Compile Include="Model\GS\GS.cs" />
+    <Compile Include="Model\LPU\Department.cs" />
+    <Compile Include="Model\LPU\LPU.cs" />
+    <Compile Include="Model\LPU\LPULicensesView.cs" />
+    <Compile Include="Model\LPU\LPUPoint.cs" />
+    <Compile Include="Model\LPU\LPUPointView.cs" />
+    <Compile Include="Model\LPU\LPUView.cs" />
+    <Compile Include="Model\OFD\Classifier_ExternalView.cs" />
+    <Compile Include="Model\OFD\db_object.cs" />
+    <Compile Include="Model\OFD\PriceEtalon.cs" />
+    <Compile Include="Model\OFD\PriceEtalonView.cs" />
+    <Compile Include="Model\RetailCalculation\User.cs" />
+    <Compile Include="Model\Retail\CalcInfo.cs" />
+    <Compile Include="Model\Retail\CTM\CTMView.cs" />
+    <Compile Include="Model\Retail\FederalDistrict.cs" />
+    <Compile Include="Model\Retail\history\CountRuleUsed.cs" />
+    <Compile Include="Model\Retail\Job\JobInfoLog.cs" />
+    <Compile Include="Model\Retail\Report\ReportLauncher.cs" />
+    <Compile Include="Model\Retail\Report\Report.cs" />
+    <Compile Include="Model\Retail\Report\Status.cs" />
+    <Compile Include="Model\RetailCalculation\Process\Status.cs" />
+    <Compile Include="Model\RetailCalculation\Process\Process.cs" />
+    <Compile Include="Model\RetailCalculation\Process\Launcher.cs" />
+    <Compile Include="Model\RetailCalculation\Process\Info.cs" />
+    <Compile Include="Model\Retail\SalesSKUbySF\ViewSalesSKUByFederationSubject_SP_Result.cs" />
+    <Compile Include="Model\Retail\View\FullClassifierWithPrice.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\NFCLineView.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsCategory.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\Goods.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsBrandClassification.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsBrand.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsSection.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsCategoryKeyword.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsProductionInfo.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsTradeName.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\View\GoodsSystematizationView.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsClear.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsClassifierInWork.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsInWorkView.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\View\UserStatView.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsSystematization\View\CategoryStatView.cs" />
+    <Compile Include="Model\DrugClassifier\Log\GoodActionLog.cs" />
+    <Compile Include="Model\DrugClassifier\Log\View\GoodsProductionInfoDescription.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\GoodsUserStat.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\GoodsCategoryStat.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\SourceStat.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\contract\ContractSearchTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\purchasefile\FileAnalyzeTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\purchasefile\FileLoadTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\purchasefile\FilePurchaseData.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\RTSModel.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSCustomer.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSLoadTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSObject.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSPurchase.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSPurchaseLink.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSSearchTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\rts\RTSStage.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\search\ContractLink.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\search\SearchINNTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\search\SelectionContractLink.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Settings.cs" />
+    <Compile Include="Model\GovernmentPurchases\Keywords\ClientKeyword.cs" />
+    <Compile Include="Model\GovernmentPurchases\Keywords\Keyword.cs" />
+    <Compile Include="Model\GovernmentPurchases\Keywords\Client.cs" />
+    <Compile Include="Model\GovernmentPurchases\Search\SelectionContractLink.cs" />
+    <Compile Include="Model\GovernmentPurchases\Search\SelectionPurchaseLink.cs" />
+    <Compile Include="Model\GovernmentPurchases\Search\PurchaseLink.cs" />
+    <Compile Include="Model\GovernmentPurchases\Search\ContractLink.cs" />
+    <Compile Include="Model\GovernmentPurchases\Search\ListType.cs" />
+    <Compile Include="Model\GovernmentPurchases\Search\PurchaseClassAutoList.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\Keywords\ClientKeywordView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\Search\ContractLinkView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\Search\PurchaseClassAutoListView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\Search\PurchaseLinkView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\SelectionPurchaseLinkView.cs" />
+    <Compile Include="Model\GovernmentPurchases\QueryModel\PurchasesStatisticsModel.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\MassFixesDataView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\NotExportedToExternalContractsView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\NotExportedToExternalPurchasesView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\WrongPricesView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\DrugIdWithMinMaxPriceView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\AutomaticProcessesLogView.cs" />
+    <Compile Include="Model\GovernmentPurchases\LotStatus.cs" />
+    <Compile Include="Model\DataAggregator\ErrorLog.cs" />
+    <Compile Include="Model\DrugClassifier\Changes\ClassifierReplacement.cs" />
+    <Compile Include="Model\DrugClassifier\Changes\ClassifierTransfer.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ATCEphmra.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Brand.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ClassifierInfoHistory.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ClassifierInfo.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\DrugClassification.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FederalBenefit\FederalBenefitChecked.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FederalBenefit\FederalBenefitClassification.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FederalBenefit\FederalBenefitPeriod.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FederalBenefit\NoFederalBenefitView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FederalBenefit\FederalBenefitView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\RealPackingCount.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\VEDChecked.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\VEDClassificationByTN.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\VEDPeriod.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\VEDClassification.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\DataTransferClassifierView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\NoVedView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\SystematizationView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\TransferedDataView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\VedView.cs" />
+    <Compile Include="Model\DrugClassifier\Log\ActionType.cs" />
+    <Compile Include="Model\DrugClassifier\Log\ActionLog.cs" />
+    <Compile Include="Model\DrugClassifier\Log\FederalBenefit\FederalBenefitChange.cs" />
+    <Compile Include="Model\DrugClassifier\Log\FederalBenefit\FederalBenefitCheckedChange.cs" />
+    <Compile Include="Model\DrugClassifier\Log\FederalBenefit\FederalBenefitPeriodChange.cs" />
+    <Compile Include="Model\DrugClassifier\Log\Replacement.cs" />
+    <Compile Include="Model\DrugClassifier\Log\VEDChange.cs" />
+    <Compile Include="Model\DrugClassifier\Log\VEDCheckedChange.cs" />
+    <Compile Include="Model\DrugClassifier\Log\VEDPeriodChange.cs" />
+    <Compile Include="Model\DrugClassifier\Log\View\ProductionInfoDescription.cs" />
+    <Compile Include="Model\GovernmentPurchases\DataBaseChecked.cs" />
+    <Compile Include="Model\GovernmentPurchases\ExternalGovernmentSegmentShipmentLog.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Contract.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ContractInfo.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ContractObject.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ContractPaymentStage.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ContractUrl.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\DeletePurchase.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Log.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\MethodDictionary.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Organization.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationLoad.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ProxyStat.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ProxyStatLoad.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PurchaseInfo223.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OKPD2.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\StageDictionary.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Supplier.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SupplierList.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SupplierResults.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SupplierResultsAnalyze.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\CirculationPeriod.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\DrugType.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Manufacturer.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ProductionInfo.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\DrugPackingView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\RegistrationCertificateView.cs" />
+    <Compile Include="Model\DrugClassifier\DataAnalyzer\SynManufacturer.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\DrugClearPeriod.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\Period.cs" />
+    <Compile Include="Model\ExternalDataRetail\ClassifierExternal\ATC.cs" />
+    <Compile Include="Model\ExternalDataRetail\ClassifierExternal\ExternalView.cs" />
+    <Compile Include="Model\ExternalDataRetail\ClassifierExternal\FTG.cs" />
+    <Compile Include="Model\ExternalDataRetail\ClassifierExternal\INNGroup.cs" />
+    <Compile Include="Model\ExternalDataRetail\ClassifierExternal\Manufacturer.cs" />
+    <Compile Include="Model\ExternalDataRetail\ClassifierExternal\TradeName.cs" />
+    <Compile Include="Model\ExternalDataRetail\external\ExternalLog.cs" />
+    <Compile Include="Model\ExternalDataRetail\external\PharmacyDataView.cs" />
+    <Compile Include="Model\ExternalDataRetail\external\PharmacySellingStructure.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Payment.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Date.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\ErrorLog.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\FieldHtmlFieldOrhanization.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\KOSGUAnalyzeTest.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\LoadTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Lot.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OKPD.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationErrorLog.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationInfo.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationLink.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationPage.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationSearchPage.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\OrganizationSearchTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Page.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PageItem.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PageTable.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PageTableHeader.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PostIndexes.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Proxy.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Purchase.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Purchase1.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PurchaseLink.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\PurchaseObject.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\Region.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SearchFields.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SearchPage.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SearchTask.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\StagePurchase.cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\SupplierResultsLotStatus .cs" />
+    <Compile Include="Model\GovernmentPurchasesLoader\WhoIsPurchase.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractAveragePrice.cs" />
+    <Compile Include="Model\GovernmentPurchases\DataBaseTransfer.cs" />
+    <Compile Include="Model\GovernmentPurchases\OrganizationRaw.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseAveragePrice.cs" />
+    <Compile Include="Model\GovernmentPurchases\Category.cs" />
+    <Compile Include="Model\GovernmentPurchases\Contract.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractObject.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractObjectCalculated.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractObjectReady.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractPaymentStage.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractStatus.cs" />
+    <Compile Include="Model\GovernmentPurchases\DeliveryTimeInfo.cs" />
+    <Compile Include="Model\GovernmentPurchases\DeliveryTimePeriod.cs" />
+    <Compile Include="Model\GovernmentPurchases\Funding.cs" />
+    <Compile Include="Model\GovernmentPurchases\LotFunding.cs" />
+    <Compile Include="Model\GovernmentPurchases\Nature.cs" />
+    <Compile Include="Model\GovernmentPurchases\OrganizationType.cs" />
+    <Compile Include="Model\GovernmentPurchases\Payment.cs" />
+    <Compile Include="Model\GovernmentPurchases\PaymentYear.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseNatureMixed.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseObjectReadyBulkInsert.cs" />
+    <Compile Include="Model\GovernmentPurchases\Supplier.cs" />
+    <Compile Include="Model\GovernmentPurchases\SupplierList.cs" />
+    <Compile Include="Model\GovernmentPurchases\SupplierResult.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\ShipmentInfo.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\SupplierRawBinding.cs" />
+    <Compile Include="Model\GovernmentPurchases\SupplierRaw.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseClass.cs" />
+    <Compile Include="DAL\RetailContext.cs" />
+    <Compile Include="DAL\FtpPoisklekarstvContext.cs" />
+    <Compile Include="DAL\DrugClassifierContext.cs" />
+    <Compile Include="Model\DrugClassifier\Bad\BadData.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ATCWho.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\View\ClassifierView.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FTG.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Dosage.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Drug.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\DosageGroup.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\INNDosage.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\EphRMA.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\FormProduct.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\INN.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\INNGroup_INN.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\Packing.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\DrugPacking.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\INNGroup.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\RegistrationCertificate.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\TradeMark.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\TradeName.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\LinkedTable.cs" />
+    <Compile Include="Model\DataLoader\RawData.cs" />
+    <Compile Include="Model\DataLoader\LoadStatus.cs" />
+    <Compile Include="Model\DataLoader\Task.cs" />
+    <Compile Include="Model\DataLoader\TaskLoadStatus.cs" />
+    <Compile Include="Model\DataLoader\TaskParameter.cs" />
+    <Compile Include="Model\Common\DictionaryItem.cs" />
+    <Compile Include="Model\Common\HierarchicalDictionaryItem.cs" />
+    <Compile Include="Model\DrugClassifier\DataAnalyzer\ActualClassifierView.cs" />
+    <Compile Include="Model\DrugClassifier\DataAnalyzer\ManufacturerSearchInfo.cs" />
+    <Compile Include="Model\DrugClassifier\DataAnalyzer\DrugSearchInfo.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\LogSynonym.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\SynDosageGroup.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\SynFormProduct.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\SynINNGroup.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\SynTradeName.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\DrugClearWorkStat.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\DataTypeStat.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\RobotStat.cs" />
+    <Compile Include="Model\DrugClassifier\Stat\UserWorkStat.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\DrugClassifier.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\DrugClassifierRobot.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\DrugClassifierInWork.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\DrugClear.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\DrugRaw.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\Robot.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\Source.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\Status.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\StatusHistory.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\UserSource.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\View\DrugInWorkView.cs" />
+    <Compile Include="Model\DrugClassifier\Systematization\View\User.cs" />
+    <Compile Include="Model\FtpPoisklekarstv\File.cs" />
+    <Compile Include="Model\DrugClassifier\InputData\ClearDrugDescription.cs" />
+    <Compile Include="Model\DrugClassifier\InputData\HtmlSource.cs" />
+    <Compile Include="Model\DrugClassifier\InputData\HtmlSourceOldVersion.cs" />
+    <Compile Include="Model\DrugClassifier\InputData\InputDataSource.cs" />
+    <Compile Include="Model\DrugClassifier\InputData\InputDrugDescription.cs" />
+    <Compile Include="Model\DrugClassifier\InputData\InputType.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ProductionStage.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\AbstractSynonym.cs" />
+    <Compile Include="Model\DrugClassifier\SearchTerms\SynDrugPacking.cs" />
+    <Compile Include="Model\GovernmentPurchases\LawType.cs" />
+    <Compile Include="Model\GovernmentPurchases\Lot.cs" />
+    <Compile Include="Model\GovernmentPurchases\Method.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseObject.cs" />
+    <Compile Include="Model\GovernmentPurchases\Organization.cs" />
+    <Compile Include="Model\GovernmentPurchases\Purchase.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseObjectCalculated.cs" />
+    <Compile Include="Model\GovernmentPurchases\PurchaseObjectReady.cs" />
+    <Compile Include="Model\GovernmentPurchases\Region.cs" />
+    <Compile Include="Model\GovernmentPurchases\Stage.cs" />
+    <Compile Include="Model\GovernmentPurchases\Status.cs" />
+    <Compile Include="Model\GovernmentPurchases\StatusHistory.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\AveragePriceView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\CalculatedDataView.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\ContractDistributionWork.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\DistributionWork.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\PurchaseInWork.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\RegionName.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\User.cs" />
+    <Compile Include="Model\GRLS\Drug.cs" />
+    <Compile Include="Model\GRLS\DrugInfo.cs" />
+    <Compile Include="Model\GRLS\DrugPackage.cs" />
+    <Compile Include="Model\GRLS\Page.cs" />
+    <Compile Include="Model\GRLS\ProductionStage.cs" />
+    <Compile Include="Model\GRLS\RegistrationCertificate.cs" />
+    <Compile Include="Model\OkpdLoader\LoadedOKPD.cs" />
+    <Compile Include="Model\RetailTransit\RiglaFile.cs" />
+    <Compile Include="Model\RetailTransit\RiglaLog.cs" />
+    <Compile Include="Model\Retail\AggregatedRawDataByClassifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Retail\AggregatedRawDataByDrugClear.cs" />
+    <Compile Include="Model\Retail\CountRule.cs" />
+    <Compile Include="Model\Retail\CountRuleFullVolume.cs" />
+    <Compile Include="Model\Retail\Dadata\Result.cs" />
+    <Compile Include="Model\Retail\Dadata\SourceString.cs" />
+    <Compile Include="Model\Retail\Data.cs" />
+    <Compile Include="Model\Retail\ExternalInteraction\ExternalLog.cs" />
+    <Compile Include="Model\Retail\ExternalInteraction\PharmacySellingStructure.cs" />
+    <Compile Include="Model\Retail\ExternalInteraction\RegionCode.cs" />
+    <Compile Include="Model\Retail\ExternalInteraction\PharmacyDataView.cs" />
+    <Compile Include="Model\Retail\ExternalInteraction\OrenlekGroup.cs" />
+    <Compile Include="Model\Retail\FileData.cs" />
+    <Compile Include="Model\Retail\FileInfo.cs" />
+    <Compile Include="Model\Retail\FileInfoLog.cs" />
+    <Compile Include="Model\Retail\FileInfoService\FileInfoServiceErrorLog.cs" />
+    <Compile Include="Model\Retail\FileStatus.cs" />
+    <Compile Include="Model\Retail\MarkupDefault.cs" />
+    <Compile Include="Model\Retail\QueryModel\HasDataForAvgPrice.cs" />
+    <Compile Include="Model\Retail\QueryModel\CalcRuleModel.cs" />
+    <Compile Include="Model\Retail\Net.cs" />
+    <Compile Include="Model\Retail\Pharmacy.cs" />
+    <Compile Include="Model\Retail\CountCheck.cs" />
+    <Compile Include="Model\Retail\PriceRule.cs" />
+    <Compile Include="Model\Retail\View\MarkupDefaultView.cs" />
+    <Compile Include="Model\Retail\View\CountRuleFullVolumeView.cs" />
+    <Compile Include="Model\Retail\View\CountRuleView.cs" />
+    <Compile Include="Model\Retail\View\PriceRuleListView.cs" />
+    <Compile Include="Model\Retail\PriceCheck.cs" />
+    <Compile Include="Model\Retail\PriceRange.cs" />
+    <Compile Include="Model\Retail\Region.cs" />
+    <Compile Include="Model\Retail\RegionParameters.cs" />
+    <Compile Include="Model\Retail\PharmacyParameters.cs" />
+    <Compile Include="Model\Retail\RawData.cs" />
+    <Compile Include="Model\Retail\Source.cs" />
+    <Compile Include="Model\Retail\SourcePharmacy.cs" />
+    <Compile Include="Model\Retail\SourcePharmacyFile.cs" />
+    <Compile Include="Model\Retail\SourcePharmacyGroup.cs" />
+    <Compile Include="Model\Retail\SourcePharmacyGroupFile.cs" />
+    <Compile Include="Model\Retail\TargetPharmacyBrandBlackList.cs" />
+    <Compile Include="Model\Retail\Template.cs" />
+    <Compile Include="Model\Retail\TemplateField.cs" />
+    <Compile Include="Model\Retail\TemplateFieldName.cs" />
+    <Compile Include="Model\Retail\View\FileInfoView.cs" />
+    <Compile Include="Model\Retail\View\PharmacyParametersView.cs" />
+    <Compile Include="Model\Retail\View\CountCheckView.cs" />
+    <Compile Include="Model\Retail\View\PriceCheckView.cs" />
+    <Compile Include="Model\Retail\View\RegionParametersUnderCommonView.cs" />
+    <Compile Include="Model\Retail\View\RegionPM01View.cs" />
+    <Compile Include="Model\Retail\View\RegionPM12View.cs" />
+    <Compile Include="Model\Retail\View\TargetPharmacyBrandBlackListView.cs" />
+    <Compile Include="Model\Retail\View\UniteUnderCommonTerritory.cs" />
+    <Compile Include="Model\Retail\View\User.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\CustomDateTimeConverterWithTime.cs" />
+    <Compile Include="Utils\DecimalPrecisionAttribute.cs" />
+    <Compile Include="Utils\CustomDateTimeConverter.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\ProcedureHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

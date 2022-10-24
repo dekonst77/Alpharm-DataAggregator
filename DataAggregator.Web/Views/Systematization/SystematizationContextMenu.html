@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <style>
+        .context-menu-body .context-menu button {
+            width: 110px;
+        }
+
+        .context-menu-body {
+            height: 40px;
+        }
+        .label_category {
+            margin:0px;
+            width:100px;
+            white-space:nowrap;
+        }
+        .context-menu-body .row label {
+            margin-top: 7px;
+        }
+        .btn_ok {
+            width:50px !important;
+        }
+        .btn_cancel {
+            width: 70px !important;
+        }
+
+        .context-menu-body .contextMenu {
+            position: absolute;
+            list-style-type: none;
+            z-index: 1000;
+            background-color: white;
+        }
+                .padding1 {
+            padding:1px;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div style="z-index: 1;" class="context-menu-body">
+        <div class="panel panel-primary" ng-show="IsSynAdd">
+            <div class="panel-heading">
+                <h3 class="panel-title">Добавить в синонимы : <span class="badge">{{selectedText}}</span></h3>
+            </div>
+
+            <div class="btn btn-group" in-roles="SPharmacist">
+                <button type="button" class="btn btn-default" ng-click="toSyn('SynINNGroup')" ng-disabled="!canToSyn">МНН</button>
+                <button type="button" class="btn btn-default" ng-click="toSyn('SynFormProduct')" ng-disabled="!canToSyn">Формы выпуска</button>
+                <button type="button" class="btn btn-default" ng-click="toSyn('SynTradeName')" ng-disabled="!canToSyn">Торговое наименование</button>
+                <button type="button" class="btn btn-default" ng-click="toSyn('SynDosageGroup')" ng-disabled="!canToSyn">Дозировка</button>
+            </div>
+            <div in-roles="!SPharmacist">Недоступно</div>
+
+        </div>
+        <div class="panel panel-primary context-menu" ng-hide="IsSynAdd" style="width: 1250px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Меню <span class="badge">{{selectedCount}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3 padding1">
+                        <div class="row">
+                            <div class="col-md-6 padding1">
+                                <label>На проверку(shift+C)</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn_ok" ng-click="forChecking(true)" data-translate="YES"></button>
+                                        <button type="button" class="btn btn-default right-button btn_cancel" ng-click="forChecking(false)" data-translate="BUTTONS.DISCARD"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 padding1">
+                                <label>На заведение(shift+Z)</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn_ok" ng-click="forAdding(true)" data-translate="YES"></button>
+                                        <button type="button" class="btn btn-default right-button btn_cancel" ng-click="forAdding(false)" data-translate="BUTTONS.DISCARD"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 padding1">
+                                <label>ДОП(shift+X)</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn_ok" ng-click="forIsOther(true,NULL,NULL)" data-translate="YES"></button>
+                                        <button type="button" class="btn btn-default right-button btn_cancel" ng-click="forIsOther(false,NULL,NULL)" data-translate="BUTTONS.DISCARD"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" s>
+                            <div class="col-md-6 padding1">
+                                <label>Ошибка</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-danger btn_ok" ng-click="forIsError(true)" data-translate="YES"></button>
+                                        <button type="button" class="btn btn-default right-button btn_cancel" ng-click="forIsError(false)" data-translate="BUTTONS.DISCARD"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 padding1">
+                                <label>Отвязать</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-danger btn_ok" ng-click="clearDrugId()" data-translate="YES"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" in-roles="SBoss">
+                            <div class="col-md-6 padding1">
+                                <label>Достоверность 100 %</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn_ok" ng-click="SetSuperCheck(true)" data-translate="YES"></button>
+                                        <button type="button" class="btn btn-default right-button btn_cancel" ng-click="SetSuperCheck(false)" data-translate="BUTTONS.DISCARD"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 padding1">
+                                <label>Акция (shift + W)</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                <div class="input-group ">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn_ok" ng-click="openSetPromoDialog()" data-translate="YES"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 padding1">
+                                <label>Приоритетные слова</label>
+                            </div>
+                            <div class="col-md-6 padding1">
+                                  <button type="button" class="btn btn-success btn_ok" ng-click="PrioritetDrugClassifier(10)">Сброс</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <ul class="no-padding" style="list-style-type:none">
+                            <li ng-repeat="GSec in GoodsCategorySection" class="no-padding">
+                                <label class="label_category">{{GSec}}</label>
+                                
+                                <div class="btn-group btn-group-xs">
+                                    <button ng-repeat="item in GoodsCategory | filter:GSec | orderBy:'Name'" type="button" class="btn btn-primary btn-xs" ng-click="forIsOther(true,item.Id,item.Name)" data-translate="{{item.MiniName}}"></button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+﻿<div ng-controller="DrugGoodClassifierController" ng-cloak class="auto-grid-parent systematization-systematization" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .NotUsed {
+            color: red;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 no-padding">
+                    <div>
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="getDrugs()" ng-disabled="canGetDrugs()" data-translate="BUTTONS.GET_DATA"></button>
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="setDrugs()" ng-disabled="canSetDrugs()" data-translate="BUTTONS.RETURN_DATA"></button>
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="openHelp()" data-translate="BUTTONS.HELP"></button>
+                        <b>{{periodName}}</b>. Всего <b>{{drugsCount}}</b>, привязано <b>{{drugsCompleteCount}}</b>, нет <b>{{drugsCount - drugsCompleteCount}}</b>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div style="display: inline" data-translate="SYSTEMATIZATION.STATUS.NAME"></div>
+                    <div style="display: inline-block; width: 150px">
+                        <multi-select ng-model="filter.status" ap-label="" class="multi-select-control"></multi-select>
+                    </div>
+                </div>
+                <div class="col-md-5 no-padding">
+                    <textarea ng-shift-f="shiftF()" ng-enter="shiftF()" class="form-control" readonly>{{selectedRowText}}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+        <size_main>
+            <!--<size_nav resizable r-directions="['right']">
+            </size_nav>-->
+            <div class="size_content">
+                <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                    <div id="drug-grid-block" cg-busy="drugLoading" data-context-menu="Views/Systematization/SystematizationContextMenu.html" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="gridOptions" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+                    </div>
+                </div>
+                <div class="size_row">
+                    <div style="width:100%">
+                        <div id="search-filter-line" style="width:100%">
+
+                            <label><input type="checkbox" class="" ng-model="Classifier_filter_HidePacking" ng-change="Classifier_filter_change();" ng-true-value="1" ng-false-value="0">Убрать деленку</label>
+                            <button class="btn btn-primary btn-xs" ng-click='searchClassifier()'>Поиск по ЛП</button>
+                            <button class="btn btn-primary btn-xs" ng-click='searchClassifierGoods()'>Поиск по ДОП</button>
+
+                            <ul class="list-inline" style="display:inline-block">
+                                <li ng-repeat="item in FilterDescription"><b>{{item.Name}}</b>:{{item.Value}}</li>
+                            </ul>
+                        </div>
+
+                        <div id="classifier-grid-block" cg-busy="classifierLoading" class="auto-item-panel" style="width:100%">
+                            <ui-grid-control options="gridClassifierOptions" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </size_main>
+
+
+
+
+        <script type="text/ng-template" id="_rowTemplate.html">
+            <div>
+                <div class="ui-grid-cell"
+                     ng-class=" {selected : row.isSelected, green : row.entity.HasChanges}"
+                     ng-right-click="grid.appScope.setSelectedDrugsRightClick(row)"
+                     ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                     ui-grid-cell>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/ng-template" id="_rowClassifierTemplate.html">
+            <div>
+                <div class="ui-grid-cell"
+                     ng-class=" {selected : row.isSelected, yellow: !row.isSelected && row.entity.RealPackingCount != row.entity.ConsumerPackingCount,NotUsed:!row.entity.Used}"
+                     ng-dblclick="grid.appScope.setClassifierToDrugs(row.entity)"
+                     ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                     ui-grid-cell>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/ng-template" id="_icon.html">
+            <div>
+                <img src="/Content/Icons/shit.png" class="img-rounded" style="width:16px;height:16px;" ng-show="row.entity.GoodsCategoryId==25" title="Прочее ДОП" />
+                <img src="/Content/Icons/Add.png" class="img-rounded" style="width:16px;height:16px;" ng-show="row.entity.ForAdding" title="На заведение" />
+                <img src="/Content/Icons/Check.png" class="img-rounded" style="width:16px;height:16px;" ng-show="row.entity.ForChecking" title="На проверку" />
+                <img src="/Content/Icons/IsOther.png" class="img-rounded" style="width:16px;height:16px;" ng-show="row.entity.IsOther" title="ДОП" />
+                <img src="/Content/Icons/Error.png" class="img-rounded" style="width:16px;height:16px;" ng-show="row.entity.IsError" title="Ошибка" />
+                <img src="/Content/Icons/CheckGreen.png" class="img-rounded" style="width:16px;height:16px;" ng-show="row.entity.SuperCheck" title="100%" />
+            </div>
+        </script>
+</div>

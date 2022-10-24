@@ -1,0 +1,99 @@
+﻿.classifier-editor {
+
+    .ui-select-placeholder, .ui-select-match-text {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 40px;
+    }
+
+
+    .ui-select-bootstrap > .ui-select-choices {
+        width: auto !important;
+    }
+
+    span.ui-select-choices-row-inner:hover {
+        background: #1E90FF !important;
+        color:white;
+    }
+
+    .panel-default > .panel-heading {
+        background-color: #337ab7;
+        color: white;
+    }
+
+    .tight {
+        padding: 2px !important;
+    }
+
+    .panel {
+        margin-bottom: 0px;
+    }
+
+    .has-error {
+        border-color: red;
+    }
+
+    .PriceVed {
+        background-color: lightgreen !important
+    }
+
+    .PriceEtalon {
+        background-color: deepskyblue !important
+    }
+
+    .panel-body {
+        padding-bottom: 0px !important;
+        padding-top: 0px !important;
+    }
+
+    label {
+        margin-bottom: 1px !important;
+        height: 18px !important;
+    }
+
+    ul {
+        padding-top: 1px !important;
+        padding-bottom: 1px !important;
+        margin-top: 1px !important;
+    }
+
+    .panel-heading {
+        padding: 0px;
+    }
+
+    .form-control {
+        padding-bottom: 0px !important;
+        padding-top: 0px !important;
+        height: 25px !important;
+    }
+
+    .btn {
+        padding-bottom: 0px !important;
+        padding-top: 0px !important;
+        height: 25px !important;
+    }
+
+
+    .classifierChanged {
+        background-color: lightgreen !important;
+    }
+
+    .ui-grid-row,
+    .ui-grid-cell {
+        height: 20px;
+        font-size: 14px;
+        line-height: 10px;
+    }
+
+    .padding3 {
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .width-small {
+        width: 150px !important;
+    }
+}

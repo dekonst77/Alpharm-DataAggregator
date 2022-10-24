@@ -1,0 +1,43 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Поиск поставщика</h3>
+</div>
+<div class="modal-body modal-body-big" cg-busy="searchLoading">
+    <div class="row">
+        <div class="col-md-1">
+            <label>Id</label>
+            <input type="text" ng-model="filter.Id" class="form-control"/>
+        </div>
+        <div class="col-md-2">
+            <label>Название</label>
+            <input type="text" ng-model="filter.Name" class="form-control"/>
+        </div>
+        <div class="col-md-2">
+            <label>ИНН</label>
+            <input type="text" ng-model="filter.INN" class="form-control"/>
+        </div>
+        <div class="col-md-2">
+            <label>КПП</label>
+            <input type="text" ng-model="filter.KPP" class="form-control"/>
+        </div>
+        <div class="col-md-2">
+            <label>Адрес</label>
+            <input type="text" ng-model="filter.LocationAddress" class="form-control" />
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-success" ng-click="search()">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+    </div>
+
+    <br />
+
+    <div style="height: 500px">
+        <ui-grid-control options="supplierGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="close()" data-translate="BUTTONS.CANCEL"></button>
+    <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="!canSave()" data-translate="BUTTONS.OK"></button>
+</div>

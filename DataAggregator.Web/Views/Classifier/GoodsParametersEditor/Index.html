@@ -1,0 +1,58 @@
+﻿<div cg-busy="loading" ng-controller="GoodsParametersEditorController" ng-cloak style="height:100%">
+    <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+        <div class="col-md-4">
+            <select class="form-control" required
+                    ng-options="category as category.Name group by category.GoodsSection.Name for category in goodsCategoryList track by category.Id"
+                    ng-model="goodsCategory" ng-change="getParameterGroups()">
+                <option value="" disabled selected hidden>Выберите категорию...</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" ng-click="addParameterGroup()" ng-disabled="goodsCategory == null" data-translate="BUTTONS.ADD"></button>
+            <button type="button" class="btn btn-danger" ng-click="removeParameterGroupAsk()" ng-disabled="selectedParameterGroup == null" data-translate="BUTTONS.DELETE"></button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" ng-click="addParameter(1)" ng-disabled="selectedParameterGroup == null" data-translate="BUTTONS.ADD"></button>
+            <button type="button" class="btn btn-danger" ng-click="removeParameterAsk(1)" ng-disabled="selectedParameterLevel1 == null" data-translate="BUTTONS.DELETE"></button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" ng-click="addParameter(2)" ng-disabled="selectedParameterLevel1 == null" data-translate="BUTTONS.ADD"></button>
+            <button type="button" class="btn btn-danger" ng-click="removeParameterAsk(2)" ng-disabled="selectedParameterLevel2 == null" data-translate="BUTTONS.DELETE"></button>
+        </div>
+    </div>
+    <div class="row" style="height: calc(100% - 100px)">
+        <div class="col-md-4" style="height: 100%">
+            <ui-grid-control options="gridParameterGroup.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+        <div class="col-md-4" style="height: 100%">
+            <ui-grid-control options="gridParameterLevel1.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+        <div class="col-md-4" style="height: 100%">
+            <ui-grid-control options="gridParameterLevel2.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<script type="text/ng-template" id="_goodsSectionChangeView.html">    
+    <form ng-submit="save()">
+        <div class="modal-body">
+            <div class="row">
+                <div>
+                    <select required class="form-control" ng-options="item as item.Name for item in sectionsList track by item.Id" ng-model="newSection"></select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="float-left">
+                <button class="btn btn-primary" type="submit" data-translate="BUTTONS.SAVE"></button>
+            </div>
+            <div>
+                <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CLOSE"></button>
+            </div>
+        </div>
+    </form>
+</script>-->

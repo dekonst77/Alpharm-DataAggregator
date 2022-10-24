@@ -1,0 +1,94 @@
+﻿@using DataAggregator.Web.Models
+
+@model ViewUserViewModel
+
+@{
+    ViewBag.Title = "Управление пользователями: детали";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Детали</h4>
+<script>
+    angular.lowercase = angular.$$lowercase;
+</script>
+<div id="page-block" style="height: 95%; overflow-y: auto">
+    <div>
+        <h4>Пользователь</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Surname)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Surname)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.MiddleName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.MiddleName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DepartmentName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DepartmentName)
+            </dd>
+            <dt>
+                Статус
+            </dt>
+            <dd>
+                @if (Model.LockDate == null)
+                {
+                    <span>Активен</span>
+                }
+                else
+                {
+                    var lockDate = ((DateTime)Model.LockDate).ToString("dd.MM.yyyy");
+                    <span style="color: red">Заблокирован с @lockDate</span>
+                }
+            </dd>
+        </dl>
+    </div>
+    <h4>Роли этого пользователя</h4>
+    @if (ViewBag.RoleNames.Count == 0)
+    {
+        <hr />
+        <p>Пользователь не имеет ни одной роли :(</p>
+    }
+
+    <table class="table">
+
+        @foreach (var item in ViewBag.RoleNames)
+        {
+            <tr>
+                <td>
+                    @item
+                </td>
+            </tr>
+        }
+    </table>
+    <p>
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Назад к списку пользователей", "Index")
+    </p>
+
+</div>

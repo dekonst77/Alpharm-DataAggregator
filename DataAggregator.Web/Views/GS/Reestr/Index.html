@@ -1,0 +1,81 @@
+﻿<div ng-controller="ReestrController" cg-busy="ReestrLoading" ng-cloak class="Reestr-editor">
+
+    <script type="text/ng-template" id="_rowReestrTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-dblclick="setClassifierToReestr(row.entity)"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+
+
+    <ng_form name="ReestrEditor">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <!--<div class="col-md-1">Про регистрацию</div>-->
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-1">
+                        <label>Код</label>
+                        <input type="text"
+                               class="form-control"
+                               ng-model="classifier.Id"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label>Компания</label>
+                        <input name="Value" ng-class="{'has-error': Reestr.Value.$invalid}" required
+                               type="text" class="form-control" ng-model="classifier.Value"
+                               uib-typeahead="data.Value for data in searchDictionary($viewValue,'Reestr')" typeahead-select-on-exact="true">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Корпорация</label>
+                        <input name="Corporation" ng-class="{'has-error': Reestr.Corporation.$invalid}" required
+                               type="text" class="form-control" ng-model="classifier.Corporation.Value"
+                               uib-typeahead="data.Value for data in searchDictionary($viewValue,'Corporation')" typeahead-on-select="setId($item,classifier.Corporation)" typeahead-select-on-exact="true">
+                    </div>
+                    <div class="col-md-2">
+                        <label>Страна</label>
+                        <select name="Country" ng-class="{'has-error': Reestr.Country.$invalid}" required
+                                class="form-control" ng-options="item as item.DisplayValue for item in CountryList track by item.Id"
+                                typeahead-on-select="setId($item,classifier.Country)"
+                                ng-model="classifier.Country"></select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-1">Поиск</div>
+                    <div class="col-md-1">
+                        <button class="btn btn-default btn-sm" ng-click="ManufactureAdd()" data-translate="BUTTONS.ADD"></button>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-default btn-sm" ng-click="ManufactureEdit()" data-translate="BUTTONS.CHANGE"></button>
+                    </div>
+
+                    <div class="col-md-5">
+                        <input name="filter" type="text" class="form-control" ng-model="classifier.filter" ng-change="">
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-success btn-sm" ng-click="searchManufacture()"><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ui-grid-control options="classifierGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+        </div>
+    </ng_form>
+</div>

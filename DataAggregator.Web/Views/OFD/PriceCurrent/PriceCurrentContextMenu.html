@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <style>
+        .context-menu-body .context-menu button {
+            width: 110px;
+        }
+
+        .context-menu-body {
+            height: 40px;
+        }
+
+        .label_category {
+            margin: 0px;
+            width: 100px;
+            white-space: nowrap;
+        }
+
+        .context-menu-body .row label {
+            margin-top: 7px;
+        }
+
+        .btn_ok {
+            width: 50px !important;
+        }
+
+        .btn_cancel {
+            width: 70px !important;
+        }
+
+        .context-menu-body .contextMenu {
+            position: absolute;
+            list-style-type: none;
+            z-index: 1000;
+            background-color: white;
+        }
+
+        .padding1 {
+            padding: 1px;
+        }
+    </style>
+
+</head>
+<body>
+    <div style="z-index: 1;" class="context-menu-body">
+        <div class="panel panel-primary context-menu" ng-hide="IsSynAdd" style="width: 600px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Меню <span class="badge">{{selectedCount}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-md-8 padding1">
+                        <label>На проверку(shift+C)</label>
+                    </div>
+                    <div class="col-md-4 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="forChecking(true)" data-translate="YES"></button>
+                                <button type="button" class="btn btn-default right-button btn_cancel" ng-click="forChecking(false)" data-translate="BUTTONS.DISCARD"></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-8 padding1">
+                        <label>Копировать описание(shift+d)</label>
+                    </div>
+                    <div class="col-md-4 padding1">
+                        <button type="button" class="btn btn-default" ng-click="copyIntoBuffer()" data-translate="BUTTONS.COPY" ng-disabled="gridApi.selection.getSelectedRows().length == 0"></button>
+                    </div>
+                </div>              
+            </div>
+        </div>
+    </div>
+</body>
+</html>

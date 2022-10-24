@@ -1,0 +1,78 @@
+﻿<div ng-controller="DDDController" cg-busy="dataLoading" ng-init="DDD_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="DDD_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="DDD_save();" ng-disabled="!Grid_DDD.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel" data-context-menu="Views/Classifier/DDD/DDD_context_menu.html">
+        <ui-grid-control options="Grid_DDD.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+
+    <div class="modal fade" id="modal_formula">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Редактор формул</h4>
+                </div>
+                <div class="modal-body" style="height:300px">
+                    <div class="row">
+                        <div class="col-md-6 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('INN1');">INN1</button>
+                        </div>
+                        <div class="col-md-6 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('INN1');">INN2</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('DosIn');">DosIn</button>
+                        </div>
+                        <div class="col-md-6 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('DosTotal');">DosTotal</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('N');">N</button>
+                        </div>
+                        <div class="col-md-6 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('DDD_Norma');">DDD_Norma</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('/');">/</button>
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('*');">*</button>
+                        </div>
+                        <div class="col-md-4 padding3">
+                            <button type="button" class="btn btn-info" style="width:100%" ng-click="DDD_FormulasAdd('=');">=</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="formula_new" ng-change="" placeholder="Формула">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" ng-click="DDD_FormulasSetCLC();">Применить</button>
+                </div>
+            </div><!-- /.модальное окно-Содержание -->
+        </div><!-- /.модальное окно-диалог -->
+    </div><!-- /.модальное окно -->
+
+</div>

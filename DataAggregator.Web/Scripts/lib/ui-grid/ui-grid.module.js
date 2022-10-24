@@ -1,0 +1,17 @@
+﻿angular.module('ui.grid.module',
+    [
+        'ngTouch',
+        'ui.grid',
+        'ui.grid.moveColumns',
+        'ui.grid.selection',
+        'ui.grid.cellNav',
+        'ui.grid.resizeColumns',
+        'ui.grid.autoResize',
+        'ui.grid.edit',
+        'ui.grid.exporter',
+        'ui.grid.saveState',
+        'ui.grid.pagination',
+        'ui.grid.pinning',
+        'ui.grid.expandable',
+        'ui.grid.treeView'
+    ]);

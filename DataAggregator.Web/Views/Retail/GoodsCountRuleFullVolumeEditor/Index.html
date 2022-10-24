@@ -1,0 +1,84 @@
+﻿<div ng-controller="GoodsCountRuleFullVolumeEditorController" cg-busy="loading" class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="col-md-12 no-padding">
+                        <div class="col-md-2">
+                            <label data-translate="RETAIL.COUNT_RULE_EDITOR.ACTUALITY_TYPE"></label>
+                            <select class="form-control" ng-options="item as item.Name for item in actualityTypeList track by item.Id" ng-model="filter.actualityType" ng-disabled="editMode"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <label data-translate="RETAIL.COUNT_RULE_EDITOR.RULE"></label>
+                            <input type="text" class="form-control" ng-model="rule.Id" disabled>
+                        </div>
+                        <div class="col-md-2">
+                            <date-period period="rule.StartDate" ap-label="PERIOD_START" ng-disabled="!editMode"></date-period>
+                        </div>
+
+                        <div class="col-md-2">
+                            <date-period period="rule.EndDate" ap-label="PERIOD_END" ng-disabled="!editMode"></date-period>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label data-translate="RETAIL.COUNT_RULE_EDITOR.SOURCE"></label>
+                        <div class="input-group">
+                            <input type="text"
+                                   class="form-control"
+                                   readonly
+                                   ng-model="rule.FullGoodsDescription"
+                                   placeholder="{{ 'RETAIL.COUNT_RULE_EDITOR.SOURCE_DESCRIPTION' | translate }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="searchGoods(false)" ng-disabled="!editMode">
+                                    <span class=" glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label data-translate="RETAIL.COUNT_RULE_EDITOR.DESTINATION"></label>
+                        <div class="input-group">
+                            <input class="form-control"
+                                   type="text"
+                                   readonly
+                                   ng-model="rule.DistributionFullGoodsDescription"
+                                   placeholder="{{ 'RETAIL.COUNT_RULE_EDITOR.DESTINATION_DESCRIPTION' | translate }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="searchGoods(true)" ng-disabled="!editMode">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label data-translate="RETAIL.COUNT_RULE_EDITOR.TOP_COUNT"></label>
+                        <input type="text" class="form-control" ng-model="rule.TopCountTo" valid-number ng-disabled="!editMode">
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="!canCreate()" ng-click="createItem()" data-translate="BUTTONS.CREATE"></button>
+                        <button class="btn btn-primary" ng-disabled="!canEdit()" ng-click="editItem()" data-translate="BUTTONS.EDIT"></button>
+                        <button class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveItem()" data-translate="BUTTONS.SAVE"></button>
+                        <button class="btn btn-primary" ng-disabled="!canCancel()" ng-click="cancelEditing()" data-translate="BUTTONS.CANCEL"></button>
+                    </div>
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="!canClearFields()" ng-click="clearFields()" data-translate="BUTTONS.CLEAR_FIELDS"></button>
+                        <button class="btn btn-danger btn-delete-field" ng-disabled="!canDelete()" ng-click="deleteItem()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel" ng-class="{'disabled': editMode}">
+        <ui-grid-control options="countRuleFullVolumeEditorGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>
+

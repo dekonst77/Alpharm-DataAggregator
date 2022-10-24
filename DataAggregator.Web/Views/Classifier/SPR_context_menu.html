@@ -1,0 +1,32 @@
+﻿<div class="panel panel-primary context-menu" style="width: 500px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Использовать</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn_ok" ng-click="IsUse(true);">Да</button>
+                        <button type="button" class="btn btn-default right-button btn_cancel" ng-click="IsUse(false);">Нет</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Удаление</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn_ok" ng-click="SPR_delete();">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+﻿<div ng-controller="OFDController" ng-init="Init_Report();" cg-busy="dataLoading" ng-cloak class="fullHeight" ng-style="">
+    <script type="text/ng-template" id="_rowGridTemplate.html">
+        <div>
+            <div class="ui-grid-cell"
+                 ng-class=" {selected : row.isSelected, yellow: !row.isSelected}"
+                 ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name"
+                 ui-grid-cell>
+            </div>
+        </div>
+    </script>
+    <style type="text/css">
+
+        .myGrid {
+            min-height: 100%;
+        }
+
+        .fullHeight {
+            height: 100%;
+            padding: 1px;
+        }
+
+        .fullHeightGrid {
+            height: 85%;
+            padding: 1px;
+        }
+    </style>
+
+    <div class="panel panel-default fullHeight">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-3 padding3">
+                    <label>ТН (Eсли цифры, то это код. Если буквы то написание)</label>
+                    <input name="filtercommon" type="text" class="form-control" ng-model="report_text" ng-change="">
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>ОФД</label>
+                    <select name="nSupplier" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item.value for item in SupplierList track by item.Id" ng-model="report_supplier"></select>
+                </div>
+                <div class="col-md-1">
+                    <datetime ng-model="period_start" ap-label="Период с" format="dd.MM.yyyy"></datetime>
+                </div>
+                <div class="col-md-1">
+                    <datetime ng-model="period_end" ap-label="Период по" format="dd.MM.yyyy"></datetime>
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>Брик 3</label>
+                    <select name="nbrick_3_Id" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item.L3_label for item in brick_3 track by item.Id" ng-model="brick_3_Id"></select>
+                </div>
+            </div>
+         </div>
+        <div class="panel-body">
+            <ul ng-repeat="item in Reports" style="width:100%">
+                <li ng-click="ReportGet(item.Id)" class="btn btn-warning"  style="width:100%;text-align:left">
+                    {{item.value}}
+                </li>
+            </ul>
+    </div>
+</div>
+

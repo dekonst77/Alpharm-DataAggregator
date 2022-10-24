@@ -1,0 +1,15 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">К какой организации привязывать?</h3>
+</div>
+<div class="modal-body">
+    <div class="container-fluid" style="height: 400px;" title="Выберите, к какой организации привязывать?">
+        <ui-grid-control options="organizationsToMergeGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="selectedRows === 'undefined' || selectedRows.length === 0" data-translate="BUTTONS.OK"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>
+

@@ -1,0 +1,82 @@
+﻿<div ng-controller="OFDController" cg-busy="dataLoading" ng-init="Agg_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .modify {
+            color: red;
+        }
+
+        .AlphaBitSums {
+            background-color: green;
+        }
+
+        .Fix {
+            background-color: yellow;
+        }
+
+        .ОФД {
+            background-color: orange;
+        }
+
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <label>classifierID</label>
+                    <input name="filtercommon" type="text" class="form-control" ng-model="classifierID" ng-change="">
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>ОФД</label>
+                    <select name="nSupplier" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item.value for item in SupplierList track by item.Id" ng-model="supplier"></select>
+                </div>
+                <div class="col-md-1">
+                    <datetime ng-model="period" ap-label="Период" format="dd.MM.yyyy"></datetime>
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>Брик ИД</label>
+                    <input name="filtercommon" type="text" class="form-control" ng-model="brickId" ng-change="">
+                </div>
+                <div class="col-md-7 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Agg_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Agg_save();" ng-disabled="!Grid_Agg.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid_Agg.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

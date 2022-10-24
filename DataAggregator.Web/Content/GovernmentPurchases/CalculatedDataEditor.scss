@@ -1,0 +1,57 @@
+﻿.calculated-data-editor {
+    &.base {
+        .ui-grid-row .ui-grid-cell {
+            background-color: inherit !important;
+        }
+
+        .purchase {
+            background-color: #E9FBFA;
+        }
+
+        .contract {
+            background-color: #FCFAD4;
+        }
+
+        .purchaseSelected {
+            background-color: #9BEDEA;
+        }
+
+        .contractSelected {
+            background-color: #F5F07A;
+        }
+
+        .back_Red {
+            background-color: #FF0000;
+            color: black;
+        }
+
+
+        .wrongCoefficient {
+            color: #FF0000;
+        }
+
+        .Green4333 {
+            color: green;
+        }
+    }
+
+    &.filter-view {
+        .my-invalid {
+            border: 1px solid red;
+        }
+
+        .row-eq-height {
+            display: inline-flex;
+            width: 100%;
+        }
+
+        .vertical-align {
+            display: flex;
+            align-items: center;
+        }
+
+        .red-border {
+            border: 1px dotted red;
+        }
+    }
+}

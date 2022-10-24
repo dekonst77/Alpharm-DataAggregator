@@ -1,0 +1,80 @@
+﻿<div ng-controller="DistrRepController" cg-busy="dataLoading"  ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+
+    <script>
+        /*
+         * cg-busy="dataLoading" ng-init="DistrRep_EditSource_Init();"
+         * cg-busy="templatesLoading"
+         * /
+        /* <div id="source-block">
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success" ng-click="addDataSource()" data-translate="BUTTONS.ADD"></button>
+                <button type="button" class="btn btn-danger" ng-click="removeDataSource()" ng-disabled="selectedDataSource == null" data-translate="BUTTONS.DELETE"></button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success" ng-click="addTemplate()" ng-disabled="selectedDataSource == null" data-translate="BUTTONS.ADD"></button>
+                <button type="button" class="btn btn-danger" ng-click="removeTemplate()" ng-disabled="selectedTemplate == null" data-translate="BUTTONS.DELETE"></button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" style="height: 360px">
+                <ui-grid-control options="gridDataSourceOptions" class="ui-grid-header-wrap-text" ></ui-grid-control>
+            </div>
+            <div class="col-md-6" style="height: 360px">
+                <ui-grid-control options="gridTemplatesOptions" class="ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+        </div>
+</div>*/
+    </script>
+    <div id="source-block">
+        
+        <div class="col-md-6">
+
+
+            <button type="button" class="btn btn-success" ng-click="addDataSource()" data-translate="BUTTONS.ADD"></button>
+            <button type="button" class="btn btn-danger" ng-click="removeDataSource()" ng-disabled="selectedDataSource == null" data-translate="BUTTONS.DELETE"></button>
+
+            <br />
+
+            <ui-grid-control options="gridDataSourceOptions" class="ui-grid-header-wrap-text"></ui-grid-control>
+            <br /> 
+        
+            <button type="button" class="btn btn-success" ng-click="addTemplate()" ng-disabled="selectedDataSource == null" data-translate="BUTTONS.ADD"></button>
+            <button type="button" class="btn btn-danger" ng-click="removeTemplate()" ng-disabled="selectedTemplate == null" data-translate="BUTTONS.DELETE"></button>
+            <br />   
+            <ui-grid-control options="gridTemplatesOptions" class="ui-grid-header-wrap-text"></ui-grid-control>
+                    
+        </div>
+
+        <div class="col-md-6" style="height:800px;">
+            <br />
+            <div id="grid-block" class="auto-item-panel">
+                <ui-grid-control options="gridTemplatesFieldOptions" class="ui-grid-header-wrap-text ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+
+            </div>
+        </div>
+
+
+
+            <div class="modal fade" id="modal_DataSource">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="modal_DataSource_Header"></h4>
+                        </div>
+                        <div class="modal-body" id="modal_DataSource_Body" style="height:600px">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="modal_GS_Edit_Save();">Save changes</button>
+                        </div>
+                    </div><!-- /.модальное окно-Содержание -->
+                </div><!-- /.модальное окно-диалог -->
+            </div><!-- /.модальное окно -->
+
+
+        </div>

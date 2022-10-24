@@ -1,0 +1,47 @@
+﻿<div ng-controller="GSController" ng-init="Licenses_Init();" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <label>фильтр</label>
+                    <input name="filtercommon" type="text" class="form-control" ng-model="filter_Licenses.common" ng-change="">
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>адрес</label>
+                    <input name="filtercommon" type="text" class="form-control" ng-model="filter_Licenses.adress" ng-change="">
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>вид деятельности</label>
+                    <input name="activity_type" type="text" class="form-control" ng-model="filter_Licenses.activity_type" ng-change="">
+                </div>
+                <div class="col-md-2 padding3">
+                    <label>оказываемые услуги</label>
+                    <input name="works" type="text" class="form-control" ng-model="filter_Licenses.works" ng-change="">
+                </div>
+
+                <!--<div class="col-md-1 padding3">
+        <label>ограничение по дате</label>
+        <span class="input-group-btn" popover-placement="right" uib-popover="Дата с" popover-trigger="'mouseenter'" popover-append-to-body="true">
+            <button type="button" class="btn btn-default" ng-click="filter.dateStart.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+    </div>-->
+                <div class="col-md-2 padding3">
+                    <!--<label>
+                        <input name="filterisNew" type="checkbox" class="" ng-model="filter_Licenses.isNew" ng-change="">
+                        Только новые к ГС
+                    </label>-->
+                    <label>
+                        <input name="filterisNew" type="checkbox" class="" ng-model="filter_Licenses.withAdress" ng-change="">
+                        С адресами
+                    </label>
+                </div>
+                <div class="col-md-1 padding3">
+                    <button class="btn btn-success btn-sm" ng-click="Licenses_search()"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="auto-item-panel">
+        <ui-grid-control options="Grid_Licenses.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+    </div>
+</div>

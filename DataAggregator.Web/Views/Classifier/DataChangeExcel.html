@@ -1,0 +1,20 @@
+﻿<div ng-controller="DataChangeExcelController" cg-busy="dataLoading" ng-init="DataChangeExcel_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <h1>Обмен проходит по принципу: Получаете файл, Редактируете, Загружаете результат</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6 padding3">
+                    Связки ATCWho - MKB
+                </div>
+                <div class="col-md-3 padding3">
+                    <button class="btn btn-warning btn-sm" ng-click="DataChangeExcel_ATCWhoLinkMKB_Update_Get();"><span class="glyphicon glyphicon-download-alt">Получить файл</span></button>
+                </div>
+                <div class="col-md-3 padding3">
+                    <div class="btn btn-info btn-sm" ngf-select="DataChangeExcel_ATCWhoLinkMKB_Update_Save($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить результат</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

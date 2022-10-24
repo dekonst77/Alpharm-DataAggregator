@@ -1,0 +1,48 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Поиск организаций</h3>
+</div>
+<div class="modal-body" style="overflow-y: auto; height: 600px;" cg-busy="searchLoading">
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="input-group">
+                <label for="INN">ИНН</label>
+                <input id="INN" class="form-control" type="text" ng-model="filter.INN" ng-enter="search()" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>Адрес</label>
+            <input class="form-control" type="text" ng-model="filter.Address" ng-enter="search()" />
+        </div>
+        <div class="col-md-3">
+            <label>Название</label>
+            <input class="form-control" type="text" ng-model="filter.Name" ng-enter="search()" />
+        </div>
+
+        <div class="col-md-1 col-lg-offset-2">
+            <button class="btn btn-success" ng-click="search()" ng-disabled="!filter.canSearch()">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <input type="checkbox" id="Is_Customer" ng-model="filter.Is_Customer"><label for="Is_Customer">МБ заказчиком</label>
+        </div>
+        <div class="col-md-3">
+            <input type="checkbox" id="Is_Recipient" ng-model="filter.Is_Recipient"><label for="Is_Recipient">МБ получателем</label>
+        </div>
+    </div>
+        <hr />
+
+        <div style="height: 469px">
+            <ui-grid-control options="organizationGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="float-right">
+            <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="!canSave()" data-translate="BUTTONS.SELECT"></button>
+            <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CANCEL"></button>
+        </div>
+    </div>

@@ -1,0 +1,60 @@
+﻿@{
+    const string currentLocale = "ru-RU";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/Icons/favicon.ico" />
+
+    @Styles.Render(
+        "~/Content/common/css",
+        "~/Content/ui-grid/css",
+        "~/Content/ui-tree/css",
+        "~/Content/hotkeys/css"
+        )
+
+    @Scripts.Render(
+    string.Format("~/bundles/common/{0}", currentLocale),
+    "~/bundles/ui-grid",
+    "~/bundles/ui-tree",
+    "~/bundles/hotkeys",
+    "~/bundles/context-menu",
+    "~/bundles/angularjs-dropdown-multiselect"
+    )
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    @Scripts.Render("~/Views/Common/markup")
+
+    @RenderSection("PartHeader", false)
+    @RenderSection("Scripts", required: false)
+</head>
+
+    <body>
+        <div ng-app="DataAggregatorModule" ng-controller="DataAggregatorController" ng-strict-di style="height:100%" cg-busy="layoutLoading">
+            <div ng-if="!isUserDetermine()" style="height: 100%;padding:10px">
+                <h4>Loading...</h4>
+            </div>
+            
+            <div ng-show="isUserDetermine()" style="height:100%">
+                <div ng-controller="AuthCheckerController">
+
+                </div>
+
+                <div id="outer-content-block" style="padding-top: 52px">
+                    <div id="inner-content-block">
+                        @RenderBody()
+                    </div>
+                </div>
+
+                <div class="auto-item-top-part">
+                    <div ng-include src="'Views/Shared/_Navigation.html'"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+</html>

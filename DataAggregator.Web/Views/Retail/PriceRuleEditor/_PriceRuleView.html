@@ -1,0 +1,127 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Правило</h3>
+</div>
+<div class="modal-body" cg-busy="loading">
+
+    <div class="row">
+        
+       
+
+        <div class="col-md-6">
+
+            <div class="row">
+                <multi-select ng-model="model.Region" ap-label="REGION"></multi-select>
+
+            </div>
+            
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Продажи от</label>
+                    <input type="text"
+                           valid-number
+                           class="form-control"
+                           ng-model="model.SellingPriceMin">
+                </div>
+                <div class="col-md-6">
+                    <label>Продажи до</label>
+                    <input type="text"
+                           valid-number
+                           class="form-control"
+                           ng-model="model.SellingPriceMax">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Закупки от</label>
+                    <input type="text"
+                           valid-number
+                           class="form-control"
+                           ng-model="model.PurchasePriceMin">
+                </div>
+                <div class="col-md-6">
+                    <label>Закупки до</label>
+                    <input type="text"
+                           valid-number
+                           class="form-control"
+                           ng-model="model.PurchasePriceMax">
+                </div>
+
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Комментарий</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-model="model.Comment">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-11">
+                    <label>Описание</label>
+                    <input type="text"
+                           ng-model="model.DrugDescription"
+                           class="form-control">
+                </div>
+                <div class="col-md-1">
+                    <br/>
+                    <button class="btn btn-primary" ng-click="searchDrug()" ng-disabled="!model.DrugDescription">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6" style="height: 330px;">
+            <!--<div>
+                <label>Регионы</label>
+                <label style="margin-left: 200px">
+                    <input ng-disabled="editmode" type="checkbox" ng-model="IsMoscow" ng-change="changeMoscow()">
+                    Москва
+                </label>
+                <label>
+                    <input ng-disabled="editmode" type="checkbox" ng-model="IsSaintPetersburg" ng-change="changeSaintPetersburg()">
+                    Санкт-Петербург
+                </label>
+            </div>-->
+            <div style="height: 300px; overflow-y: scroll; overflow-x: hidden">
+                <div ng-repeat="region in model.Regions| orderBy:'Region'  track by region.RegionCode     ">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <button class="btn btn-xs btn-default" ng-click="removeRegion(region)">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </div>
+                        <div class="col-md-11">
+                            {{region.Region}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+  
+    <div style="height: 200px">
+        <ui-grid-control options="grid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="!canSave()" data-translate="BUTTONS.SAVE"></button>
+    </div>
+    <div>
+        <button class="btn btn-warning" type="button" ng-click="close()" data-translate="BUTTONS.CLOSE"></button>
+    </div>
+</div>

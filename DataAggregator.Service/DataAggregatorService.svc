@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataAggregator.Service.DataAggregatorService" CodeBehind="DataAggregatorService.svc.cs" %>

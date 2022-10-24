@@ -1,0 +1,52 @@
+﻿<div ng-controller="GSController" ng-init="base_address_Init();" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+                .btn-file input[type="file"] {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            cursor: inherit;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            text-align: right;
+            top: 0;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-3 padding3">
+                    <label>фильтр</label>
+                    <input name="filtercommon" type="text" class="form-control" ng-model="filter_base_address.common" ng-change="">
+                </div>
+                <div class="col-md-4 padding3">
+                    <label>
+                        <input name="filterisNew" type="checkbox" class="" ng-model="filter_base_address.toWork" ng-change="">
+                        В работу ({{count_to_work}})
+                    </label>
+                    <select name="filterinGS" ng-model="filter_base_address.in_GS">
+                        <option id="-1" value="-1">Не важно</option>
+                        <option id="0" value="0">Не в ГС ({{count_not_in_GS}})</option>
+                        <option id="1" value="1">В ГС ({{count_in_GS}})</option>
+                    </select>
+                    <label>
+                        <input name="filterisNew" type="checkbox" class="" ng-model="filter_base_address.isUse" ng-change="">
+                        Использовать ({{count_isUse}})
+                    </label>
+                </div>
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="base_address_search()"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-success btn-sm" ng-click="licenses_to_Use_BrickIdSet()" ng-disabled="Grid_base_address.NeedSave"><span class="glyphicon glyphicon-refresh">Обновить</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="base_address_save();" ng-disabled="!Grid_base_address.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <button class="btn btn-danger btn-sm" ng-click="base_address_To_GS()" ng-disabled="Grid_base_address.NeedSave"><span class="glyphicon glyphicon-check">Скинуть в ГС</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="base_address_ToExcel();" ng-disabled="Grid_base_address.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить</span></button>
+                        <div class="btn btn-info btn-sm" ngf-select="base_address_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                    </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div id="grid-block" data-context-menu="Views/GS/base_address_context_menu.html" class="auto-item-panel">
+        <ui-grid-control options="Grid_base_address.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+</div>

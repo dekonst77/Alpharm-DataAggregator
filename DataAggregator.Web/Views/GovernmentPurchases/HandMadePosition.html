@@ -1,0 +1,137 @@
+﻿<style type="text/css">
+    .Cellcolored {
+        background-color: yellow;
+     
+    }
+    .Cellcolored2 {
+        background-color: lightgreen;
+    }
+
+</style>
+<div ng-controller="HandMadePositionController" cg-busy="dataLoading" ng-init="HandMadePosition_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-2 padding1">
+                    <button class="btn btn-success btn-sm" ng-click="HandMadePosition_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                    <button class="btn btn-warning btn-sm" ng-click="HandMadePosition_save()" ng-disabled="!Grid_Raw.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                </div>
+
+                <div class="col-md-4 padding3">
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ProductModal" ng-click="getProductGrid()" ng-disabled="">Продукты</button>
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#PriceModal" ng-click="" ng-disabled="">Цены</button>
+                </div>
+                <div class="col-md-3 padding3">
+
+
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#PeriodModal" ng-click="" ng-disabled="">Добавить период</button>
+                </div>
+
+                <div class="col-md-3 padding3">
+                    <button type="button" class="btn btn-danger" ng-click="HandMadePosition_remove()" ng-disabled="" data-translate="BUTTONS.DELETE"></button>
+                </div>
+            </div>
+            </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel" style="font-size: 12px;  padding: 2px; height: calc(90% - 35px) ">
+
+        <ui-grid-control options="Grid_Raw.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm ui-grid-auto-fit-columns"></ui-grid-control>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="ProductModal" tabindex="-1" role="dialog" aria-labelledby="ProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" style="width:700px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ProductModalLabel">Продукты</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-warning btn-sm" ng-click="RawProduct_save()" ng-disabled="!Grid_Raw_Product.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    <button type="button" class="btn btn-success" ng-click="addRawProduct()" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-danger" ng-click="removeRawProduct()" ng-disabled="Grid_Raw_Product.selectedRows().length!==1" data-translate="BUTTONS.DELETE"></button>
+
+                    <br />
+                    <div id="grid-block3" class="auto-item-panel" style="font-size: 12px;  padding: 2px; height: calc(90% - 35px) ">
+
+                        <ui-grid-control options="Grid_Raw_Product.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="PriceModal" tabindex="-1" role="dialog" aria-labelledby="PriceModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" style="width: 80%;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="PriceModalLabel">Цены</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <button class="btn btn-warning btn-sm" ng-click="RawPrice_save()" ng-disabled="!Grid_Raw_Price.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    <button type="button" class="btn btn-success" ng-click="addRawPrice()" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-danger" ng-click="removeRawPrice()" ng-disabled="Grid_Raw_Price.selectedRows().length!==1" data-translate="BUTTONS.DELETE"></button>
+
+                    <br />
+                    <div id="grid-block2" class="auto-item-panel" style="font-size: 12px;  padding: 2px; height: calc(90% - 35px) ">
+
+                        <ui-grid-control options="Grid_Raw_Price.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm ui-grid-auto-fit-columns"></ui-grid-control>
+                    </div>
+                </div>
+                    <div class="modal-footer ">
+
+                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="PeriodModal" tabindex="-1" role="dialog" aria-labelledby="PeriodModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" style="width: 400px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="PeriodModalLabel">Период</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 padding1">
+                            <date-period period="Period" ng-required="true" style="width:200px;"></date-period>
+                        </div>
+                        <div class="col-md-2 padding1">
+                        </div>
+                        <div class="col-md-2 padding1">
+                            <br />
+                            <button type="button" class="btn btn-success" ng-click="addPeriod()" data-translate="BUTTONS.ADD"></button>
+                        </div>
+
+                    </div>
+                    </div>
+                    <div class="modal-footer ">
+
+                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>

@@ -1,0 +1,58 @@
+﻿<div ng-controller="DataTransferController" cg-busy="loading" ng-cloak style="height: 100%">
+    
+    <div auto-size-saver="topPartSize">
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary" ng-click="openLeftClassifierFilter()" data-translate="BUTTONS.LOAD_DATA"></button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary" ng-click="openRightClassifierFilter()" data-translate="BUTTONS.LOAD_DATA"></button>
+            </div>
+        </div>
+    </div>
+    
+    <div ng-style="gridStyle">
+        <div class="row" style="height: 100%">
+            <div class="col-md-6" style="height: 100%">
+                <ui-grid-control options="leftClassifierGrid.Options"></ui-grid-control>
+            </div>
+            <div class="col-md-6" style="height: 100%">
+                <ui-grid-control options="rightClassifierGrid.Options"></ui-grid-control>
+            </div>
+        </div>
+    </div>
+    
+    <div auto-size-saver="midPartSize" style="padding-top: 10px;padding-bottom: 10px">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" ng-click="transfer()">Переброс с учетом</button>
+                <input type="checkbox" ng-model="transferOptions.TransferDrugId"><label>DrugId</label>&nbsp;
+                <input type="checkbox" ng-model="transferOptions.TransferPackerId"><label>PackerId</label>&nbsp;
+                <input type="checkbox" ng-model="transferOptions.TransferOwnerTradeMarkId"><label>OwnerTradeMarkId</label>&nbsp;
+
+                &nbsp;&nbsp;&nbsp;<input type="checkbox" ng-model="dateFromUnlimited" ng-true-value="false" ng-false-value="true">
+                <label>c</label>
+                <span style="width: 150px; display: inline-block">
+                    <date-period period="transferOptions.DateFrom" ap-label="" ng-disabled="dateFromUnlimited"></date-period>
+                </span>
+
+                &nbsp;&nbsp;&nbsp;<input type="checkbox" ng-model="dateToUnlimited" ng-true-value="false" ng-false-value="true">
+                <label>по</label>
+                <span style="width: 150px; display: inline-block">
+                    <date-period period="transferOptions.DateTo" ap-label="" ng-disabled="dateToUnlimited"></date-period>
+                </span>
+
+                <button type="button" class="btn btn-primary" ng-click="deleteTransfer()" ng-disabled="!(transferedDataGridApi.selection.getSelectedRows().length > 0)">Удалить выделенные переносы</button>
+                <button type="button" class="btn btn-primary" ng-click="editTransfer()" ng-disabled="!(transferedDataGridApi.selection.getSelectedRows().length > 0)">Применить даты</button>
+            </div>
+        </div>
+    </div>
+    
+    <div ng-style="gridStyle">
+        <div class="row" style="height: 100%">
+            <div class="col-md-12" style="height: 100%">
+                <ui-grid-control options="transferedDataGrid.Options"></ui-grid-control>
+            </div>
+        </div>
+    </div>
+</div>

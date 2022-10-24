@@ -1,0 +1,251 @@
+﻿/*@import "compass/css3";
+*/
+$color1: #343e3d;
+$color2: #607466;
+$color3: #aedcc0;
+$color4: #7bd389;
+$color5: #38e4ae;
+/*
+body {
+    color: $color1;
+    font-family: 'Varela Round', 'Helvetica', sans-serif;
+}
+
+p {
+    line-height: 24px;
+    margin-top: 0;
+}
+
+h1 {
+    margin: 6px 0 24px;
+}
+
+ul {
+    margin: 0;
+    padding: 0 0 0 1em;
+}
+
+li {
+    line-height: 24px;
+}
+
+.icon {
+    font-size: 16px;
+    margin: 0 5px;
+}
+
+.icon-big {
+    font-size: 32px;
+    border: 2px dashed $color4;
+    color: $color4;
+    padding: 10px 11px 10px 10px;
+}
+
+* {
+    box-sizing: border-box;
+}*/
+
+// **********************************************************************
+// layout styles
+// **********************************************************************
+$spacing: 14px;
+$footer-height: 40px;
+
+/*html, body {
+    height: 100%;
+    overflow: hidden;
+}*/
+
+size_nav {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2.5em 1.75em;
+    background: #fff;
+    width: 260px;
+    max-width: 300px;
+    min-width: 165px;
+}
+
+size_main {
+    display: flex;
+    height: 100%;
+    padding-bottom: $footer-height;
+    background: #fff;
+}
+
+.size_content {
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-content: space-around;
+    padding: $spacing/2;
+}
+
+.size_row {
+    min-height: 50px;
+    flex: 1;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-content: space-around;
+
+    &.resizable {
+        flex: 0 0 300px;
+    }
+}
+
+size_section {
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 1.25em 1.75em;
+    background: #ddd;
+    border: $spacing/2 solid #fff;
+    flex: 1;
+    min-width: 30px;
+
+    &.resizable {
+        flex: 0 0 300px;
+    }
+}
+
+/*#one {
+    background: $color4;
+    color: darken($color4, 30);
+}
+
+#two {
+    background: $color3;
+    color: darken($color3, 30);
+}
+
+#three {
+    background: $color5;
+    color: darken($color5, 30);
+}
+
+#four {
+    background: url(http://publicdomainarchive.com/wp-content/uploads/2014/12/public-domain-images-free-stock-photos-high-quality-resolution-downloads-public-domain-archive-7-1000x665.jpg);
+}
+
+footer {
+    background: white;
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 0 1.75em;
+    width: 100%;
+    margin-top: 0 - $footer-height;
+    height: $footer-height;
+    line-height: $footer-height;
+    border-top: 1px solid $color3;
+
+    a {
+        position: relative;
+        text-decoration: none;
+        color: $color4;
+
+        &:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 0;
+            height: 1px;
+            background-color: $color4;*/
+            /*@include transition(all .3s ease-in-out);*/
+        /*}
+
+        &:hover {
+            &:after {
+                width: 100%;
+            }
+        }
+    }
+}*/
+
+
+// **********************************************************************
+// directive styles
+// **********************************************************************
+.resizable {
+    position: relative;
+
+    &.no-transition {
+        transition: none !important;
+    }
+}
+
+.rg-right, .rg-left, .rg-top, .rg-bottom {
+    display: block;
+    width: $spacing;
+    height: $spacing;
+    line-height: $spacing;
+    position: absolute;
+    z-index: 1;
+    /*@include user-select(none);*/
+
+    span {
+        position: absolute;
+        box-sizing: border-box;
+        display: block;
+        border: 1px solid #ccc;
+    }
+}
+
+.rg-right, .rg-left {
+    span {
+        border-width: 0 1px;
+        top: 50%;
+        margin-top: -10px;
+        margin: -10px 0 0 $spacing/4;
+        height: 20px;
+        width: $spacing/2;
+    }
+}
+
+.rg-top, .rg-bottom {
+    span {
+        border-width: 1px 0;
+        left: 50%;
+        margin: $spacing/4 0 0 -10px;
+        width: 20px;
+        height: $spacing/2;
+    }
+}
+
+.rg-top {
+    cursor: row-resize;
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin-top: -$spacing/2;
+}
+
+.rg-right {
+    cursor: col-resize;
+    height: 100%;
+    right: 0;
+    top: 0;
+    margin-right: -$spacing;
+}
+
+.rg-bottom {
+    cursor: row-resize;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    margin-bottom: -$spacing/2;
+}
+
+.rg-left {
+    cursor: col-resize;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin-left: -$spacing;
+}

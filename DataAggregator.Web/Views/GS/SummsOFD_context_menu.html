@@ -1,0 +1,41 @@
+﻿<div class="panel panel-primary context-menu" style="width: 500px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Комментарии</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('');">Очистить</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('Низкие продажи');">Низкие продажи</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('Высокие продажи');">Высокие продажи</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('Проверить привязку');">Проверить привязку</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('Проверить режим работы');">Проверить режим работы</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('возможно закрытие');">возможно закрытие</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('ошибка транзакции');">ошибка транзакции</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('аптека при МЦ');">аптека при МЦ</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('Не использовать');">Не использовать</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_Comment('Одинаковые транзакции');">Одинаковые транзакции</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Отметка об использовании</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_IsUse(null,true,0);">Использовать</button>
+                        <button type="button" class="btn btn-default" ng-click="SummsOFD_IsUse(null,false,0);">Убрать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

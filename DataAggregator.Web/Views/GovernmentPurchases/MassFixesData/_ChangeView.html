@@ -1,0 +1,119 @@
+﻿
+<div class="modal-header">
+    <h3 class="modal-title">Изменить</h3>
+</div>
+<div cg-busy="changeLoading" ng-cloak class="modal-body classifier-editor">
+    <form name="changeForm">
+        <div class="container-fluid">
+
+            <div in-roles="GOperator">
+                <label>Характер</label>
+                <select name="Nature"
+                        class="form-control" ng-options="item as item.Value for item in natureNames track by item.Id"
+                        typeahead-on-select="setId($item,change.NatureId)"
+                        ng-model="Nature"></select>
+            </div>
+            <div in-roles="GManager">
+                <label>Характер.Подраздел</label>
+                <select name="Nature"
+                        class="form-control" ng-options="item as item.Value for item in natureNames_L2 track by item.Id"
+                        typeahead-on-select="setId($item,change.Nature_L2Id)"
+                        ng-model="Nature_L2"></select>
+            </div>
+            <br />
+
+            <div in-roles="GManager">
+                <label>Дата с / Дата по / Кол-во / Период</label>
+                <button type="button" class="btn btn-primary" ng-click="addDeliveryTimeInfo()">Добавить период поставки.</button>
+                <div class="form-inline deliveryTimeInfoBlock" ng-repeat="dti in change.DeliveryTimeInfo">
+                    <div class="input-group width-small">
+                        <input id="dateStart"
+                               type="text"
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               ng-model-options="{ timezone: 'UTC' }"
+                               ng-model="dti.DateStart"
+                               is-open="dti.StartOpened"
+                               datepicker-options="dti.DateStartOptions"
+                               ng-change="changeMinAndMaxDates(dti)" />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="dti.StartOpen()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="input-group">
+                        -
+                    </div>
+                    <div class="input-group width-small">
+                        <input id="dateEnd"
+                               type="text"
+                               class="form-control"
+                               uib-datepicker-popup="{{format}}"
+                               ng-model-options="{ timezone: 'UTC' }"
+                               ng-model="dti.DateEnd "
+                               is-open="dti.EndOpened"
+                               ng-change="changeMinAndMaxDates(dti)"
+                               datepicker-options="dti.DateEndOptions" />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="dti.EndOpen()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <span>: {{(dti.DateEnd - dti.DateStart)/(1000*60*60*24) | number : 0}} дней &nbsp;&nbsp;</span>
+                    <input type="text" ng-model="dti.Count" class="form-control width-small" style="width:100px" />
+                    <select class="form-control width-small" ng-options="item as item.Name for item in deliveryTimePeriodList track by item.Id" ng-model="dti.DeliveryTimePeriod"></select>
+                    <button type="button" class="btn btn-primary" ng-click="removeDeliveryTimeInfo($index)" data-translate="BUTTONS.DELETE"></button>
+                </div>
+
+            </div>
+
+            <br />
+            <div class="row"  in-roles="GOperator">
+                <label>Финансирование</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="FundingD" readonly />
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="editFunding()">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <br />
+            <div in-roles="GManager">
+                <label>Получатель</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="Receiver.Value" readonly />
+                    <span class="input-group-btn">
+                        <button type="button"
+                                class="btn btn-default"
+                                ng-click="changeObjectReadyReceiver()">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <br />
+            <div in-roles="GManager">
+                <label>Примечание</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="Comment" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div>
+        <button class="btn btn-primary" type="button" ng-disabled="changeForm.$invalid" ng-click="ok()" data-translate="Применить"></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

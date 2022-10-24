@@ -1,0 +1,23 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="NetworkBrand_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="NetworkBrand_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button type="button" class="btn btn-warning btn-sm" ng-disabled="!Grid_NetworkBrand.NeedSave" ng-click="NetworkBrand_Save();"><span class="glyphicon glyphicon-floppy-disk">Сохранить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-3 padding3">
+                    shift+w - Одобрено;
+                    shift+d - Не правильно;
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid_NetworkBrand.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

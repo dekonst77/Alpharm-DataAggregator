@@ -1,0 +1,61 @@
+﻿<div ng-controller="PriceEtalonController"
+     cg-busy="loading"
+     ng-cloak
+     class="auto-grid-parent"
+     ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part"
+         auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2">
+                    <date-period period="filter.date"
+                                 ng-required="true"
+                                 ap-label="">
+                    </date-period>
+                </div>
+
+                <div class="col-md-1">
+                    <button class="btn btn-success" type="button" ng-click="search()" data-translate="BUTTONS.SEARCH"></button>
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               ng-model="model.ClassifierId"
+                               placeholder="ClassifierId">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="searchDrug()">
+                                <span class=" glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <input type="text"
+                           valid-number
+                           class="form-control"
+                           placeholder="Цена"
+                           ng-model="model.Price">
+                </div>
+
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary" ng-click="add()" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-primary" ng-click="edit()" ng-disabled="!canEdit()" data-translate="BUTTONS.CHANGE"></button>
+                    <button type="button" class="btn btn-primary" ng-click="delete()" ng-disabled="!canEdit()" data-translate="BUTTONS.DELETE"></button>
+                </div>
+
+            </div>          
+        </div>
+    </div>
+    
+    <div class="auto-item-panel">
+        <ui-grid-control options="priceGrid.Options"
+                         class="ui-grid-header-wrap-text">
+        </ui-grid-control>
+    </div>
+</div>

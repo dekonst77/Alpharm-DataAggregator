@@ -1,0 +1,86 @@
+﻿<div ng-controller="DeliveryTimeController" ng-init="Init();" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .modify {
+            color: red;
+        }
+
+        .Edit {
+            background-color: lightyellow;
+        }
+
+        .multi {
+            background-color: seashell;
+        }
+
+        .error {
+            background-color: tomato;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-2 padding1">
+                    <button class="btn btn-primary" type="button" ng-click="openFilterDialog()" data-translate="BUTTONS.FILTER"></button>
+
+                    <button class="btn btn-warning btn-sm" ng-click="Save();" ng-disabled="!NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    <button class="btn btn-warning btn-sm" ng-click="ADD();"><span class="glyphicon glyphicon-save">Добавить</span></button>
+                </div>
+                <div class="col-md-1 padding1">
+                    <p class="input-group ap-required" style="margin:0px;">
+                        <input type="text"
+                               name="Purchase_DateStart_start"
+                               class="form-control"
+                               ng-model-options="{ timezone: 'UTC' }"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="Set_DateStartDTI.Value"
+                               is-open="Set_DateStartDTI.Opened"
+                               placeholder="{{'PERIOD_END' | translate}}"
+                               datepicker-options="{minMode: 'day', showWeeks: false }"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="Set_DateStartDTI.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <button class="btn btn-warning btn-sm" ng-click="DateStartDTI_Set();"><span class="glyphicon glyphicon-calendar">DateStart применить</span></button>
+                </div>
+                <div class="col-md-1 padding1">
+
+                    <p class="input-group ap-required" style="margin:0px;">
+                        <input type="text"
+                               name="Purchase_DateEnd_start"
+                               class="form-control"
+                               ng-model-options="{ timezone: 'UTC' }"
+                               uib-datepicker-popup="{{format}}"
+                               on-open-focus="true"
+                               ng-model="Set_DateEndDTI.Value"
+                               is-open="Set_DateEndDTI.Opened"
+                               placeholder="{{'PERIOD_END' | translate}}"
+                               datepicker-options="{minMode: 'day', showWeeks: false }"
+                               datepicker-mode="'day'" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="Set_DateEndDTI.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <button class="btn btn-warning btn-sm" ng-click="DateEndDTI_Set();"><span class="glyphicon glyphicon-calendar">DateEnd применить</span></button>
+                </div>
+                <div class="col-md-1 padding1">
+                    <input name="filtercommon" type="text" class="form-control" ng-model="DayPlus" ng-change="" placeholder="добавить дни">
+                    <button class="btn btn-warning btn-sm" ng-click="DateEndDTI_SetDayp();"><span class="glyphicon glyphicon-calendar">DateEnd применить</span></button>
+                </div>
+
+                <div class="col-md-2 padding1">
+                    <button class="btn btn-warning btn-sm" ng-click="SetPeriodAuto();"><span class="glyphicon glyphicon-save">Проставить автоматически</span></button>
+                </div>
+                <div class="col-md-5 padding1">
+                        <textarea class="form-control" readonly>{{DeliveryTime}}</textarea>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+            <div class="auto-item-panel">
+                <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+            </div>
+        </div>

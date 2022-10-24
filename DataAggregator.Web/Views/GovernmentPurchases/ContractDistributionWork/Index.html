@@ -1,0 +1,74 @@
+﻿<div ng-controller="ContractDistributionWorkController" cg-busy="loadingDictionary" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <h4 style="padding-left: 5px" data-translate="GOVERNMENT_PURCHASES.CONTRACT_DISTRIBUTION_WORK.TITLE"></h4>
+        <div class="panel-heading">
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup ng-model="filter.DateBegin_Start.Value" is-open="filter.DateBegin_Start.Opened" max-date="filter.DateBegin_End.Value" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата объявления начиная с " popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateBegin_Start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup ng-model="filter.DateBegin_End.Value" is-open="filter.DateBegin_End.Opened" min-date="filter.DateBegin_Start.Value" init-date="now" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата объявления по " popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateBegin_End.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <select class="form-control" ng-options="item.Name for item in filter.purchaseClass.DictionaryData" ng-model="filter.purchaseClass.selected"></select>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="filter.isAssignedToUser" />Назначено на обработку
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="filter.isCheckTZ" />Перевнесение
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group" popover-placement="right" uib-popover="Отправить на обработку выбранному пользователю" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <input type="text" ng-model="filter.user.selectedName" ng-change="filter.user.textChange()" uib-typeahead="user.FullName for user in filter.user.DictionaryData | filter:$viewValue | limitTo:8" class="form-control" placeholder="Пользователь"
+                               typeahead-on-select="filter.user.setSelected($item)" typeahead-select-on-exact="true">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="setAssignedToUser()"><span class="glyphicon glyphicon-user"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group">
+                        <button class="btn btn-success" type="button" ng-click="filter.search()" ng-disabled="canSearch()" popover-placement="right" uib-popover="Поиск по выбранным параметрам" popover-trigger="'mouseenter'" popover-append-to-body="true"><span class="glyphicon glyphicon-search"></span></button>
+                        <button class="btn btn-warning" type="button" ng-click="filter.clear()" popover-placement="right" uib-popover="Очистить поля" popover-trigger="'mouseenter'" popover-append-to-body="true"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group">
+                        <button class="btn btn-info" type="button" ng-click="removeKK()" ng-disabled="canSearch()" popover-placement="left" uib-popover="Обнулить количество КК у выделенных контрактов" popover-trigger="'mouseenter'" popover-append-to-body="true">Снять КК</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="purchase.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+﻿<div ng-controller="PurchasesFoundController"cg-busy="loading"  ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-2" disabled>
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               uib-datepicker-popup
+                               ng-model="filter.DateBegin_Start.Value"
+                               is-open="filter.DateBegin_Start.Opened"
+                               max-date="filter.DateBegin_End.Value"
+                               readonly />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="filter.DateBegin_Start.Open()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group" disabled>
+                        <input type="text"
+                               class="form-control"
+                               uib-datepicker-popup
+                               ng-model="filter.DateBegin_End.Value"
+                               is-open="filter.DateBegin_End.Opened"
+                               min-date="filter.DateBegin_Start.Value"
+                               init-date="now"
+                               readonly />
+                        <span class="input-group-btn">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    ng-click="filter.DateBegin_End.Open()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <select class="form-control"
+                                ng-options="item.Name for item in filter.purchaseClass.DictionaryData"
+                                ng-model="filter.purchaseClass.selected"></select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default"
+                                    type="button"
+                                    ng-click="setPurchaseClass()" ng-disabled="!filter.canSetPurchaseClass()">
+                                <span class="glyphicon glyphicon-link"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 col-md-offset-2">
+                    <div class="input-group">
+                        <input type="text"
+                               ng-model="filter.user.selectedName"
+                               ng-change="filter.user.textChange()"
+                               uib-typeahead="user.FullName for user in filter.user.DictionaryData | filter:$viewValue | limitTo:8"
+                               class="form-control"
+                               placeholder="Пользователь"
+                               typeahead-on-select="filter.user.setSelected($item)"
+                               typeahead-select-on-exact="true">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <button class="btn btn-success"
+                                type="button"
+                                ng-click="filter.search()"
+                                ng-disabled="canSearch()">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        <button class="btn btn-warning"
+                                type="button"
+                                ng-click="filter.clear()">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control id="purchasesGrid"
+                         options="purchasesGrid.Options"
+                         class="ui-grid-enable-content-selection">
+        </ui-grid-control>
+    </div>
+</div>

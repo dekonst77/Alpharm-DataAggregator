@@ -1,0 +1,91 @@
+﻿
+<div ng-controller="GSController" cg-busy="dataLoading" ng-init="Organization_without_INNInit();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .cssEdit {
+            background-color: yellow;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-7 padding3">
+                    <div class="row">
+                        <div class="col-md-2 padding3">
+                            <input name="FilterOrganization_common" placeholder="Id" type="text" class="form-control" ng-model="FilterOrganization.ids" ng-change="">
+                        </div>
+                        <div class="col-md-2 padding3">
+                            <input name="FilterOrganization_common" placeholder="инн" type="text" class="form-control" ng-model="FilterOrganization.inn" ng-change="">
+                        </div>
+                        <div class="col-md-5 padding3">
+                            <input name="FilterOrganization_common" placeholder="название" type="text" class="form-control" ng-model="FilterOrganization.common" ng-change="">
+                        </div>
+
+                    </div>
+                    <!--  <div class="row">
+        <div class="col-md-12 padding3" style="font-size:small!important">
+            <label>
+                <input name="filterisNew" type="checkbox" class="" ng-model="FilterOrganization.withNull" ng-change="">
+                Не заполненые ({{count_withNull}})
+            </label>
+            <label>
+                <input name="filterisNew" type="checkbox" class="" ng-model="FilterOrganization.IsNotCheck" ng-change="">
+                Не проверенные ({{count_IsNotCheck}})
+            </label>
+            <label>
+                <input name="filterisNew" type="checkbox" class="" ng-model="FilterOrganization.IsErrors" ng-change="">
+                С проблемами ({{count_IsErrors}})
+            </label>
+        </div>
+    </div> -->
+                </div>
+                <div class="col-md-5 padding3">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Organization_without_INN_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Organization_without_INN_save();" ng-disabled="!Grid_Organization_without_INN.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <div class="btn btn-info btn-sm" ngf-select="Organization_without_INN_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Из Excel</span></div>
+                        <!--
+       <button class="btn btn-danger btn-sm" ng-click="base_address_To_GS()" ng-disabled="Grid_Organization.NeedSave"><span class="glyphicon glyphicon-check">Скинуть Адреса для Базы в ГС</span></button>
+       <button class="btn btn-danger btn-sm" ng-click="CreateLPUId()" ng-disabled="Grid_Organization.NeedSave"><span class="glyphicon glyphicon-check">Скинуть Адреса для Базы в МУ</span></button>
+
+                      </div>
+                           <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                               <button class="btn btn-info btn-sm" ng-click="Spark_To()" ng-disabled="Grid_Organization.NeedSave"><span class="glyphicon glyphicon-check">Выбрать для СПАРК</span></button>
+                               <div class="btn btn-info btn-sm" ngf-select="Spark_From($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Из СПАРК в БД</span></div>
+                           </div>
+                               -->
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel" data-context-menu="_contextMenu.html">
+        <ui-grid-control options="Grid_Organization_without_INN.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+    <script type="text/ng-template" id="_contextMenu.html">
+        <div class="panel panel-primary context-menu" style="width: 800px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Действия<span class="badge">{{selectedCount}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row padding1">
+                    <div class="col-md-3 padding1">
+                        <label>Проверено</label>
+                    </div>
+                    <div class="col-md-9 padding1">
+                        <div class="input-group ">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn_ok" ng-click="Organization_without_INN_IsCheck(true);">Установить</button>
+                                <button type="button" class="btn btn-default btn_ok" ng-click="Organization_without_INN_IsCheck(false);">Снять</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </script>
+</div>
+

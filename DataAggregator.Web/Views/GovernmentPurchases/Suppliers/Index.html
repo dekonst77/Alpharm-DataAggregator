@@ -1,0 +1,51 @@
+﻿<div ng-controller="SuppliersController" ng-cloak class="auto-grid-parent suppliers" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-2">
+                    <label>
+                        <input type="checkbox" class="form-inline" ng-model="supplierRawFilter.Ready" />
+                        Готовые
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                        <input type="checkbox" class="form-inline" ng-model="supplierRawFilter.NotReady" />
+                        Не готовые ({{supplierRawNotReadyCount}})
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success" ng-click="loadSupplierRawList()">Обновить данные</button>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-success" ng-click="loadSupplierList()">Обновить справочник</button>
+                    <button class="btn btn-success" ng-click="editSupplier()" data-translate="BUTTONS.EDIT"></button>
+                    <button class="btn btn-success" ng-click="addSupplier()" data-translate="BUTTONS.ADD"></button>
+                    <button class="btn btn-success" ng-click="deleteSupplier()" data-translate="BUTTONS.DELETE"></button>
+                    <button class="btn btn-success" ng-click="mergeSupplier()" data-translate="BUTTONS.MERGE"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="auto-item-panel">
+        <div id="supplierRawGrid" cg-busy="supplierRawLoading">
+            <ui-grid-control options="supplierRawGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+        <div id="supplierGrid" cg-busy="supplierLoading">
+            <ui-grid-control options="supplierGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+    </div>
+
+
+    <script type="text/ng-template" id="_rowSupplierTemplate.html">
+        <div>
+            <div class="ui-grid-cell" ng-class=" {selected : row.isSelected}" ng-dblclick="grid.appScope.bindSupplier(row.entity)" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" ui-grid-cell></div>
+        </div>
+    </script>
+
+</div>
+

@@ -1,0 +1,42 @@
+﻿<div ng-controller="CertificateController" cg-busy="dataLoading" ng-init="Substance_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-warning btn-sm" ng-click="Substance_save();" ng-disabled="!Grid_Substance.NeedSave && !Grid_Chemicals.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                    </div>
+                </div>
+                <div class="col-md-11 padding3">
+                        shift+e - Добавить субстанцию;
+                        shift+d - Удалить субстанцию;
+                        shift+c - копировать id;
+                        shift+v - вставить id в id_new;
+                        shift+z - вставить в id_new значение из Id;
+                        shift+x - вставить в id_new значение из isMain;
+                </div>
+                <!--<div class="col-md-7 padding3">
+       <input type="text" ng-model="CurrentLekForm" uib-typeahead="data.Value for data in ChemicalSPR | filter:$viewValue | limitTo:12" class="form-control">
+    </div>-->
+
+            </div>
+        </div>
+    </div>
+    <size_main>
+        <div class="size_content">
+            <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                <div id="drug-grid-block" cg-busy="drugLoading" class="auto-item-panel" style="width:100%">
+                    <ui-grid-control options="Grid_Substance.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                </div>
+            </div>
+            <div class="size_row">
+                <div style="width:100%">
+                    <div id="classifier-grid-block" cg-busy="classifierLoading" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="Grid_Chemicals.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </size_main>
+
+</div>

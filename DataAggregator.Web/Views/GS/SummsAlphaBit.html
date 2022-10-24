@@ -1,0 +1,68 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="SummsAlphaBit_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <label>Период</label>
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
+
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>
+                        <input name="isDoubles" type="checkbox" class="" ng-model="isDoubles" ng-change="">Дубли точек
+                    </label>
+                </div>
+                <div class="col-md-1 padding3">
+                    <label>
+                        <input name="isDoublesAdd" type="checkbox" class="" ng-model="isDoublesAdd" ng-change="">Дубли префикса
+                    </label>
+                </div>
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="SummsAlphaBit_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="SummsAlphaBit_save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <button class="btn btn-danger btn-sm" ng-click="SummsAlphaBit_recalc();"><span class="glyphicon glyphicon-flash">Пересчитать период</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" data-context-menu="Views/GS/SummsAlphaBit_context_menu.html" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

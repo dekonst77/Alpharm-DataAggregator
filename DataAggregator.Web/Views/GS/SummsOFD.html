@@ -1,0 +1,76 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="SummsOFD_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .AlphaBitSums {
+            background-color: green;
+        }
+
+        .Fix {
+            background-color: yellow;
+        }
+
+        .ОФД {
+            background-color: orange;
+        }
+        .Red {
+            background-color: red;
+        }
+
+        .Yellow {
+            background-color: yellow;
+        }
+
+        .Green {
+            background-color: green;
+        }
+
+        .LightCyan {
+            background-color: lightcyan;
+        }
+
+        .PapayaWhip {
+            background-color: papayawhip;
+        }
+
+        .PeachPuff {
+            background-color: peachpuff;
+        }
+
+        .PaleGoldenrod {
+            background-color: palegoldenrod;
+        }
+
+        .NavajoWhite {
+            background-color: navajowhite;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-1 padding3">
+                    <label>Период</label>
+                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
+                            class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
+
+                </div>
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="SummsOFD_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="SummsOFD_save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+
+                        <!--<button class="btn btn-danger btn-sm" ng-click="SummsOFD_recalc();"><span class="glyphicon glyphicon-flash">Пересчитать период Из ОФД</span></button>-->
+
+                    </div>
+                </div>
+                <div class="col-md-5 padding3">
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="btn btn-info btn-sm" ngf-select="SummsOFD_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" data-context-menu="Views/GS/SummsOFD_context_menu.html" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

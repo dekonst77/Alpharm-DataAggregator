@@ -1,0 +1,37 @@
+﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="BrickRegion_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default fullscreen">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-5 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-warning btn-sm" ng-click="BrickRegion_save();">
+                        <span class="glyphicon glyphicon-save">Сохранить</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-body no-padding fullscreen">
+            <div class="row fullscreen">
+                <div class="col-md-2 padding3 fullscreen">
+                    <select name="Regions" style="height:80%" size="10"
+                            class="form-control" ng-options="item as item.L3_label for item in Bricks_L3 track by item.Id" ng-model="Bricks_L3_model" ng-change="BrickRegion_Change(Bricks_L3_model.Id)"></select>
+                </div>
+                <div class="col-md-10 padding3">
+                    <div>
+                        <label>{{Bricks_L3_model.Id}}</label>
+                        <label>{{Bricks_L3_model.L1_label}}</label>
+                        <label>{{Bricks_L3_model.L2_label}}</label>
+                    </div>
+                    <input name="text" type="text" class="form-control" ng-model="Bricks_L3_model.L3_label"/>
+                    <textarea ckeditor="minimal" class="fullscreen"
+                              ng-model="Bricks_L3_model.Description"
+                              name="editor1" id="editor1" ></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

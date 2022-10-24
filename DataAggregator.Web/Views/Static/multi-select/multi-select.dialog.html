@@ -1,0 +1,19 @@
+<div cg-busy="searchPromise">
+    <div class="modal-header">
+        <button class="close" type="button" ng-click="$dismiss()">&times;</button>
+        <div class="col-md-12" ng-show="ngModel.search">
+            <label ng-hide="apLabel === ''" data-translate="{{apLabel}}"></label>
+            <input class="form-control" ng-model="multiSelectFilter" ng-model-options="{debounce: 500}" uib-tooltip="{{'MULTI_SELECT_DIALOG.SEMICOLON_SEPARATOR' | translate}}" autofocus/>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div style="height: 500px">
+            <ui-grid-control options="sourceGrid.options" class="ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <button class="btn btn-warning" type="button" ng-click="$dismiss()" data-translate="BUTTONS.CLOSE"></button>
+        </div>
+    </div>
+</div>

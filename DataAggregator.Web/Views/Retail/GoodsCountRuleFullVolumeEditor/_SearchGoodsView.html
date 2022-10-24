@@ -1,0 +1,37 @@
+﻿<div class="modal-body count-rule-editor-dialog" cg-busy="loading">
+
+    <div>
+        <span data-translate="REGION"></span>: <span data-translate="COUNTRIES.RUSSIA"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <label data-translate="BRAND"></label>
+            <input type="text"
+                   class="form-control"
+                   ng-model="currentBrand"
+                   placeholder="{{ 'BRAND' | translate }}"
+                   ng-change="setBrand()"
+                   uib-typeahead="data.Value for data in searchBrand($viewValue)"
+                   typeahead-select-on-exact="true"
+                   typeahead-min-length="3"
+                   typeahead-on-select="setBrand($item)"
+                   ng-model-options="{debounce: 500}">
+        </div>
+    </div>
+
+    <br/>
+
+    <div style="height: 400px">
+        <ui-grid-control options="grid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="Select()" ng-disabled="!canSelect()" data-translate="BUTTONS.SELECT"></button>
+    </div>
+    <div>
+        <button class="btn btn-warning" type="button" ng-click="Close()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

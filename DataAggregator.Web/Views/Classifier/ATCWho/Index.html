@@ -1,0 +1,78 @@
+﻿<div ng-controller="ATCWhoController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCWho1">ATCWho 1</label>
+                        <div id="ATCWho1" class="form-inline full-width">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc1.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc1.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCWho2">ATCWho 2</label>
+                        <div id="ATCWho2" class="form-inline full-width">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc2.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc2.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCWho3">ATCWho 3</label>
+                        <div id="ATCWho3" class="form-inline full-width">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc3.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc3.Description" style="width: 69%">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="clearField()" data-translate="BUTTONS.CLEAR_FIELDS"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCWho4">ATCWho 4</label>
+                        <div id="ATCWho4" class="form-inline" style="width: 100%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc4.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc4.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ATCWho5">ATCWho 5</label>
+                        <div id="ATCWho5" class="form-inline" style="width: 100%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc5.Value" style="width: 30%">
+                            <input type="text" class="form-control" placeholder="" ng-model="atc.atc5.Description" style="width: 69%">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-offset-3 col-md-3">
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="add()" data-translate="BUTTONS.ADD"></button>
+                        <button class="btn btn-primary" ng-disabled="newValue.length == 0" ng-click="change()" data-translate="BUTTONS.CHANGE"></button>
+                        <button class="btn btn-danger" ng-disabled="newValue.length == 0" ng-click="delete()" data-translate="BUTTONS.DELETE"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <ui-grid-control options="gridOptions" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>
+
+

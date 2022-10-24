@@ -1,0 +1,23 @@
+﻿<div class="modal-body count-rule-editor-dialog" cg-busy="loading">
+
+    <div>
+        <span data-translate="Status"></span>: {{jobStatus}}
+    </div>
+
+    <div>
+        История
+    </div>
+    <div style="height:400px">      
+        <ui-grid-control options="grid.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+</div>
+<div class="modal-footer" cg-busy="loading">
+    <div class="float-left">
+        <button class="btn btn-primary" type="button" ng-click="Run()" data-translate="BUTTONS.RUN"></button>
+        <button class="btn btn-primary" type="button" ng-click="Stop()" data-translate="BUTTONS.STOP"></button>
+    </div>
+    <div>
+        <button class="btn btn-warning" type="button" ng-click="Close()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<label ng-hide="apLabel === ''" data-translate="{{apLabel}}"></label>
+<span class="input-group" style="width: 100%; display: block; padding-right: 39px">
+    <input style="width: 100%; display: inline; float: none"
+           type="text"
+           readonly
+           ng-required="ngRequired"
+           class="form-control"
+           ng-model="ngModel.displayValue"
+           placeholder="{{placeholder | translate}}"
+           />
+    <span class="input-group-btn" style="position: absolute; top: 0; right: 0; width: 39px">
+        <button type="button" class="btn btn-default" ng-disabled="ngDisabled" ng-click="openDialog()"><i class="glyphicon glyphicon-option-horizontal"></i></button>
+    </span>
+</span>

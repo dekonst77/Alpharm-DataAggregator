@@ -1,0 +1,28 @@
+﻿.count-rule-editor {
+    .btn-delete-field {
+        margin-left: 10px;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+
+   
+}
+
+.doubleFrom {
+    background-color: red !important;
+}
+
+.count-rule-editor-dialog .ui-grid-row .ui-grid-cell.repeated {
+    background: red;
+    color: white;
+}
+
+
+
+.my-group .form-control {
+    width: 50%;
+}

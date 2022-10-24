@@ -1,0 +1,106 @@
+﻿<div ng-controller="DistributionWorkController" cg-busy="loadingDictionary" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <h4 style="padding-left: 5px" data-translate="GOVERNMENT_PURCHASES.DISTRIBUTION_WORK.TITLE"></h4>
+        <div class="panel-heading">
+            <div class="row">
+
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <input type="text" placeholder="Дата объявления с" class="form-control" uib-datepicker-popup ng-model="filter.DateBegin_Start.Value" is-open="filter.DateBegin_Start.Opened" max-date="filter.DateBegin_End.Value" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата объявления с" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateBegin_Start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <input type="text" placeholder="Дата объявления по" class="form-control" uib-datepicker-popup ng-model="filter.DateBegin_End.Value" is-open="filter.DateBegin_End.Opened" min-date="filter.DateBegin_Start.Value" init-date="now" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата объявления по" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateBegin_End.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <input type="text" placeholder="Дата окончания с" class="form-control" uib-datepicker-popup ng-model="filter.DateEnd_Start.Value" is-open="filter.DateEnd_Start.Opened" max-date="filter.DateEnd_End.Value" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата окончания с" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateEnd_Start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <input type="text" placeholder="Дата окончания по" class="form-control" uib-datepicker-popup ng-model="filter.DateEnd_End.Value" is-open="filter.DateEnd_End.Opened" min-date="filter.DateEnd_Start.Value" init-date="now" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата окончания по" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.DateEnd_End.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <input type="text" placeholder="Дата создания с" class="form-control" uib-datepicker-popup ng-model="filter.PurchaseDateCreate_Start.Value" is-open="filter.PurchaseDateCreate_Start.Opened" max-date="filter.PurchaseDateCreate_End.Value" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата создания с" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.PurchaseDateCreate_Start.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <input type="text" placeholder="Дата создания по" class="form-control" uib-datepicker-popup ng-model="filter.PurchaseDateCreate_End.Value" is-open="filter.PurchaseDateCreate_End.Opened" min-date="filter.PurchaseDateCreate_Start.Value" init-date="now" readonly />
+                        <span class="input-group-btn" popover-placement="right" uib-popover="Дата создания по" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                            <button type="button" class="btn btn-default" ng-click="filter.PurchaseDateCreate_End.Open()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-1 padding3">
+                    <div class="input-group" popover-placement="right" uib-popover="Изменить раздел" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <select class="form-control" ng-options="item.Name for item in filter.purchaseClass.DictionaryData" ng-model="filter.purchaseClass.selected"></select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="setPurchaseClass()" ng-disabled="!purchase.getSelected().length > 0"><span class="glyphicon glyphicon-link"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                            <label>
+                                <input type="checkbox" ng-model="filter.isAssignedToUser" />Назначено на обработку
+                            </label>
+                    </div>
+                </div>
+                <div class="col-md-2 padding3">
+                    <div class="input-group" popover-placement="right" uib-popover="Отправить на обработку выбранному пользователю" popover-trigger="'mouseenter'" popover-append-to-body="true">
+                        <input type="text" ng-model="filter.user.selectedName" ng-change="filter.user.textChange()" uib-typeahead="user.FullName for user in filter.user.DictionaryData | filter:$viewValue | limitTo:8" class="form-control" placeholder="Пользователь"
+                               typeahead-on-select="filter.user.setSelected($item)" typeahead-select-on-exact="true">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="setAssignedToUser()"><span class="glyphicon glyphicon-user"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1 padding3">
+                    <div class="input-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="filter.withPtotokol" />С протоколами
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group">
+                        <button class="btn btn-success" type="button" ng-click="filter.search()" ng-disabled="canSearch()" popover-placement="right" uib-popover="Поиск по выбранным параметрам" popover-trigger="'mouseenter'" popover-append-to-body="true"><span class="glyphicon glyphicon-search"></span></button>
+                        <button class="btn btn-warning" type="button" ng-click="filter.clear()" popover-placement="right" uib-popover="Очистить поля" popover-trigger="'mouseenter'" popover-append-to-body="true"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="auto-item-panel">
+        <ui-grid-control options="purchase.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+</div>
