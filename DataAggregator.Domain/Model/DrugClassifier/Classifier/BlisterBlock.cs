@@ -12,7 +12,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
     public class BlisterBlock
     {
         [Key]
-        public long Classifierid { get; set; }
+        public long ClassifierId { get; set; }
         public Nullable<int> ClassifierPackingId { get; set; }
         public Nullable<bool> IsExist { get; set; }
         public string Comment { get; set; }

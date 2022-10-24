@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -395,6 +396,7 @@ namespace DataAggregator.Domain.DAL
 
             modelBuilder.Entity<DDDView>().Property(d => d.DDDs).HasPrecision(18, 6);
             modelBuilder.Entity<DrugClassification>().Property(d => d.DDDs).HasPrecision(18, 6);
+            modelBuilder.Entity<BlisterBlock>().Property(d => d.ClassifierId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
         }
 
         public void SetDrugs(Guid userId)

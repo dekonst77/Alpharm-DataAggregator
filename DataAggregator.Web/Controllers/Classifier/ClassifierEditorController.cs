@@ -28,7 +28,7 @@ namespace DataAggregator.Web.Controllers
             var result = new List<ClassifierPackingBlisterBlockJson>();
 
             List<ClassifierPacking> ClassifierPackings = _context.ClassifierPacking.Where(t => t.ClassifierId == ClassifierId).OrderBy(t => t.Id).ToList(); // упаковки без блистеровки
-            BlisterBlock blister_block = _context.BlisterBlock.Where(t => t.Classifierid == ClassifierId).FirstOrDefault(); // ссылка на блистеровочную упаковку
+            BlisterBlock blister_block = _context.BlisterBlock.Where(t => t.ClassifierId == ClassifierId).FirstOrDefault(); // ссылка на блистеровочную упаковку
 
             ClassifierPackings.ForEach(u =>
             {
@@ -550,7 +550,7 @@ namespace DataAggregator.Web.Controllers
                     PriceSourceId = 0,
                     ProductionStage = new DictionaryJson(productionInfo.ProductionStage),
                     ProductionLocalization = new DictionaryJson(productionInfo.ProductionLocalization),
-                    PackerLocalization = new DictionaryJson(productionInfo.Packer.Country.Localization) 
+                    PackerLocalization = new DictionaryJson(productionInfo.Packer.Country.Localization)
                 };
 
                 if (productionInfo != null)
@@ -1109,8 +1109,17 @@ namespace DataAggregator.Web.Controllers
                 else
                     NewClassifierPackingId = null;
 
-                BlisterBlockView blister_record = _context.BlisterBlockView.Where(x => x.ClassifierId == ClassifierId).SingleOrDefault();
-                blister_record.ClassifierPackingId = NewClassifierPackingId;
+                var BlisterEntity = _context.BlisterBlock.Find(ClassifierId);
+
+                if (BlisterEntity == null)
+                {
+                    BlisterEntity = new BlisterBlock { ClassifierId = ClassifierId, ClassifierPackingId = NewClassifierPackingId };
+                    _context.BlisterBlock.Add(BlisterEntity);
+                }
+                else
+                    BlisterEntity.ClassifierPackingId = NewClassifierPackingId;
+
+
                 _context.SaveChanges();
 
                 JsonNetResult jsonNetResult = new JsonNetResult
