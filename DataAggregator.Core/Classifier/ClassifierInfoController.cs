@@ -8,6 +8,15 @@ namespace DataAggregator.Core.Classifier
 {
     public class ClassifierInfoController
     {
+        private static void AddBlisterBlock(long ClassifierId, DrugClassifierContext context)
+        {
+            if (context.BlisterBlock.Find(ClassifierId) == null)
+            {                
+                context.BlisterBlock.Add(new BlisterBlock { ClassifierId = ClassifierId });
+                context.SaveChanges();
+            }            
+        }
+
         public static void Change(ProductionInfo from, ProductionInfo to, Guid userId, DrugClassifierContext context)
         {
 
@@ -23,7 +32,7 @@ namespace DataAggregator.Core.Classifier
 
                 if (from.DrugId != to.DrugId ||
                     from.OwnerTradeMarkId != to.OwnerTradeMarkId ||
-                    from.PackerId != to.PackerId) 
+                    from.PackerId != to.PackerId)
                 {
                     //Если такой записи еще не было, то записываем
                     if (!context.ClassifierInfoHistory.Any(h => h.ClassifierInfoId == (int)classifierInfoFrom.Id &&
@@ -52,7 +61,7 @@ namespace DataAggregator.Core.Classifier
                     context.ClassifierPacking.RemoveRange(cidel);
                     context.ClassifierInfo.Remove(classifierInfoFrom);
                 }
-            }                  
+            }
 
             ClassifierInfo classifierInfoTo = context.ClassifierInfo.SingleOrDefault(c => c.ProductionInfoId == to.Id);
 
@@ -77,6 +86,7 @@ namespace DataAggregator.Core.Classifier
                 context.ClassifierInfo.Add(classifierInfoTo);
                 context.SaveChanges();
 
+                AddBlisterBlock(classifierInfoTo.Id, context);
             }
 
             //Записываем в таблицу ClassifierReplacement
@@ -95,10 +105,5 @@ namespace DataAggregator.Core.Classifier
 
             context.SaveChanges();
         }
-
-
-
-
-
     }
 }

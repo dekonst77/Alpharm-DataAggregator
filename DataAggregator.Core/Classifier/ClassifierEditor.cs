@@ -489,7 +489,7 @@ namespace DataAggregator.Core.Classifier
                 }
             }
 
-            //Собираем информацию про регистрационные сертификаты
+            #region Собираем информацию про регистрационные сертификаты
             List<ChangeDescription> registrationCertificateChangeDescriptions = new List<ChangeDescription>();
             List<ChangeDescription> registrationCertificateIsBlockedChangeDescriptions = new List<ChangeDescription>();
 
@@ -524,8 +524,9 @@ namespace DataAggregator.Core.Classifier
                 string newVal = "Серт. " + regCert.Number + (model.RegistrationCertificate.IsBlocked ? "" : " не") + " заблокирован";
                 registrationCertificateIsBlockedChangeDescriptions.Add(new ChangeDescription(String.Empty, oldVal, newVal));
             }
+            #endregion
 
-            //Собираем информацию про регистрационные сертификаты
+            #region Изменения для блокировки Use и Comment
             List<ChangeDescription> changeUse = new List<ChangeDescription>();
 
             if (productionInfo.Used != model.Used)
@@ -540,8 +541,7 @@ namespace DataAggregator.Core.Classifier
             {
                 changeUse.Add(new ChangeDescription("Comment", productionInfo.Comment, model.Comment));
             }
-
-            //Изменения для блокировки Use и Comment
+            #endregion
 
             return new ChangeInfo()
             {
@@ -1122,14 +1122,19 @@ namespace DataAggregator.Core.Classifier
 
         }
 
-        //Добавляем новую запись
+        /// <summary>
+        /// Добавляем новую запись
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="tryMode"></param>
+        /// <returns></returns>
         private ClassifierInfoModel add(ClassifierEditorModelJson model, bool tryMode)
         {
             model.Clear();
 
             var drugProperty = _dictionary.GetDrugProperty(model);
 
-            //Ищем Drug
+            #region Ищем Drug
             Drug drug = null;
 
             // Ищем если
@@ -1142,10 +1147,9 @@ namespace DataAggregator.Core.Classifier
                 _context.SaveChanges();
                 model.DrugId = drug.Id;
             }
+            #endregion
 
-
-            //OnwerTradeMark Packer
-
+            #region OnwerTradeMark, Packer
             Manufacturer ownerTradeMark = _dictionary.FindManufacturer(model.OwnerTradeMark) ?? _dictionary.CreateManufacturer(model.OwnerTradeMark);
             Manufacturer packer = _dictionary.FindManufacturer(model.Packer) ?? _dictionary.CreateManufacturer(model.Packer);
 
@@ -1155,12 +1159,10 @@ namespace DataAggregator.Core.Classifier
             //Я не знаю почему но в моделе остаётся код от того который был введён при выборе из листа, поэтому меняем код модели на код драга 2019,01,31
             model.OwnerTradeMarkId = ownerTradeMark.Id;
             model.PackerId = packer.Id;
+            #endregion
 
-
-            #region Сертификат
+            #region Ищем сертификаты
             RegistrationCertificate certificate = null;
-
-            //Ищем сертификаты
 
             if (!model.WithoutRegistrationCertificate && model.RegistrationCertificate == null && (ownerTradeMark.Id.ToString() != "6" || packer.Id.ToString() != "6") && drug.DrugTypeId == 1)
                 throw new ApplicationException("не задан регистрационный сертификат");
@@ -1176,10 +1178,9 @@ namespace DataAggregator.Core.Classifier
                     certificate.OwnerRegistrationCertificate = ownerRegistrationCertificate;
                 }
             }
-            #endregion Сертификат
+            #endregion
 
-            #region ProductionInfo
-            //Ищем ProductionInfo
+            #region Ищем ProductionInfo
 
             var productionInfo = _dictionary.FindProductionInfo(ownerTradeMark, packer, drug);
 
@@ -1201,19 +1202,13 @@ namespace DataAggregator.Core.Classifier
 
                 _context.ProductionInfo.Add(productionInfo);
             }
-
-            #endregion ProductionInfo
+            #endregion
 
             #region собираем RealPacking
-            //RealPacking
-
             AddRealPacking(model.RealPackingList, drug);
-
-            #endregion #region собираем RealPacking
+            #endregion
 
             #region Сохранение
-            //Save
-
             if (!tryMode)
             {
                 _context.SaveChanges();
@@ -1223,8 +1218,6 @@ namespace DataAggregator.Core.Classifier
                 _context.SaveChanges();
 
                 #region Собираем ClassifierPacking
-                //Собираем ClassifierPacking
-
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
                 foreach (var CP in model.ClassifierPackings)
                 {
@@ -1232,8 +1225,7 @@ namespace DataAggregator.Core.Classifier
                     _dictionary.CreateClassifierPacking(CI, CP);
                 }
                 _context.SaveChanges();
-
-                #endregion Собираем ClassifierPacking
+                #endregion
 
                 var dc = _context.DrugClassification.Single(c => c.DrugId == productionInfo.DrugId && c.OwnerTradeMarkId == productionInfo.OwnerTradeMarkId);
 
@@ -1257,13 +1249,9 @@ namespace DataAggregator.Core.Classifier
                     checkInnGroup(drug.INNGroupId.Value);
                 }
             }
+            #endregion
 
-            #endregion Сохранение
-
-            #region Собираем информация о том, что,изменилось для отчета
-
-            //Собираем информация о том, что,изменилось
-
+            #region Собираем информацию о том, что изменилось для отчета
             ClassifierInfoModel info = new ClassifierInfoModel
             {
                 KCU = new List<string>(),
@@ -1306,15 +1294,10 @@ namespace DataAggregator.Core.Classifier
 
                 //если у выбранного сертификата сменили режим блокировки, то сохраняем в переменную старое значение. 
                 //иначе null - признак отсутствия изменений.
-                info.RegistrationCertificateIsBlockedOldValue =
-                        model.RegistrationCertificate.IsBlocked != certificate.IsBlocked ?
-                                                                        (bool?)certificate.IsBlocked :
-                                                                        null;
+                info.RegistrationCertificateIsBlockedOldValue = model.RegistrationCertificate.IsBlocked != certificate.IsBlocked ? (bool?)certificate.IsBlocked : null;
             }
+            #endregion
 
-            #endregion Собираем информация о том, что,изменилось для отчета
-
-            //Ищем информацию о сертификате
             return info;
         }
 
