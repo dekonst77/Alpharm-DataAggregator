@@ -732,7 +732,8 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
                 $scope.SalesSKUbySF_Search();
             }, function (response) {
                 $scope.Grid.Options.data = [];
-                messageBoxService.showError(JSON.stringify(response));
+                let message = response.data.message;
+                messageBoxService.showError(JSON.stringify(message));
             });
         }
     };
