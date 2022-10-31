@@ -1625,7 +1625,7 @@ function GSController($scope, $route, $http, $uibModal, commonService, messageBo
         $scope.Grid_Organization_without_INN = uiGridCustomService.createGridClassMod($scope, 'Grid_Organization_without_INN');
         $scope.Grid_Organization_without_INN.Options.columnDefs = [
             { enableCellEdit: false, visible: false, name: 'Id', field: 'Id' },
-            { enableCellEdit: true, width: 100, name: 'ИНН', field: 'inn', headerCellClass: 'cssEdit', filter: { condition: uiGridCustomService.condition }            },
+            { enableCellEdit: true, width: 100, name: 'ИНН', field: 'inn', headerCellClass: 'cssEdit', filter: { condition: uiGridCustomService.condition } },
             { enableCellEdit: true, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
             { enableCellEdit: false, width: 100, name: 'Полное наименование', field: 'full_name', filter: { condition: uiGridCustomService.condition }, cellTemplate: formatConstants.cellTemplateHint },
             { enableCellEdit: false, width: 100, name: 'Короткое наименование', field: 'name', filter: { condition: uiGridCustomService.condition }, cellTemplate: formatConstants.cellTemplateHint },
@@ -3693,9 +3693,12 @@ function GSController($scope, $route, $http, $uibModal, commonService, messageBo
             { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'fias_id_manual', field: 'fias_id_manual', filter: { condition: uiGridCustomService.condition } },
             //{ headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'fias_code_manual', field: 'fias_code_manual', filter: { condition: uiGridCustomService.condition } },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lat_manual', field: 'geo_lat_manual', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual', filter: { condition: uiGridCustomService.condition } }
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual', filter: { condition: uiGridCustomService.condition } },
 
+            { visible: false, headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ГАР Guid', field: 'HOUSEGUID', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 500, headerCellClass: 'Yellow', name: 'ГАР СФ', field: 'GAR_Address', filter: { condition: uiGridCustomService.condition } }
         ];
+
         $scope.Grid.SetDefaults();
         $scope.dataLoading = $http({
             method: 'POST',

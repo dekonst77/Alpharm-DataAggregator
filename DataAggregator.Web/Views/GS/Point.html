@@ -55,25 +55,19 @@
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
         <div class="panel-heading padding1">
             <div class="row">
-                <div class="col-md-6 padding3">
+                <div class="col-md-2 padding3">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-success btn-sm" ng-click="Point_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
                         <button type="button" class="btn btn-warning btn-sm" ng-disabled="!Grid.NeedSave" ng-click="Point_Save();"><span class="glyphicon glyphicon-floppy-disk">Сохранить</span></button>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <!--<div class="col-md-1 padding3">
-                    <select name="period" ng-class="{'has-error': Supplier.$invalid}" required
-                            class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"></select>
-                </div>-->
-                <div class="col-md-3 padding3">
+                <div class="col-md-1 padding3">
                     <label>
                         <input name="IsNoKoord" type="checkbox" class="" ng-model="IsNoKoord" ng-change="">Нет координат
                     </label>
                 </div>
                 <div class="col-md-3 padding3">
-                    <input name="filtercommon" type="text" class="form-control" ng-model="PHids" ng-change="" placeholder="PharmacyId">
+                    <input name="filtercommon" type="text" class="form-control" ng-model="PHids" ng-change="" placeholder="Список Pharmacy Id" id="filtercommon">
                 </div>
             </div>
         </div>

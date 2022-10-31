@@ -131,15 +131,16 @@ namespace DataAggregator.Domain.Model.GS
             UserControl_Name = "";
             UserControl_dt = null;
             Comment = "";
-            PointCategoryId = 10;        }
+            PointCategoryId = 10;
+        }
     }
-     [Table("PointCategory", Schema = "dbo")]
-     public class PointCategory
+    [Table("PointCategory", Schema = "dbo")]
+    public class PointCategory
     {
-         //[Key]
-         public Byte Id { get; set; }
-         public string Name { get; set; }
-     }
+        //[Key]
+        public Byte Id { get; set; }
+        public string Name { get; set; }
+    }
     public class GS_View_SP
     {
 
@@ -457,7 +458,7 @@ namespace DataAggregator.Domain.Model.GS
 
         public string fias_id_manual { get; set; }
         public string fias_code_manual { get; set; }
-//[Column(TypeName = "decimal(9, 6)")]
+        //[Column(TypeName = "decimal(9, 6)")]
         public decimal? geo_lat_manual { get; set; }
         //[Column(TypeName = "decimal(9, 6)")]
         public decimal? geo_lon_manual { get; set; }
@@ -507,7 +508,7 @@ namespace DataAggregator.Domain.Model.GS
         public string Info { get; set; }
         public bool IsCheck { get; set; }
         public bool IsUseLPU { get; set; }
-       // public string WWW { get; set; }
+        // public string WWW { get; set; }
     }
     [Table("Organization_without_INN", Schema = "dbo")]
     public class Organization_without_INN
@@ -641,7 +642,7 @@ namespace DataAggregator.Domain.Model.GS
         public string Web { get; set; }
         public string Comment { get; set; }
         public void NotNull()
-       {
+        {
             if (EntityINN == null) EntityINN = "";
             if (EntityName == null) EntityName = "";
             if (DistributorBrand == null) DistributorBrand = "";
@@ -879,11 +880,11 @@ namespace DataAggregator.Domain.Model.GS
         public string NetworkName_p0 { get; set; }
         public string NetworkName_p1 { get; set; }
         public string NetworkName_p2 { get; set; }
-        
+
         public bool? isExists_p0 { get; set; }
         public bool? isExists_p1 { get; set; }
         public bool? isExists_p2 { get; set; }
-        
+
 
         public decimal? Summa_Start_p0 { get; set; }
         public decimal? Summa_Start_p1 { get; set; }
@@ -892,12 +893,12 @@ namespace DataAggregator.Domain.Model.GS
         public decimal? Summa_p0 { get; set; }
         public decimal? Summa_p1 { get; set; }
         public decimal? Summa_p2 { get; set; }
-       
+
 
         public string SourceData_p0 { get; set; }
         public string SourceData_p1 { get; set; }
         public string SourceData_p2 { get; set; }
-       
+
         public void NotNull()
         {
 
@@ -905,7 +906,7 @@ namespace DataAggregator.Domain.Model.GS
     }
     [Table("GS_Period_Region", Schema = "dbo")]
     public class GS_Period_Region
-    { 
+    {
         public int Id { get; set; }
         public string Region { get; set; }
         public DateTime Period { get; set; }
@@ -1007,7 +1008,7 @@ namespace DataAggregator.Domain.Model.GS
         public decimal? SummOFD { get; set; }
         public decimal? anketSum { get; set; }
         public int? anketPoint { get; set; }
-        public int? periodPoint{get;set;}
+        public int? periodPoint { get; set; }
         public decimal? SummaStartYearA { get; set; }
         public decimal? Summa { get; set; }
         public decimal? ProcentInCountry { get; set; }
@@ -1193,7 +1194,7 @@ namespace DataAggregator.Domain.Model.GS
         public string STM_Brands { get; set; }
         public string EntityInn { get; set; }
 
-        
+
     }
 
     [Table("spr_NetworkNameView", Schema = "dbo")]
@@ -1265,7 +1266,7 @@ namespace DataAggregator.Domain.Model.GS
         public string INN { get; set; }
         public string Region { get; set; }
         public string City { get; set; }
-        public string Address { get; set; }       
+        public string Address { get; set; }
         public int? GSId { get; set; }
         public int? LPUId { get; set; }
         public int? DistrId { get; set; }
@@ -1324,7 +1325,7 @@ namespace DataAggregator.Domain.Model.GS
         public string Comments { get; set; }
         public string Spark { get; set; }
         public string Spark2 { get; set; }
-        public byte Status { get; set; }        
+        public byte Status { get; set; }
         public DateTime Date_Add { get; set; }
 
         public string TypeClients { get; set; }
@@ -1457,7 +1458,7 @@ namespace DataAggregator.Domain.Model.GS
     [Table("History_SPR_Distr_view", Schema = "adr")]
     public class History_SPR_Distr_view
     {
-        
+
         public int? GSId { get; set; }
         public int? LPUId { get; set; }
         [Key]
@@ -1488,7 +1489,7 @@ namespace DataAggregator.Domain.Model.GS
 
         public int? GSId { get; set; }
         public int? LPUId { get; set; }
-        
+
         public int? DistrId { get; set; }
         public int? PharmacyId { get; set; }
         public bool? isExists { get; set; }
@@ -1507,8 +1508,48 @@ namespace DataAggregator.Domain.Model.GS
         public string PharmacyNumber { get; set; }
         [Key]
         public string BricksId { get; set; }
-
-
     }
+
+    /// <summary>
+    /// proc [dbo].[GetPharmacys]
+    /// </summary>
+    public class GetPharmacys_Result
+    {
+        public int PharmacyId { get; set; }
+        public System.DateTime date_add { get; set; }
+        public int GSId_first { get; set; }
+        public Nullable<decimal> koor_широта { get; set; }
+        public Nullable<decimal> koor_долгота { get; set; }
+        public Nullable<System.DateTime> koor_DT { get; set; }
+        public string Address { get; set; }
+        public string BricksId { get; set; }
+        public string fias_id_manual { get; set; }
+        public string fias_code_manual { get; set; }
+        public Nullable<decimal> geo_lat_manual { get; set; }
+        public Nullable<decimal> geo_lon_manual { get; set; }
+        public Nullable<decimal> Address_koor_lat { get; set; }
+        public Nullable<decimal> Address_koor_long { get; set; }
+        public string Address_region { get; set; }
+        public string Address_city { get; set; }
+        public string Address_index { get; set; }
+        public string Address_street { get; set; }
+        public string Address_comment { get; set; }
+        public string Address_float { get; set; }
+        public string Address_room { get; set; }
+        public string Address_room_area { get; set; }
+        public string fias_id { get; set; }
+        public string Post_Index { get; set; }
+
+        /// <summary>
+        /// ГАР поля
+        /// </summary>
+        public Guid? HOUSEGUID { get; set; }
+        public string SF { get; set; }
+        public string Locality { get; set; }
+        public string Street { get; set; }
+        public string House { get; set; }
+        public string GAR_Address { get; set; }
+    }
+
 }
 

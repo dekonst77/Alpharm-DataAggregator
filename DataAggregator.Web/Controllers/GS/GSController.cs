@@ -1532,10 +1532,10 @@ GS_Brick*/
                     var upd = _context.Organization_without_INN.Where(w => w.Id == item.Id).Single();
 
                     upd.inn = item.inn;
-                    upd.form = item.form;      
-                
+                    upd.form = item.form;
+
                     upd.FIO = item.FIO;
-                    upd.Status =item.Status;
+                    upd.Status = item.Status;
 
                     upd.Boss_Name = item.Boss_Name;
                     upd.Date_registration = item.Date_registration;
@@ -1936,23 +1936,26 @@ group by inn having count(*) > 1
             }
             return ret;
         }
+
+        /// <summary>
+        /// Поиск по аптекам
+        /// </summary>
+        /// <param name="IsNoKoord">наличие координат</param>
+        /// <param name="PHids">Id аптеки</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Point_Search(bool IsNoKoord, string PHids)
         {
             try
             {
                 var _context = new GSContext(APP);
-                _context.Database.CommandTimeout = 0;
-                var result = _context.Pharmacy.Where(w => 1 == 1);
-                if (!string.IsNullOrEmpty(PHids))
-                {
-                    var l_PHids = ConvertToList(PHids);
-                    result = result.Where(w => l_PHids.Contains(w.PharmacyId));
-                }
-                if (IsNoKoord)
-                {
-                    result = result.Where(w => w.koor_широта == null || w.koor_широта == 0 || w.fias_id == null);
-                }
+
+                var l_PHids = !String.IsNullOrEmpty(PHids) ? String.Join(",", ConvertToList(PHids)) : String.Empty;
+
+                var result = _context.Database.SqlQuery<GetPharmacys_Result>("dbo.GetPharmacys @PharmacyIdList, @IsNotExistCoordinates",
+                    new System.Data.SqlClient.SqlParameter { ParameterName = "@PharmacyIdList", SqlDbType = System.Data.SqlDbType.VarChar, Value = l_PHids },
+                    new System.Data.SqlClient.SqlParameter { ParameterName = "@IsNotExistCoordinates", SqlDbType = System.Data.SqlDbType.Bit, Value = IsNoKoord }
+                ).ToList();
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -1963,7 +1966,6 @@ group by inn having count(*) > 1
             }
             catch (Exception e)
             {
-
                 return BadRequest(e);
             }
         }
@@ -3764,7 +3766,7 @@ group by OperationMode
             finally
             {
                 System.IO.File.Delete(filename);
-            }            
+            }
         }
     }
     public class HystoryFilter
