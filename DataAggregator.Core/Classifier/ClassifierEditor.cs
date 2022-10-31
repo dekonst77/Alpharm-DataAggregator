@@ -790,7 +790,7 @@ namespace DataAggregator.Core.Classifier
                 //Если МНН групп новая проверим её на существование
                 if (drugProperty.INNGroupNew)
                 {
-                    checkInnGroup(drug.INNGroupId.Value);
+                    CheckInnGroup(drug.INNGroupId.Value);
                 }
 
                 //Меняем на новый DrugId
@@ -1053,7 +1053,7 @@ namespace DataAggregator.Core.Classifier
                 //Если МНН групп новая проверим её на существование
                 if (drugProperty.INNGroupNew)
                 {
-                    checkInnGroup(drug.INNGroupId.Value);
+                    CheckInnGroup(drug.INNGroupId.Value);
                 }
 
                 transaction.Commit();
@@ -1069,7 +1069,7 @@ namespace DataAggregator.Core.Classifier
 
         }
 
-        private void checkInnGroup(long innGroupId)
+        private void CheckInnGroup(long innGroupId)
         {
             var existsINNGroup = _context.InnGroupCheckUnique(innGroupId);
 
@@ -1113,7 +1113,7 @@ namespace DataAggregator.Core.Classifier
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
-                var result = add(model, tryMode);
+                var result = Add(model, tryMode);
 
                 transaction.Commit();
 
@@ -1123,12 +1123,12 @@ namespace DataAggregator.Core.Classifier
         }
 
         /// <summary>
-        /// Добавляем новую запись
+        /// Добавляем новый классификатор
         /// </summary>
         /// <param name="model"></param>
         /// <param name="tryMode"></param>
         /// <returns></returns>
-        private ClassifierInfoModel add(ClassifierEditorModelJson model, bool tryMode)
+        private ClassifierInfoModel Add(ClassifierEditorModelJson model, bool tryMode)
         {
             model.Clear();
 
@@ -1246,7 +1246,7 @@ namespace DataAggregator.Core.Classifier
                 //Если МНН групп новая проверим её на существование
                 if (drugProperty.INNGroupNew)
                 {
-                    checkInnGroup(drug.INNGroupId.Value);
+                    CheckInnGroup(drug.INNGroupId.Value);
                 }
             }
             #endregion
