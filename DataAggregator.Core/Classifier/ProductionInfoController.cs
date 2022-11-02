@@ -80,10 +80,6 @@ namespace DataAggregator.Core.Classifier
             //Учитвыаем изменения в DrugClassification
             DrugClassificationController.Change(from, to, context);
 
-
-
-
-
             ClassificationGenericController.Change(from, to, context);
 
             //Перепривязываем данные при изменении привязки
