@@ -16,6 +16,38 @@ namespace DataAggregator.Core.Classifier
 
         private readonly ClassifierDictionary _dictionary;
 
+        /// <summary>
+        /// Добавление блистеровки
+        /// Для всех типов перенести коэффициент в блок «блистеровка» автоматически из классификатора (поле количество первичных упаковок)
+        /// если упаковка одна или одинаковое кол-во
+        /// </summary>
+        /// <param name="classifierInfo">новый классификатор</param>
+        /// <param name="context">БД</param>
+        private static void AddBlisterBlock(ClassifierInfo classifierInfo, DrugClassifierContext context)
+        {
+            if (classifierInfo == null)
+            {
+                throw new ArgumentException("Parameter cannot be null", nameof(classifierInfo));
+            }
+
+            long ClassifierId = classifierInfo.Id;
+
+            #region находим Id упаковки: [Classifier].[ClassifierPacking].Id
+            int? ClassifierPackingId = null;
+
+            if (context.ClassifierPacking.Where(w => w.ClassifierId == ClassifierId).GroupBy(t => t.CountPrimaryPacking).Count() == 1)
+            {
+                ClassifierPackingId = context.ClassifierPacking.Where(w => w.ClassifierId == ClassifierId).SingleOrDefault().Id;
+            }
+            #endregion
+
+            if (context.BlisterBlock.Find(ClassifierId) == null)
+            {
+                context.BlisterBlock.Add(new BlisterBlock { ClassifierId = ClassifierId, ClassifierPackingId = ClassifierPackingId });
+                context.SaveChanges();
+            }
+        }
+
         public ClassifierEditor(DrugClassifierContext context, Guid user)
         {
             _context = context;
@@ -1233,6 +1265,9 @@ namespace DataAggregator.Core.Classifier
                 {
                     dc.NFCId = model.Nfc.Id;
                 }
+
+                // добавляем блистеровку
+                AddBlisterBlock(CI, _context);
 
                 LogAction.Log(_context, productionInfo.Id, LogAction.ActionType.Add, _user);
 

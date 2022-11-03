@@ -1097,6 +1097,13 @@ namespace DataAggregator.Web.Controllers
             return jsonNetResult;
         }
 
+        /// <summary>
+        /// Редактирование упаковок: поле блистеровки
+        /// </summary>
+        /// <param name="id">ID упаковки</param>
+        /// <param name="ClassifierId">ID классификатора</param>
+        /// <param name="newValue">наличие или отсутствие ссылки на ID упаковки</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ClassifierPackingEdit(int id, long ClassifierId, bool newValue)
         {
