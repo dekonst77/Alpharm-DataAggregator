@@ -8,15 +8,6 @@ namespace DataAggregator.Core.Classifier
 {
     public class ClassifierInfoController
     {
-        private static void AddBlisterBlock(long ClassifierId, DrugClassifierContext context)
-        {
-            if (context.BlisterBlock.Find(ClassifierId) == null)
-            {                
-                context.BlisterBlock.Add(new BlisterBlock { ClassifierId = ClassifierId });
-                context.SaveChanges();
-            }            
-        }
-
         public static void Change(ProductionInfo from, ProductionInfo to, Guid userId, DrugClassifierContext context)
         {
 
@@ -67,7 +58,6 @@ namespace DataAggregator.Core.Classifier
 
             if (classifierInfoTo == null)
             {
-
                 classifierInfoTo = new ClassifierInfo { ProductionInfoId = to.Id };
 
                 var classifierInfoHistory = context.ClassifierInfoHistory.FirstOrDefault(p =>
@@ -85,8 +75,6 @@ namespace DataAggregator.Core.Classifier
 
                 context.ClassifierInfo.Add(classifierInfoTo);
                 context.SaveChanges();
-
-                AddBlisterBlock(classifierInfoTo.Id, context);
             }
 
             //Записываем в таблицу ClassifierReplacement
