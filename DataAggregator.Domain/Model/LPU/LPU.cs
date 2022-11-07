@@ -9,6 +9,7 @@ namespace DataAggregator.Domain.Model.LPU
     {
         public int Id { get; set; }
         public int? ParentId { get; set; }
+        public int? ActualId { get; set; }
         [Column("LPU_PointId")]
         public int LPUPointId { get; set; }
         public int OrganizationId { get; set; }

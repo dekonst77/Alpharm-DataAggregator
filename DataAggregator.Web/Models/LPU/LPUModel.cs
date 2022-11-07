@@ -7,6 +7,7 @@ namespace DataAggregator.Web.Models.LPU
     {       
         public int LPUId { get; set; }
         public int? ParentId { get; set; }
+        public int? ActualId { get; set; }
         public string Comment { get; set; }
         public DateTime Date_Create { get; set; }
         public int OrganizationId { get; set; }

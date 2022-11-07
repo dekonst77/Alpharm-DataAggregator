@@ -33,7 +33,7 @@ namespace DataAggregator.Web.Controllers.LPU
         {
             try
             {  
-                var lpu = _context.LPUView.Where(l => l.PointId == PointId).Select(LPUModel.Create).ToList();
+                var lpu = _context.LPUView.Where(l => l.PointId == PointId && (l.ActualId<1 || l.ActualId == null)&& (l.IsDepartment < 1 || l.IsDepartment == null)).Select(LPUModel.Create).ToList();
                 return ReturnData(lpu);
             }
             catch (Exception ex)
@@ -77,8 +77,14 @@ namespace DataAggregator.Web.Controllers.LPU
                         lpuenum = lpuenum.Where(l => l.IsDepartment < 1 || l.IsDepartment == null);
                     }
                 }
+                if (filter.IsActual != null)
+                {
+                    if (filter.IsActual == true)
+                    {
+                        lpuenum = lpuenum.Where(l => l.ActualId < 1 || l.ActualId == null);
+                    }
+                }
 
-              
 
                 if (!string.IsNullOrEmpty(filter.BrickId))
                 {
@@ -129,6 +135,7 @@ namespace DataAggregator.Web.Controllers.LPU
 
                     //Обновление point
                     lpu.LPUPoint.BricksId = lpumodel.BricksId;
+                    lpu.ActualId = lpumodel.ActualId;
                     lpu.LPUPoint.Address_street = lpumodel.Address_street;
                     lpu.LPUPoint.Address_comment = lpumodel.Address_comment;
                     lpu.LPUPoint.Address_float = lpumodel.Address_float;
