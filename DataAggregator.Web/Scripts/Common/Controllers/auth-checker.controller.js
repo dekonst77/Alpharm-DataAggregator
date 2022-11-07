@@ -10,29 +10,28 @@
                 $scope.$on('userChanged', function () { isFirstCheckingRequest = true; });
 
                 function runChecking() {
-                    intervalPromise = $interval(function() {
-                            $interval.cancel(intervalPromise);
+                    
+                    intervalPromise = $interval(function () {
+                        $interval.cancel(intervalPromise);
 
-                        $http.post('/AccountMini/IsAuthenticated').then(function(response) {
-                                var data = response.data;
+                        $http.post('/AccountMini/IsAuthenticated').then(function (response) {
+                            var data = response.data;
 
-                                if (data.IsAuthenticated) {
-                                    runChecking();
-                                    return;
-                                }
+                            if (data.IsAuthenticated) {
+                                runChecking();
+                                return;
+                            }
 
-                                if (!isFirstCheckingRequest) {
-                                    showAlert(gotoLoginPage);
+                            if (!isFirstCheckingRequest) {
+                                showAlert(gotoLoginPage);
 
-                                    return;
-                                }
+                                return;
+                            }
 
-                            }).then(() => isFirstCheckingRequest = false);
+                        }).then(() => isFirstCheckingRequest = false);
 
-                        },
-                        60000);
+                    }, 60000);
                 }
-
 
                 function showAlert(callback) {
                     //messageBoxService.showInfo($translate.instant('AUTH_CHECKER.AUTO_LOGOUT_MESSAGE')).then(callback);

@@ -1,0 +1,43 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    Layout = null;
+    ViewBag.Title = "Error 401";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Unauthorized</title>
+</head>
+<body>
+    <h1>@ViewBag.StatusCode</h1>
+
+
+    <div class="list-header clearfix">
+        <span>Error</span>
+    </div>
+    <div class="list-sfs-holder">
+        <div class="alert alert-error">
+            У вас нет доступа к данному режиму.
+        </div>
+        @if (Model != null)
+        {
+            <div>
+                <p>
+                    <b>Exception:</b> @Model.Exception.Message<br />
+                    <b>Controller:</b> @Model.ControllerName<br />
+                    <b>Action:</b> @Model.ActionName
+                </p>
+                <div style="overflow:scroll">
+                    <pre>
+                    @Model.Exception.StackTrace
+                </pre>
+                </div>
+            </div>
+        }
+    </div>
+
+</body>
+</html>

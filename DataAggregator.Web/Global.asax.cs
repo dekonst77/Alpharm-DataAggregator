@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -15,7 +12,6 @@ namespace DataAggregator.Web
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
 
             JsonValueProviderFactory jsonValueProviderFactory = null;
 
@@ -35,6 +31,39 @@ namespace DataAggregator.Web
 
             // Инициализируем mapper
             ModelMapper.Init();
+        }
+
+        protected void Application_AuthorizeRequest(object sender, EventArgs e)
+        {
+            //this.Context.Request.
+
+            //// Transfer the user to the appropriate custom error page
+            //HttpException lastErrorWrapper = Server.GetLastError() as HttpException;
+
+            //if (lastErrorWrapper == null)
+            //    return;
+
+            //if (lastErrorWrapper.GetHttpCode() == 404)
+            //{
+            //    Server.Transfer("~/ErrorPages/404.aspx");
+            //}
+            //else
+            //{
+            //    Server.Transfer("~/ErrorPages/Oops.aspx");
+            //}
+        }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+
+            // Code that runs when an unhandled error occurs
+            //Exception ex = Server.GetLastError();
+
+            //if (ex is HttpUnhandledException)
+            //{
+            //    // Pass the error on to the error page.
+            //    Server.Transfer("ErrorPage.aspx?handler=Application_Error%20-%20Global.asax", true);
+            //}
         }
     }
 }
