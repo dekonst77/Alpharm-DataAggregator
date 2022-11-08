@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataAggregator.Web.Controllers;
+using System;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -55,15 +57,88 @@ namespace DataAggregator.Web
 
         void Application_Error(object sender, EventArgs e)
         {
+            HttpException httpException = Server.GetLastError() as HttpException;
 
-            // Code that runs when an unhandled error occurs
-            //Exception ex = Server.GetLastError();
+            if (httpException == null)
+            {
+                return;
+            }
 
-            //if (ex is HttpUnhandledException)
-            //{
-            //    // Pass the error on to the error page.
-            //    Server.Transfer("ErrorPage.aspx?handler=Application_Error%20-%20Global.asax", true);
-            //}
+            /*
+if (Context.AllErrors != null)
+{
+    Context.Response.ClearHeaders();
+    Context.Response.ClearContent();
+    Context.ClearError();
+}
+*/
+
+
+            //It's an Http Exception, Let's handle it.
+
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "Error";
+            routeData.Values["StatusCode"] = Context.Response.StatusCode;
+            routeData.Values["StatusDescription"] = Context.Response.StatusDescription;
+
+            switch (httpException.GetHttpCode())
+            {
+                case 401:
+                    // Unauthorized
+                    routeData.Values.Add("action", "Unauthorized");
+                    break;
+                case 404:
+                    // Page not found.
+                    routeData.Values.Add("action", "NotFound");
+                    break;
+                case 500:
+                    // Server error.
+                    routeData.Values.Add("action", "HttpError500");
+                    break;
+
+                // Here you can handle Views to other error codes.
+                // I choose a General error template  
+                default:
+                    routeData.Values.Add("action", "General");
+                    break;
+            }
+
+            // Clear the error on server.
+            Server.ClearError();
+
+            // Avoid IIS7 getting in the middle
+            Response.TrySkipIisCustomErrors = true;
+
+            // Call target Controller and pass the routeData.
+            IController errorController = new ErrorController();
+            errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
         }
+
+        protected void Application_EndRequest()
+        {
+            // Unauthorized
+            if (Context.Response.StatusCode == 401)
+            {
+                var routeData = new RouteData();
+                routeData.Values["controller"] = "Error";
+                routeData.Values["action"] = "Unauthorized";
+
+                routeData.Values["StatusCode"] = Context.Response.StatusCode;
+                routeData.Values["StatusDescription"] = Context.Response.StatusDescription;
+
+                // Clear the error on server.
+                Server.ClearError();
+
+                // Avoid IIS7 getting in the middle
+                Response.TrySkipIisCustomErrors = true;
+
+                // Call target Controller and pass the routeData.
+                IController errorController = new ErrorController();
+                errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
+
+                return;
+            }
+        }
+
     }
 }
