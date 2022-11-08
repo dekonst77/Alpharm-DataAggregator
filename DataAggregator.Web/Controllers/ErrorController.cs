@@ -7,6 +7,12 @@ namespace DataAggregator.Web.Controllers
 
     public class ErrorController : Controller
     {
+        private int GetStatusCode(Exception exception)
+        {
+            HttpException httpException = exception as HttpException;
+            return httpException != null ? httpException.GetHttpCode() : (int)HttpStatusCode.InternalServerError;
+        }
+
         public ActionResult Unauthorized()
         {
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -34,5 +40,22 @@ namespace DataAggregator.Web.Controllers
 
             return View();
         }
+
+        public ActionResult InternalServerError()
+        {
+            Exception exception = (Exception)RouteData.Values["error"];
+
+            Response.StatusCode = GetStatusCode(exception);
+
+            return View();
+        }
+
+        public ActionResult General()
+        {
+            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            return View();
+        }
+
     }
 }
