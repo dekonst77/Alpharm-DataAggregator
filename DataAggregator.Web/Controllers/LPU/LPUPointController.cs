@@ -51,6 +51,14 @@ namespace DataAggregator.Web.Controllers.LPU
                     else lpuenum = lpuenum.Where(l => l.Address_city.Contains(filter.City));
 
                 }
+                if (filter.IsActual != null)
+                {
+                    if (filter.IsActual == true)
+                    {
+                        lpuenum = lpuenum.Where(l => l.ActualId > 1 && l.ActualId != null);
+                    }
+                }
+
                 if (filter.IsGPS!=null)
                 {
                     if (filter.IsGPS == true) {
@@ -185,6 +193,7 @@ namespace DataAggregator.Web.Controllers.LPU
 
                     //Обновление point
                     point.BricksId = lpupointmodel.BricksId;
+                    point.ActualId = lpupointmodel.ActualId;
                     point.Address_street = lpupointmodel.Address_street;
                     point.Address_comment = lpupointmodel.Address_comment;
                     point.Address_float = lpupointmodel.Address_float;

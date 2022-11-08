@@ -8,9 +8,12 @@ function LPUPointController($scope, $http, messageBoxService, errorHandlerServic
     $scope.GridLPUPoint.Options.showGridFooter = true;
     $scope.GridLPUPoint.Options.multiSelect = true;
     $scope.GridLPUPoint.Options.modifierKeysToMultiSelect = true;
-
+    $scope.filter = {
+        IsActual: true
+    };
     $scope.GridLPUPoint.Options.columnDefs = [
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'PointId', field: 'PointId', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Коммент', field: 'Comment', filter: { condition: uiGridCustomService.condition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Адрес из лицензии', width: 300, field: 'Address', filter: { condition: uiGridCustomService.condition } },
         { headerTooltip: true, name: 'ФО', width: 100, field: 'Bricks_FederalDistrict', headerCellClass: 'LightCyan', filter: { condition: uiGridCustomService.condition } },
@@ -68,6 +71,7 @@ function LPUPointController($scope, $http, messageBoxService, errorHandlerServic
 
     $scope.GridLPU.Options.columnDefs = [
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'LPUId', field: 'LPUId', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'OrganizationId', field: 'OrganizationId', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'PointId', field: 'PointId', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Коммент', field: 'Comment', filter: { condition: uiGridCustomService.condition } },

@@ -54,17 +54,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-5 padding3">
+                        <div class="col-md-5 padding3"  style="vertical-align:central;">
                             <input name="filtercommon" type="text" class="form-control" ng-model="filter.BrickId" ng-change="" placeholder="БрикИд">
                         </div>
-                        <div class="col-md-3 padding3">
+                        <div class="col-md-3 padding3"  style="vertical-align:central;">
                             <input name="filtercommon" type="text" class="form-control" ng-model="filter.PointId" ng-change="" placeholder="PointId">
                         </div>
-                        <div class="col-md-4 padding3">
+                        <div class="col-md-4 padding3"  style="vertical-align:central;">
                             <label>
                                 <input name="filtercommon" type="checkbox" class="" ng-model="filter.IsDepartment" ng-change=""> Скрыть Отделения
                             </label>
+                            <label>
+                                <input name="filtercommon" type="checkbox" class="" ng-model="filter.IsActual" ng-change="" [checked]="item.check" > Актуальные
+                            </label>
                         </div>
+
                         <!--  <div class="col-md-4 padding3">
                             <label>
                                 <input name="filtercommon" type="checkbox" class="" ng-model="filter.IsBrick" ng-change="">Пустые брики

@@ -13,6 +13,7 @@ namespace DataAggregator.Domain.Model.LPU
     {     
         [Key]
         public int PointId { get; set; }
+        public int? ActualId { get; set; }
         public string Address { get; set; }
         public string Address_index { get; set; }
         public string Address_region { get; set; }

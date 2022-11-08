@@ -9,6 +9,7 @@ namespace DataAggregator.Domain.Model.LPU
         [Key]
         [Column("LPU_PointId")]       
         public int Id { get; set; }
+        public int? ActualId { get; set; }
         public string BricksId { get; set; }
         public string Address_street { get; set; }
         public string Address_comment { get; set; }

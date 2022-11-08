@@ -19,6 +19,7 @@ namespace DataAggregator.Web.Models.LPU
         public Boolean? IsAddress { get; set; }
         public Boolean? IsLPU { get; set; }
         public Boolean? IsDepartment { get; set; }
+        public Boolean? IsActual { get; set; }
         public Boolean? Double { get; set; }
         public string SF { get; set; }
         public string City { get; set; }
