@@ -214,9 +214,9 @@ function BlisterBlockController($scope, $http, $q, $cacheFactory, $timeout, user
             }
 
         }, function (response) {
-            /*
             console.log(response);
 
+            /*
             if (response.status in [401, 404]) {
                 messageBoxService.showError("У вас нет доступа к данному ресурсу. Обратитесь к администратору системы.");
 
