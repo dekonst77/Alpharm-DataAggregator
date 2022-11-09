@@ -36,27 +36,6 @@ namespace DataAggregator.Web
             ModelMapper.Init();
         }
 
-        protected void Application_AuthorizeRequest(object sender, EventArgs e)
-        {
-            //this.Context.Request.
-
-            //// Transfer the user to the appropriate custom error page
-            //HttpException lastErrorWrapper = Server.GetLastError() as HttpException;
-
-            //if (lastErrorWrapper == null)
-            //    return;
-
-            //if (lastErrorWrapper.GetHttpCode() == 404)
-            //{
-            //    Server.Transfer("~/ErrorPages/404.aspx");
-            //}
-            //else
-            //{
-            //    Server.Transfer("~/ErrorPages/Oops.aspx");
-            //}
-        }
-        
-
         void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
@@ -66,20 +45,32 @@ namespace DataAggregator.Web
                 return;
             }
 
-            HttpException httpException = exception as HttpException;
+            #region source info
 
-            Response.Clear();
+            var httpContext = ((MvcApplication)sender).Context;
+            var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            var currentController = currentRouteData?.Values["controller"].ToString() ?? string.Empty;
+            var currentAction = currentRouteData?.Values["action"].ToString() ?? string.Empty;
+
+            #endregion
+
+            #region запись в журнал
+
+            #endregion
+
+            #region choice controller and action
+
+            HttpException httpException = exception as HttpException;
 
             var routeData = new RouteData();
             routeData.Values["controller"] = "Error";
 
-            if (httpException == null)
+            if (httpException == null) // если ошибка не http
             {
-                // Unauthorized
-                if (Context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                if (Context.Response.StatusCode == (int)HttpStatusCode.Unauthorized) // 401
                     routeData.Values.Add("action", "Unauthorized");
                 else
-                    routeData.Values.Add("action", "InternalServerError");
+                    routeData.Values.Add("action", "General");
             }
             else
                 //It's an Http Exception, Let's handle it.
@@ -88,6 +79,10 @@ namespace DataAggregator.Web
                     case 401:
                         // Unauthorized
                         routeData.Values.Add("action", "Unauthorized");
+                        break;
+                    case 403:
+                        // Forbidden - доступ запрещён
+                        routeData.Values.Add("action", "Forbidden");
                         break;
                     case 404:
                         // Page not found.
@@ -100,24 +95,35 @@ namespace DataAggregator.Web
 
                     // Here you can handle Views to other error codes.
                     default:
-                        routeData.Values.Add("action", "General");
+                        routeData.Values.Add("action", "HttpError");
                         break;
                 }
 
-            // Pass exception details to the target error View.
-            routeData.Values.Add("error", exception);
+            routeData.Values.Add("exception", exception);
+
+            #endregion
 
             routeData.Values.Add("url", Context.Request.Url.OriginalString);
+
+            #region подготовка ответа
 
             // Clear the error on server.
             Server.ClearError();
 
+            Response.Clear();
+
             // to disable IIS custom errors
             Response.TrySkipIisCustomErrors = true;
 
+            #endregion
+            
+            var errorController = new ErrorController();
+
+            // Pass exception details, current Controller, current Action to the target error View.
+            errorController.ViewData.Model = new HandleErrorInfo(exception, currentController, currentAction);
+
             // Call target Controller and pass the routeData.
-            IController errorController = new ErrorController();
-            errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
+            ((IController)errorController).Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
         }
 
         protected void Application_EndRequest()
