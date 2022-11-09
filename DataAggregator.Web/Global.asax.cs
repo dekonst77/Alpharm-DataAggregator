@@ -60,10 +60,10 @@ namespace DataAggregator.Web
 
             #region choice controller and action
 
-            HttpException httpException = exception as HttpException;
-
             var routeData = new RouteData();
             routeData.Values["controller"] = "Error";
+
+            HttpException httpException = exception as HttpException;
 
             if (httpException == null) // если ошибка не http
             {
