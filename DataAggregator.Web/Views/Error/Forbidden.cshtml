@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error 403</title>
+</head>
+<body>
+    <h2>Доступ запрещён.</h2>
+
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+        <div>
+            <p>
+                <b>Controller:</b> @Model.ControllerName<br />
+                <b>Action:</b> @Model.ActionName<br />
+                <b>Exception:</b> @Model.Exception.Message
+            </p>
+        </div>
+    }
+
+</body>
+</html>

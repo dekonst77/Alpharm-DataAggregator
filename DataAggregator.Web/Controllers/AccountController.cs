@@ -54,14 +54,12 @@ namespace DataAggregator.Web.Controllers
 
                 if (user != null && (user.LockDate == null || user.LockDate > DateTime.Now))
                 {
-                    if(!user.MultipleAuthentication)
+                    if (!user.MultipleAuthentication)
                         await UserManager.UpdateSecurityStampAsync(user.Id);
 
                     await SignInAsync(user, model.RememberMe);
 
-                 
-
-                   return Json(new UserServiceModel ( User, HttpContext), JsonRequestBehavior.AllowGet);
+                    return Json(new UserServiceModel(User, HttpContext), JsonRequestBehavior.AllowGet);
                 }
             }
             return BadRequest("Неправильный логин или пароль.");

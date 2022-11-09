@@ -1,29 +1,29 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('DataAggregatorController', ['$scope', '$http', '$location', 'userService','uiGridCustomService',
+    .controller('DataAggregatorController', ['$scope', '$http', '$location', 'userService', 'uiGridCustomService',
         function ($scope, $http, $location, userService, uiGridCustomService) {
 
-                // Для данного самого главного контроллера верхней частью является меню
-                $scope.topMainPartSize = {
-                };
+            // Для данного самого главного контроллера верхней частью является меню
+            $scope.topMainPartSize = {
+            };
 
-                $scope.isUserDetermine = function() {
-                    return !!userService.getUser();
-                };
+            $scope.isUserDetermine = function () {
+                return !!userService.getUser();
+            };
 
-                $scope.isAuthenticated = function() {
-                    return userService.isAuthenticated();
-                };
+            $scope.isAuthenticated = function () {
+                return userService.isAuthenticated();
+            };
 
-                $scope.getUserName = function () {
-                    var user = userService.getUser();
-                    if (!user)
-                        return '';
-                    if (!user.IsAuthenticated)
-                        return '';
+            $scope.getUserName = function () {
+                var user = userService.getUser();
+                if (!user)
+                    return '';
+                if (!user.IsAuthenticated)
+                    return '';
 
-                    return user.Fullname;
-                };
+                return user.Fullname;
+            };
 
             $scope.logout = function () {
                 $scope.layoutLoading = $http.post('Account/LogOut')
@@ -58,16 +58,12 @@
                             if (response.data.Data.Distr_report !== undefined) {
                                 $scope.DAM_Distr_report.splice(0, $scope.DAM_Distr_report.length);
                                 Array.prototype.push.apply($scope.DAM_Distr_report, response.data.Data.Distr_report);
-                            }                            
+                            }
                         }, function () {
                         });
                 }
             };
             $scope.$on('userChanged', function () { $scope.MenuReportLoad(); });
-
-
-
-
-            }
-        ]);
+        }
+    ]);
 

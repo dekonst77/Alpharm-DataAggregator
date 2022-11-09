@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.Classifier
 {
-    [Authorize(Roles = "SBoss")]
+    [Authorize(Roles = "SPharmacist")]
     public class BlisterBlockController : BaseController
     {
         private readonly DrugClassifierContext _context;

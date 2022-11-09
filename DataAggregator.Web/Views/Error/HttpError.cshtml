@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error @ViewBag.StatusCode</title>
+</head>
+<body>
+    <p>При выполнении операции произошла непредвиденная ошибка. Сообщите администратору приложенную ниже информацию.</p>
+
+    @if (Model != null)
+    {
+        <div>
+            <p>
+                <b>Controller:</b> @Model.ControllerName<br />
+                <b>Action:</b> @Model.ActionName<br />
+                <b>Exception:</b> @Model.Exception.Message
+            </p>
+            <p><b>StackTrace:</b></p>
+            <div style="overflow:scroll">
+                <pre>@Model.Exception.StackTrace</pre>
+            </div>
+        </div>
+    }
+
+</body>
+</html>

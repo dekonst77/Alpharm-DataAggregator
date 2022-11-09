@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error 500</title>
+</head>
+<body>
+    <h2>Внутренняя ошибка сервера.</h2>
+
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+        <div>
+            <p>
+                <b>Controller:</b> @Model.ControllerName<br />
+                <b>Action:</b> @Model.ActionName<br />
+                <b>Exception:</b> @Model.Exception.Message
+            </p>
+            <p><b>StackTrace:</b></p>
+            <div style="overflow:scroll">
+                <pre>@Model.Exception.StackTrace</pre>
+            </div>
+        </div>
+    }
+    <img src="https://www.freeiconspng.com/uploads/error-icon-13.png" width="250" />
+</body>
+</html>
