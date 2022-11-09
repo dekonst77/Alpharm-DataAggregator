@@ -108,15 +108,15 @@ namespace DataAggregator.Web
             #region подготовка ответа
 
             // Clear the error on server.
-            Server.ClearError();
-
-            Response.Clear();
+            httpContext.ClearError();
+            
+            httpContext.Response.Clear();
 
             // to disable IIS custom errors
-            Response.TrySkipIisCustomErrors = true;
+            httpContext.Response.TrySkipIisCustomErrors = true;
 
             #endregion
-            
+
             var errorController = new ErrorController();
 
             // Pass exception details, current Controller, current Action to the target error View.
