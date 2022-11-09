@@ -2261,6 +2261,10 @@
     <Content Include="Views\GS\Organization_without_INN.html" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\General.cshtml" />
+    <Content Include="Views\Error\HttpError.cshtml" />
+    <Content Include="Views\Error\Forbidden.cshtml" />
+    <Content Include="Views\Error\InternalServerError.cshtml" />
     <None Include="Web.DebugOnProductDB.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

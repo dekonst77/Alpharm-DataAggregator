@@ -7,11 +7,10 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Error 401</title>
+    <title>Error 500</title>
 </head>
 <body>
-    <h1>Ошибка авторизации</h1>
-    <h2>У вас нет доступа к данному режиму.</h2>
+    <h2>Внутренняя ошибка сервера.</h2>
 
     @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
     {
@@ -21,6 +20,10 @@
                 <b>Action:</b> @Model.ActionName<br />
                 <b>Exception:</b> @Model.Exception.Message
             </p>
+            <p><b>StackTrace:</b></p>
+            <div style="overflow:scroll">
+                <pre>@Model.Exception.StackTrace</pre>
+            </div>
         </div>
     }
 
