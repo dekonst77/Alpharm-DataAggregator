@@ -6,6 +6,7 @@ using DataAggregator.Domain.Model.Ecom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataAggregator.Domain.DAL
 {
@@ -65,6 +66,28 @@ namespace DataAggregator.Domain.DAL
             }
             return true;
         }
+
+        public async Task<bool> EcomExportSourceRun(DateTime Period)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@Year", SqlDbType.Int).Value = Period.Year;
+                command.Parameters.Add("@Month", SqlDbType.Int).Value = Period.Month;
+
+                command.CommandText = "[source].[RawDataOnlineOffline]";
+
+                Database.Connection.Open();
+
+                await command.ExecuteNonQueryAsync();
+            }
+            return true;
+        }
+
         public bool Table_Coefficient_Test_Min_Max()
         {
             using (var command = new SqlCommand())

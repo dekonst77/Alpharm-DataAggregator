@@ -3,19 +3,25 @@
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
         <div class="panel-heading padding1">
             <div class="row">
-                <div class="col-md-3 padding3">
+                <div class="col-md-4 padding3">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-success btn-sm" ng-click="Coefficients_Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
-                        <button type="button" class="btn btn-warning btn-sm"
+                        <button type="button" class="btn btn-warning btn-sm" 
                                 ng-disabled="!Grid_RegionalCoefficients.NeedSave && !Grid_CoefficientsCount.NeedSave && !Grid_CoefficientsPrice.NeedSave && !Grid_Coefficients.NeedSave"
                                 ng-click="Coefficients_Save();">
                             <span class="glyphicon glyphicon-floppy-disk">Сохранить</span>
                         </button>
+                        <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave"
+                             ngf-select="Coefficients_from_Excel($files)"
+                             multiple
+                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                            <span class="glyphicon glyphicon-upload">Импорт Excel</span>
+                        </div>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
 
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="Coefficients_Calc();"><span class="glyphicon glyphicon-flash">Расчёт</span></button>
-
-                        <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ngf-select="Coefficients_from_Excel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Импорт Excel</span></div>
-
+                        <button type="button" class="btn btn-primary btn-sm" ng-click="Source_Calc();"><span class="glyphicon glyphicon-flash">Загрузка исходников</span></button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="Coefficients_Calc();"><span class="glyphicon glyphicon-flash">Расчёт Ecom</span></button>
                     </div>
                 </div>
                 <div class="col-md-1 padding3">
@@ -29,10 +35,10 @@
 
     <div id="grid-block" class="auto-item-panel">
         <div class="row no-padding">
-            <div class="col-md-3 no-padding">
+            <div class="col-md-4 no-padding">
                 <ui-grid-control options="Grid_RegionalCoefficients.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
             </div>
-            <div class="col-md-9 no-padding">
+            <div class="col-md-8 no-padding">
                 <div class="row no-padding">
                     <div class="col-md-4 no-padding">
                         <div style="height: 250px !important">
