@@ -67,7 +67,7 @@ namespace DataAggregator.Domain.DAL
             return true;
         }
 
-        public async Task<bool> EcomExportSourceRun(DateTime Period)
+        public async Task EcomExportSourceRun(DateTime Period)
         {
             using (var command = new SqlCommand())
             {
@@ -85,7 +85,6 @@ namespace DataAggregator.Domain.DAL
 
                 await command.ExecuteNonQueryAsync();
             }
-            return true;
         }
 
         public bool Table_Coefficient_Test_Min_Max()
