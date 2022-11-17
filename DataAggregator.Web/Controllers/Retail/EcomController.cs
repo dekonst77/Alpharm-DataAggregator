@@ -12,6 +12,8 @@ using System.IO.Compression;
 using DataAggregator.Domain.Model.Ecom;
 using DataAggregator.Domain.Utils;
 using System.Data;
+using System.Threading.Tasks;
+
 namespace DataAggregator.Web.Controllers.Retail
 {
     [Authorize(Roles = "Ecom")]
@@ -140,6 +142,28 @@ namespace DataAggregator.Web.Controllers.Retail
                 var _context = new EcomContext(APP);
                 _context.Database.CommandTimeout = 0;
                 _context.EcomRun(Period);
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = ViewData
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Source_Calc(string currentperiod)
+        {
+            try
+            {
+                DateTime Period = Convert.ToDateTime(currentperiod + "-1");
+                var _context = new EcomContext(APP);
+                _context.Database.CommandTimeout = 0;
+                await _context.EcomExportSourceRun(Period);
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
