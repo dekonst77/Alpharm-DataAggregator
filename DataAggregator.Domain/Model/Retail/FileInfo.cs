@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAggregator.Domain.Model.Retail
 {
+    [Table("FileInfo", Schema = "dbo")]
     public class FileInfo
     {
         public long Id { get; set; }

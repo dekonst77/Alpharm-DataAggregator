@@ -249,7 +249,7 @@ namespace DataAggregator.Web.Controllers.Retail
 
             if (!check)
                 throw new ApplicationException(
-                    String.Format("Процессы не могут быть запущены, не все условия выполенны:{0}", message));
+                    String.Format("Процессы не могут быть запущены, не все условия выполены:{0}", message));
 
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -328,7 +328,7 @@ namespace DataAggregator.Web.Controllers.Retail
 
             List<int> goodStatusId = new List<int>() {1,2,3};
 
-            List<int> baseProcess = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            List<int> baseProcess = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23 };
 
 
             if (ProcessId < 10)

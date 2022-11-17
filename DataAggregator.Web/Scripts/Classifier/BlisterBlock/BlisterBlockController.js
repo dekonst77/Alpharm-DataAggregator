@@ -214,9 +214,17 @@ function BlisterBlockController($scope, $http, $q, $cacheFactory, $timeout, user
             }
 
         }, function (response) {
-            console.log('errorHandlerService.showResponseError = ' + response);
-            errorHandlerService.showResponseError(response);
-        });
+            console.log(response);
+
+            /*
+            if (response.status in [401, 404]) {
+                messageBoxService.showError("У вас нет доступа к данному ресурсу. Обратитесь к администратору системы.");
+
+                return
+            }
+            */
+            messageBoxService.showError(response.data);
+        }).catch(error => alert(error.message));
     }
 
     $scope.BlisterBlock_Save = function () {

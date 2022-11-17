@@ -147,6 +147,11 @@ namespace DataAggregator.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.Forbidden;
             return new EmptyResult();
         }
+        protected ActionResult Unauthorized()
+        {
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return new EmptyResult();
+        }
 
         protected ActionResult NotFound()
         {

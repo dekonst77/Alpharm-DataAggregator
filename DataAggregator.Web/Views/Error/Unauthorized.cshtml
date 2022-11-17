@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error 401. Ошибка авторизации</title>
+</head>
+<body>
+    <h2>У вас нет доступа к данному режиму.</h2>
+
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+        <div>
+            <p>
+                <b>Controller:</b> @Model.ControllerName<br />
+                <b>Action:</b> @Model.ActionName<br />
+            </p>
+        </div>
+    }
+    
+</body>
+</html>

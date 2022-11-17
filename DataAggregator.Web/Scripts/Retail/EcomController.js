@@ -189,4 +189,25 @@ function EcomController($scope, $route, $http, $uibModal, commonService, message
             });
         }
     };
+
+    $scope.Source_Calc = function () {
+        messageBoxService.showConfirm('Вы уверены?', 'Загрузка исходников в Ecom за ' + $scope.currentperiod)
+            .then(
+                function (result) {
+                    console.log(11)
+                    $http({
+                        method: 'POST',
+                        url: '/Ecom/Source_Calc/',
+                        data: JSON.stringify({ currentperiod: $scope.currentperiod })
+                    }).then(function (response) {
+                        console.log("выполнено /Ecom/Source_Calc/" + $scope.currentperiod)
+                    }, function (response) {
+                        errorHandlerService.showResponseError(response);
+                    });
+                },
+                function (result) {
+                    if (result === 'no') {
+                    }
+                });
+    };
 }

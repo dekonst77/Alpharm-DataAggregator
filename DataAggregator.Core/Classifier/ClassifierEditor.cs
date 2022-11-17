@@ -36,7 +36,7 @@ namespace DataAggregator.Core.Classifier
             int? ClassifierPackingId = null;
 
             if (context.ClassifierPacking.Where(w => w.ClassifierId == ClassifierId).GroupBy(t => t.CountPrimaryPacking).Count() == 1)
-            {               
+            {
                 ClassifierPackingId = context.ClassifierPacking.Where(w => w.ClassifierId == ClassifierId).FirstOrDefault().Id;
             }
             #endregion
