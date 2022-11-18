@@ -30,8 +30,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
     {
         [Key]
         public long Id { get; set; }
-
-
+        
         public decimal OFD_Sum_LastMonth { get; set; }
         public decimal Audit_Sum_LastMonth { get; set; }
 
@@ -56,5 +55,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
         public bool ToBlockUsed { get; set; }
         public bool ToSplitMnn { get; set; }
         public bool IsSTM { get; set; }
+
+        public string OperatorComments { get; set; }
     }
 }
