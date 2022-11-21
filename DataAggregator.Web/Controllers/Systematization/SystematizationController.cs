@@ -148,7 +148,32 @@ namespace DataAggregator.Web.Controllers.Systematization
             {
                 ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 3600;
 
-                List<DrugInWorkView> drugs = context.DrugInWorkView.Where(d => d.UserId == userGuid).OrderBy(d => d.DrugClearText).ToList();
+                List<DrugInWorkView> drugs = context.DrugInWorkView
+                    .Where(d => d.UserId == userGuid)
+                    .OrderBy(d => d.DrugClearText)
+                    .ToList();
+
+                //выбираем все DrugId из списка
+                var drugIds = drugs.Where(x => x.DrugId != null).Select(x => x.DrugId.Value).ToList();
+                //выбираем все DrugClassifier по не пустым DrugId и пустым ClassifierId
+                List<long> dcs = context.DrugClassifier
+                    .Where(x => x.DrugId != null && x.ClassifierId == null && drugIds.Select(y => y)
+                    .Contains(x.DrugId.Value))
+                    .Select(x => x.DrugId.Value)
+                    .ToList();
+
+                //если есть такие записи
+                if (dcs.Count > 0)
+                {
+                    foreach (var dcw in drugs)
+                    {
+                        foreach (var dc in dcs)
+                        {
+                            if (dcw.DrugId.HasValue && dcw.DrugId == dc)
+                                dcw.HasEmptyClassfierId = true;
+                        }
+                    }
+                }
 
                 JsonResult jsonResult = Json(drugs, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
@@ -161,9 +186,17 @@ namespace DataAggregator.Web.Controllers.Systematization
         {
             using (var context = new DrugClassifierContext(APP))
             {
-                var res = context.GoodsCategory.OrderBy(o => o.GoodsSection.Name).Select(s => new GoodsSection_view() { Id = (byte)s.Id, Name = s.Name, MiniName = s.MiniName, Section = s.GoodsSection.Name });
+                var res = context.GoodsCategory
+                    .OrderBy(o => o.GoodsSection.Name)
+                    .Select(s => new GoodsSection_view() { 
+                        Id = (byte)s.Id, 
+                        Name = s.Name, 
+                        MiniName = s.MiniName, 
+                        Section = s.GoodsSection.Name 
+                    })
+                    .ToList();
 
-                JsonResult jsonResult = Json(res.ToList(), JsonRequestBehavior.AllowGet);
+                JsonResult jsonResult = Json(res, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
 
                 return jsonResult;
@@ -199,7 +232,9 @@ namespace DataAggregator.Web.Controllers.Systematization
 
             using (var context = new DrugClassifierContext(APP))
             {
-                List<DrugClassifierInWork> drugsInWork = context.DrugClassifierInWork.Where(dcw => dcw.UserId == userGuid).ToList();
+                List<DrugClassifierInWork> drugsInWork = context.DrugClassifierInWork
+                                                                .Where(dcw => dcw.UserId == userGuid)
+                                                                .ToList();
 
                 foreach (long id in drugClassifierInWork)
                 {
