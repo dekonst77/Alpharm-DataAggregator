@@ -100,5 +100,25 @@ namespace DataAggregator.Domain.Model.Retail.SalesSKUbySF
         public string Comment_3 { get; set; }
 
         public Nullable<decimal> LifeSavingDrugsPrice { get; set; } // цена ЖНВЛП
+
+        // аудит по скю
+        public Nullable<decimal> RevenuePerOFDpharmacy { get; set; }                       // Выручка на 1 аптеку ОФД
+        public Nullable<decimal> RevenuePerALBpharmacy { get; set; }                       // Выручка на 1 аптеку АЛБ
+        public Nullable<double> MarketShareinOFDRegion { get; set; }                      // Доля от рынка в регионе ОФД
+        public Nullable<double> MarketShareinALBRegion { get; set; }                      // Доля от рынка в регионе АЛБ
+        public Nullable<double> RevenueAverage { get; set; }                              // Среднее арифметическое, находим число которое равнозначно удалено от R и S
+        public Nullable<double> ChooseSourceOFD_ALB { get; set; }                         // выбираем источник ОФД/АЛБ
+        public Nullable<double> BiasProbability { get; set; }                             // вероятность смещения
+        public Nullable<double> AverageQuantityPacktoFakePart { get; set; }               // Среднее кол-во уп.на фейковую часть
+        public Nullable<double> ShareOfOFDPoints { get; set; }                            // Доля от точек ОФД
+        public Nullable<double> ShareOfAlphaBitPoints { get; set; }                       // Доля от точек АЛБ
+        public Nullable<double> RevenueAverage2 { get; set; }                             // Среднее арифметическое, находим число которое равнозначно удалено от R и S
+        public Nullable<double> ChooseSourceOFD_ALB2 { get; set; }                        // выбираем источник ОФД/АЛБ (2)
+        public Nullable<double> BiasProbability2 { get; set; }                            // вероятность смещения(2)
+        public Nullable<double> AverageQuantityPacktoFakePart2 { get; set; }              // Среднее кол-во уп.на фейковую часть (2)
+        public Nullable<double> CalculationOfFakePartOfNumberOfPharmacies { get; set; }   // Расчет фейковой части кол-ва аптек
+        public Nullable<double> NumberOfFakePacks { get; set; }                           // Кол-во уп фейк.
+        public Nullable<double> WholeMarket { get; set; }                                 // Весь рынок
+        public Nullable<double> GrowthOfEntireMarketFromPreviousMonth { get; set; }       // Прирост весь рынок от предыдущего месяца
     }
 }
