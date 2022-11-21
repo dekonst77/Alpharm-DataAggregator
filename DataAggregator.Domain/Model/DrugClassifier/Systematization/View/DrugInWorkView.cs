@@ -75,6 +75,9 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Systematization.View
         public string Comment { get; set; }
         public string PrioritetWords { get; set; }
         public int? PrioritetWords_isControl { get; set; }
-        public string OperatorComment { get; set; }        
+        public string OperatorComment { get; set; }
+
+        [NotMapped]
+        public bool HasEmptyClassfierId { get; set; }
     }
 }

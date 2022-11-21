@@ -18,6 +18,8 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Systematization
 
         public long? PackerId { get; set; }
 
+        public int? ClassifierId { get; set; }
+
         public int? ConsumerPackingCount { get; set; }
       
         public long? RobotId { get; set; }
@@ -82,5 +84,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Systematization
         public virtual Manufacturer OwnerTradeMark { get; set; }
 
         public virtual Robot Robot { get; set; }
+
+       
     }
 }
