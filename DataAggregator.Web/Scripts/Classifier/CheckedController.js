@@ -34,6 +34,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         }
         $scope.Grid_Checked = uiGridCustomService.createGridClassMod($scope, "Grid_Checked");
 
+        let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
 
         $scope.Grid_Checked.Options.columnDefs = [
             { name: 'ClassifierId', field: 'Id', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/Classifier/ClassifierEditor/Edit?ClassifierId={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
@@ -61,8 +62,16 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
             { name: 'IsOther', field: 'IsOther', type: 'boolean' },
             { name: 'СТМ', field: 'IsSTM', type: 'boolean', enableCellEdit: true },
             { name: 'New', field: 'PriceNew', enableCellEdit: true, type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
-            { name: 'LastWhen', field: 'LastWhen', type: 'date' }
+            { name: 'LastWhen', field: 'LastWhen', type: 'date' },
+
+            {
+                name: 'OperatorComments',
+                field: 'OperatorComments',
+                filter: { condition: uiGridCustomService.condition },
+                cellTemplate: cellTemplateHint
+            }
         ];
+
         $scope.Grid_Checked.SetDefaults();
         $scope.dataLoading = $http({
             method: 'POST',
@@ -80,7 +89,9 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
                 url: '/Checked/Checked_search/',
                 data: JSON.stringify({ IsBrick: $scope.filter.IsBrick, isOther: $scope.filter.isOther, ToBlock: $scope.filter.ToBlock })
             }).then(function (response) {
+                
                 var data = response.data;
+
                 if (data.Success) {
                     $scope.Grid_Checked.Options.data = data.Data.Checkeds;
                 }
