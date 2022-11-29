@@ -12,7 +12,7 @@ using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 
 namespace DataAggregator.Web.Controllers.Classifier
 {
-    [Authorize(Roles = "SBoss")]
+    [Authorize(Roles = "SBoss,SPharmacist")]
     public class DDDController : BaseController
     {
         public ActionResult DDD_Norma_Init()
