@@ -50,8 +50,11 @@ namespace DataAggregator.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+#if DEBUG
+                ApplicationUser user = await UserManager.FindByNameAsync(model.Name);
+#else
                 ApplicationUser user = await UserManager.FindAsync(model.Name, model.Password);
-
+#endif
                 if (user != null && (user.LockDate == null || user.LockDate > DateTime.Now))
                 {
                     if (!user.MultipleAuthentication)
@@ -62,6 +65,7 @@ namespace DataAggregator.Web.Controllers
                     return Json(new UserServiceModel(User, HttpContext), JsonRequestBehavior.AllowGet);
                 }
             }
+
             return BadRequest("Неправильный логин или пароль.");
         }
 
