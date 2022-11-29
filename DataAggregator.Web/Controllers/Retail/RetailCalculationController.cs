@@ -328,7 +328,7 @@ namespace DataAggregator.Web.Controllers.Retail
 
             List<int> goodStatusId = new List<int>() {1,2,3};
 
-            List<int> baseProcess = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23 };
+            List<int> baseProcess = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23, 27 };
 
 
             if (ProcessId < 10)
