@@ -23,6 +23,8 @@ namespace DataAggregator.Domain.Model.RetailCalculation
 
         public string Comment { get; set; }
 
+        public int? SourceId { get; set; }
+
         public  virtual  Process Process { get; set; }
 
         public virtual Status Status { get; set; }

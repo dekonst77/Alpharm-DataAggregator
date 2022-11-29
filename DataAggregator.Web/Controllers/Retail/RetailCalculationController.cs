@@ -232,11 +232,11 @@ namespace DataAggregator.Web.Controllers.Retail
 
         //Запустить
         [HttpPost]
-        public ActionResult RunProcess(List<int> processList, int year, int month)
+        public ActionResult RunProcess(List<int> processList, int year, int month, int? sourceId)
         {
             CheckCurrentPeriod(year, month);
 
-            //Проверим каждый процесс на возможность запускаs
+            //Проверим каждый процесс на возможность запуска
             //Если в списке идут зависимые процессы, то будем считать, что предыдущий завершился успешно
             bool check = true;
             string message = string.Empty;
@@ -259,6 +259,7 @@ namespace DataAggregator.Web.Controllers.Retail
                     pl.StartTime = DateTime.Now;
                     pl.StatusId = 1;
                     pl.Comment = null;
+                    pl.SourceId = sourceId;
                     pl.EndTime = null;
                     pl.UserId = new Guid(User.Identity.GetUserId());
                 }

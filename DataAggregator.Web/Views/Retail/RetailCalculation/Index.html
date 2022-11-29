@@ -15,17 +15,38 @@
                     <div class="col-md-2">
                         <date-period period="filter.date" ng-required="true"></date-period>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <br />
                         <button type="button" class="btn btn-primary" ng-click="startPeriod()" ng-disabled="!canStartPeriod() || fileInfoForm.$invalid" data-translate="RETAIL.RETAIL_CALCULATION.START_PERIOD"></button>
                         <button type="button" class="btn btn-primary" ng-click="endPeriod()" ng-disabled="!canEndPeriod() || fileInfoForm.$invalid" data-translate="RETAIL.RETAIL_CALCULATION.END_PERIOD"></button>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
+                        <div ng-show="showSource()">
+                            <label>Поставщик</label>
+                            <input type="text"
+                                   name="Source"
+                                   required
+                                   validate
+                                   dictionaryrequiredid="{{sources.Source.Id}}"
+                                   ng-model="sources.Source.Name"
+                                   ng-focus="onFocus($event)"
+                                   ng-class="{'has-error': fileInfoForm.source.$invalid}"
+                                   emptyTypeahead
+                                   ng-change="clearId(sources.Source)"
+                                   uib-typeahead="data.Name for data in getListSource($viewValue)"
+                                   class="form-control"
+                                   typeahead-on-select="setId($item, sources.Source)"
+                                   typeahead-select-on-exact="true"
+                                   typeahead-min-length="0"
+                                   typeahead-show-hint="false"
+                                   placeholder="Поставщик"
+                                   autocomplete="new-password">
+                        </div>
+                      
+                    </div>
+                    <div class="col-md-3">
                         <br />
                         <button type="button" class="btn btn-success" ng-click="runProcess() || fileInfoForm.$invalid" ng-disabled="!canStart()" data-translate="RETAIL.RETAIL_CALCULATION.START_ACTION"></button>
-                    </div>
-                    <div class="col-md-2">
-                        <br />
                         <button type="button" class="btn btn-warning" ng-click="stopProcess() || fileInfoForm.$invalid" ng-disabled="!canStop()" data-translate="RETAIL.RETAIL_CALCULATION.STOP_ACTION"></button>
                     </div>
                 </div>

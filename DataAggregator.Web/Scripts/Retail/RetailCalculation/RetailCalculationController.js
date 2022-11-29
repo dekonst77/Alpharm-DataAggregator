@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('RetailCalculationController', ['$scope', '$http', '$uibModal', '$interval', 'uiGridCustomService', 'errorHandlerService', 'formatConstants', RetailCalculationController]);
+    .controller('RetailCalculationController', ['$scope', '$http', '$uibModal', '$interval', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'formatConstants', RetailCalculationController]);
 
-function RetailCalculationController($scope, $http, $uibModal, $interval, uiGridCustomService, errorHandlerService, formatConstants) {
+function RetailCalculationController($scope, $http, $uibModal, $interval, $timeout, uiGridCustomService, errorHandlerService, formatConstants) {
 
     $scope.setTabIndex = function (index) {
         $scope.currentTabIndex = index;
@@ -109,7 +109,6 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, uiGrid
         });
     }
 
-   
 
     //Определяем текущую дату и выпускаемый период
     function init() {
@@ -121,7 +120,7 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, uiGrid
             if (response.data.Year !== null) {
                 var year = response.data.Year;
                 var month = response.data.Month;
-                var date = new Date(year, month-1, 15);
+                var date = new Date(year, month - 1, 15);
 
                 $scope.filter.date = date;
                 calculationPeriod = date;
@@ -129,10 +128,10 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, uiGrid
                 $scope.filter.date = null;
                 calculationPeriod = null;
             }
-          
-
-          
         }, function () {
+
+        }).then(function () {
+            $scope.loadSourceList();
         });
 
         $scope.$watch(function () { return $scope.filter.date; },
@@ -205,6 +204,7 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, uiGrid
             year: $scope.filter.Year,
             month: $scope.filter.Month,
             processList: selectedProcessList,
+            sourceId: $scope.sources.Source.Id
         }
 
         $scope.loading = $http({
@@ -273,10 +273,54 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, uiGrid
         return $scope.dataGridOptions.data.some(d => d.Checked);
     };
 
+    //Показ выпадающиего блока поставщиков у процесса "Отвязать аптеки"
+    $scope.showSource = function () {
+        if (!$scope.dataGridOptions.data)
+            return false;
+        return $scope.dataGridOptions.data.some(d => d.Checked && d.ProcessId == 1);
+    };
 
+    $scope.loadSourceList = function (selecedItem, event) {
 
+        $http({
+            method: 'POST',
+            url: '/RetailTemplates/GetAllSources'
+        }).then(function (response) {
+            $scope.sources = response.data;
+            $scope.sources.Source = {}
+            $scope.sources.Source.Id = null;
+            $scope.sources.Source.Name = null;
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    };
 
+    $scope.getListSource = function (value) {
+        if (value == "" || value == null)
+            return $scope.sources.slice(0, 20);
 
+        return $scope.sources.filter(function (item) {
+            return item.Name.toLowerCase().includes(value.toLowerCase())
+        }).slice(0, 20);
+    };
+
+    $scope.setId = function (dictionaryItem, item) {
+        item.Id = dictionaryItem.Id;
+        item.Name = dictionaryItem.Name;
+    };
+
+    $scope.clearId = function (item, value) {
+        if (item != null)
+            item.Id = null;
+    };
+
+    //Для выпадающего списка при клике на Поставщика
+    $scope.onFocus = function (e) {
+        $timeout(function () {
+            $(e.target).trigger('input');
+            $(e.target).trigger('change'); // for IE
+        });
+    }
 }
 
 
