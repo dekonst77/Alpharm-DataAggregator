@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAggregator.Domain.Model.Retail.FileInfoService
 {
@@ -8,7 +9,7 @@ namespace DataAggregator.Domain.Model.Retail.FileInfoService
     {
         public long Id { get; set; }
 
-        public string Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public string ErrorMessage { get; set; }
 
