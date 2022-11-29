@@ -13,8 +13,13 @@ namespace DataAggregator.Web
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+#if DEBUG
+            BundleTable.EnableOptimizations = false;
+#endif
 
             JsonValueProviderFactory jsonValueProviderFactory = null;
 
