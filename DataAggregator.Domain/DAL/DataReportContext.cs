@@ -5,6 +5,7 @@ using System.Data;
 using DataAggregator.Domain.Model.DataReport;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DataAggregator.Domain.DAL
 {
@@ -15,6 +16,7 @@ namespace DataAggregator.Domain.DAL
         {
             Database.SetInitializer<DataReportContext>(null);
             Database.Connection.ConnectionString += "APP=" + APP;//Чтобы триггер увидел, кто меняет
+            Database.Log = (query) => Debug.Write(query);
         }
         public DbSet<Worker> Worker { get; set; }
         public DbSet<WebAggReports> WebAggReports { get; set; }
