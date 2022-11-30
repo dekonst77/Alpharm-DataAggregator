@@ -94,6 +94,9 @@ namespace DataAggregator.Web
 
                 // Блок «блистеровка» 
                 .Include("~/Scripts/Classifier/BlisterBlock/BlisterBlockController.js")
+
+                // Отчет проверки классификатора
+                .Include("~/Scripts/Classifier/Reports/CheckClassifireReportController.js")
                 );
 
             bundles.Add(new ComplexStyleBundle("~/Content/Classifier/css")

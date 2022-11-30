@@ -221,7 +221,7 @@
     // Систематизация
     function setupSystematizationRouting() {
         $routeProvider
-           
+
             // Обработка доп. ассортимента
             .when('/Systematization/Raspredelenie',
                 {
@@ -503,12 +503,12 @@
                     isEditor: true
                 })
             .when('/Classifier/DataChangeExcel',
-                    {
-                        templateUrl: 'Views/Classifier/DataChangeExcel.html',
-                        title: 'Обмен через Excel',
-                        authorize: true,
-                        isEditor: true
-                    })
+                {
+                    templateUrl: 'Views/Classifier/DataChangeExcel.html',
+                    title: 'Обмен через Excel',
+                    authorize: true,
+                    isEditor: true
+                })
             .when('/Classifier/Checkeds',
                 {
                     templateUrl: 'Views/Classifier/Checkeds.html',
@@ -720,7 +720,14 @@
                 title: 'CLASSIFIER.BLISTERBLOCK.TITLE',
                 authorize: true
             })
-        ;
+
+            // Отчет проверки классификатора
+            .when('/Classifier/CheckReport',
+                {
+                    templateUrl: 'Views/Classifier/Reports/CheckReport/CheckReport.html',
+                    title: 'CLASSIFIER.CHECK_REPORT.TITLE',
+                    authorize: true
+                });
     }
 
     // Розница
@@ -849,7 +856,7 @@
                 title: 'RETAIL.RETAIL_CALCULATION.TITLE',
                 authorize: true
             })
-            .when('/Retail/CTM', {              
+            .when('/Retail/CTM', {
                 templateUrl: 'Views/Retail/CTM/CTM.html',
                 title: 'RETAIL.RETAIL_CTM.TITLE',
                 authorize: true
@@ -863,198 +870,198 @@
             ;
     }
 
-// Госзакупки
-function setupGovernmentPurchasesRouting() {
-    $routeProvider
+    // Госзакупки
+    function setupGovernmentPurchasesRouting() {
+        $routeProvider
 
-        // Добавление закупок на скачивание
-        .when('/GovernmentPurchases/PurchaseLink',
-            {
-                templateUrl: 'Views/GovernmentPurchases/PurchaseLink/Index.html',
-                title: 'GOVERNMENT_PURCHASES.PURCHASE_LINK.TITLE',
-                authorize: true
-            })
+            // Добавление закупок на скачивание
+            .when('/GovernmentPurchases/PurchaseLink',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/PurchaseLink/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.PURCHASE_LINK.TITLE',
+                    authorize: true
+                })
 
-        // Ключевые слова для распределения
-        .when('/GovernmentPurchases/DistributionKeyWords',
-            {
-                templateUrl: 'Views/GovernmentPurchases/DistributionKeyWords/Index.html',
-                title: 'GOVERNMENT_PURCHASES.DISTRIBUTION_KEY_WORDS.TITLE',
-                authorize: true
-            })
+            // Ключевые слова для распределения
+            .when('/GovernmentPurchases/DistributionKeyWords',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/DistributionKeyWords/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.DISTRIBUTION_KEY_WORDS.TITLE',
+                    authorize: true
+                })
 
-        // Распределение в работу
-        .when('/GovernmentPurchases/DistributionWork',
-            {
-                templateUrl: 'Views/GovernmentPurchases/DistributionWork/Index.html',
-                title: 'GOVERNMENT_PURCHASES.DISTRIBUTION_WORK.TITLE',
-                authorize: true
-            })
+            // Распределение в работу
+            .when('/GovernmentPurchases/DistributionWork',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/DistributionWork/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.DISTRIBUTION_WORK.TITLE',
+                    authorize: true
+                })
 
-        // Распределение контрактов в работу
-        .when('/GovernmentPurchases/ContractDistributionWork',
-            {
-                templateUrl: 'Views/GovernmentPurchases/ContractDistributionWork/Index.html',
-                title: 'GOVERNMENT_PURCHASES.CONTRACT_DISTRIBUTION_WORK.TITLE',
-                authorize: true
-            })
-        // Проверка по сайту контракты
-        .when('/GovernmentPurchases/Check/Contract',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Check/Contract/Index.html',
-                title: 'Проверка по сайту контракты',
-                authorize: true
-            })
-        // Дополнительная скачка и сравнение КБК по сайту http://s-dev1:8080/redmine/issues/6240#change-18690
-        .when('/GovernmentPurchases/Check/ContractPaymentStage',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Check/ContractPaymentStage.html',
-                title: 'Дополнительная скачка и сравнение КБК по сайту',
-                authorize: true
-            })
-        // Редактирование закупок
-        .when('/GovernmentPurchases/GovernmentPurchases',
-            {
-                templateUrl: 'Views/GovernmentPurchases/GovernmentPurchases/Index.html',
-                title: 'GOVERNMENT_PURCHASES.GOVERNMENT_PURCHASES.TITLE',
-                authorize: true
-            })
+            // Распределение контрактов в работу
+            .when('/GovernmentPurchases/ContractDistributionWork',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/ContractDistributionWork/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.CONTRACT_DISTRIBUTION_WORK.TITLE',
+                    authorize: true
+                })
+            // Проверка по сайту контракты
+            .when('/GovernmentPurchases/Check/Contract',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Check/Contract/Index.html',
+                    title: 'Проверка по сайту контракты',
+                    authorize: true
+                })
+            // Дополнительная скачка и сравнение КБК по сайту http://s-dev1:8080/redmine/issues/6240#change-18690
+            .when('/GovernmentPurchases/Check/ContractPaymentStage',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Check/ContractPaymentStage.html',
+                    title: 'Дополнительная скачка и сравнение КБК по сайту',
+                    authorize: true
+                })
+            // Редактирование закупок
+            .when('/GovernmentPurchases/GovernmentPurchases',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/GovernmentPurchases/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.GOVERNMENT_PURCHASES.TITLE',
+                    authorize: true
+                })
 
-        // Редактирование организаций
-        .when('/GovernmentPurchases/OrganizationsEditor',
-            {
-                templateUrl: 'Views/GovernmentPurchases/OrganizationsEditor/Index.html',
-                title: 'GOVERNMENT_PURCHASES.ORGANIZATIONS_EDITOR.TITLE',
-                authorize: true
-            })
-        .when('/GovernmentPurchases/OrganizationRaw',
-            {
-                templateUrl: 'Views/GovernmentPurchases/OrganizationRaw.html',
-                title: 'Организации Обработка',
-                authorize: true
-            })
-        // Редактирование поставщиков
-        .when('/GovernmentPurchases/Suppliers',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Suppliers/Index.html',
-                title: 'GOVERNMENT_PURCHASES.SUPPLIERS.TITLE',
-                authorize: true
-            })
+            // Редактирование организаций
+            .when('/GovernmentPurchases/OrganizationsEditor',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/OrganizationsEditor/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.ORGANIZATIONS_EDITOR.TITLE',
+                    authorize: true
+                })
+            .when('/GovernmentPurchases/OrganizationRaw',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/OrganizationRaw.html',
+                    title: 'Организации Обработка',
+                    authorize: true
+                })
+            // Редактирование поставщиков
+            .when('/GovernmentPurchases/Suppliers',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Suppliers/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.SUPPLIERS.TITLE',
+                    authorize: true
+                })
 
-        // Блок массовой замены
-        .when('/GovernmentPurchases/MassFixesData',
-            {
-                templateUrl: 'Views/GovernmentPurchases/MassFixesData/Index.html',
-                title: 'GOVERNMENT_PURCHASES.MASS_FIXES_DATA.TITLE',
-                authorize: true
-            })
-        // Блок массовой замены
-        .when('/GovernmentPurchases/DeliveryTime',
-            {
-                templateUrl: 'Views/GovernmentPurchases/MassFixesData/DeliveryTime.html',
-                title: 'Пустые периоды поставки',
-                authorize: true
-            })
-        // Перенос данных по форме выпуска
-        .when('/GovernmentPurchases/ObjectsToObjectsReady',
-            {
-                templateUrl: 'Views/GovernmentPurchases/ObjectsToObjectsReady/Index.html',
-                title: 'GOVERNMENT_PURCHASES.OBJECTS_TO_OBJECTS_READY.TITLE',
-                authorize: true
-            })
+            // Блок массовой замены
+            .when('/GovernmentPurchases/MassFixesData',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/MassFixesData/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.MASS_FIXES_DATA.TITLE',
+                    authorize: true
+                })
+            // Блок массовой замены
+            .when('/GovernmentPurchases/DeliveryTime',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/MassFixesData/DeliveryTime.html',
+                    title: 'Пустые периоды поставки',
+                    authorize: true
+                })
+            // Перенос данных по форме выпуска
+            .when('/GovernmentPurchases/ObjectsToObjectsReady',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/ObjectsToObjectsReady/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.OBJECTS_TO_OBJECTS_READY.TITLE',
+                    authorize: true
+                })
 
-        // Запуск расчета
-        .when('/GovernmentPurchases/CalcRunner',
-            {
-                templateUrl: 'Views/GovernmentPurchases/CalcRunner/Index.html',
-                title: 'GOVERNMENT_PURCHASES.CALC_RUNNER.TITLE',
-                authorize: true
-            })
+            // Запуск расчета
+            .when('/GovernmentPurchases/CalcRunner',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/CalcRunner/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.CALC_RUNNER.TITLE',
+                    authorize: true
+                })
 
-        // Редактирование расчетных данных
-        .when('/GovernmentPurchases/CalculatedDataEditor',
-            {
-                templateUrl: 'Views/GovernmentPurchases/CalculatedDataEditor/Index.html',
-                title: 'GOVERNMENT_PURCHASES.CALCULATED_DATA_EDITOR.TITLE',
-                authorize: true
-            })
-        // Редактирование расчетных данных
-        .when('/GovernmentPurchases/HandMadePosition',
-            {
-                templateUrl: 'Views/GovernmentPurchases/HandMadePosition.html',
-                title: 'Ручной ввод данных - вакцины',
-                authorize: true
-            })
-        .when('/GovernmentPurchases/Reports',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Reports/Reports.html',
-                title: 'Отчёты',
-                authorize: true
-            })
-        // Drug id с min/max ценой
-        .when('/GovernmentPurchases/DrugIdWithMinMaxPriceReport',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Reports/DrugIdWithMinMaxPriceReport/Index.html',
-                title: 'GOVERNMENT_PURCHASES.REPORT_DRUG_ID_WITH_MIN_MAX_PRICE.TITLE',
-                authorize: true
-            })
-        .when('/GovernmentPurchases/KBK',
-            {
-                templateUrl: 'Views/GovernmentPurchases/KBK.html',
-                title: 'KBK',
-                authorize: true
-            })
-        .when('/GovernmentPurchases/Budjet',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Budjet.html',
-                title: 'Бюджет',
-                authorize: true
-            })
-        // Неправильные цены
-        .when('/GovernmentPurchases/WrongPricesReport',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Reports/WrongPricesReport/Index.html',
-                title: 'GOVERNMENT_PURCHASES.REPORT_WRONG_PRICES.TITLE',
-                authorize: true
-            })
+            // Редактирование расчетных данных
+            .when('/GovernmentPurchases/CalculatedDataEditor',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/CalculatedDataEditor/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.CALCULATED_DATA_EDITOR.TITLE',
+                    authorize: true
+                })
+            // Редактирование расчетных данных
+            .when('/GovernmentPurchases/HandMadePosition',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/HandMadePosition.html',
+                    title: 'Ручной ввод данных - вакцины',
+                    authorize: true
+                })
+            .when('/GovernmentPurchases/Reports',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Reports/Reports.html',
+                    title: 'Отчёты',
+                    authorize: true
+                })
+            // Drug id с min/max ценой
+            .when('/GovernmentPurchases/DrugIdWithMinMaxPriceReport',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Reports/DrugIdWithMinMaxPriceReport/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.REPORT_DRUG_ID_WITH_MIN_MAX_PRICE.TITLE',
+                    authorize: true
+                })
+            .when('/GovernmentPurchases/KBK',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/KBK.html',
+                    title: 'KBK',
+                    authorize: true
+                })
+            .when('/GovernmentPurchases/Budjet',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Budjet.html',
+                    title: 'Бюджет',
+                    authorize: true
+                })
+            // Неправильные цены
+            .when('/GovernmentPurchases/WrongPricesReport',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Reports/WrongPricesReport/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.REPORT_WRONG_PRICES.TITLE',
+                    authorize: true
+                })
 
-        // Не вылитые в External базу закупки
-        .when('/GovernmentPurchases/NotExportedToExternalPurchasesReport',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Reports/NotExportedToExternalPurchasesReport/Index.html',
-                title: 'GOVERNMENT_PURCHASES.REPORT_NOT_EXPORTED_TO_EXTERNAL_PURCHASES.TITLE',
-                authorize: true
-            })
+            // Не вылитые в External базу закупки
+            .when('/GovernmentPurchases/NotExportedToExternalPurchasesReport',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Reports/NotExportedToExternalPurchasesReport/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.REPORT_NOT_EXPORTED_TO_EXTERNAL_PURCHASES.TITLE',
+                    authorize: true
+                })
 
-        // Статистика по закупкам/контрактам
-        .when('/GovernmentPurchases/PurchasesAndContractsStatistics',
-            {
-                templateUrl: 'Views/GovernmentPurchases/Statistics/PurchasesAndContractsStatistics/Index.html',
-                title: 'GOVERNMENT_PURCHASES.STATISTICS_PURCHASES_AND_CONTRACTS.TITLE',
-                authorize: true
-            })
-        .when('/GovernmentPurchases/AutoNature',
-            {
-                templateUrl: 'Views/GovernmentPurchases/AutoNature.html',
-                title: 'Авто - Характер',
-                authorize: true
-            })
-        .when('/GovernmentPurchases/PurchasesFound',
-            {
-                templateUrl: 'Views/GovernmentPurchases/PurchasesLoader/PurchasesFound/Index.html',
-                title: 'GOVERNMENT_PURCHASES.PURCHASES_FOUND.TITLE',
-                authorize: true
-            })
-        // Редактор ключевых слов для клиентских фильтров
-        .when('/GovernmentPurchases/ClientKeywords',
-            {
-                templateUrl: 'Views/GovernmentPurchases/ClientKeywords/Index.html',
-                title: 'GOVERNMENT_PURCHASES.CLIENT_KEYWORDS.TITLE',
-                authorize: true
-            })
+            // Статистика по закупкам/контрактам
+            .when('/GovernmentPurchases/PurchasesAndContractsStatistics',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Statistics/PurchasesAndContractsStatistics/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.STATISTICS_PURCHASES_AND_CONTRACTS.TITLE',
+                    authorize: true
+                })
+            .when('/GovernmentPurchases/AutoNature',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/AutoNature.html',
+                    title: 'Авто - Характер',
+                    authorize: true
+                })
+            .when('/GovernmentPurchases/PurchasesFound',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/PurchasesLoader/PurchasesFound/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.PURCHASES_FOUND.TITLE',
+                    authorize: true
+                })
+            // Редактор ключевых слов для клиентских фильтров
+            .when('/GovernmentPurchases/ClientKeywords',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/ClientKeywords/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.CLIENT_KEYWORDS.TITLE',
+                    authorize: true
+                })
 
-        ;
-}
+            ;
+    }
 }]);
 
 angular.module('DataAggregatorModule').run(['$rootScope', '$window', '$translate', function ($rootScope, $window, $translate) {
