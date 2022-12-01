@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('CheckClassifireReportController', ['$scope', '$http', '$q', '$cacheFactory', '$filter', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', 'uiGridPaginationService', CheckClassifireReportController]);
+    .controller('CheckClassifireReportController', ['$scope', '$http', '$q', '$cacheFactory', '$filter', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', 'hotkeys', CheckClassifireReportController]);
 
-function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filter, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants, uiGridPaginationService) {
+function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filter, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants, hotkeys) {
     $scope.Title = "Отчет проверки классификатора";
     $scope.user = userService.getUser();
     $scope.canSearch = function () { return true; }
@@ -10,6 +10,14 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
     $scope.CheckClassifireReportList = []; // список отчётов
 
     $scope.CheckClassifireReport_Init = function () {
+
+        hotkeys.bindTo($scope).add({
+            combo: 'shift+d',
+            description: 'Удалить исключение',
+            callback: function (event) {
+                $scope.deleteFiles(event);
+            }
+        });
 
         //******** Grid ******** ->
         $scope.Exception_Grid = uiGridCustomService.createGridClassMod($scope, 'Exception_Grid');
@@ -213,7 +221,7 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
 
         $timeout(function () {
             $scope.Exception_Grid.gridApi.selection.selectRow($scope.Exception_Grid.Options.data[total - 1]);
-        });        
+        });
 
         $scope.scrollTo(total - 1, 0);
     };
@@ -244,4 +252,39 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
                 errorHandlerService.showResponseError(response);
             });
     };
+
+    //Отправить записи на удаление
+    $scope.deleteFiles = function () {
+
+        //Выеберем все выделенные строки, которые видны.
+        var selectedRows = $scope.Exception_Grid.gridApi.selection.getSelectedGridRows();
+
+        if (selectedRows.length == 0)
+            return;
+
+        var r = messageBoxService.showConfirm('Вы уверены что хотите удалить выбранные записи?', 'Удаление')
+        r.then(
+            function () {
+
+                txt = "You pressed OK!";
+
+                var item = selectedRows[0].entity;
+
+                $scope.dataLoading = $http({
+                    method: "POST",
+                    url: "/CheckClassifireReport/ReportExceptionListRemove/",
+                    data: JSON.stringify({ ExceptionId: item.Id })
+                }).then(function (response) {
+                    $scope.CheckClassifireReportView();
+                    messageBoxService.showInfo("Успешное удаление", 'Удаление');
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+
+            },
+            function () {
+
+            });
+    }
+
 }

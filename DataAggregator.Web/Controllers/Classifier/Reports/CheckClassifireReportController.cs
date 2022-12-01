@@ -160,5 +160,24 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             return jsonNetResult;
         }
 
+        /// <summary>
+        /// удаление исключения
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ReportExceptionListRemove(int ExceptionId)
+        {
+            RegCertificateNumberExceptions entity = _context.RegCertificateNumberExceptions.Find(ExceptionId);
+            _context.RegCertificateNumberExceptions.Remove(entity);
+            _context.SaveChanges();
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
+        }
+
     }
 }
