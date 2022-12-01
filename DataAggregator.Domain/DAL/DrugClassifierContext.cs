@@ -367,6 +367,7 @@ namespace DataAggregator.Domain.DAL
 
         #region report
         public DbSet<DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierReport> ClassifierReport { get; set; }
+        public DbSet<RegCertificateNumberExceptions> RegCertificateNumberExceptions { get; set; }
         #endregion
 
         public DbSet<RegistrationCertificateClassification> RegistrationCertificateClassification { get; set; }

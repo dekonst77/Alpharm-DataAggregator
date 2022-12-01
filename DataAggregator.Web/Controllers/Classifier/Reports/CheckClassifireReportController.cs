@@ -3,11 +3,9 @@ using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckRepor
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text.Json;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.Classifier.Reports
@@ -112,6 +110,50 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             {
                 Formatting = Formatting.Indented,
                 Data = new JsonResult() { Data = ViewBag }
+            };
+            return jsonNetResult;
+        }
+
+        /// <summary>
+        /// сохранение списка исключений
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ReportExceptionListSave(List<RegCertificateNumberExceptions> ExceptionList)
+        {
+            List<RegCertificateNumberExceptions> records = new List<RegCertificateNumberExceptions>();
+
+            foreach (var item in ExceptionList)
+            {
+                RegCertificateNumberExceptions record = _context.RegCertificateNumberExceptions.Find(item.Id);
+                if (record != null)
+                {
+                    record.ClassifierReportId = item.ClassifierReportId;
+                    record.RegistrationCertificateId = item.RegistrationCertificateId;
+                }
+                else
+                {
+                    record = _context.RegCertificateNumberExceptions.Add(new RegCertificateNumberExceptions()
+                    {
+                        ClassifierReportId = item.ClassifierReportId,
+                        RegistrationCertificateId = item.RegistrationCertificateId
+                    });
+
+                }
+
+                if (_context.SaveChanges() > 0)
+                {
+                    _context.Entry<RegCertificateNumberExceptions>(record).State = EntityState.Detached;
+                    records.Add(_context.RegCertificateNumberExceptions.Find(record.Id));
+                }
+            }
+
+            ViewData["ReportExceptionRecords"] = records;
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResultData() { Data = ViewData, count = 0, status = "ок", Success = true }
             };
             return jsonNetResult;
         }

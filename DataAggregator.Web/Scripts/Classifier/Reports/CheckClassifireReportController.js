@@ -15,10 +15,10 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         $scope.Exception_Grid = uiGridCustomService.createGridClassMod($scope, 'Exception_Grid');
         $scope.Exception_Grid.Options.showGridFooter = true;
         $scope.Exception_Grid.Options.showColumnFooter = false;
-        $scope.Exception_Grid.Options.multiSelect = true;
-        $scope.Exception_Grid.Options.enableSelectAll = true;
+        $scope.Exception_Grid.Options.multiSelect = false;
+        $scope.Exception_Grid.Options.enableSelectAll = false;
         $scope.Exception_Grid.Options.enableFiltering = true;
-        $scope.Exception_Grid.Options.modifierKeysToMultiSelect = true;
+        $scope.Exception_Grid.Options.modifierKeysToMultiSelect = false;
 
         $scope.Exception_Grid.Options.columnDefs = [
             { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Id', type: 'number', visible: false, nullable: false },
@@ -39,7 +39,7 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         ];
 
         $scope.Exception_Grid.SetDefaults();
-        
+
         // редактируемые поля: Comment
         function editRowDataSource(rowEntity, colDef, newValue, oldValue) {
             /*
@@ -122,7 +122,7 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
 
         $scope.dataLoading.then(
             function () {
-                CheckClassifireReportView();
+                $scope.CheckClassifireReportView();
             }
         );
 
@@ -148,7 +148,7 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
     }
 
     // загрузка списка исключений
-    function CheckClassifireReportView() {
+    $scope.CheckClassifireReportView = function () {
         $scope.message = 'Пожалуйста, ожидайте... Загрузка списка исключений';
 
         $scope.dataLoading = $http({
@@ -211,9 +211,11 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             "ClassifierReportId": "Выберите отчёт",
         });
 
-        $scope.scrollTo(total -1, 0);
+        $timeout(function () {
+            $scope.Exception_Grid.gridApi.selection.selectRow($scope.Exception_Grid.Options.data[total - 1]);
+        });        
 
-        $scope.Exception_Grid.gridApi.selection.selectRow($scope.Exception_Grid.Options.data[total-1]);
+        $scope.scrollTo(total - 1, 0);
     };
 
     $scope.scrollTo = function (rowIndex, colIndex) {
@@ -223,4 +225,23 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             }, 100);
     };
 
+    $scope.ReportExceptionListSave = function (action) {
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/CheckClassifireReport/ReportExceptionListSave/',
+                data: JSON.stringify({
+                    ExceptionList: $scope.Exception_Grid.GetArrayModify()
+                })
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    $scope.Exception_Grid.ClearModify();
+                    $scope.CheckClassifireReportView();
+                    messageBoxService.showError('Сохранение успешно.<br/>');
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
 }

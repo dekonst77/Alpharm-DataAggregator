@@ -123,6 +123,7 @@
     <Compile Include="Model\DrugClassifier\Classifier\BlisterBlock.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ClassificationGeneric.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ClassifierCheckReport\ClassifierCheckReport_ExceptionListResult.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ClassifierCheckReport\RegCertificateNumberExceptions.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ClassifierReport.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\Corporation.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\Country.cs" />
