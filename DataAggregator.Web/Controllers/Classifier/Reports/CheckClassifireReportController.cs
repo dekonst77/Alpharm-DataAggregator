@@ -19,10 +19,12 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             _context = new DrugClassifierContext(APP);
         }
 
-        ~CheckClassifireReportController()
+        protected override void Dispose(bool disposing)
         {
             _context.Dispose();
+            base.Dispose(disposing);
         }
+
         [HttpPost]
         public JsonResult CheckClassifireReportView()
         {
@@ -122,6 +124,8 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         public ActionResult ReportExceptionListSave(List<RegCertificateNumberExceptions> ExceptionList)
         {
             List<RegCertificateNumberExceptions> records = new List<RegCertificateNumberExceptions>();
+
+            throw new Exception("какая то ошибка");
 
             foreach (var item in ExceptionList)
             {
