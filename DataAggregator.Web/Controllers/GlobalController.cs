@@ -24,7 +24,7 @@ namespace DataAggregator.Web.Controllers
             {
                 var _context = new DataReportContext(APP);
 
-                ViewData["Area"] = _context.WebAggReports.Select(s=>s.Area).OrderBy(o => o).Distinct().ToList();
+                ViewData["Area"] = _context.WebAggReports.Select(s => s.Area).OrderBy(o => o).Distinct().ToList();
 
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -75,9 +75,7 @@ namespace DataAggregator.Web.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public ActionResult query_save(
-            ICollection<DataAggregator.Domain.Model.DataReport.WebAggReports> array
-            )
+        public ActionResult query_save(ICollection<DataAggregator.Domain.Model.DataReport.WebAggReports> array)
         {
             try
             {
@@ -97,8 +95,16 @@ namespace DataAggregator.Web.Controllers
                         }
                         else
                         {
-                            _context.WebAggReports.Add(new Domain.Model.DataReport.WebAggReports() 
-                            { Name = item.Name, Server = item.Server, Area = item.Area, Roles = item.Roles, Query = item.Query, Filters = item.Filters });
+                            _context.WebAggReports.Add(
+                                new Domain.Model.DataReport.WebAggReports()
+                                {
+                                    Name = item.Name,
+                                    Server = item.Server,
+                                    Area = item.Area,
+                                    Roles = item.Roles,
+                                    Query = item.Query,
+                                    Filters = item.Filters
+                                });
                         }
                     }
                 _context.SaveChanges();
@@ -224,7 +230,7 @@ namespace DataAggregator.Web.Controllers
                 }
 
                 System.Data.DataTable tbl = new System.Data.DataTable("tbl");
-                string strconnection = "Persist Security Info=true;Server=" + report.Server + ";Database=tempdb;Integrated Security=SSPI;APP="+APP;
+                string strconnection = "Persist Security Info=true;Server=" + report.Server + ";Database=tempdb;Integrated Security=SSPI;APP=" + APP;
                 System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(strconnection);
                 conn.Open();
 
@@ -437,7 +443,7 @@ select Id,Value from Classifier.FormProduct
 union
 select -1*Id as Id,Value from [GoodsClassifier].[GoodsDescription_for_Hydra]
 ");
-                            //.FormProducts.Select(s => s).OrderBy(o => o.Id);
+                        //.FormProducts.Select(s => s).OrderBy(o => o.Id);
                         var DosageGroups = _context_AutoCorrectDosageRecount.Database.SqlQuery<cSPRItem>(@"
 select Id,Description Value from Classifier.DosageGroup
 --union
@@ -450,7 +456,7 @@ select Id,Description Value from Classifier.DosageGroup
                             Name = "FormProducts",
                             Data = FormProducts.ToList()
                         });
-                        
+
                         SPR.Add(new cSPR()
                         {
                             Name = "DosageGroups",
@@ -509,7 +515,7 @@ select Id,Description Value from Classifier.DosageGroup
                         {
                             return Forbidden();
                         }
-        sql = "select * from [DrugClassifier].[Classifier].[ProductionInfoView] where 0=0 ";
+                        sql = "select * from [DrugClassifier].[Classifier].[ProductionInfoView] where 0=0 ";
 
                         foreach (var filter in Filters)
                         {
@@ -545,7 +551,7 @@ select Id,Description Value from Classifier.DosageGroup
                         var ret = _context.Database.SqlQuery<DataAggregator.Domain.Model.DrugClassifier.Classifier.ProductionInfoView>(sql).ToList();
                         ViewBag.Result = ret;
                         ViewBag.Data = ret;
-                       break;
+                        break;
                     case "dictMethod":
                         var _context_Method = new GovernmentPurchasesLoaderContext(APP);
                         _context_Method.Database.CommandTimeout = 0;
@@ -565,7 +571,7 @@ select unit into #new from [dbo].[ContractObjectReady] group by unit
 insert into [dbo].[AutoCorrectAmountInfo]([Unit],[Action],[Type])
 select unit,'нет',0 from #new where unit not in (select unit from [dbo].[AutoCorrectAmountInfo])");
                         _context_AutoCorrectAmountInfo.Database.CommandTimeout = 0;
-                        var ret_AutoCorrectAmountInfo = _context_AutoCorrectAmountInfo.AutoCorrectAmountInfo.Select(s=>s).ToList();
+                        var ret_AutoCorrectAmountInfo = _context_AutoCorrectAmountInfo.AutoCorrectAmountInfo.Select(s => s).ToList();
                         ViewBag.Result = ret_AutoCorrectAmountInfo;
                         ViewBag.Data = ret_AutoCorrectAmountInfo;
                         break;
@@ -581,12 +587,12 @@ select unit,'нет',0 from #new where unit not in (select unit from [dbo].[Auto
                         sql = "select * from [logs].[TriggerLog] where 0=0";
                         foreach (var filter in Filters)
                         {
-                            if(!string.IsNullOrEmpty((string)filter.Value))
-                            sql += " and " + filter.Name + " = " + (string)filter.Value;
+                            if (!string.IsNullOrEmpty((string)filter.Value))
+                                sql += " and " + filter.Name + " = " + (string)filter.Value;
                         }
                         var _context_gs_trigger_log = new GovernmentPurchasesContext(APP);
                         _context_gs_trigger_log.Database.CommandTimeout = 0;
-                        var ret_gs_trigger_log = _context_gs_trigger_log.Database.SqlQuery< DataAggregator.Domain.Model.GovernmentPurchases.TriggerLog>(sql).ToList();
+                        var ret_gs_trigger_log = _context_gs_trigger_log.Database.SqlQuery<DataAggregator.Domain.Model.GovernmentPurchases.TriggerLog>(sql).ToList();
 
                         ViewBag.Result = ret_gs_trigger_log;
                         ViewBag.Data = ret_gs_trigger_log;
@@ -725,14 +731,14 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
                         upd.CoeffLAmount = item.CoeffLAmount;
                         upd.CoeffM3Amount = item.CoeffM3Amount;
                     }
-                   /* else
-                    {
-                        _context.AutoCorrectAmountInfo.Add(new Domain.Model.GovernmentPurchases.AutoCorrectAmountInfo()
-                        {
-                            Type = item.Type,
-                            Unit = item.Unit
-                        });
-                    }*/
+                    /* else
+                     {
+                         _context.AutoCorrectAmountInfo.Add(new Domain.Model.GovernmentPurchases.AutoCorrectAmountInfo()
+                         {
+                             Type = item.Type,
+                             Unit = item.Unit
+                         });
+                     }*/
                 }
                 _context.SaveChanges();
                 ViewBag.Success = true;
@@ -847,7 +853,7 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
             return true;
         }
         [HttpPost]
-        public ActionResult Job(string Server, string Name,bool Run)
+        public ActionResult Job(string Server, string Name, bool Run)
         {
             if (!IsEnable(Server, Name))
                 return null;
@@ -856,7 +862,7 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
                 string strconnection = "Persist Security Info=true;Server=" + Server + ";Database=ControlALG;Integrated Security=SSPI;APP=" + APP;
                 DbContext context = new DbContext(strconnection);
                 ViewBag.Status = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(context, Name,
-                    Run==true?Domain.Model.ControlALG.ControlALG.JobStartAction.start:Domain.Model.ControlALG.ControlALG.JobStartAction.info
+                    Run == true ? Domain.Model.ControlALG.ControlALG.JobStartAction.start : Domain.Model.ControlALG.ControlALG.JobStartAction.info
                     ).Replace("\r\n", @"<br />");
 
 
@@ -873,7 +879,7 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
             }
         }
         public class cField
-        { 
+        {
             public string Name { get; set; }
             public string DisplayName { get; set; }
             public string sType { get; set; }
@@ -903,7 +909,7 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
         public class cSPR
         {
             public string Name { get; set; }
-            public List<cSPRItem> Data{get;set;}
+            public List<cSPRItem> Data { get; set; }
         }
 
     }
