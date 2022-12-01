@@ -125,8 +125,6 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         {
             List<RegCertificateNumberExceptions> records = new List<RegCertificateNumberExceptions>();
 
-            throw new Exception("какая то ошибка");
-
             foreach (var item in ExceptionList)
             {
                 RegCertificateNumberExceptions record = _context.RegCertificateNumberExceptions.Find(item.Id);
