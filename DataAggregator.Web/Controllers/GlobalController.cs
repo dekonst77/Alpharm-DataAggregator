@@ -12,6 +12,7 @@ using DataAggregator.Web.App_Start;
 using DataAggregator.Domain.Model.Project;
 using System.Web;
 using System.Data.Entity;
+using System.Diagnostics;
 
 namespace DataAggregator.Web.Controllers
 {
@@ -861,6 +862,8 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
             {
                 string strconnection = "Persist Security Info=true;Server=" + Server + ";Database=ControlALG;Integrated Security=SSPI;APP=" + APP;
                 DbContext context = new DbContext(strconnection);
+                context.Database.Log = (query) => Debug.Write(query);
+
                 ViewBag.Status = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(context, Name,
                     Run == true ? Domain.Model.ControlALG.ControlALG.JobStartAction.start : Domain.Model.ControlALG.ControlALG.JobStartAction.info
                     ).Replace("\r\n", @"<br />");
