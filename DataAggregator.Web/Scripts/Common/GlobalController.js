@@ -73,9 +73,12 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
                 $scope.SetData(ddd);
             }
 
-
             return 1;
+        }, function (response) {
+            console.log(response);
+            messageBoxService.showError(response.data.message);
         });
+
         return 0;
     };
     $scope.InitArrays = function (Data) {

@@ -1,15 +1,16 @@
 ﻿angular.module('DataAggregatorModule').directive('job', ['$uibModal', function ($uibModal) {
     return {
         scope: {
-            jobTitle:'@',
+            jobTitle: '@',
             jobServer: '@',
             jobName: '@',
         },
         templateUrl: 'Views/Static/job.html',
-        controller: ['$scope', '$http', '$interval', 'errorHandlerService', function ($scope, $http, $interval, errorHandlerService) {
+        controller: ['$scope', '$http', '$interval', 'errorHandlerService', '$sce', function ($scope, $http, $interval, errorHandlerService, $sce) {
+            $scope.sce = $sce;
             $scope.Status = "";
             $scope.StatusId = 0;
-            $scope.Go = function(Fl1) {
+            $scope.Go = function (Fl1) {
                 $scope.loading = $http({
                     method: "POST",
                     url: "/Global/Job",
@@ -39,7 +40,7 @@
                 }
                 return -1;
             };
-           $scope.Go(0);
+            $scope.Go(0);
 
             function runChecking() {
                 var intervalPromise = $interval(function () {

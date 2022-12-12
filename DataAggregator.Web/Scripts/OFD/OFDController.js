@@ -117,7 +117,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
 
     $scope.Reports = [];
     $scope.report_text = "";
-    $scope.period_start = new Date(2019, 0, 1);
+    $scope.period_start = new Date(new Date().getFullYear(), 0, 1);
     $scope.period_end = new Date();
     $scope.report_supplier = { Id: 0 };
     $scope.brick_3_Id = { Id: "%" };
@@ -186,7 +186,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             { name: 'amount Квартал', field: 'amount_30', type: 'number', headerCellClass: 'beige', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Брики Квартал', field: 'count_brik_30', type: 'number', headerCellClass: 'beige', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Тран Квартал', field: 'count_tran_30', type: 'number', headerCellClass: 'beige', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
-          { name: 'sum Мес', field: 'sum_20', type: 'number', headerCellClass: 'antiquewhite', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
+            { name: 'sum Мес', field: 'sum_20', type: 'number', headerCellClass: 'antiquewhite', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'amount Мес', field: 'amount_20', type: 'number', headerCellClass: 'antiquewhite', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Брики Мес', field: 'count_brik_20', type: 'number', headerCellClass: 'antiquewhite', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Тран Мес', field: 'count_tran_20', type: 'number', headerCellClass: 'antiquewhite', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
@@ -195,6 +195,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             { name: 'Брики Дни', field: 'count_brik_10', type: 'number', headerCellClass: 'bisque', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Тран Дни', field: 'count_tran_10', type: 'number', headerCellClass: 'bisque', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE }
         ];
+
         $scope.dataLoading =
             $http({
                 method: 'GET',
@@ -209,23 +210,25 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
                 errorHandlerService.showResponseError(response);
             });
     };
+
     $scope.Periods_type_Set = function (value) {
         $scope.Grid.selectedRows().forEach(function (item) {
             $scope.Grid.GridCellsMod(item, "period_type", value);
         });
     };
+
     $scope.Periods_save = function () {
-            $scope.dataLoading =
-                $http({
-                    method: 'POST',
-                    url: '/OFD/Periods_save/',
-                    data: JSON.stringify({ array: $scope.Grid.GetArrayModify() })
-                }).then(function (response) {
-                    $scope.Grid.ClearModify();
-                    alert("Сохранил");
-                }, function (response) {
-                    errorHandlerService.showResponseError(response);
-                });
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/OFD/Periods_save/',
+                data: JSON.stringify({ array: $scope.Grid.GetArrayModify() })
+            }).then(function (response) {
+                $scope.Grid.ClearModify();
+                alert("Сохранил");
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
     };
 
 

@@ -439,10 +439,10 @@
                 <li class="dropdown" ng-if="isAuthenticated()">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Отчёты"></span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <!--<li>
+                        <li>
                             <a ng-href="/#/Classifier/CheckReport" data-translate="CLASSIFIER.CHECK_REPORT.TITLE"></a>
                         </li>
-                        <li class="divider"></li>-->
+                        <li class="divider"></li>
                         <li ng-repeat="item_rep in DAM_GZ_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
                             </a>

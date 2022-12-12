@@ -745,6 +745,7 @@
     <Content Include="Scripts\Classifier\GoodsParametersEditor\AddParameterViewController.js" />
     <Content Include="Scripts\Classifier\Manufacturer\ManufacturerController.js" />
     <Content Include="Scripts\Classifier\RaspredelenieController.js" />
+    <Content Include="Scripts\Classifier\Reports\CheckClassifireReportController.js" />
     <Content Include="Scripts\Classifier\SPRController.js" />
     <Content Include="Scripts\Classifier\SQA\SQAController.js" />
     <Content Include="Scripts\Classifier\MaskController.js" />
@@ -2138,6 +2139,7 @@
     <Content Include="Views\Classifier\GoodsParametersEditor\_AddParameterView.html" />
     <Content Include="Views\Classifier\Manufacturer\Index.html" />
     <Content Include="Views\Classifier\Raspredelenie.html" />
+    <Content Include="Views\Classifier\Reports\CheckReport\CheckReport.html" />
     <Content Include="Views\Classifier\SPR.html" />
     <Content Include="Views\Classifier\SPR_context_menu.html" />
     <Content Include="Views\Classifier\SQA\Index.html" />
@@ -2297,6 +2299,7 @@
     <Compile Include="Controllers\Classifier\BlisterBlockController.cs" />
     <Compile Include="Controllers\Classifier\DataChangeExcelController.cs" />
     <Compile Include="Controllers\Classifier\MaskController.cs" />
+    <Compile Include="Controllers\Classifier\Reports\CheckClassifireReportController.cs" />
     <Compile Include="Controllers\Classifier\SQAController.cs" />
     <Compile Include="Controllers\Classifier\CertificateController.cs" />
     <Compile Include="Controllers\Classifier\CheckedController.cs" />
@@ -2671,6 +2674,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service References\App_Data\" />
+    <Folder Include="Views\CheckClassifireReport\" />
     <Folder Include="Views\Mask\" />
   </ItemGroup>
   <ItemGroup>
@@ -2729,8 +2733,8 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>6</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>

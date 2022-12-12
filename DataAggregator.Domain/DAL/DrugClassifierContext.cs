@@ -10,6 +10,7 @@ using System.Linq;
 using DataAggregator.Domain.Model.DrugClassifier.Bad;
 using DataAggregator.Domain.Model.DrugClassifier.Changes;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckReport;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.FederalBenefit;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.Function;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
@@ -194,6 +195,15 @@ namespace DataAggregator.Domain.DAL
 
         #endregion
 
+        /// <summary>
+        /// Отчет проверки классификатора
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ClassifierCheckReportExceptionListResult> ClassifierCheckReport_SP(string reportName)
+        {
+            return Database.SqlQuery<ClassifierCheckReportExceptionListResult>("[report].[ClassifierCheckReport] {0}", reportName);
+        }
+
         #endregion
 
         #region FederalBenefit
@@ -321,9 +331,6 @@ namespace DataAggregator.Domain.DAL
 
         #region Log
 
-
-
-
         public DbSet<ProductionInfoDescription> ProductionInfoDescription { get; set; }
         public DbSet<GoodsProductionInfoDescription> GoodsProductionInfoDescription { get; set; }
 
@@ -358,6 +365,10 @@ namespace DataAggregator.Domain.DAL
 
         #endregion
 
+        #region report
+        public DbSet<DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierReport> ClassifierReport { get; set; }
+        public DbSet<RegCertificateNumberExceptions> RegCertificateNumberExceptions { get; set; }
+        #endregion
 
         public DbSet<RegistrationCertificateClassification> RegistrationCertificateClassification { get; set; }
 

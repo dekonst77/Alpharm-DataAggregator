@@ -52,8 +52,8 @@
          </div>
         <div class="panel-body">
             <ul ng-repeat="item in Reports" style="width:100%">
-                <li ng-click="ReportGet(item.Id)" class="btn btn-warning"  style="width:100%;text-align:left">
-                    {{item.value}}
+                <li ng-click="ReportGet(item.Id)" class="btn btn-warning" style="width:100%;text-align:left">
+                    {{item.Id}} - {{item.value}}
                 </li>
             </ul>
     </div>

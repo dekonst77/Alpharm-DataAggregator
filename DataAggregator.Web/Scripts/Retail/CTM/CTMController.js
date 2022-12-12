@@ -177,7 +177,6 @@ function CTMController($scope, $http, $q, $timeout, uiGridCustomService, errorHa
             $scope.Networks.length = 0;
             $scope.NetworksLabel.length = 0;
 
-            let lng = Array.prototype.push.apply($scope.Networks, response.data);
             Array.prototype.push.apply($scope.NetworksLabel, response.data.map(function (obj) {
                 var rObj = { 'value': obj.NetworkName, 'NetworksLabel': obj.NetworkName == null ? '-' : obj.NetworkName };
                 return rObj;
