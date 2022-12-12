@@ -1,17 +1,15 @@
 ﻿using DataAggregator.Domain.DAL;
+using DataAggregator.Domain.Model.GS;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Entity.SqlServer;
-using System.Linq;
-using System.Reflection;
-using System.Web.Mvc;
-using System.IO.Compression;
-using DataAggregator.Domain.Model.GS;
-using DataAggregator.Domain.Utils;
 using System.Data;
+using System.Data.Entity;
+using System.Data.SqlClient;
+using System.IO.Compression;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.GS
 {
@@ -931,12 +929,43 @@ GS_Brick*/
                 return BadRequest(msg);
             }
         }
+
+        private bool CheckBricks(string JsonData)
+        {
+            using (var command = new SqlCommand())
+            {
+                var _context = new GSContext(APP);
+
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)_context.Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@JSONData", SqlDbType.NVarChar).Value = JsonData;
+
+                command.CommandText = "dbo.CheckBricks_SP";
+
+                _context.Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+            return true;
+        }
+
         [Authorize(Roles = "GS_Brick")]
         [HttpPost]
         public ActionResult Bricks_save(ICollection<DataAggregator.Domain.Model.GS.Bricks> array)
         {
+
+
             try
             {
+                // преобразуем в JSON            
+                string jsonBricks = JsonConvert.SerializeObject(array);
+
+                // проверка на дубль
+                CheckBricks(jsonBricks);
+
                 var _context = new GSContext(APP);
 
                 foreach (var item in array)
