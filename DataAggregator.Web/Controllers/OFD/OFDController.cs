@@ -168,12 +168,12 @@ namespace DataAggregator.Web.Controllers.OFD
                     var brick_3 = _ofd_context.Brick_L3_all.OrderBy(o => o.L3_label).ToList();
                     brick_3.Insert(0, new Domain.Model.OFD.Brick_L3_all() { Id = "%", L3_label = "Все" });
 
-                    var res = _ofd_context.List.OrderByDescending(o => o.value);
+                    var res = _ofd_context.List.OrderByDescending(o => o.value).ToList();
 
                     JsonNetResult jsonNetResult = new JsonNetResult
                     {
                         Formatting = Formatting.Indented,
-                        Data = new JsonResult() { Data = res.ToList(), Data2 = brick_3, count = res.Count(), status = "ок", Success = true }
+                        Data = new JsonResult() { Data = res, Data2 = brick_3, count = res.Count(), status = "ок", Success = true }
                     };
                     return jsonNetResult;
             }
