@@ -175,6 +175,7 @@
     <Compile Include="Model\GS\licenses_roszdravnadzor.cs" />
     <Compile Include="Model\GS\GS.cs" />
     <Compile Include="Model\LPU\Department.cs" />
+    <Compile Include="Model\LPU\Dictionaries.cs" />
     <Compile Include="Model\LPU\LPU.cs" />
     <Compile Include="Model\LPU\LPULicensesView.cs" />
     <Compile Include="Model\LPU\LPUPoint.cs" />

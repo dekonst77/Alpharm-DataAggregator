@@ -2325,6 +2325,7 @@
     <Compile Include="Controllers\GovernmentPurchases\Reports\ReportsController.cs" />
     <Compile Include="Controllers\GS\GSController.cs" />
     <Compile Include="Controllers\LPU\LPUController.cs" />
+    <Compile Include="Controllers\LPU\LPUDictionariesController.cs" />
     <Compile Include="Controllers\LPU\LPULicensesController.cs" />
     <Compile Include="Controllers\LPU\LPUPointController.cs" />
     <Compile Include="Controllers\Management\ProjectController.cs" />
@@ -2675,6 +2676,7 @@
   <ItemGroup>
     <Folder Include="Service References\App_Data\" />
     <Folder Include="Views\CheckClassifireReport\" />
+    <Folder Include="Views\LPUDictionaries\" />
     <Folder Include="Views\Mask\" />
   </ItemGroup>
   <ItemGroup>

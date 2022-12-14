@@ -28,7 +28,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<Department> Department { get; set; }
 
-
+        public DbSet<LPUType> LPUType { get; set; }
+        public DbSet<LPUKind> LPUKind { get; set; }
 
         #endregion LPU
 
