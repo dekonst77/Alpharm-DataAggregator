@@ -1,6 +1,6 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('RetailReportController', ['$scope', '$http', '$interval', 'uiGridCustomService', 'formatConstants', 'errorHandlerService',RetailReportController]);
+    .controller('RetailReportController', ['$scope', '$http', '$interval', 'uiGridCustomService', 'formatConstants', 'errorHandlerService', RetailReportController]);
 
 function RetailReportController($scope, $http, $interval, uiGridCustomService, formatConstants, errorHandlerService) {
 
@@ -13,8 +13,7 @@ function RetailReportController($scope, $http, $interval, uiGridCustomService, f
     $scope.filter.date = previousMonthDate;
     $scope.filter.selectedReports = [];
 
-    $interval(refreshGrid, 1000 * 60);
-
+    var intervalPromise = $interval(refreshGrid, 1000 * 60);
 
     function refreshGrid() {
         $scope.loading = $http({
@@ -29,7 +28,6 @@ function RetailReportController($scope, $http, $interval, uiGridCustomService, f
         });
     }
 
-
     var Init = function () {
         $scope.loading = $http({
             method: "POST",
@@ -39,13 +37,9 @@ function RetailReportController($scope, $http, $interval, uiGridCustomService, f
         }, function (response) {
             $scope.filter.reports = null;
             errorHandlerService.showResponseError(response);
-            });
+        });
 
         refreshGrid();
-     
-
-
-        
     }
 
     Init();
@@ -108,17 +102,19 @@ function RetailReportController($scope, $http, $interval, uiGridCustomService, f
     $scope.reportGrid.Options.columnDefs = [
         { name: 'Id', field: 'Id', width: 50, type: 'number' },
         { name: 'Отчет', field: 'ReportName', width: 500 },
-        { name: 'Год', field: 'Year', width: 50},
-        { name: 'Месяц', field: 'Month', width: 50},
+        { name: 'Год', field: 'Year', width: 50 },
+        { name: 'Месяц', field: 'Month', width: 50 },
         { name: 'Статус', field: 'StatusName', width: 200 },
         { name: 'Дата', field: 'Date', type: 'date', cellFilter: formatConstants.FILTER_DATE_TIME, width: 100 },
         { name: 'Дата окончания', field: 'DateEnd', type: 'date', cellFilter: formatConstants.FILTER_DATE_TIME, width: 100 },
         { name: 'Пользователь', field: 'UserFullName' },
-        { name: 'Email', field: 'Email' },      
+        { name: 'Email', field: 'Email' },
         { name: 'Ошибка', field: 'ErrorMessage' },
-   
     ];
 
-   
+    $scope.$on("$destroy", function handler() {
+        $interval.cancel(intervalPromise);
+    });
+
 }
 

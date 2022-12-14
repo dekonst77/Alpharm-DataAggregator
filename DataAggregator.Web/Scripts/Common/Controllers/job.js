@@ -43,12 +43,16 @@
             $scope.Go(0);
 
             function runChecking() {
-                var intervalPromise = $interval(function () {
+                return $interval(function () {
                     $scope.Go(0);
                 },
                     30000);
             }
-            runChecking();
+            var intervalPromise = runChecking();
+
+            $scope.$on("$destroy", function handler() {
+                $interval.cancel(intervalPromise);
+            });
         }]
     };
 }]);
