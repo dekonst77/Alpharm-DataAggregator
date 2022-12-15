@@ -759,6 +759,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
         );
     }
 
+    // импорт коэффициентов коррекции
     $scope.SalesSKUbySF_from_Excel = function (files) {
         if (files && files.length) {
             var formData = new FormData();
@@ -769,6 +770,32 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
             $scope.dataLoading = $http({
                 method: 'POST',
                 url: '/SalesSKUbySF/SalesSKUbySF_from_Excel/',
+                data: formData,
+                headers: {
+                    'Content-Type': undefined
+                },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.SalesSKUbySF_Search();
+            }, function (response) {
+                $scope.Grid.Options.data = [];
+                let message = response.data.message;
+                messageBoxService.showError(JSON.stringify(message));
+            });
+        }
+    };
+
+    // импорт цены по субъектам федерации
+    $scope.Price_SalesSKUbySF_from_Excel = function (files) {
+        if (files && files.length) {
+            var formData = new FormData();
+            files.forEach(function (item, i, arr) {
+                formData.append('uploads', item);
+                formData.append('currentperiod', $scope.currentperiod);
+            });
+            $scope.dataLoading = $http({
+                method: 'POST',
+                url: '/SalesSKUbySF/Price_SalesSKUbySF_from_Excel/',
                 data: formData,
                 headers: {
                     'Content-Type': undefined

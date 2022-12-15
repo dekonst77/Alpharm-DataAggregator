@@ -85,7 +85,17 @@
                         <button type="button" class="btn btn-success btn-sm" ng-click="SalesSKUbySF_Search();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-refresh"> Выбрать</span> </button>
                         <!--<button type="button" class="btn btn-warning btn-sm" ng-disabled="!inactive" ng-click=""> <span class="glyphicon glyphicon-floppy-disk"> Сохранить</span> </button>-->
                         <button type="button" class="btn btn-info btn-sm" ng-click="SalesSKUbySF_To_Excel();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-upload"> Экспорт</span> </button>
-                        <div class="btn btn-info btn-sm" ng-disabled="inactive" ngf-select="SalesSKUbySF_from_Excel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"> <span class="glyphicon glyphicon-download"> Импорт</span> </div>
+
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-download"></span> Импорт</button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li ng-if="IsSelectedPeriod()">
+                                <a ng-href="" data-translate="Импорт коэффициентов коррекции" ngf-select="SalesSKUbySF_from_Excel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></a>
+                            </li>
+                            <li ng-if="IsSelectedPeriod()">
+                                <a ng-href="" data-translate="Импорт цены по субъектам федерации" ngf-select="Price_SalesSKUbySF_from_Excel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"></a>
+                            </li>
+                        </ul>
+
                     </div>
 
                     <div class="btn-group col-md-2 col-lg-2 padding3">
@@ -99,7 +109,7 @@
                             <li ng-if="IsSelectedPeriod()">
                                 <a ng-href="" data-translate="Цены по субъектам федерации" ng-click="PricesByFederalSubjectsToExcel();"></a>
                             </li>
-                        </ul>                        
+                        </ul>
                     </div>
 
                     <div class="btn-group col-md-7 col-lg-7 padding3" role="group">

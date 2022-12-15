@@ -273,10 +273,16 @@ namespace DataAggregator.Web.Controllers.Retail
             {
                 return BadRequest(ex.Message);
             }
-        }        
+        }
 
+        /// <summary>
+        /// Импорт коэффициентов коррекции
+        /// </summary>
+        /// <param name="uploads"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult SalesSKUbySF_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads, string currentperiod)
+        public ActionResult SalesSKUbySF_from_Excel(IEnumerable<HttpPostedFileBase> uploads, string currentperiod)
         {
             try
             {
@@ -291,6 +297,42 @@ namespace DataAggregator.Web.Controllers.Retail
                 file.SaveAs(filename);
 
                 _context.SalesSKUbySF_from_Excel(filename, currentperiod);
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = null }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Импорт цены по субъектам федерации
+        /// </summary>
+        /// <param name="uploads"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Price_SalesSKUbySF_from_Excel(IEnumerable<HttpPostedFileBase> uploads, string currentperiod)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    throw new ApplicationException("uploads not set");
+
+                var file = uploads.First();
+                string filename = @"\\s-sql3\FileUpload\Price_SalesSKUbySF_from_Excel_" + User.Identity.GetUserId() + ".xlsx";
+
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+                file.SaveAs(filename);
+
+                _context.Price_SalesSKUbySF_from_Excel(filename, currentperiod);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
