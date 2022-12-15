@@ -96,7 +96,10 @@
                             <li ng-if="IsSelectedPeriod()">
                                 <a ng-href="" data-translate="Рейтинги по РФ и СФ (СКЮ и Корп)" ng-click="Ratings_To_Excel();"></a>
                             </li>
-                        </ul>
+                            <li ng-if="IsSelectedPeriod()">
+                                <a ng-href="" data-translate="Цены по субъектам федерации" ng-click="PricesByFederalSubjectsToExcel();"></a>
+                            </li>
+                        </ul>                        
                     </div>
 
                     <div class="btn-group col-md-7 col-lg-7 padding3" role="group">
