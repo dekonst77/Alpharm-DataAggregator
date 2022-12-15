@@ -47,6 +47,13 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
     $scope.DepartmentSource = [];
     $scope.DepartmentSourceLabel = [];
+
+
+    $scope.LPUType = [];
+    $scope.LPUTypeLabel = [];
+    $scope.LPUKind = [];
+    $scope.LPUKindLabel = [];
+
     //#A3F06C
     $scope.Grid.Options.columnDefs = [
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'LPUId', field: 'LPUId', filter: { condition: uiGridCustomService.numberCondition } },
@@ -133,6 +140,46 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
     $scope.GetDepartmentSource();
 
+
+    $scope.GetLPUType = function () {
+        $http({
+            method: "POST",
+            url: "/LPUDictionaries/GetLPUType/",
+
+        }).then(function (response) {
+            Array.prototype.push.apply($scope.LPUType, response.data.Data);
+            Array.prototype.push.apply($scope.LPUTypeLabel, $scope.LPUType.map(function (obj) {
+                var rObj = { 'value': obj.Id, 'label': obj.Name };
+                return rObj;
+            }));
+
+
+        }, function () {
+            $scope.message = "Unexpected Error";
+        });
+    };
+
+    $scope.GetLPUType();
+
+    $scope.GetLPUKind = function () {
+        $http({
+            method: "POST",
+            url: "/LPUDictionaries/GetLPUKind/",
+
+        }).then(function (response) {
+            Array.prototype.push.apply($scope.LPUKind, response.data.Data);
+            Array.prototype.push.apply($scope.LPUKindLabel, $scope.LPUKind.map(function (obj) {
+                var rObj = { 'value': obj.Id, 'label': obj.Name };
+                return rObj;
+            }));
+
+
+        }, function () {
+            $scope.message = "Unexpected Error";
+        });
+    };
+
+    $scope.GetLPUKind();
 
 
     $scope.Search = function () {
