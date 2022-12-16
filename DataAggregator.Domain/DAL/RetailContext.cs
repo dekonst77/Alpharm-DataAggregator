@@ -1008,6 +1008,13 @@ namespace DataAggregator.Domain.DAL
                 }
             }
         }
+
+        /// <summary>
+        /// Импорт коэффициентов коррекции
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
         public bool SalesSKUbySF_from_Excel(string filename, string currentperiod)
         {
             using (var command = new SqlCommand())
@@ -1027,7 +1034,34 @@ namespace DataAggregator.Domain.DAL
                 command.ExecuteNonQuery();
             }
             return true;
-        }        
+        }
+
+        /// <summary>
+        /// Импорт цены по субъектам федерации
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
+        public bool Price_SalesSKUbySF_from_Excel(string filename, string currentperiod)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+                command.Parameters.Add("@currentperiod", SqlDbType.Date).Value = currentperiod;
+
+                command.CommandText = "SalesSKU.Price_SalesSKUbySF_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+            return true;
+        }
 
         /// <summary>
         /// Получить рейтинги по РФ и бренду
