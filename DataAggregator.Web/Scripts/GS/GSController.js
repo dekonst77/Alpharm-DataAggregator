@@ -1,9 +1,9 @@
 ﻿angular
     .module('DataAggregatorModule')
     .controller('GSController', [
-        '$scope', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'userService', 'uiGridTreeViewConstants', GSController]);
+        '$scope', '$route', '$http', '$q', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'userService', 'uiGridTreeViewConstants', 'Upload', 'cfpLoadingBar', GSController]);
 
-function GSController($scope, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, userService, uiGridTreeViewConstants) {
+function GSController($scope, $route, $http, $q, $uibModal, commonService, messageBoxService, hotkeys, $timeout, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, userService, uiGridTreeViewConstants, Upload, cfpLoadingBar) {
     $scope.IsRowSelection = false;
     $scope.Title = "ГС";
     $scope.user = userService.getUser();
@@ -393,6 +393,7 @@ function GSController($scope, $route, $http, $uibModal, commonService, messageBo
                 }
             );
     };
+   
     $scope.YandexAddress = function () {
         var array_GSID = [];
         var selectedRows = $scope.Grid.selectedRows();
@@ -1843,20 +1844,58 @@ function GSController($scope, $route, $http, $uibModal, commonService, messageBo
                 headerTooltip: true, enableCellEdit: false, periodIndex: 0, periodName: 'Работает', name: '-0м Работает', width: 100, field: 'isExists', headerCellClass: 'PapayaWhip', filter: { condition: uiGridCustomService.booleanConditionX }, type: 'boolean',
                 cellTemplate: '<div class="btn-group"><button type="button" class="btn" ng-class="{\'btn-info\' : row.entity.isExists==null}">x</button><button type="button" class="btn" ng-class="{\'btn-danger\' : row.entity.isExists==false}">0</button><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.isExists==true}">1</button></div>'
             },
-
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 12, periodName: '∑', name: '-12м ∑', width: 100, field: 'RealSellingSum_p12', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 11, periodName: '∑', name: '-11м ∑', width: 100, field: 'RealSellingSum_p11', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 10, periodName: '∑', name: '-10м ∑', width: 100, field: 'RealSellingSum_p10', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 9, periodName: '∑', name: '-9м ∑', width: 100, field: 'RealSellingSum_p9', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 8, periodName: '∑', name: '-8м ∑', width: 100, field: 'RealSellingSum_p8', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 7, periodName: '∑', name: '-7м ∑', width: 100, field: 'RealSellingSum_p7', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 6, periodName: '∑', name: '-6м ∑', width: 100, field: 'RealSellingSum_p6', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 5, periodName: '∑', name: '-5м ∑', width: 100, field: 'RealSellingSum_p5', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 4, periodName: '∑', name: '-4м ∑', width: 100, field: 'RealSellingSum_p4', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 3, periodName: '∑', name: '-3м ∑', width: 100, field: 'RealSellingSum_p3', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 2, periodName: '∑', name: '-2м ∑', width: 100, field: 'RealSellingSum_p2', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 1, periodName: '∑', name: '-1м ∑', width: 100, field: 'RealSellingSum_p1', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
-            { headerTooltip: true, enableCellEdit: false, periodIndex: 0, periodName: '∑', name: '-0м ∑', width: 100, field: 'RealSellingSum', headerCellClass: 'PapayaWhip', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 12, periodName: '∑', name: '-12м ∑', width: 100, field: 'RealSellingSum_p12', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p12==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 11, periodName: '∑', name: '-11м ∑', width: 100, field: 'RealSellingSum_p11', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p11==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 10, periodName: '∑', name: '-10м ∑', width: 100, field: 'RealSellingSum_p10', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p10==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 9, periodName: '∑', name: '-9м ∑', width: 100, field: 'RealSellingSum_p9', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p9==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 8, periodName: '∑', name: '-8м ∑', width: 100, field: 'RealSellingSum_p8', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p8==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 7, periodName: '∑', name: '-7м ∑', width: 100, field: 'RealSellingSum_p7', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p7==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 6, periodName: '∑', name: '-6м ∑', width: 100, field: 'RealSellingSum_p6', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p6==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 5, periodName: '∑', name: '-5м ∑', width: 100, field: 'RealSellingSum_p5', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p5==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 4, periodName: '∑', name: '-4м ∑', width: 100, field: 'RealSellingSum_p4', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p4==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 3, periodName: '∑', name: '-3м ∑', width: 100, field: 'RealSellingSum_p3', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p3==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 2, periodName: '∑', name: '-2м ∑', width: 100, field: 'RealSellingSum_p2', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p2==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 1, periodName: '∑', name: '-1м ∑', width: 100, field: 'RealSellingSum_p1', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile_p1==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
+            {
+                headerTooltip: true, enableCellEdit: false, periodIndex: 0, periodName: '∑', name: '-0м ∑', width: 100, field: 'RealSellingSum', headerCellClass: 'PapayaWhip', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
+                cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile==1}"></div>{{COL_FIELD | number : 0}}</div>'
+            },
             { headerTooltip: true, enableCellEdit: false, name: 'КОФ', width: 100, field: 'KOF', headerCellClass: 'PapayaWhip', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
             { headerTooltip: true, enableCellEdit: false, name: 'Исп.Послед ∑', width: 100, field: 'LastSellingSum_IsUse', headerCellClass: 'LightCyan', type: 'boolean', filter: { condition: uiGridCustomService.booleanConditionX } },
             { headerTooltip: true, enableCellEdit: false, name: 'Послед ∑', width: 100, field: 'LastSellingSum', headerCellClass: 'LightCyan', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
@@ -1999,6 +2038,37 @@ function GSController($scope, $route, $http, $uibModal, commonService, messageBo
                 });
         }
     };
+
+    $scope.NeoFarm_from_Excel = function (file) {
+
+        cfpLoadingBar.start();
+
+        var upload = Upload.upload({
+            url: '/GS/AlphaBitSums_from_Excel/',
+            data: {
+                uploads: file,
+                supplier: 'Нео-Фарм (Москва)',
+                currentperiod: $scope.currentperiod
+            }
+        }).then(function (resp) {
+            console.log('Success ' + resp.config.data.uploads.name + 'uploaded. Response: ' + resp.data);
+            cfpLoadingBar.complete();
+            $scope.message = "Загрузка"
+        }, function (resp) {
+            errorHandlerService.showResponseError(resp);
+            cfpLoadingBar.complete();
+            $scope.message = "Загрузка"
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            cfpLoadingBar.set(progressPercentage / 100);
+            $scope.message = "Загрузка файла " + progressPercentage + "%"
+            if (progressPercentage >= 100)
+                $scope.message = "Обработка файла"
+        });
+
+        $scope.dataLoading = $q.all([upload])
+    };
+
     ////////////////////////////// SummsAlphaBit для Окончание
 
     ////////////////////////////////// History_Init Начало

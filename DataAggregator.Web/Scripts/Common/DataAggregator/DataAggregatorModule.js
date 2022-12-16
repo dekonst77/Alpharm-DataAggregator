@@ -17,5 +17,8 @@
         'long2know',
         'ui.select',
         'ui.select.pagination.groups',
-        'angularjs-dropdown-multiselect'
-    ]);
+        'angularjs-dropdown-multiselect',
+        'angular-loading-bar'
+    ]).config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.includeSpinner = false;
+    }])

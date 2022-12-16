@@ -776,6 +776,20 @@ namespace DataAggregator.Domain.Model.GS
             if (Comment_p1 == null) Comment_p1 = "";
             if (Comment_p2 == null) Comment_p2 = "";
         }
+
+        public bool? RealSellingSumFromFile { get; set; }
+        public bool? RealSellingSumFromFile_p1 { get; set; }
+        public bool? RealSellingSumFromFile_p2 { get; set; }
+        public bool? RealSellingSumFromFile_p3 { get; set; }
+        public bool? RealSellingSumFromFile_p4 { get; set; }
+        public bool? RealSellingSumFromFile_p5 { get; set; }
+        public bool? RealSellingSumFromFile_p6 { get; set; }
+        public bool? RealSellingSumFromFile_p7 { get; set; }
+        public bool? RealSellingSumFromFile_p8 { get; set; }
+        public bool? RealSellingSumFromFile_p9 { get; set; }
+        public bool? RealSellingSumFromFile_p10 { get; set; }
+        public bool? RealSellingSumFromFile_p11 { get; set; }
+        public bool? RealSellingSumFromFile_p12 { get; set; }
     }
     public class SummsPeriod_SP
     {

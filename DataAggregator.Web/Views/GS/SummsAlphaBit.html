@@ -1,4 +1,4 @@
-﻿<div ng-controller="GSController" cg-busy="dataLoading" ng-init="SummsAlphaBit_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+﻿<div ng-controller="GSController" cg-busy="{promise:dataLoading, message:message}" ng-init="SummsAlphaBit_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
     <style>
         .Red {
             background-color: red;
@@ -56,6 +56,13 @@
                         <button class="btn btn-success btn-sm" ng-click="SummsAlphaBit_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
                         <button class="btn btn-warning btn-sm" ng-click="SummsAlphaBit_save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
                         <button class="btn btn-danger btn-sm" ng-click="SummsAlphaBit_recalc();"><span class="glyphicon glyphicon-flash">Пересчитать период</span></button>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn btn-info btn-sm" 
+                             ngf-select="NeoFarm_from_Excel($file)" 
+                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"> 
+                            <span><img src="/Content/Icons/Excel.png" style="width:17px;height:17px" /> Импорт НЕО-ФАРМ</span> 
+                        </div>
                     </div>
                 </div>
             </div>
