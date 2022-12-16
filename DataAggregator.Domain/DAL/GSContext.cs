@@ -244,6 +244,27 @@ namespace DataAggregator.Domain.DAL
             }
             return true;
         }
+        public bool AlphaBitSums_from_Excel(string filename, string supplier, string currentperiod)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+                command.Parameters.Add("@supplier", SqlDbType.NVarChar).Value = supplier;
+                command.Parameters.Add("@currentperiod", SqlDbType.NVarChar).Value = currentperiod;
+
+                command.CommandText = "dbo.AlphaBitSums_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+            return true;
+        }
         public bool SummsPeriod_OFD_Update(DateTime Period)
         {
             using (var command = new SqlCommand())
