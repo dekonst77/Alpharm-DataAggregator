@@ -312,14 +312,14 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Среднее кол-во уп. на фейковую часть', field: 'AverageQuantityPacktoFakePart', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Доля от точек ОФД', field: 'ShareOfOFDPoints', visible: true, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Доля от точек АЛБ', field: 'ShareOfAlphaBitPoints', visible: true, headerCellClass: 'Revenue', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Среднее арифметическое 2', field: 'RevenueAverage2', visible: false, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'выбираем источник ОФД/АЛБ (2)', field: 'ChooseSourceOFD_ALB2', visible: false, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'вероятность смещения (2)', field: 'BiasProbability2', visible: false, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Среднее кол-во уп. на фейковую часть (2)', field: 'AverageQuantityPacktoFakePart2', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Среднее арифметическое по точкам', field: 'RevenueAverage2', visible: false, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'выбираем источник ОФД/АЛБ для точек', field: 'ChooseSourceOFD_ALB2', visible: false, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'вероятность смещения точек', field: 'BiasProbability2', visible: false, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Среднее кол-во точек на фейковую часть', field: 'AverageQuantityPacktoFakePart2', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Расчет фейковой части кол-ва аптек', field: 'CalculationOfFakePartOfNumberOfPharmacies', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Кол-во уп фейк.', field: 'NumberOfFakePacks', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Кол-во упаковок фейк.', field: 'NumberOfFakePacks', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Весь рынок', field: 'WholeMarket', visible: true, filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Прирост весь рынок от предыдущего месяца', field: 'GrowthOfEntireMarketFromPreviousMonth', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint }
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Прирост всего рынка от предыдущего месяца', field: 'GrowthOfEntireMarketFromPreviousMonth', visible: true, headerCellClass: 'Average', filter: { condition: uiGridCustomService.condition }, cellTemplate: numbercellTemplateHint }
         ];
         $scope.Grid.SetDefaults();
 
@@ -730,9 +730,37 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
         });
     }
 
-    $scope.SalesSKUbySF_from_Excel = function (files) {
-        var stop = 1;
+    $scope.PricesByFederalSubjectsToExcel = function () {
+        const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
+        const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
+        const fileName = 'модуль_Sell_out_отчет_цены_' + $scope.currentperiod + '.xlsx';
 
+        var json_str = JSON.stringify({ year: year, month: month });
+
+        $scope.message = 'Пожалуйста, ожидайте... Формируется отчет для выгрузки цен по субъектам федерации';
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/SalesSKUbySF/PricesByFederalSubjectsToExcel/',
+            data: json_str,
+            headers: { 'Content-type': 'application/json' },
+            responseType: 'arraybuffer'
+        }).then(function (response) {
+            var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, fileName);
+        }, function (error) {
+            messageBoxService.showError('Rejected:' + error);
+        });
+
+        $scope.dataLoading.catch(
+            function (err) {
+                messageBoxService.showError('Ошибка загрузки: ' + err);
+                console.error('Ошибка загрузки: ' + err);
+            }
+        );
+    }
+
+    // импорт коэффициентов коррекции
+    $scope.SalesSKUbySF_from_Excel = function (files) {
         if (files && files.length) {
             var formData = new FormData();
             files.forEach(function (item, i, arr) {
@@ -742,6 +770,32 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
             $scope.dataLoading = $http({
                 method: 'POST',
                 url: '/SalesSKUbySF/SalesSKUbySF_from_Excel/',
+                data: formData,
+                headers: {
+                    'Content-Type': undefined
+                },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.SalesSKUbySF_Search();
+            }, function (response) {
+                $scope.Grid.Options.data = [];
+                let message = response.data.message;
+                messageBoxService.showError(JSON.stringify(message));
+            });
+        }
+    };
+
+    // импорт цены по субъектам федерации
+    $scope.Price_SalesSKUbySF_from_Excel = function (files) {
+        if (files && files.length) {
+            var formData = new FormData();
+            files.forEach(function (item, i, arr) {
+                formData.append('uploads', item);
+                formData.append('currentperiod', $scope.currentperiod);
+            });
+            $scope.dataLoading = $http({
+                method: 'POST',
+                url: '/SalesSKUbySF/Price_SalesSKUbySF_from_Excel/',
                 data: formData,
                 headers: {
                     'Content-Type': undefined

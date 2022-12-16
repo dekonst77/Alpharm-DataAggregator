@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Data.SqlTypes;
 
 namespace DataAggregator.Domain.Model.GS
 {

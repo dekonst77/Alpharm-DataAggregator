@@ -873,7 +873,7 @@ namespace DataAggregator.Domain.DAL
                 new SqlParameter { ParameterName = "@isExcel", SqlDbType = SqlDbType.Bit, Value = isExcel }
                 );
         }
-        
+
         public void RecalcDistrData_SP(int year, short month)
         {
             var parameters = new List<SqlParameter>
@@ -916,6 +916,18 @@ namespace DataAggregator.Domain.DAL
             }.Cast<object>().ToArray();
 
             Database.ExecuteSqlCommand("exec [SalesSKU].[RecalcCalculatedData_SP] @year, @month", parameters);
+        }
+
+        public void SalesCalculationAlgorithmByRegion(Nullable<System.DateTime> currPeriod, string regionName, Nullable<bool> isdebug)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@currPeriod", SqlDbType = SqlDbType.Date, Value = currPeriod},
+                new SqlParameter() { ParameterName = "@RegionName", SqlDbType = SqlDbType.VarChar, Size = 150, Value = regionName},
+                new SqlParameter() { ParameterName = "@isdebug", SqlDbType = SqlDbType.Bit, Value = isdebug}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [SalesSKU].[SalesCalculationAlgorithmByRegion] @currPeriod, @RegionName, @isdebug", parameters);
         }
 
         public IEnumerable<ViewSalesSKUByFederationSubject_SP_Result> Load_SalesSKUByFederationSubject_Record(ViewSalesSKUByFederationSubject_SP_Result record, string fieldname)
@@ -1015,7 +1027,7 @@ namespace DataAggregator.Domain.DAL
                 command.ExecuteNonQuery();
             }
             return true;
-        }
+        }        
 
         /// <summary>
         /// Получить рейтинги по РФ и бренду
@@ -1267,6 +1279,33 @@ namespace DataAggregator.Domain.DAL
                     tbl.Columns[16].Caption = "Прирост, руб.";
                     tbl.Columns[17].Caption = "Доля тек. от СФ";
                     tbl.Columns[18].Caption = "Доля -1 от СФ";
+
+                    return ds.Tables[0];
+                }
+            }
+        }
+
+        public DataTable Get_PricesByFederalSubjects_ListTable(int year, short month)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RetailContext"].ConnectionString))
+            {
+                using (var command = new SqlCommand())
+                {
+                    command.CommandTimeout = 0;
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add("@year", SqlDbType.Int).Value = year;
+                    command.Parameters.Add("@month", SqlDbType.TinyInt).Value = month;
+
+                    command.CommandText = "[SalesSKU].[GetPricesByFederalSubjects]";
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    var ds = new DataSet();
+                    var adapter = new SqlDataAdapter(command);
+                    adapter.Fill(ds);
 
                     return ds.Tables[0];
                 }
