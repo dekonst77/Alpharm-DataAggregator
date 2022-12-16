@@ -118,7 +118,7 @@ namespace DataAggregator.Domain.DAL
             var ret = Database.SqlQuery<GS_View_SP>("dbo.GS_View_SP @filter,@period", new SqlParameter("@filter", filter), new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = period });
             return ret;
         }
-        public bool BrickDelete(string Id)
+        public void BrickDelete(string Id)
         {
             using (var command = new SqlCommand())
             {
@@ -135,7 +135,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
         public int GS_add_from_History_coding(int History_codingId)
         {
@@ -166,7 +165,7 @@ namespace DataAggregator.Domain.DAL
             return GSId;
         }
 
-        //public bool licenses_to_Use_To_LPU(string userId)
+        //public void licenses_to_Use_To_LPU(string userId)
         //{
         //    using (var command = new SqlCommand())
         //    {
@@ -183,10 +182,9 @@ namespace DataAggregator.Domain.DAL
 
         //        command.ExecuteNonQuery();
         //    }
-        //    return true;
         //}
 
-        public bool licenses_to_Use_To_GS(string userId)
+        public void licenses_to_Use_To_GS(string userId)
         {
             using (var command = new SqlCommand())
             {
@@ -203,11 +201,10 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
 
-        public bool CreateLPUId(string userId)
+        public void CreateLPUId(string userId)
         {
             using (var command = new SqlCommand())
             {
@@ -222,9 +219,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool AlphaBitSums_update(int Year, int Month)
+        public void AlphaBitSums_update(int Year, int Month)
         {
             using (var command = new SqlCommand())
             {
@@ -242,9 +238,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool AlphaBitSums_from_Excel(string filename, string supplier, string currentperiod)
+        public void AlphaBitSums_from_Excel(string filename, string supplier, string currentperiod)
         {
             using (var command = new SqlCommand())
             {
@@ -263,9 +258,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SummsPeriod_OFD_Update(DateTime Period)
+        public void SummsPeriod_OFD_Update(DateTime Period)
         {
             using (var command = new SqlCommand())
             {
@@ -282,9 +276,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SummsPeriod_OFD_Apply(DateTime Period)
+        public void SummsPeriod_OFD_Apply(DateTime Period)
         {
             using (var command = new SqlCommand())
             {
@@ -301,9 +294,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool Organization_Set()
+        public void Organization_Set()
         {
             using (var command = new SqlCommand())
             {
@@ -318,10 +310,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool Organization_Without_INN_Set()
+        public void Organization_Without_INN_Set()
         {
             using (var command = new SqlCommand())
             {
@@ -336,10 +327,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool spr_NetworkName_Update(string NetworkName_old, string NetworkName_new)
+        public void spr_NetworkName_Update(string NetworkName_old, string NetworkName_new)
         {
             using (var command = new SqlCommand())
             {
@@ -358,10 +348,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool NetworkBrand_UpdateBrand(string NetworkName, string PharmacyBrand_old, string PharmacyBrand_new)
+        public void NetworkBrand_UpdateBrand(string NetworkName, string PharmacyBrand_old, string PharmacyBrand_new)
         {
             using (var command = new SqlCommand())
             {
@@ -381,10 +370,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool GS_delete(int GSId)
+        public void GS_delete(int GSId)
         {
             using (var command = new SqlCommand())
             {
@@ -399,9 +387,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_restore_From_changelog(string IDS)
+        public void GS_restore_From_changelog(string IDS)
         {
             using (var command = new SqlCommand())
             {
@@ -414,9 +401,8 @@ namespace DataAggregator.Domain.DAL
                 Database.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_BrickIdSet()
+        public void GS_BrickIdSet()
         {
             using (var command = new SqlCommand())
             {
@@ -429,9 +415,8 @@ namespace DataAggregator.Domain.DAL
                     Database.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_PharmacyIdSet()
+        public void GS_PharmacyIdSet()
         {
             using (var command = new SqlCommand())
             {
@@ -444,10 +429,9 @@ namespace DataAggregator.Domain.DAL
                     Database.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool LPU_Add(Organization LPU_Mod)
+        public void LPU_Add(Organization LPU_Mod)
         {
             using (var command = new SqlCommand())
             {
@@ -456,7 +440,7 @@ namespace DataAggregator.Domain.DAL
                 command.Connection = (SqlConnection)Database.Connection;
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.Add("@inn", LPU_Mod.inn);
+                command.Parameters.AddWithValue("@inn", LPU_Mod.inn);
                 command.Parameters.AddWithValue("@ogrn", LPU_Mod.ogrn);
                 command.Parameters.AddWithValue("@form", LPU_Mod.form);
                 command.Parameters.AddWithValue("@full_name", LPU_Mod.full_name);
@@ -470,7 +454,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
         public void LPU_Merge(int LPUId, List<int> LPUIds, string UserId)
@@ -530,7 +513,7 @@ namespace DataAggregator.Domain.DAL
             }
 
         }
-        public bool GS_Merge(int GSId, List<int> GSIds)
+        public void GS_Merge(int GSId, List<int> GSIds)
         {
 
             DataTable dt_ids = new DataTable();
@@ -556,9 +539,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool History_from_Excel(string filename)
+        public void History_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -575,10 +557,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool SummsOFD_FromExcel(string filename)
+        public void SummsOFD_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -595,10 +576,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool Network_FromExcel(string filename)
+        public void Network_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -615,9 +595,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SummsPeriod_from_Excel(string filename, string currentperiod)
+        public void SummsPeriod_from_Excel(string filename, string currentperiod)
         {
             using (var command = new SqlCommand())
             {
@@ -635,9 +614,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool DistributorBranch_from_Excel(string filename)
+        public void DistributorBranch_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -654,10 +632,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool LPU_from_Excel(string filename)
+        public void LPU_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -674,10 +651,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool GS_from_Excel(string filename)
+        public void GS_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -694,9 +670,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool Organization_FromExcel(string filename)
+        public void Organization_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -713,9 +688,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool Organization_without_INN_FromExcel(string filename)
+        public void Organization_without_INN_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -732,10 +706,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool SummsAnket_FromTemplate(string filename)
+        public void SummsAnket_FromTemplate(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -752,9 +725,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool licenses_to_Use_BrickIdSet(string userId)
+        public void licenses_to_Use_BrickIdSet(string userId)
         {
             using (var command = new SqlCommand())
             {
@@ -771,9 +743,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_Period_AddAll()
+        public void GS_Period_AddAll()
         {
             using (var command = new SqlCommand())
             {
@@ -789,9 +760,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SyncWithSPR_inwork()
+        public void SyncWithSPR_inwork()
         {
             using (var command = new SqlCommand())
             {
@@ -806,7 +776,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
         public List<History_coding_inwork_View> adr_GetData(Guid user, int top, string Source_client, string text, string GSIDs, string PharmacyIDs, string Ids, byte Category, int Status, string Comments,
             string INN, string Address, string DataSource, string NetworkName, string Spec, string DataSourceType, bool IsOnline)
@@ -843,7 +812,7 @@ namespace DataAggregator.Domain.DAL
                 return null;
             }
         }
-        public bool adr_SetData(Guid user)
+        public void adr_SetData(Guid user)
         {
             using (var command = new SqlCommand())
             {
@@ -859,7 +828,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
     }
 }

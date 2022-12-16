@@ -160,7 +160,8 @@ GS_Brick*/
                 var _context = new GSContext(APP);
                 int GS_min = GSIds.Min();
                 GSIds.Remove(GS_min);
-                var merg = _context.GS_Merge(GS_min, GSIds);
+                
+                _context.GS_Merge(GS_min, GSIds);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -181,7 +182,8 @@ GS_Brick*/
             try
             {
                 var _context = new GSContext(APP);
-                var GS = _context.GS_delete(GSId);
+                
+                _context.GS_delete(GSId);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -570,7 +572,7 @@ GS_Brick*/
             try
             {
                 var _context = new GSContext(APP);
-                var GS = _context.GS_restore_From_changelog(GSIds);
+                _context.GS_restore_From_changelog(GSIds);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -908,7 +910,7 @@ GS_Brick*/
             {
                 foreach (var item in array)
                 {
-                    var del = _context.BrickDelete(item.Id);
+                    _context.BrickDelete(item.Id);
                 }
                 //_context.SaveChanges();
                 JsonNetResult jsonNetResult = new JsonNetResult
