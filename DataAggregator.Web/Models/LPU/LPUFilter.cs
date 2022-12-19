@@ -23,6 +23,10 @@ namespace DataAggregator.Web.Models.LPU
         public Boolean? Double { get; set; }
         public string SF { get; set; }
         public string City { get; set; }
+        public Boolean? IsNullType { get; set; }
+        public Boolean? IsNullKind { get; set; }
+        public int? TypeId { get; set; }
+        public int? KindId { get; set; }
 
     }
 }

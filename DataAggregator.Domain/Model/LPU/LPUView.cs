@@ -42,5 +42,10 @@ namespace DataAggregator.Domain.Model.LPU
         public int? DepartmentId { get; set; }
         public int? DepartmentCnt { get; set; }
         public string Status { get; set; }
+        public int? TypeId { get; set; }
+        public int? KindId { get; set; }
+        public string full_name { get; set; }
+        public string name { get; set; }
+        public string form { get; set; }
     }
 }

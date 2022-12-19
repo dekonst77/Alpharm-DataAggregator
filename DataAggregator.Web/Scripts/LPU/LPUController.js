@@ -37,6 +37,8 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
      LPUID_Val = null;
     $scope.selectedDept = null;
     $scope.selectedDepartment = null;
+    $scope.selectedKind = null;
+    $scope.selectedType = null;
     /////Department
     //Dep_Grid
   
@@ -50,8 +52,10 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
 
     $scope.LPUType = [];
+   // $scope.LPUTypeFilter = [{ 'Id': -1, 'Name': 'Показать Все' }];
     $scope.LPUTypeLabel = [];
     $scope.LPUKind = [];
+    //$scope.LPUKindFilter = [{ 'Id': -1, 'Name': 'Показать Все' }];
     $scope.LPUKindLabel = [];
 
     //#A3F06C
@@ -112,7 +116,44 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
         },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Это Отделение', field: 'IsDepartment', filter: { condition: uiGridCustomService.numberCondition } },
         { enableCellEdit: false, width: 100, name: 'Status', field: 'Status', filter: { condition: uiGridCustomService.condition }, cellTemplate: formatConstants.cellTemplateHint },
+        {
+            enableCellEdit: true,
+            width: 150,
+            name: 'Тип',
+            field: 'TypeId',
+            headerCellClass: 'Edit',
+            cellFilter: 'griddropdownSSS:this',
+            editType: 'dropdown',
+            filter:
+            {
+                type: uiGridConstants.filter.SELECT,
+                selectOptions: $scope.LPUTypeLabel
 
+            },
+            editableCellTemplate: 'ui-grid/dropdownEditor',
+            editDropdownOptionsArray: $scope.LPUType,
+            editDropdownIdLabel: 'Id',
+            editDropdownValueLabel: 'Name'
+        },
+        {
+            enableCellEdit: true,
+            width: 150,
+            name: 'Вид отделения',
+            field: 'KindId',
+            headerCellClass: 'Edit',
+            cellFilter: 'griddropdownSSS:this',
+            editType: 'dropdown',
+            filter:
+            {
+                type: uiGridConstants.filter.SELECT,
+                selectOptions: $scope.LPUKindLabel
+
+            },
+            editableCellTemplate: 'ui-grid/dropdownEditor',
+            editDropdownOptionsArray: $scope.LPUKind,
+            editDropdownIdLabel: 'Id',
+            editDropdownValueLabel: 'Name'
+        },
     ];
     $scope.filter = {        
         IsActual: true
@@ -148,6 +189,7 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
         }).then(function (response) {
             Array.prototype.push.apply($scope.LPUType, response.data.Data);
+          //  Array.prototype.push.apply($scope.LPUTypeFilter, response.data.Data);
             Array.prototype.push.apply($scope.LPUTypeLabel, $scope.LPUType.map(function (obj) {
                 var rObj = { 'value': obj.Id, 'label': obj.Name };
                 return rObj;
@@ -183,8 +225,15 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
 
     $scope.Search = function () {
-
-        var json = JSON.stringify($scope.filter);
+        var SearchFilter = [];
+         SearchFilter = $scope.filter;
+        if ($scope.filter.TypeIdModel != null)
+            SearchFilter["TypeId"] = $scope.filter.TypeIdModel.Id;
+        else SearchFilter["TypeId"] = null;
+        if ($scope.filter.KindIdModel != null)
+            SearchFilter["KindId"] = $scope.filter.KindIdModel.Id;
+        else SearchFilter["KindId"] = null;
+        var json = JSON.stringify(SearchFilter);
 
         $scope.classifierLoading =
             $scope.dataLoading = $http({
@@ -306,7 +355,104 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
     })
     */
-  
+
+    //Блок Вид подразделения
+    $scope.KindGrid = uiGridCustomService.createGridClassMod($scope, 'KindGrid');
+ 
+    $scope.KindGrid.Options.multiSelect = false;
+    $scope.KindGrid.Options.noUnselect = false;
+    $scope.KindGrid.Options.showGridFooter = true;
+    $scope.KindGrid.Options.columnDefs = [
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Вид отделения', field: 'Name', filter: { condition: uiGridCustomService.condition } }
+    ];
+    $scope.KindGrid.data = [];
+   
+    $scope.KindGrid.Options.onRegisterApi = function (gridApi) {
+        $scope.KindGridApi = gridApi;
+   };
+
+    $('#KindModal').on('show.bs.modal', function (event) {
+        getKindList();
+    });
+
+
+
+    function getKindList() {
+        //очищаем выбор если был
+        if ($scope.KindGridApi.selection.getSelectedRows() != undefined && $scope.KindGridApi.selection.getSelectedRows() != null && $scope.KindGridApi.selection.getSelectedRows().length > 0) {
+            $scope.KindGridApi.selection.clearSelectedRows();
+        }
+        $scope.KindGrid.data = [];
+        $scope.KindGrid.Options.data = [];
+        $scope.KindGrid.Options.data = null;
+        $scope.KindGrid.Options.data = $scope.LPUKind;
+    };
+
+    $scope.SelectKind = function () {
+        if ($scope.Grid.selectedRows() === undefined || $scope.Grid.selectedRows().length < 1 || $scope.KindGridApi.selection.getSelectedRows() === undefined || $scope.KindGridApi.selection.getSelectedRows() === null || $scope.KindGridApi.selection.getSelectedRows().length < 1) {
+            return;
+        }
+        var Id=  $scope.KindGridApi.selection.getSelectedRows()[0].Id
+        var selectedRows = $scope.Grid.selectedRows();
+        selectedRows.forEach(function (item) {
+            $scope.Grid.GridCellsMod(item, "KindId", Id);
+        
+        });
+
+    };
+ //Конец Блок Вид подразделения
+
+
+ //Блок Тип подразделения
+    $scope.TypeGrid = uiGridCustomService.createGridClassMod($scope, 'TypeGrid');
+
+    $scope.TypeGrid.Options.multiSelect = false;
+    $scope.TypeGrid.Options.noUnselect = false;
+    $scope.TypeGrid.Options.showGridFooter = true;
+    $scope.TypeGrid.Options.columnDefs = [
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Тип подразделения', field: 'Name', filter: { condition: uiGridCustomService.condition } }
+    ];
+    $scope.TypeGrid.data = [];
+
+    $scope.TypeGrid.Options.onRegisterApi = function (gridApi) {
+        $scope.TypeGridApi = gridApi;
+    };
+
+    $('#TypeModal').on('show.bs.modal', function (event) {
+        getTypeList();
+    });
+
+
+
+    function getTypeList() {
+        //очищаем выбор если был
+        if ($scope.TypeGridApi.selection.getSelectedRows() != undefined && $scope.TypeGridApi.selection.getSelectedRows() != null && $scope.TypeGridApi.selection.getSelectedRows().length > 0) {
+            $scope.TypeGridApi.selection.clearSelectedRows();
+        }
+        $scope.TypeGrid.data = [];
+        $scope.TypeGrid.Options.data = [];
+        $scope.TypeGrid.Options.data = null;
+        $scope.TypeGrid.Options.data = $scope.LPUType;
+    };
+
+    $scope.SelectType = function () {
+        if ($scope.Grid.selectedRows() === undefined || $scope.Grid.selectedRows().length < 1 || $scope.TypeGridApi.selection.getSelectedRows() === undefined || $scope.TypeGridApi.selection.getSelectedRows() === null || $scope.TypeGridApi.selection.getSelectedRows().length < 1) {
+            return;
+        }
+        var Id = $scope.TypeGridApi.selection.getSelectedRows()[0].Id
+        var selectedRows = $scope.Grid.selectedRows();
+        selectedRows.forEach(function (item) {
+            $scope.Grid.GridCellsMod(item, "TypeId", Id);
+
+        });
+
+    };
+ //Конец Блок Тип подразделения
+
+
+
     $scope.Dep_GridOptions = uiGridCustomService.createOptions('Dep_Grid');
     var Dep_GridOptions = {
         customEnableRowSelection: true,

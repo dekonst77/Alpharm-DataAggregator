@@ -27,8 +27,8 @@ namespace DataAggregator.Web.Controllers.LPU
         }
 
 
-        [HttpPost]
-        [Authorize(Roles = "LPU_view")]
+       
+     
         public ActionResult GetLPUType()
         {
             try
@@ -43,9 +43,11 @@ namespace DataAggregator.Web.Controllers.LPU
         }
 
 
-
-        [HttpPost]
-        [Authorize(Roles = "LPU_view")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+     
         public ActionResult GetLPUKind()
         {
             try

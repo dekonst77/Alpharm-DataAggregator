@@ -77,6 +77,30 @@ namespace DataAggregator.Web.Controllers.LPU
                         lpuenum = lpuenum.Where(l => l.IsDepartment < 1 || l.IsDepartment == null);
                     }
                 }
+                if (filter.IsNullType != null)
+                {
+                    if (filter.IsNullType == true)
+                    {
+                        lpuenum = lpuenum.Where(l => l.TypeId < 1 || l.TypeId == null);
+                    }
+                }
+                if (filter.TypeId.HasValue)
+                {
+                    lpuenum = lpuenum.Where(l => l.TypeId == filter.TypeId.Value);
+                }
+                if (filter.KindId.HasValue)
+                {
+                    lpuenum = lpuenum.Where(l => l.KindId == filter.KindId.Value);
+                }
+
+                if (filter.IsNullKind != null)
+                {
+                    if (filter.IsNullKind == true)
+                    {
+                        lpuenum = lpuenum.Where(l => l.KindId < 1 || l.KindId == null);
+                    }
+                }
+
                 if (filter.IsActual != null)
                 {
                     if (filter.IsActual == true)
@@ -147,6 +171,8 @@ namespace DataAggregator.Web.Controllers.LPU
                     lpu.LPUPoint.Address_koor = lpumodel.Address_koor;
                     lpu.DepartmentId = lpumodel.DepartmentId;
                     lpu.Department = lpumodel.Department;
+                    lpu.TypeId = lpumodel.TypeId;
+                    lpu.KindId = lpumodel.KindId;
                 }
 
                 //Сохранение изменений
@@ -161,41 +187,11 @@ namespace DataAggregator.Web.Controllers.LPU
 
         [HttpPost]
         [Authorize(Roles = "LPU_view")]
-        public ActionResult AddLPU(DataAggregator.Domain.Model.GS.Organization lpumodels)
+        public ActionResult AddLPU(DataAggregator.Domain.Model.LPU.LPUView lpumodels)
         {
             try
             {
                 _context.LPU_Add(lpumodels);
-
-                /*
-                foreach (var lpumodel in lpumodels)
-                {
-                    var lpu = _context.LPU.SingleOrDefault(l => l.Id == lpumodel.LPUId);
-
-                    if (lpu == null)
-                        throw new Exception($"Не найден LPU с Id {lpumodel.LPUId}");
-                    //Обноавление LPU
-
-                    lpu.Comment = lpumodel.Comment;
-
-                    //Обновление point
-                    lpu.LPUPoint.BricksId = lpumodel.BricksId;
-                    lpu.LPUPoint.Address_street = lpumodel.Address_street;
-                    lpu.LPUPoint.Address_comment = lpumodel.Address_comment;
-                    lpu.LPUPoint.Address_float = lpumodel.Address_float;
-                    lpu.LPUPoint.Address_room = lpumodel.Address_room;
-                    lpu.LPUPoint.Address_index = lpumodel.Address_index;
-                    lpu.LPUPoint.Address_region = lpumodel.Address_region;
-                    lpu.LPUPoint.Address_city = lpumodel.Address_city;
-                    lpu.LPUPoint.Address_room_area = lpumodel.Address_room_area;
-                    lpu.LPUPoint.Address_koor = lpumodel.Address_koor;
-                    lpu.DepartmentId = lpumodel.DepartmentId;
-                    lpu.Department = lpumodel.Department;
-                }
-
-                //Сохранение изменений
-                _context.SaveChanges();
-                */
                 return ReturnData(null);
             }
             catch (Exception ex)

@@ -425,31 +425,35 @@ namespace DataAggregator.Domain.DAL
             }
             return true;
         }
-
-        public bool LPU_Add(Organization LPU_Mod )
+        /// <summary>
+        /// Добавление нового ЛПУ 
+        /// </summary>
+        /// <param name="LPUModel"></param>
+        /// <returns></returns>
+        public void LPU_Add(LPUView LPUModel )
         {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 0;
 
                 command.Connection = (SqlConnection)Database.Connection;
-                command.CommandType = CommandType.StoredProcedure;
-            
-                command.Parameters.Add("@inn", LPU_Mod.inn);
-                command.Parameters.AddWithValue("@ogrn", LPU_Mod.ogrn);
-                command.Parameters.AddWithValue("@form", LPU_Mod.form);
-                command.Parameters.AddWithValue("@full_name", LPU_Mod.full_name);
-                command.Parameters.AddWithValue("@name", LPU_Mod.name);
-                command.Parameters.AddWithValue("@EntityName", LPU_Mod.EntityName);
-                command.Parameters.AddWithValue("@address", LPU_Mod.address);
-
+                command.CommandType = CommandType.StoredProcedure;            
+                command.Parameters.AddWithValue("@inn", LPUModel.EntityINN);
+                command.Parameters.AddWithValue("@ogrn", LPUModel.EntityOGRN);
+                command.Parameters.AddWithValue("@form", LPUModel.form);
+                command.Parameters.AddWithValue("@full_name", LPUModel.full_name);
+                command.Parameters.AddWithValue("@name", LPUModel.name);
+                command.Parameters.AddWithValue("@EntityName", LPUModel.EntityName);
+                command.Parameters.AddWithValue("@address", LPUModel.Address);
+                command.Parameters.AddWithValue("@TypeId", LPUModel.TypeId);
+                command.Parameters.AddWithValue("@KindId", LPUModel.KindId);
                 command.CommandText = "dbo.LPU_Add";
 
                 Database.Connection.Open();
 
                 command.ExecuteNonQuery();
             }
-            return true;
+           
         }
 
         public void LPU_Merge(int LPUId, List<int> LPUIds, string UserId)
