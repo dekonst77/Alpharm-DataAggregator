@@ -160,7 +160,8 @@ GS_Brick*/
                 var _context = new GSContext(APP);
                 int GS_min = GSIds.Min();
                 GSIds.Remove(GS_min);
-                var merg = _context.GS_Merge(GS_min, GSIds);
+                
+                _context.GS_Merge(GS_min, GSIds);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -181,7 +182,8 @@ GS_Brick*/
             try
             {
                 var _context = new GSContext(APP);
-                var GS = _context.GS_delete(GSId);
+                
+                _context.GS_delete(GSId);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -570,7 +572,7 @@ GS_Brick*/
             try
             {
                 var _context = new GSContext(APP);
-                var GS = _context.GS_restore_From_changelog(GSIds);
+                _context.GS_restore_From_changelog(GSIds);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -908,7 +910,7 @@ GS_Brick*/
             {
                 foreach (var item in array)
                 {
-                    var del = _context.BrickDelete(item.Id);
+                    _context.BrickDelete(item.Id);
                 }
                 //_context.SaveChanges();
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -2149,8 +2151,7 @@ group by inn having count(*) > 1
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@period", SqlDbType = System.Data.SqlDbType.Date, Value = currentperiod },
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@isDoubles", SqlDbType = System.Data.SqlDbType.Bit, Value = isDoubles },
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@isDoublesAdd", SqlDbType = System.Data.SqlDbType.Bit, Value = isDoublesAdd }
-
-                    ).ToList();
+                ).ToList();
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
@@ -2185,21 +2186,42 @@ group by inn having count(*) > 1
                             UPD.RealSellingSum = (decimal)item.RealSellingSum;
                         }
                     }
+                    else
+                    {
+                        if (item.Supplier == "Нео-Фарм (Москва)" && (item.IsUse ?? false) && (item.RealSellingSumFromFile ?? false))
+                        {
+                            var newsp = new DataAggregator.Domain.Model.GS.AlphaBitSums_Period();
+                            newsp.Supplier = item.Supplier;
+                            newsp.PharmacyId = item.PharmacyId;
+                            newsp.Period = item.Period;
+                            newsp.IsUse = item.IsUse ?? false;
+                            newsp.RealSellingSum = item.RealSellingSum ?? (decimal)item.RealSellingSum;
+                            newsp.Comment = item.Comment;
+                            _context.AlphaBitSums_Period.Add(newsp);
+                        }
+                    }
+
                     //обновление прошлого периода -1
                     if (item.IsUse_p1 != null)
                     {
                         DateTime P1 = item.Period.AddMonths(-1);
                         var upd_p1 = _context.AlphaBitSums_Period.Where(w => w.PharmacyId == item.PharmacyId && w.Period == P1 && w.Supplier == item.Supplier).FirstOrDefault();
-                        upd_p1.IsUse = (bool)item.IsUse_p1;
-                        upd_p1.Comment = item.Comment_p1;
+                        if (upd_p1 != null)
+                        {
+                            upd_p1.IsUse = (bool)item.IsUse_p1;
+                            upd_p1.Comment = item.Comment_p1;
+                        }
                     }
                     //обновление прошлого периода -2
                     if (item.IsUse_p2 != null)
                     {
                         DateTime P2 = item.Period.AddMonths(-2);
                         var upd_p2 = _context.AlphaBitSums_Period.Where(w => w.PharmacyId == item.PharmacyId && w.Period == P2 && w.Supplier == item.Supplier).FirstOrDefault();
-                        upd_p2.IsUse = (bool)item.IsUse_p2;
-                        upd_p2.Comment = item.Comment_p2;
+                        if (upd_p2 != null)
+                        {
+                            upd_p2.IsUse = (bool)item.IsUse_p2;
+                            upd_p2.Comment = item.Comment_p2;
+                        }
                     }
                 }
 
@@ -2238,7 +2260,37 @@ group by inn having count(*) > 1
                 return BadRequest(e);
             }
         }
+        [HttpPost]
+        public ActionResult AlphaBitSums_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads, string supplier, string currentperiod)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    return null;
 
+                var _context = new GSContext(APP);
+
+                var file = uploads.First();
+                string filename = @"\\s-sql2\Upload\AlphaBitSums_from_Excel_" + User.Identity.GetUserId() + ".xlsx";
+
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+                file.SaveAs(filename);
+
+                _context.AlphaBitSums_from_Excel(filename, supplier, currentperiod);
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [Authorize(Roles = "GS_History")]
         public ActionResult History_Init()
         {

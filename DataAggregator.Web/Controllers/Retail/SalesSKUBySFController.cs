@@ -6,6 +6,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -96,7 +97,7 @@ namespace DataAggregator.Web.Controllers.Retail
             {
                 return BadRequest(ex.Message);
             }
-        }        
+        }
 
         [HttpPost]
         public ActionResult RecalcDistrData(int year, short month)
@@ -169,7 +170,9 @@ namespace DataAggregator.Web.Controllers.Retail
         {
             try
             {
-                _context.RecalcCalculatedData_SP(year, month);
+                var currPeriod = new DateTime(year, month, 15);
+
+                _context.SalesCalculationAlgorithmByRegion(currPeriod, String.Empty, false);
 
                 var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
 
@@ -271,8 +274,15 @@ namespace DataAggregator.Web.Controllers.Retail
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Импорт коэффициентов коррекции
+        /// </summary>
+        /// <param name="uploads"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult SalesSKUbySF_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads, string currentperiod)
+        public ActionResult SalesSKUbySF_from_Excel(IEnumerable<HttpPostedFileBase> uploads, string currentperiod)
         {
             try
             {
@@ -287,6 +297,42 @@ namespace DataAggregator.Web.Controllers.Retail
                 file.SaveAs(filename);
 
                 _context.SalesSKUbySF_from_Excel(filename, currentperiod);
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = null }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Импорт цены по субъектам федерации
+        /// </summary>
+        /// <param name="uploads"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Price_SalesSKUbySF_from_Excel(IEnumerable<HttpPostedFileBase> uploads, string currentperiod)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    throw new ApplicationException("uploads not set");
+
+                var file = uploads.First();
+                string filename = @"\\s-sql3\FileUpload\Price_SalesSKUbySF_from_Excel_" + User.Identity.GetUserId() + ".xlsx";
+
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+                file.SaveAs(filename);
+
+                _context.Price_SalesSKUbySF_from_Excel(filename, currentperiod);
 
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -349,10 +395,6 @@ namespace DataAggregator.Web.Controllers.Retail
         {
             try
             {
-                //Trace.WriteLine("Начало выполнения");
-                //Stopwatch stopWatch = new Stopwatch();
-                //stopWatch.Start();
-
                 Task<DataTable>[] tasks = new Task<DataTable>[4];
 
                 tasks[0] = new Task<DataTable>(() => _context.GetRatingByRFandBrand_Table(year, month));
@@ -365,11 +407,6 @@ namespace DataAggregator.Web.Controllers.Retail
 
                 Task.WaitAll(tasks);
 
-                //stopWatch.Stop();
-                //TimeSpan ts = stopWatch.Elapsed;
-                //string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                //Trace.WriteLine("Время выполнения: " + elapsedTime);
-
                 Excel.Excel excel = new Excel.Excel();
                 excel.Create();
 
@@ -381,6 +418,40 @@ namespace DataAggregator.Web.Controllers.Retail
                 //excel.Style_ColumnBackColor("Продажи SKU по СФ", 12, System.Drawing.Color.Green); // Коэф. Кор.
                 //excel.Style_ColumnBackColor("Продажи SKU по СФ", 13, System.Drawing.Color.Green); // уп. тек. Старт
                 //excel.Style_ColumnBackColor("Продажи SKU по СФ", 47, System.Drawing.Color.Green); // Комментарий
+
+                byte[] bb = excel.SaveAsByte();
+
+                string currentperiod = new DateTime(year, month, 1).ToString("yyyy_MM_dd");
+
+                return File(bb, "application/vnd.ms-excel");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult PricesByFederalSubjectsToExcel(int year, short month)
+        {
+            try
+            {
+                DataTable result = _context.Get_PricesByFederalSubjects_ListTable(year, month);
+
+                Excel.Excel excel = new Excel.Excel();
+                excel.Create();
+
+                excel.InsertDataTable("Отчёт", 1, 1, result, true, true, null);
+
+                excel.Style_ColumnBackColor("Отчёт", 1, Color.FromArgb(221, 235, 247)); // ClassifierId
+                excel.Style_ColumnBackColor("Отчёт", 2, Color.FromArgb(221, 235, 247)); // Наименование ТН
+                excel.Style_ColumnBackColor("Отчёт", 3, Color.FromArgb(221, 235, 247)); // Описание ТН
+                excel.Style_ColumnBackColor("Отчёт", 4, Color.FromArgb(221, 235, 247)); // Правообладатель
+
+                for (int i = 5; i <= excel.ColumnCount("Отчёт"); i++)
+                {
+                    excel.Style_ColumnBackColor("Отчёт", i, Color.FromArgb(226, 239, 218));
+                }                
 
                 byte[] bb = excel.SaveAsByte();
 

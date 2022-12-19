@@ -873,7 +873,7 @@ namespace DataAggregator.Domain.DAL
                 new SqlParameter { ParameterName = "@isExcel", SqlDbType = SqlDbType.Bit, Value = isExcel }
                 );
         }
-        
+
         public void RecalcDistrData_SP(int year, short month)
         {
             var parameters = new List<SqlParameter>
@@ -916,6 +916,18 @@ namespace DataAggregator.Domain.DAL
             }.Cast<object>().ToArray();
 
             Database.ExecuteSqlCommand("exec [SalesSKU].[RecalcCalculatedData_SP] @year, @month", parameters);
+        }
+
+        public void SalesCalculationAlgorithmByRegion(Nullable<System.DateTime> currPeriod, string regionName, Nullable<bool> isdebug)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@currPeriod", SqlDbType = SqlDbType.Date, Value = currPeriod},
+                new SqlParameter() { ParameterName = "@RegionName", SqlDbType = SqlDbType.VarChar, Size = 150, Value = regionName},
+                new SqlParameter() { ParameterName = "@isdebug", SqlDbType = SqlDbType.Bit, Value = isdebug}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [SalesSKU].[SalesCalculationAlgorithmByRegion] @currPeriod, @RegionName, @isdebug", parameters);
         }
 
         public IEnumerable<ViewSalesSKUByFederationSubject_SP_Result> Load_SalesSKUByFederationSubject_Record(ViewSalesSKUByFederationSubject_SP_Result record, string fieldname)
@@ -996,6 +1008,13 @@ namespace DataAggregator.Domain.DAL
                 }
             }
         }
+
+        /// <summary>
+        /// Импорт коэффициентов коррекции
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
         public bool SalesSKUbySF_from_Excel(string filename, string currentperiod)
         {
             using (var command = new SqlCommand())
@@ -1009,6 +1028,33 @@ namespace DataAggregator.Domain.DAL
                 command.Parameters.Add("@currentperiod", SqlDbType.NVarChar).Value = currentperiod;
 
                 command.CommandText = "SalesSKU.SalesSKUbySF_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Импорт цены по субъектам федерации
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="currentperiod"></param>
+        /// <returns></returns>
+        public bool Price_SalesSKUbySF_from_Excel(string filename, string currentperiod)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+                command.Parameters.Add("@currentperiod", SqlDbType.Date).Value = currentperiod;
+
+                command.CommandText = "SalesSKU.Price_SalesSKUbySF_from_Excel";
 
                 Database.Connection.Open();
 
@@ -1267,6 +1313,33 @@ namespace DataAggregator.Domain.DAL
                     tbl.Columns[16].Caption = "Прирост, руб.";
                     tbl.Columns[17].Caption = "Доля тек. от СФ";
                     tbl.Columns[18].Caption = "Доля -1 от СФ";
+
+                    return ds.Tables[0];
+                }
+            }
+        }
+
+        public DataTable Get_PricesByFederalSubjects_ListTable(int year, short month)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RetailContext"].ConnectionString))
+            {
+                using (var command = new SqlCommand())
+                {
+                    command.CommandTimeout = 0;
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add("@year", SqlDbType.Int).Value = year;
+                    command.Parameters.Add("@month", SqlDbType.TinyInt).Value = month;
+
+                    command.CommandText = "[SalesSKU].[GetPricesByFederalSubjects]";
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    var ds = new DataSet();
+                    var adapter = new SqlDataAdapter(command);
+                    adapter.Fill(ds);
 
                     return ds.Tables[0];
                 }

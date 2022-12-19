@@ -20,7 +20,7 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<LPU> LPU { get; set; }
 
-        public DbSet<LPUPointView> LPUPointView { get; set;}
+        public DbSet<LPUPointView> LPUPointView { get; set; }
 
         public DbSet<LPUPoint> LPUPoint { get; set; }
 
@@ -39,7 +39,7 @@ namespace DataAggregator.Domain.DAL
         public DbSet<licenses_ViewAll> licenses_ViewAll { get; set; }
         public DbSet<licenses_adress> licenses_adress { get; set; }
         public DbSet<GS> GS { get; set; }
-       // public DbSet<GS_View> GS_View { get; set; }
+        // public DbSet<GS_View> GS_View { get; set; }
         public DbSet<Bricks> Bricks { get; set; }
         public DbSet<changelogBricks> changelogBricks { get; set; }
         public DbSet<Bricks_L3> Bricks_L3 { get; set; }
@@ -49,7 +49,7 @@ namespace DataAggregator.Domain.DAL
         public DbSet<GS_Period_Network> GS_Period_Network { get; set; }
         public DbSet<AlphaBitSums_Period> AlphaBitSums_Period { get; set; }
         public DbSet<OFDSumms_Period> OFDSumms_Period { get; set; }
-        public DbSet<GS_Period_Region> GS_Period_Region { get; set; }        
+        public DbSet<GS_Period_Region> GS_Period_Region { get; set; }
         public DbSet<History_Status> History_Status { get; set; }
         public DbSet<GS_Period_Lic_View> GS_Period_Lic_View { get; set; }
         public DbSet<Calls> Calls { get; set; }
@@ -83,7 +83,7 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-           
+
         }
 
         public DbSet<History_SPR_LPU_view> History_SPR_LPU_view { get; set; }
@@ -105,7 +105,7 @@ namespace DataAggregator.Domain.DAL
             modelBuilder.Entity<Pharmacy>().Property(d => d.geo_lat_manual).HasPrecision(9, 6);
             modelBuilder.Entity<Pharmacy>().Property(d => d.geo_lon_manual).HasPrecision(9, 6);
         }
-            public GSContext(string APP)
+        public GSContext(string APP)
         {
             Database.SetInitializer<GSContext>(null);
             Database.Connection.ConnectionString += "APP=" + APP;//Чтобы триггер увидел, кто меняет
@@ -113,12 +113,12 @@ namespace DataAggregator.Domain.DAL
             Database.Log = (query) => Debug.Write(query);
         }
 
-        public IEnumerable<GS_View_SP> GS_View_SP(string filter,DateTime period)
+        public IEnumerable<GS_View_SP> GS_View_SP(string filter, DateTime period)
         {
-            var ret = Database.SqlQuery<GS_View_SP>("dbo.GS_View_SP @filter,@period", new SqlParameter("@filter", filter), new SqlParameter { ParameterName= "@period",SqlDbType= SqlDbType.Date, Value= period });
+            var ret = Database.SqlQuery<GS_View_SP>("dbo.GS_View_SP @filter,@period", new SqlParameter("@filter", filter), new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = period });
             return ret;
         }
-        public bool BrickDelete(string Id)
+        public void BrickDelete(string Id)
         {
             using (var command = new SqlCommand())
             {
@@ -135,7 +135,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
         public int GS_add_from_History_coding(int History_codingId)
         {
@@ -166,7 +165,7 @@ namespace DataAggregator.Domain.DAL
             return GSId;
         }
 
-        //public bool licenses_to_Use_To_LPU(string userId)
+        //public void licenses_to_Use_To_LPU(string userId)
         //{
         //    using (var command = new SqlCommand())
         //    {
@@ -183,10 +182,9 @@ namespace DataAggregator.Domain.DAL
 
         //        command.ExecuteNonQuery();
         //    }
-        //    return true;
         //}
 
-        public bool licenses_to_Use_To_GS(string userId)
+        public void licenses_to_Use_To_GS(string userId)
         {
             using (var command = new SqlCommand())
             {
@@ -203,18 +201,17 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
 
-        public bool CreateLPUId(string userId)
+        public void CreateLPUId(string userId)
         {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 0;
 
                 command.Connection = (SqlConnection)Database.Connection;
-                command.CommandType = CommandType.StoredProcedure;                               
+                command.CommandType = CommandType.StoredProcedure;
 
                 command.CommandText = "dbo.LPU_Sync";
 
@@ -222,9 +219,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool AlphaBitSums_update (int Year,int Month)
+        public void AlphaBitSums_update(int Year, int Month)
         {
             using (var command = new SqlCommand())
             {
@@ -242,9 +238,28 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SummsPeriod_OFD_Update(DateTime Period)
+        public void AlphaBitSums_from_Excel(string filename, string supplier, string currentperiod)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+                command.Parameters.Add("@supplier", SqlDbType.NVarChar).Value = supplier;
+                command.Parameters.Add("@currentperiod", SqlDbType.NVarChar).Value = currentperiod;
+
+                command.CommandText = "dbo.AlphaBitSums_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+        public void SummsPeriod_OFD_Update(DateTime Period)
         {
             using (var command = new SqlCommand())
             {
@@ -261,9 +276,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SummsPeriod_OFD_Apply(DateTime Period)
+        public void SummsPeriod_OFD_Apply(DateTime Period)
         {
             using (var command = new SqlCommand())
             {
@@ -280,9 +294,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool Organization_Set()
+        public void Organization_Set()
         {
             using (var command = new SqlCommand())
             {
@@ -297,10 +310,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        
-        public bool Organization_Without_INN_Set()
+
+        public void Organization_Without_INN_Set()
         {
             using (var command = new SqlCommand())
             {
@@ -315,10 +327,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool spr_NetworkName_Update(string NetworkName_old, string NetworkName_new)
+        public void spr_NetworkName_Update(string NetworkName_old, string NetworkName_new)
         {
             using (var command = new SqlCommand())
             {
@@ -337,10 +348,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool NetworkBrand_UpdateBrand(string NetworkName, string PharmacyBrand_old, string PharmacyBrand_new)
+        public void NetworkBrand_UpdateBrand(string NetworkName, string PharmacyBrand_old, string PharmacyBrand_new)
         {
             using (var command = new SqlCommand())
             {
@@ -360,10 +370,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool GS_delete(int GSId)
+        public void GS_delete(int GSId)
         {
             using (var command = new SqlCommand())
             {
@@ -378,9 +387,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_restore_From_changelog(string IDS)
+        public void GS_restore_From_changelog(string IDS)
         {
             using (var command = new SqlCommand())
             {
@@ -393,24 +401,22 @@ namespace DataAggregator.Domain.DAL
                 Database.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_BrickIdSet()
+        public void GS_BrickIdSet()
         {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 0;
 
                 command.Connection = (SqlConnection)Database.Connection;
-                command.CommandType = CommandType.StoredProcedure;              
+                command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = "dbo.GS_BrickIdSet";
                 if (Database.Connection.State != ConnectionState.Open)
                     Database.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_PharmacyIdSet()
+        public void GS_PharmacyIdSet()
         {
             using (var command = new SqlCommand())
             {
@@ -423,7 +429,6 @@ namespace DataAggregator.Domain.DAL
                     Database.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            return true;
         }
         /// <summary>
         /// Добавление нового ЛПУ 
@@ -511,9 +516,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            
+
         }
-        public bool GS_Merge(int GSId, List<int> GSIds)
+        public void GS_Merge(int GSId, List<int> GSIds)
         {
 
             DataTable dt_ids = new DataTable();
@@ -539,9 +544,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool History_from_Excel(string filename)
+        public void History_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -558,10 +562,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool SummsOFD_FromExcel(string filename)
+        public void SummsOFD_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -578,10 +581,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool Network_FromExcel(string filename)
+        public void Network_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -598,9 +600,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SummsPeriod_from_Excel(string filename, string currentperiod)
+        public void SummsPeriod_from_Excel(string filename, string currentperiod)
         {
             using (var command = new SqlCommand())
             {
@@ -618,9 +619,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool DistributorBranch_from_Excel(string filename)
+        public void DistributorBranch_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -637,10 +637,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool LPU_from_Excel(string filename)
+        public void LPU_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -657,10 +656,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool GS_from_Excel(string filename)
+        public void GS_from_Excel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -677,9 +675,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool Organization_FromExcel(string filename)
+        public void Organization_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -696,9 +693,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool Organization_without_INN_FromExcel(string filename)
+        public void Organization_without_INN_FromExcel(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -715,10 +711,9 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
 
-        public bool SummsAnket_FromTemplate(string filename)
+        public void SummsAnket_FromTemplate(string filename)
         {
             using (var command = new SqlCommand())
             {
@@ -735,9 +730,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool licenses_to_Use_BrickIdSet(string userId)
+        public void licenses_to_Use_BrickIdSet(string userId)
         {
             using (var command = new SqlCommand())
             {
@@ -754,9 +748,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool GS_Period_AddAll()
+        public void GS_Period_AddAll()
         {
             using (var command = new SqlCommand())
             {
@@ -772,9 +765,8 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public bool SyncWithSPR_inwork()
+        public void SyncWithSPR_inwork()
         {
             using (var command = new SqlCommand())
             {
@@ -789,13 +781,12 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
-        public List<History_coding_inwork_View> adr_GetData(Guid user, int top, string Source_client, string text, string GSIDs, string PharmacyIDs,string Ids, byte Category, int Status, string Comments,
+        public List<History_coding_inwork_View> adr_GetData(Guid user, int top, string Source_client, string text, string GSIDs, string PharmacyIDs, string Ids, byte Category, int Status, string Comments,
             string INN, string Address, string DataSource, string NetworkName, string Spec, string DataSourceType, bool IsOnline)
         {
             List<SqlParameter> spc = new List<SqlParameter>();
-            spc.Add(new SqlParameter() { ParameterName = "@user", SqlDbType = SqlDbType.UniqueIdentifier, Value = user , Direction =ParameterDirection.Input});
+            spc.Add(new SqlParameter() { ParameterName = "@user", SqlDbType = SqlDbType.UniqueIdentifier, Value = user, Direction = ParameterDirection.Input });
             spc.Add(new SqlParameter() { ParameterName = "@top", SqlDbType = SqlDbType.Int, Value = top, Direction = ParameterDirection.Input });
             spc.Add(new SqlParameter() { ParameterName = "@Source_client", SqlDbType = SqlDbType.NVarChar, Value = Source_client, Direction = ParameterDirection.Input });
             spc.Add(new SqlParameter() { ParameterName = "@text", SqlDbType = SqlDbType.NVarChar, Value = text, Direction = ParameterDirection.Input });
@@ -813,20 +804,20 @@ namespace DataAggregator.Domain.DAL
             spc.Add(new SqlParameter() { ParameterName = "@DataSourceType", SqlDbType = SqlDbType.NVarChar, Value = DataSourceType, Direction = ParameterDirection.Input });
             spc.Add(new SqlParameter() { ParameterName = "@IsOnline", SqlDbType = SqlDbType.Bit, Value = IsOnline, Direction = ParameterDirection.Input });
 
-            string sparams=string.Join(",", spc.Select(s => s.ParameterName));
-            
-                if (IsOnline)
+            string sparams = string.Join(",", spc.Select(s => s.ParameterName));
+
+            if (IsOnline)
             {
-                var ret= Database.SqlQuery<History_coding_inwork_View>("exec [adr].[GetData] "+ sparams, spc.Cast<object>().ToArray());
+                var ret = Database.SqlQuery<History_coding_inwork_View>("exec [adr].[GetData] " + sparams, spc.Cast<object>().ToArray());
                 return ret.ToList();
             }
             else
             {
-                Database.ExecuteSqlCommand("exec [adr].[GetData] "+ sparams, spc.Cast<object>().ToArray());
+                Database.ExecuteSqlCommand("exec [adr].[GetData] " + sparams, spc.Cast<object>().ToArray());
                 return null;
             }
         }
-        public bool adr_SetData(Guid user)
+        public void adr_SetData(Guid user)
         {
             using (var command = new SqlCommand())
             {
@@ -842,7 +833,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            return true;
         }
     }
 }

@@ -372,3 +372,15 @@ select.ng-invalid{
     /*В гриде все записи в 1 строчку*/
     white-space: nowrap;
 }
+
+#loading-bar .bar {
+    background: #4cff00;
+}
+
+.triangle-topright {
+    width: 0;
+    height: 0;
+    border-top: 8px solid red;
+    border-right: 8px solid transparent;
+    position: absolute;
+}

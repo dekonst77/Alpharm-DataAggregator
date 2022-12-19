@@ -24,7 +24,7 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/angular.js")
                 .Include("~/Scripts/angular-aria.js")
                 .Include("~/Scripts/angular-route.js")
-                .Include("~/Scripts/angular-animate.js")
+                .Include("~/Scripts/angular-animate.min.js")
                 .Include("~/Scripts/angular-touch.js")
                 .Include("~/Scripts/angular-sanitize.js")
                 .Include("~/Scripts/angular-resource.js")
@@ -48,6 +48,7 @@ namespace DataAggregator.Web
 
                 .Include("~/Scripts/ng-file-upload-shim.min.js")
                 .Include("~/Scripts/ng-file-upload.min.js")
+                .Include("~/Scripts/loading-bar.min.js")
                 .Include("~/Scripts/lib/ngRightClick.js")                
                 .Include("~/Scripts/lib/FileSaver/FileSaver.min.js")
                 .Include("~/Scripts/lib/dynamic-number/dynamic-number.js")
@@ -71,9 +72,9 @@ namespace DataAggregator.Web
             bundles.Add(new StyleBundle("~/Content/common/css")
                 .Include("~/Scripts/lib/bootstrap/3.3.7/css/bootstrap.min.css")
                 .Include("~/Scripts/lib/angular-busy/4.1.4/angular-busy.css")
+                .Include("~/Content/loading-bar.min.css")
                 .Include("~/Content/common/common.css")
                 .Include("~/Content/select.min.css")
-
             );
 
             #endregion

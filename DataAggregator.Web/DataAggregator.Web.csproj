@@ -267,6 +267,7 @@
     <Content Include="Content\Icons\favicon.ico" />
     <Content Include="Content\Icons\shit.png" />
     <Content Include="Content\GoodsSystematization\GoodsSystematization.scss" />
+    <Content Include="Content\loading-bar.min.css" />
     <Content Include="Content\LPU\LPU.css" />
     <Content Include="Content\Retail\RetailReport.css" />
     <Content Include="Content\select.css" />
@@ -1781,6 +1782,7 @@
     <Content Include="Scripts\lib\ui-grid\grunt-scripts\vfs_fonts.js" />
     <Content Include="Scripts\lib\ui-grid\ui-grid.module.js" />
     <Content Include="Scripts\lib\ui-grid\ui-grid.ru-RU.js" />
+    <Content Include="Scripts\loading-bar.min.js" />
     <Content Include="Scripts\LPU\LPULicensesController.js" />
     <Content Include="Scripts\LPU\LPUMergeController.js" />
     <Content Include="Scripts\LPU\LPUPointController.js" />
