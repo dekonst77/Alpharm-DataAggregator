@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Web.Mvc;
 using WebGrease.Css.Extensions;
@@ -28,60 +29,55 @@ namespace DataAggregator.Web.Controllers.Systematization
         {
             var userGuid = new Guid(User.Identity.GetUserId());
 
-            // у пользователя не должно быть данных в работе
             using (var context = new DrugClassifierContext(APP))
             {
-                context.Database.CommandTimeout = 0;
-                int userDrugsCount = context.DrugClassifierInWork.Count(dcw => dcw.UserId == userGuid);
-                if (userDrugsCount != 0)
-                    throw new ApplicationException("user data not empty");
-
-                //INNER JOIN Systematization.UserSource as us on drug.SourceId = us.SourceId and drugPeriod.PeriodId = us.PeriodId
-                var us = context.UserSource.Where(w => w.UserId == userGuid).FirstOrDefault();
-                if (us == null)
+                try
                 {
-                    throw new ArgumentNullException("Нет данных о блоке обработки");
-                }
-                var drugFilter = new DrugFilter(APP, us.SourceId, us.PeriodId)
-                {
-                    Count = drugFilterParameters.Count,
-                    RobotStat = drugFilterParameters.RobotStat,
-                    DateStat = drugFilterParameters.DateStat,
-                    DrugClearWorkStat = drugFilterParameters.DrugClearWorkStat,
-                    DataTypeStat = drugFilterParameters.DataTypeStat,
-                    UserWorkStat = drugFilterParameters.UserWorkStat,
-                    CategoryStat = drugFilterParameters.CategoryStat,
-                    PrioritetStat = drugFilterParameters.PrioritetStat,
-                    Additional = drugFilterParameters.Additional
-                };
+                    context.Database.CommandTimeout = 0;
 
-                drugFilter.Count = GetLimitedCount(drugFilter.Count, userGuid);
+                    int userDrugsCount = context.DrugClassifierInWork.Count(dcw => dcw.UserId == userGuid);
+                    if (userDrugsCount > 0)
+                        throw new ApplicationException("У пользователя не должно быть данных в работе");
 
-
-                //новый забор без сервиса
-                string drugFilter_string = "";
-                if (rettype == 0)
-                    drugFilter_string = drugFilter.GetFilter(userGuid);
-                if (rettype == 1)
-                {
-                    if (drugFilter.Additional != null && (drugFilter.Additional.DrugClearId != null || drugFilter.Additional.GZ_code != null))
+                    var us = context.UserSource.Where(w => w.UserId == userGuid).FirstOrDefault();
+                    if (us == null)
+                        throw new ArgumentNullException("Нет данных о блоке обработки");
+                
+                    var drugFilter = new DrugFilter(APP, us.SourceId, us.PeriodId)
                     {
-                        if (drugFilter.Additional.DrugClearId != null)
-                            drugFilter.Additional.DrugClearId = drugFilter.Additional.DrugClearId.Trim().Replace(" ", ",");
-                        if (drugFilter.Additional.GZ_code != null)
-                            drugFilter.Additional.GZ_code = drugFilter.Additional.GZ_code.Trim().Replace(" ", ",");
-                        drugFilter_string = drugFilter.GetFilter_v1(userGuid);
-                    }
-                    else
+                        Count = drugFilterParameters.Count,
+                        RobotStat = drugFilterParameters.RobotStat,
+                        DateStat = drugFilterParameters.DateStat,
+                        DrugClearWorkStat = drugFilterParameters.DrugClearWorkStat,
+                        DataTypeStat = drugFilterParameters.DataTypeStat,
+                        UserWorkStat = drugFilterParameters.UserWorkStat,
+                        CategoryStat = drugFilterParameters.CategoryStat,
+                        PrioritetStat = drugFilterParameters.PrioritetStat,
+                        Additional = drugFilterParameters.Additional
+                    };
+
+                    drugFilter.Count = GetLimitedCount(drugFilter.Count, userGuid);
+
+                    //новый забор без сервиса
+                    string drugFilter_string = "";
+                    if (rettype == 0)
+                        drugFilter_string = drugFilter.GetFilter(userGuid);
+
+                    if (rettype == 1)
                         drugFilter_string = drugFilter.GetFilter_v2(userGuid);
-                }
 
-                if (string.IsNullOrEmpty(drugFilter_string))
+                    if (string.IsNullOrEmpty(drugFilter_string))
+                    {
+                        throw new ArgumentNullException("Задайте корректные значения для фильтров (drugFilter)");
+                    }
+               
+                    context.GetDrugs(drugFilter_string, userGuid, drugFilterParameters.Count);
+                }
+                catch (Exception ex)
                 {
-                    throw new ArgumentNullException("drugFilter");
+                    return BadRequest(ex.Message);
                 }
-
-                context.GetDrugs(drugFilter_string, userGuid, drugFilterParameters.Count);
+                
             }
             return LoadDrugs();
         }
@@ -94,9 +90,7 @@ namespace DataAggregator.Web.Controllers.Systematization
             {
                 var userSource = context.UserSource.FirstOrDefault(us => us.UserId == userGuid);
                 if (userSource == null)
-                {
-                    throw new ApplicationException("no UserSource for current user found");
-                }
+                    throw new ApplicationException("Текущего пользователя нет в системе обработки информации");
 
                 var userIdentity = (ClaimsIdentity)User.Identity;
                 var claims = userIdentity.Claims;
@@ -109,7 +103,8 @@ namespace DataAggregator.Web.Controllers.Systematization
                     return 50;
                 }
 
-                if (count > 100000) return 100000;
+                if (count > 100000) 
+                    return 100000;
 
                 return count;
             }

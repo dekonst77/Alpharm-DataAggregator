@@ -14,8 +14,8 @@ namespace DataAggregator.Core.Filter
         /// </summary>
         public long? DrugId { get; set; }
 
-        // По коду владельцу РУ
-        public string OwnerRegistrationCertificateId { get; set; }
+        //// По коду владельцу РУ
+        //public string OwnerRegistrationCertificateId { get; set; }
 
         //По коду правообладателя
         public long? OwnerTradeMarkId { get; set; }
@@ -29,11 +29,11 @@ namespace DataAggregator.Core.Filter
         //Препарат
         public string TradeName { get; set; }
 
-
         public string DrugClearId { get; set; }
 
         //Производитель
         public string Manufacturer { get; set; }
+        
         public string GZ_code { get; set; }
 
         public string GetFilter()
@@ -43,13 +43,12 @@ namespace DataAggregator.Core.Filter
 
             if (DrugId.HasValue)
                 subConditions.Add(string.Format("c.DrugId = {0}", DrugId));
-
  
             if (OwnerTradeMarkId>0)
-                subConditions.Add(string.Format("c.OwnerTradeMarkId in (SELECT Id FROM Classifier.Manufacturer WHERE [Id] = '{0}')", OwnerTradeMarkId));
+                subConditions.Add(string.Format("c.OwnerTradeMarkId in (select Id from Classifier.Manufacturer where [Id] = '{0}')", OwnerTradeMarkId));
 
             if (PackerId>0)
-                subConditions.Add(string.Format("c.PackerId in (SELECT t.Id FROM Classifier.Manufacturer t WHERE t.[id] = '{0}')", PackerId));
+                subConditions.Add(string.Format("c.PackerId in (select t.Id from Classifier.Manufacturer t where t.[id] = '{0}')", PackerId));
 
             if (!string.IsNullOrEmpty(Text))
             {
@@ -62,32 +61,17 @@ namespace DataAggregator.Core.Filter
             }
 
             if (!string.IsNullOrEmpty(TradeName))
-                subConditions.Add(string.Format("d.TradeNameId in (SELECT Id FROM Classifier.TradeName WHERE Value like '{0}')",TradeName.Replace("*","%")));
+                subConditions.Add(string.Format("d.TradeNameId in (select Id from Classifier.TradeName where Value like '{0}')", TradeName.Replace("'", "").Replace("*","%")));
 
             if (!string.IsNullOrEmpty(Manufacturer))
-                subConditions.Add(string.Format("drug.Manufacturer like '{0}'", Manufacturer.Replace("*", "%")));
-
-            /*if (!string.IsNullOrEmpty(GZ_code))
-                subConditions.Add(string.Format(@" c.Id in(
-SELECT       PurchaseObjectReady.DrugClassifierId
-FROM[GovernmentPurchases]..Purchase INNER JOIN
-                         [GovernmentPurchases]..Lot ON Purchase.Id = Lot.PurchaseId INNER JOIN
-                         [GovernmentPurchases]..PurchaseObjectReady ON Lot.Id = PurchaseObjectReady.LotId
-where Purchase.Number in ('{0}')
-union
-SELECT       ContractObjectReady.DrugClassifierId
-FROM[GovernmentPurchases]..Contract INNER JOIN
-                         [GovernmentPurchases]..ContractObjectReady ON Contract.Id = ContractObjectReady.ContractId
-where Contract.ReestrNumber in ('{0}'))
-", GZ_code.Replace(" ", "").Replace(",", "','")));*/
+                subConditions.Add(string.Format("drug.Manufacturer like '{0}'", Manufacturer.Replace("'", "").Replace("*", "%")));
 
             if (subConditions.Count > 0)
             {
-
                 foreach (var where in subConditions)
                 {
                     if (mainCondition.Length > 0)
-                        mainCondition.Append(" AND ");
+                        mainCondition.Append(" and ");
 
                     mainCondition.Append(where);
                 }

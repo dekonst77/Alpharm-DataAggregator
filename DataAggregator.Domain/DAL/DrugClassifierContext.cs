@@ -412,8 +412,6 @@ namespace DataAggregator.Domain.DAL
 
         public void SetDrugs(Guid userId)
         {
-            //using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            //{
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -430,7 +428,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            //}
         }
 
 
@@ -451,8 +448,6 @@ namespace DataAggregator.Domain.DAL
 
         public void PublishFull(long ClassifierId)//DrugClassifierContext
         {
-            //using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            //{
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -469,12 +464,11 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            //}
+
         }
         public void CreateNew(string Name, int TableId, DateTime Date_Begin, DateTime Date_End, bool withRegion, int RaspredelenieId)
         {
-            //using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            //{
+ 
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 0;
@@ -496,7 +490,7 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            //}
+
         }
         public IEnumerable<ClassifierInfo_Report> ClassifierInfo_GetReport(bool IsBrick, bool isOther)
         {
@@ -509,9 +503,6 @@ namespace DataAggregator.Domain.DAL
 
         public void GetDrugs(string filter, Guid userId, int Count)
         {
-
-            //using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            // {
             using (var command = new SqlCommand())
             {
                 //чтобы при больших запросах в итоге он отваливался, а НЕ вешал всех на весь день
@@ -532,13 +523,33 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            // }
         }
+
+        public void GetDrugsV2(string filter, Guid userId, int Count)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 20 * 60;
+                command.Connection = (SqlConnection)this.Database.Connection;
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@sql", SqlDbType.NVarChar).Value = filter;
+
+                command.Parameters.Add("@UserId", SqlDbType.UniqueIdentifier).Value = userId;
+                command.Parameters.Add("@Count", SqlDbType.Int).Value = Count;
+
+                command.CommandText = "Systematization.GetDrugsV2";
+
+                command.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
 
         public void SetGoods(Guid userId)
         {
-            // using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            // {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -555,13 +566,10 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            //}
         }
 
         public void GetGoods(string filter, Guid userId)
         {
-            //using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            // {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -577,13 +585,10 @@ namespace DataAggregator.Domain.DAL
                 command.Connection.Open();
                 command.ExecuteNonQuery();
             }
-            //  }
         }
 
         public void FederalBenefitCopyPeriod(long periodIdFrom, long periodIdTo, Guid userId)
         {
-            //using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            // {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -602,13 +607,10 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            //}
         }
 
         public void CopyPeriod(long periodIdFrom, long periodIdTo, Guid userId)
         {
-            //  using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            // {
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -626,14 +628,12 @@ namespace DataAggregator.Domain.DAL
                 command.Connection.Open();
 
                 command.ExecuteNonQuery();
-                //   }
             }
         }
 
         public void GetDrugsForAnalyze(long robotId, int currentVersion, int count)
         {
-            // using (var connection = new SqlConnection(this.Database.Connection.ConnectionString))
-            // {
+
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 600;
@@ -653,7 +653,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-            //}
         }
 
         public List<INNGroup> InnGroupCheckUnique(long INNGroupId)

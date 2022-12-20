@@ -823,7 +823,8 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
                     }, 200);
 
                     updateCount();
-                }, function () {
+                }, function (err) {
+                    messageBoxService.showError(err.data.message);
                     $scope.message = 'Unexpected Error';
                 });
     }
@@ -841,7 +842,7 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
         modalDrugsInstance.result.then(function (filter) {
             $location.hash(null);
             getDrugs(filter);
-        }, function () {
+        }, function (err) {
             $location.hash(null);
         });
     };
@@ -852,9 +853,8 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
         $scope.drugLoading = $http.post('/Systematization/SetDrugs/')
             .then(function () {
                 $scope.gridOptions.data = [];
-
                 updateCount();
-            }, function () {
+            }, function (err) {
                 $scope.message = 'Unexpected Error';
             });
     };

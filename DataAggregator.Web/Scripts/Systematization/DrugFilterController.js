@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('DrugFilterController', ['$scope', '$http', '$uibModalInstance', 'hotkeys', DrugFilterController]);
+    .controller('DrugFilterController', ['$scope', '$http', '$uibModalInstance', 'hotkeys', '$window', DrugFilterController]);
 
-function DrugFilterController($scope, $http, $modalInstance, hotkeys) {
+function DrugFilterController($scope, $http, $modalInstance, hotkeys, $window) {
 
     hotkeys.bindTo($scope).add({
         combo: 'enter',
@@ -87,7 +87,8 @@ function DrugFilterController($scope, $http, $modalInstance, hotkeys) {
         $scope.isCollapsed_user = !$scope.isCollapsed_user;
     };
 
-    $scope.ok = function() {
+    $scope.ok = function () {
+        //$window.sessionStorage["drugFilterController"] = JSON.stringify($scope.filter)
         $modalInstance.close($scope.filter);
     };
 
@@ -124,6 +125,11 @@ function DrugFilterController($scope, $http, $modalInstance, hotkeys) {
             url: '/Systematization/GetDrugFilterStatistic/'
         }).then(function (response) {
             $scope.filter = response.data;
+            //if ($window.sessionStorage["drugFilterController"] != undefined) {
+            //    var filter = $window.sessionStorage["drugFilterController"];
+            //    filter = JSON.parse(filter);
+            //    $scope.filter.Additional = filter.Additional;
+            //}
         }, function () {
             $scope.message = 'Unexpected Error';
         });
