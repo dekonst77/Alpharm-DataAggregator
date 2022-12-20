@@ -231,7 +231,7 @@ namespace DataAggregator.Core.Filter
                     {
                         whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.IsOtherUserId = '{0}'", user.UserId));
                     }
-                    else //по выбранным пользователямы
+                    else //по выбранным пользователям
                         whereBlock.Add(string.Format(@" c.LastChangedUserId = '{0}'", user.UserId));
                 }
             }
