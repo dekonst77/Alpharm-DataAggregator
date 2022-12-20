@@ -503,6 +503,7 @@ namespace DataAggregator.Domain.Model.GS
         public string Info { get; set; }
         public bool IsCheck { get; set; }
         public bool IsUseLPU { get; set; }
+     
         // public string WWW { get; set; }
     }
     [Table("Organization_without_INN", Schema = "dbo")]

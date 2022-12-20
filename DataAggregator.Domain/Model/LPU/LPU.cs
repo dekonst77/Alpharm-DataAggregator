@@ -19,10 +19,10 @@ namespace DataAggregator.Domain.Model.LPU
         public int? DepartmentId { get; set; }
 
         public string Department { get; set; }
-       // public virtual Department Department { get;set;}
-
+        // public virtual Department Department { get;set;}
+        public int? TypeId { get; set; }
+        public int? KindId { get; set; }
         public virtual Organization Organization {get;set;}
-
         public  virtual LPUPoint LPUPoint { get; set; }
     }
 }

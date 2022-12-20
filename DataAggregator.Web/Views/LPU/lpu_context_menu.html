@@ -43,8 +43,21 @@
                 </div>
             </div>
         </div>
+        <div class="row padding1">
+            <div class="col-md-4 padding1">
+                ЛПУ:
+            </div>
+            <div class="col-md-8 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" type="button" ng-click="getTypeList()" data-toggle="modal" data-target="#TypeModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Тип подразделения</button>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="getKindList()" data-toggle="modal" data-target="#KindModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Вид подразделения</button>
+                    </div>
 
-
+                </div>
+            </div>
+        </div>
+        
 
 
     </div>
