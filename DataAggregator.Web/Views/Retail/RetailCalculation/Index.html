@@ -25,9 +25,6 @@
                             <label>Поставщик</label>
                             <input type="text"
                                    name="Source"
-                                   required
-                                   validate
-                                   dictionaryrequiredid="{{sources.Source.Id}}"
                                    ng-model="sources.Source.Name"
                                    ng-focus="onFocus($event)"
                                    ng-class="{'has-error': fileInfoForm.source.$invalid}"
