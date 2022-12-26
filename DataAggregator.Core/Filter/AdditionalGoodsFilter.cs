@@ -58,7 +58,7 @@ namespace DataAggregator.Core.Filter
                 subConditions.Add(string.Format("c.PackerId in (SELECT t.Id FROM Classifier.Manufacturer t WHERE t.[Id] = '{0}')", PackerId));
 
             if (!string.IsNullOrWhiteSpace(Text))
-                subConditions.Add(string.Format("dc.Text like '{0}'", Text.Replace("*", "%")));
+                subConditions.Add(string.Format("dc.ShortText like '{0}'", Text.Replace("*", "%")));
 
             if (!string.IsNullOrWhiteSpace(Goods))
                 subConditions.Add(string.Format("c.GoodsId in (SELECT t.Id FROM GoodsClassifier.Goods t WHERE t.GoodsDescription like '{0}')", Goods.Replace("*", "%")));

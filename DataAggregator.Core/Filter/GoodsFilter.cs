@@ -103,7 +103,7 @@ namespace DataAggregator.Core.Filter
                 }
             }
 
-            query.Append(" order by dc.Text");
+            query.Append(" order by dc.ShortText");
 
             return query.ToString();
         }
