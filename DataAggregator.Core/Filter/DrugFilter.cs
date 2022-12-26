@@ -39,38 +39,40 @@ namespace DataAggregator.Core.Filter
         public string GetFilter_v2(Guid userGuid)
         {
             StringBuilder queryDrug = new StringBuilder();
-            queryDrug.AppendFormat(@"   create table #Drug (Id bigint, [Date] datetime);
+            queryDrug.AppendFormat(@"  
+                                    create table #Drug (Id bigint, [Date] datetime);
 
-                                        create index drug_data ON #Drug (Id);
+                                    create index drug_data ON #Drug (Id);
 
-                                        insert into #Drug
-                                        select top {0} drug.Id, drug.Date
-	                                    from Systematization.DrugClear drug with(nolock)
-	                                    where drug.SourceId={1}
+                                    insert into #Drug
+                                    select top {0} drug.Id, drug.Date
+	                                from Systematization.DrugClear drug with(nolock)
+	                                where drug.SourceId={1}
              ", Count, SourceId);
 
             StringBuilder query = new StringBuilder();
-            query.AppendFormat(@" ;select  c.Id, drugPeriod.DrugClearId 
-                                            into #R1
-                                            from #Drug drug with(nolock)
-                                                inner join Systematization.DrugClearPeriod drugPeriod with(nolock) on drugPeriod.DrugClearId = drug.Id
-                                                inner join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
-                                                left join Classifier.Drug d with(nolock) on c.DrugId = d.Id
-                                                left join Systematization.DrugClassifierInWork dciw with(nolock) on c.DrugClearPeriodId = dciw.DrugClearPeriodId
-                                            where drugPeriod.PeriodId={0} 
-		                                        and dciw.DrugClearPeriodId is null
-                                            ",
+            query.AppendFormat(@" 
+                                    ;select  c.Id, drugPeriod.DrugClearId 
+                                    into #R1
+                                    from #Drug drug with(nolock)
+                                        inner join Systematization.DrugClearPeriod drugPeriod with(nolock) on drugPeriod.DrugClearId = drug.Id
+                                        inner join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
+                                        left join Classifier.Drug d with(nolock) on c.DrugId = d.Id
+                                        left join Systematization.DrugClassifierInWork dciw with(nolock) on c.id = dciw.id
+                                    where drugPeriod.PeriodId={0} 
+		                                and dciw.id is null
+                                    ",
                PeriodId);
 
             StringBuilder queryAdd = new StringBuilder();
             queryAdd.AppendFormat(@"  
-                                                create index ix_r1_data ON #R1 (DrugClearId);
+                                    create index ix_r1_data ON #R1 (DrugClearId);
 
-                                                insert into #data(DrugClassifierId)
-                                                select  top {0} R.Id 
-                                                from    Systematization.DrugClear drug with(nolock)
-                                                    inner join #R1 R on R.DrugClearId=drug.Id
-                                                order by drug.ShortText", Count);
+                                    insert into #data(DrugClassifierId)
+                                    select  top {0} R.Id 
+                                    from    Systematization.DrugClear drug with(nolock)
+                                        inner join #R1 R on R.DrugClearId=drug.Id
+                                    order by drug.ShortText", Count);
 
 
             if (Additional != null && !string.IsNullOrEmpty(Additional.DrugClearId))
