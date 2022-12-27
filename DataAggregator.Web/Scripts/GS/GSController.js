@@ -3765,6 +3765,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lat_manual', field: 'geo_lat_manual', filter: { condition: uiGridCustomService.condition } },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual', filter: { condition: uiGridCustomService.condition } },
 
+            { headerTooltip: true, name: 'Проверено', enableCellEdit: true, width: 100, field: 'IsChecked', type: 'boolean' },
             { visible: false, headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ГАР Guid', field: 'HOUSEGUID', filter: { condition: uiGridCustomService.condition } },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 500, headerCellClass: 'Yellow', name: 'ГАР СФ', field: 'GAR_Address', filter: { condition: uiGridCustomService.condition } }
         ];

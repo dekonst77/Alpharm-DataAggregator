@@ -2017,6 +2017,7 @@ group by inn having count(*) > 1
                         UPD_0.fias_id_manual = item.fias_id_manual;
                         UPD_0.geo_lat_manual = item.geo_lat_manual;
                         UPD_0.geo_lon_manual = item.geo_lon_manual;
+                        UPD_0.IsChecked = item.IsChecked;
                     }
                 }
 
