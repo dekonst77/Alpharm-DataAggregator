@@ -16,6 +16,7 @@ using DataAggregator.Web.App_Start;
 using System.Web;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DataAggregator.Web.Controllers.OFD
 {
@@ -377,18 +378,23 @@ namespace DataAggregator.Web.Controllers.OFD
         {
             try
             {
-                var _context = new OFDContext(APP);
-                period = new DateTime(period.Year, period.Month, period.Day);
-                _context.Database.CommandTimeout = 0;
-                ViewData["Agg"] = _context.Aggregated_All.Where(w=>w.ClassifierId==ClassifierId && w.SupplierId== SupplierId && w.period== period && w.BrickId== BrickId).ToList();
-                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
-
-                JsonNetResult jsonNetResult = new JsonNetResult
+                using (var txn = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.ReadUncommitted }))
                 {
-                    Formatting = Formatting.Indented,
-                    Data = Data
-                };
-                return jsonNetResult;
+                    using (var _context = new OFDContext(APP))
+                    {
+                        period = new DateTime(period.Year, period.Month, period.Day);
+                        _context.Database.CommandTimeout = 0;
+                        ViewData["Agg"] = _context.Aggregated_All.Where(w => w.ClassifierId == ClassifierId && w.SupplierId == SupplierId && w.period == period && w.BrickId == BrickId).ToList();
+                        var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                        JsonNetResult jsonNetResult = new JsonNetResult
+                        {
+                            Formatting = Formatting.Indented,
+                            Data = Data
+                        };
+                        return jsonNetResult;
+                    }
+                }
             }
             catch (Exception e)
             {
