@@ -14,7 +14,7 @@ namespace DataAggregator.Core.Filter
         public int Count { get; set; }
 
         public List<RobotStat> RobotStat { get; set; }
-        public List<DateStat> DateStat { get; set; }
+        public List<DateStat> DateStat { get; set; } 
         public DrugClearWorkStat DrugClearWorkStat { get; set; }
 
         public List<UserWorkStat> UserWorkStat { get; set; }
@@ -28,7 +28,7 @@ namespace DataAggregator.Core.Filter
         public long SourceId = 0;
         public long PeriodId = 0;
 
-        public DrugFilter(string APP, long SourceId, long PeriodId)
+        public DrugFilter(string APP,long SourceId,long PeriodId)
         {
             this.SourceId = SourceId;
             this.PeriodId = PeriodId;
@@ -38,29 +38,38 @@ namespace DataAggregator.Core.Filter
         }
         public string GetFilter_v2(Guid userGuid)
         {
+            StringBuilder queryDrug = new StringBuilder();
+            queryDrug.AppendFormat(@"  
+                                    create table #Drug (Id bigint, [Date] datetime);
+
+                                    create index drug_data ON #Drug (Id);
+
+                                    insert into #Drug
+                                    select drug.Id, drug.Date
+	                                from Systematization.DrugClear drug with(nolock)
+	                                where drug.SourceId={0} ", SourceId);
 
             StringBuilder query = new StringBuilder();
-            query.Append(string.Format(@"   select  c.Id, drugPeriod.DrugClearId 
-                                            into #R1
-                                            from    Systematization.DrugClear drug with(nolock)
-                                                    inner join Systematization.DrugClearPeriod drugPeriod with(nolock) on drugPeriod.DrugClearId = drug.Id
-                                                    left join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
-                                                    left join Classifier.Drug d with(nolock) on c.DrugId = d.Id
-                                                    left join Systematization.DrugClassifierInWork dciw with(nolock) on c.DrugClearPeriodId = dciw.DrugClearPeriodId
-                                            where drugPeriod.PeriodId={3} 
-		                                        and drug.SourceId={2} 
-		                                        and dciw.DrugClearPeriodId is null
-                                            ",
-               Count, userGuid, SourceId, PeriodId));
+            query.AppendFormat(@" 
+                                    ;select c.Id, drugPeriod.DrugClearId 
+                                    into #R1
+                                    from #Drug drug with(nolock)
+                                        inner join Systematization.DrugClearPeriod drugPeriod with(nolock) on drugPeriod.DrugClearId = drug.Id
+                                        inner join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
+                                        left join Classifier.Drug d with(nolock) on c.DrugId = d.Id
+                                        left join Systematization.DrugClassifierInWork dciw with(nolock) on c.id = dciw.id
+                                    where drugPeriod.PeriodId={0} 
+		                                and dciw.id is null ", PeriodId);
 
-            string queryADD = string.Format(@"  
-                                                create index ix_r1_data ON #R1 (DrugClearId);
+            StringBuilder queryAdd = new StringBuilder();
+            queryAdd.AppendFormat(@"  
+                                    ;create index ix_r1_data ON #R1 (DrugClearId);
 
-                                                insert into #data(DrugClassifierId)
-                                                select  top {0} R.Id 
-                                                from    Systematization.DrugClear drug with(nolock)
-                                                inner join #R1 R on R.DrugClearId=drug.Id
-                                                order by drug.ShortText", 10 * Count);
+                                    insert into #data(DrugClassifierId)
+                                    select  top {0} R.Id 
+                                    from    Systematization.DrugClear drug with(nolock)
+                                        inner join #R1 R on R.DrugClearId=drug.Id
+                                    order by drug.ShortText ", Count);
 
 
             if (Additional != null && !string.IsNullOrEmpty(Additional.DrugClearId))
@@ -77,9 +86,11 @@ namespace DataAggregator.Core.Filter
                 else
                     return String.Empty;
 
-                query.Append(string.Format(" and drug.Id in ({0});", Additional.DrugClearId));
+                queryDrug.AppendFormat(" and drug.Id in ({0});", Additional.DrugClearId);
 
-                query.Append(queryADD);
+                query.Insert(0, queryDrug.ToString());
+
+                query.Append(queryAdd.ToString());
 
                 return query.ToString();
             }
@@ -111,13 +122,15 @@ namespace DataAggregator.Core.Filter
                                            inner join [GovernmentPurchases].dbo.ContractObjectReady ON Contract.Id = ContractObjectReady.ContractId
                                     where   Contract.ReestrNumber in ('{0}')); ", Additional.GZ_code.Replace(",", "','")));
 
-                query.Append(queryADD);
+                query.Insert(0, queryDrug.ToString());
+
+                query.Append(queryAdd.ToString());
 
                 return query.ToString();
             }
 
             List<string> whereBlock = new List<string>();
-
+           
             if (DrugClearWorkStat.IsChecked == true) //Не проставленное
             {
                 //Лекарственные средства
@@ -299,30 +312,65 @@ namespace DataAggregator.Core.Filter
             if (date_where_in.Count > 0)
             {
                 if (date_where_in.Count == 1)
-                    query.Append(query.ToString().Trim().EndsWith("AND") ? "" : string.Format(@" and drug.[date] <={0}", string.Join(",", date_where_in)));
+                {
+                    var minDate = DateStat.Where(w => w.SourceId == SourceId).Min(x => x.date);
+                    if (minDate == null)
+                        minDate = DateTime.Now.AddDays(-7).ToString("yyyyMMdd");
+                    else
+                        minDate = string.Format(@"'" + minDate.Replace("-", "") + "'");
+
+                    queryDrug.Append(queryDrug.ToString().Trim().EndsWith("AND") ? "" : string.Format(@" and drug.[date] >={0} and drug.[date] <= {1}", minDate, string.Join(",", date_where_in)));
+                }
                 else
-                    query.Append(query.ToString().Trim().EndsWith("AND") ? "" : string.Format(@" and drug.[date] in({0})", string.Join(",", date_where_in)));
+                    queryDrug.Append(queryDrug.ToString().Trim().EndsWith("AND") ? "" : string.Format(@" and drug.[date] in({0})", string.Join(",", date_where_in)));
             }
 
             //Накладываем дополнительный фильтр
             if (Additional != null)
             {
+                var additionalDrud = Additional.GetFilterDrug();
                 var additionalWhere = Additional.GetFilter();
 
+                if (!string.IsNullOrEmpty(additionalDrud))
+                    queryDrug.Append(" AND " + additionalDrud);
+
                 if (!string.IsNullOrEmpty(additionalWhere))
-                    query.Append(query.ToString().Trim().EndsWith("AND") ? "" : " and " + additionalWhere);
+                    query.Append(" AND " + additionalWhere);
             }
 
             query.Append(GetOrderCondition(userGuid));
 
-            query.Append(queryADD);
+            query.Insert(0, queryDrug.ToString());
+
+            query.Append(queryAdd.ToString());
 
             return query.ToString();
+        }
+
+        private string GetOrderCondition(Guid userGuid)
+        {
+            using (var context = new DrugClassifierContext(APP))
+            {
+                var userSource = context.UserSource.FirstOrDefault(us => us.UserId == userGuid);
+                if (userSource == null)
+                    throw new ApplicationException("Текущего пользователя нет в системе обработки информации"); ;
+
+                if (userSource.PeriodId == 69) //GZ и контракты (задача 4675)
+                    return "ORDER BY drug.Date,c.Id desc;";
+
+                if (userSource.PeriodId == 2 || userSource.PeriodId == 12) //GZ и контракты (задача 4675)
+                    return "ORDER BY c.Id desc;";
+
+                return ""; //ORDER BY drug.ShortText;
+            }
         }
 
         [Obsolete("Method string GetFilter_v1 is deprecated", true)]
         public string GetFilter_v1(Guid userGuid)
         {
+            //пробуем избавиться от лишних методов
+            return "";
+
             var query = new StringBuilder();
 
             query.Append(string.Format(@"
@@ -337,7 +385,7 @@ namespace DataAggregator.Core.Filter
 		                        and drug.SourceId={2} 
 		                        and dciw.DrugClearPeriodId is null
                                 and ",
-               10 * Count, userGuid, SourceId, PeriodId));
+               10*Count, userGuid, SourceId, PeriodId));
 
             if (Additional != null && !string.IsNullOrEmpty(Additional.DrugClearId))
             {
@@ -347,12 +395,12 @@ namespace DataAggregator.Core.Filter
                             .Split(',')
                             .Where(x => x != string.Empty && int.TryParse(x, out inum))
                             .Select(x => x.Trim()).ToList();
-
+                
                 if (cnt.Count > 0)
                     Additional.DrugClearId = string.Join(",", cnt);
                 else
                     return String.Empty;
-
+                
                 query.Append(string.Format(" drug.Id in ({0})) as dr GROUP BY dr.Id ", Additional.DrugClearId));
                 return query.ToString();
             }
@@ -382,7 +430,7 @@ namespace DataAggregator.Core.Filter
                                            inner join [GovernmentPurchases].dbo.ContractObjectReady ON Contract.Id = ContractObjectReady.ContractId
                                     where   Contract.ReestrNumber in ('{0}'))
                                 ) as dr 
-                        group by dr.Id ",
+                        group by dr.Id ", 
                 Additional.GZ_code.Replace(",", "','")));
 
                 return query.ToString();
@@ -391,17 +439,19 @@ namespace DataAggregator.Core.Filter
             return query.ToString();
         }
 
+        [Obsolete("Method string GetFilter is deprecated", true)]
         public string GetFilter(Guid userGuid)
         {
+            //пробуем избавиться от лишних методов
+            return "";
 
             StringBuilder query = new StringBuilder();
-
             query.Append(string.Format(@"
                 select c.id from (
 	                select top({0}) drugPeriod.Id 
                     from Systematization.DrugClear drug with(nolock)
 		                inner join Systematization.DrugClearPeriod drugPeriod with(nolock) on drugPeriod.DrugClearId = drug.Id
-		                left join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
+		                inner join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
 		                left join Classifier.Drug d with(nolock) on c.DrugId = d.Id
 		                left join Systematization.DrugClassifierInWork dciw with(nolock) on c.DrugClearPeriodId = dciw.DrugClearPeriodId
 	                where drugPeriod.PeriodId={3} 
@@ -441,7 +491,7 @@ namespace DataAggregator.Core.Filter
                     whereBlock.Add(string.Format(" c.RobotId = {0} and c.DrugId is not null and c.OwnerTradeMarkId is not null and c.LastChangedUserId is null ", robot.Id));
                 }
             }
-
+            
             //В обработку ЛС
             if (DrugClearWorkStat.IsChecked && DataTypeStat.Any(c => c.FullName == "Лекарственные средства" && c.IsChecked))
             {
@@ -497,7 +547,7 @@ namespace DataAggregator.Core.Filter
                     whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.IsOtherUserId = '{0}'", user.UserId));
                 }
             }
-
+            
             if (whereBlock.Count > 0)
             {
                 StringBuilder whereQuery = new StringBuilder();
@@ -521,48 +571,36 @@ namespace DataAggregator.Core.Filter
             if (date_where_in.Count > 0)
             {
                 if (date_where_in.Count == 1)
-                    query.Append(string.Format(@" AND drug.[date] <={0}", string.Join(",", date_where_in)));
+                    query.AppendFormat(@" AND drug.[date] <={0}", date_where_in[0]);
                 else
-                    query.Append(string.Format(@" AND drug.[date] in({0})", string.Join(",", date_where_in)));
+                    query.AppendFormat(@" AND drug.[date] in({0})", string.Join(",", date_where_in));
             }
 
             //Накладываем дополнительный фильтр
             if (Additional != null)
             {
+                var additionalDrud = Additional.GetFilterDrug();
                 var additionalWhere = Additional.GetFilter();
+
+                if (!string.IsNullOrEmpty(additionalDrud))
+                    query.Append(" AND " + additionalDrud);
 
                 if (!string.IsNullOrEmpty(additionalWhere))
                     query.Append(" AND " + additionalWhere);
             }
 
             query.Append(GetOrderCondition(userGuid));
-
+            
             query.Append(" ) as dr GROUP BY c.Id ");
-
+            
             return query.ToString();
-        }
-
-        private string GetOrderCondition(Guid userGuid)
-        {
-            using (var context = new DrugClassifierContext(APP))
-            {
-                var userSource = context.UserSource.FirstOrDefault(us => us.UserId == userGuid);
-                if (userSource == null)
-                    throw new ApplicationException("Текущего пользователя нет в системе обработки информации"); ;
-
-                if (userSource.PeriodId == 69) //GZ и контракты (задача 4675)
-                    return "ORDER BY drug.Date,c.Id desc;";
-
-                if (userSource.PeriodId == 2 || userSource.PeriodId == 12) //GZ и контракты (задача 4675)
-                    return "ORDER BY c.Id desc;";
-
-                return "ORDER BY drug.ShortText;";
-            }
         }
 
         [Obsolete("Method IList<DrugClear> GetDrugs is deprecated", true)]
         public IList<DrugClear> GetDrugs(DrugClassifierContext context)
         {
+            //пробуем избавиться от лишних методов
+            return context.DrugClear.Take(0).ToList();
 
             StringBuilder query = new StringBuilder();
             query.Append(string.Format(@" SELECT TOP({0}) drug.* 
@@ -614,17 +652,17 @@ namespace DataAggregator.Core.Filter
                     case "ДОП":
                         block2.Append("(c.IsOther = 1)");
                         break;
-
+                        
                 }
             }
 
             block2.Append(")");
             query.Append(block2.ToString());
-            query.Append(" ORDER BY drug.Text");
+            query.Append(" ORDER BY drug.ShortText");
 
             return context.DrugClear.SqlQuery(query.ToString()).ToList();
         }
 
-
+        
     }
 }

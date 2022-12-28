@@ -58,11 +58,7 @@ namespace DataAggregator.Web.Controllers.Systematization
 
                     drugFilter.Count = GetLimitedCount(drugFilter.Count, userGuid);
 
-                    //новый забор без сервиса
                     string drugFilter_string = "";
-                    //if (rettype == 0)
-                    //    drugFilter_string = drugFilter.GetFilter(userGuid);
-
                     if (rettype == 1)
                         drugFilter_string = drugFilter.GetFilter_v2(userGuid);
 
