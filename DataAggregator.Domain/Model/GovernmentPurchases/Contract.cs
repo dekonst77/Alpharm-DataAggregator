@@ -20,6 +20,8 @@ namespace DataAggregator.Domain.Model.GovernmentPurchases
 
         public DateTime? ConclusionDate { get; set; }
 
+        public DateTime? StatusDate { get; set; }
+
         public string ContractNumber { get; set; }
 
         public long? MethodPriceId { get; set; }

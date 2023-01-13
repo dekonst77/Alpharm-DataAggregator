@@ -18,5 +18,6 @@ namespace DataAggregator.Web.Models.GovernmentPurchases.GovernmentPurchases
         public bool is_LO { get; set; }
         public bool is_CP { get; set; }
         public bool is_Actual { get; set; }
+        public bool no_iin { get; set; }
     }
 }

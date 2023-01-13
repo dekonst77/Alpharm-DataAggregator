@@ -17,6 +17,7 @@ function OrganizationsFilterController($scope, $http, $modalInstance, filter) {
         $scope.filter.OnlyEmptyRegion = false;
         $scope.filter.is_LO = false;
         $scope.filter.is_CP = false;
+        $scope.filter.no_iin = false;
         $scope.filter.is_Actual = false;
         $scope.filter.FederalDistrict.selectedItems = [];
         $scope.filter.FederalDistrict.displayValue = '';

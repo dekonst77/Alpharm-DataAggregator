@@ -802,7 +802,7 @@
                                 <input type="text" id="selectedContractActuallyPaidInput" class="form-control" ng-disabled="!selectedContractIsEdited" ng-model="selectedContract.ActuallyPaid" awnum="sum">
                             </div>
                         </div>
-                        <div class="col-md-1 no-padding">
+                        <div class="col-md-2 no-padding">
                             <label popover-placement="right" uib-popover="Статус" popover-trigger="'mouseenter'" popover-append-to-body="true">Статус</label>
                             <div>
                                 <!--<input type="text" class="form-control" ng-disabled="!selectedContractIsEdited" ng-model="selectedContract.ContractStatus.Id">-->
@@ -811,7 +811,10 @@
 
                             </div>
                         </div>
-                        <div class="col-md-3 no-padding">
+                        <div class="col-md-1 padding3">
+                            <datetime ng-model="selectedContract.StatusDate" ap-label="Дата статуса" format="dd.MM.yyyy" ng-disabled="!selectedContractIsEdited || !isInRoles('GManager')"></datetime>
+                        </div>
+                        <div class="col-md-2 no-padding">
                             <label>Последнее изменение</label>
                             <input type="text" class="form-control" ng-model="selectedContract.LastChangedUser" disabled />
                         </div>
