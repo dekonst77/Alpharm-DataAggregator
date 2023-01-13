@@ -66,5 +66,7 @@ namespace DataAggregator.Domain.Model.GovernmentPurchases
         public decimal? amount { get; set; }
         public string country_reg { get; set; }
         public decimal? sumObject { get; set; }
+        public string DrugDescription_grls { get; set; }
+        public string trade_name { get; set; }
     }
 }
