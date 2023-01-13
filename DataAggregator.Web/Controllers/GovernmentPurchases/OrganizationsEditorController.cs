@@ -264,6 +264,8 @@ on OO.[OutId] = o.Id "
                 result.Append("AND o.is_CP=1");
             if (filter.is_LO)
                 result.Append("AND o.is_LO=1");
+            if (filter.no_iin)
+                result.Append("AND o.inn is null");
 
             if (!string.IsNullOrEmpty(filter.Inn))
             {

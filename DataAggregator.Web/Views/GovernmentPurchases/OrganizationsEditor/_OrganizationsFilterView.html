@@ -50,28 +50,31 @@
             <div class="col-md-6">
                 <input type="checkbox" id="is_LO" ng-model="filter.is_LO"><label for="is_LO">ЛО</label>
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6">
                 <input type="checkbox" id="is_CP" ng-model="filter.is_CP"><label for="is_CP">ЦП</label>
             </div>
         </div>
+       
         <div class="row">
             <div class="col-md-6">
                 <input type="checkbox" id="is_Actual" ng-model="filter.is_Actual"><label for="is_Actual">Без связаных</label>
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
                 <input type="checkbox" id="OnlyEmptyRegion" ng-model="filter.OnlyEmptyRegion"><label for="OnlyEmptyRegion">Только пустой регион</label>
             </div>
         </div>
+       
         <div class="row">
             <div class="col-md-6">
                 <input type="checkbox" id="OnlyDrugsLinked" ng-model="filter.OnlyDrugsLinked"><label for="OnlyDrugsLinked">Только связанные с ЛС</label>
             </div>
+             <div class="col-md-6">
+                <input type="checkbox" id="OnlyDrugsLinked" ng-model="filter.no_iin"><label for="OnlyDrugsLinked">без ИНН</label>
+            </div>
         </div>
 
+       
     </div>
 </div>
 <div class="modal-footer">
