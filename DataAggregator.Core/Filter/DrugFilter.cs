@@ -36,6 +36,310 @@ namespace DataAggregator.Core.Filter
             // значения по умолчанию
             Count = 10;
         }
+        public string GetFilter_v3(Guid userGuid)
+        {
+            StringBuilder queryDrug = new StringBuilder();
+            queryDrug.AppendFormat(@"  
+                                    select drug.Id, drug.Date
+	                                from Systematization.DrugClear drug with(nolock)
+	                                where drug.SourceId={0} ", SourceId);
+
+            StringBuilder query = new StringBuilder();
+            query.AppendFormat(@" 
+                                    ;select c.Id, drugPeriod.DrugClearId 
+                                    into #R1
+                                    from #Drug drug 
+                                        inner join Systematization.DrugClearPeriod drugPeriod with(nolock) on drugPeriod.PeriodId={0} and drugPeriod.DrugClearId = drug.Id
+                                        inner join Systematization.DrugClassifier c with(nolock) on drugPeriod.Id = c.DrugClearPeriodId 
+                                        left join Classifier.Drug d with(nolock) on c.DrugId = d.Id
+                                        left join Systematization.DrugClassifierInWork dciw with(nolock) on c.id = dciw.id
+                                    where dciw.id is null ", PeriodId);
+
+            StringBuilder queryAdd = new StringBuilder();
+            queryAdd.AppendFormat(@"  
+                                    ;create index ix_r1_data ON #R1 (DrugClearId);
+
+                                    insert into #data(DrugClassifierId)
+                                    select  top {0} R.Id 
+                                    from    Systematization.DrugClear drug with(nolock)
+                                        inner join #R1 R on R.DrugClearId=drug.Id
+                                    order by drug.ShortText ", Count);
+
+
+            if (Additional != null && !string.IsNullOrEmpty(Additional.DrugClearId))
+            {
+                int inum;
+                var cnt = Additional.DrugClearId
+                            .Replace(" ", ",")
+                            .Split(',')
+                            .Where(x => x != string.Empty && int.TryParse(x, out inum))
+                            .Select(x => x.Trim()).ToList();
+
+                if (cnt.Count > 0)
+                    Additional.DrugClearId = string.Join(",", cnt);
+                else
+                    return String.Empty;
+
+                queryDrug.AppendFormat(" and drug.Id in ({0});", Additional.DrugClearId);
+
+                query.Replace("#Drug", "("+queryDrug.ToString()+")");
+
+                query.Append(queryAdd.ToString());
+
+                return query.ToString();
+            }
+
+            if (Additional != null && !string.IsNullOrEmpty(Additional.GZ_code))
+            {
+                var cnt = Additional.GZ_code
+                        .Replace("*", "")
+                        .Replace("'", "")
+                        .Replace(" ", ",")
+                        .Split(',')
+                        .Where(x => x != string.Empty)
+                        .Select(x => x.Trim()).ToList();
+
+                if (cnt.Count > 0)
+                    Additional.GZ_code = string.Join(",", cnt);
+                else
+                    return String.Empty;
+
+                query.Append(string.Format(@" 
+                        and c.Id in (   select PurchaseObjectReady.DrugClassifierId
+                                    from    [GovernmentPurchases].dbo.Purchase 
+                                                inner join [GovernmentPurchases].dbo.Lot ON Purchase.Id = Lot.PurchaseId 
+                                                inner join [GovernmentPurchases].dbo.PurchaseObjectReady ON Lot.Id = PurchaseObjectReady.LotId
+                                    where   Purchase.Number in ('{0}')
+                                    union
+                                    select  ContractObjectReady.DrugClassifierId
+                                    from    [GovernmentPurchases].dbo.Contract 
+                                           inner join [GovernmentPurchases].dbo.ContractObjectReady ON Contract.Id = ContractObjectReady.ContractId
+                                    where   Contract.ReestrNumber in ('{0}')); ", Additional.GZ_code.Replace(",", "','")));
+
+                query.Replace("#Drug", "(" + queryDrug.ToString() + ")");
+
+                query.Append(queryAdd.ToString());
+
+                return query.ToString();
+            }
+
+            List<string> whereBlock = new List<string>();
+           
+            if (DrugClearWorkStat.IsChecked == true) //Не проставленное
+            {
+                //Лекарственные средства
+                if (DataTypeStat.Any(c => c.FullName == "Лекарственные средства" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.DrugId is null AND (c.ForChecking = 0 and c.ForAdding = 0 and c.IsOther = 0))");
+                }
+                //ДОП
+                if (DataTypeStat.Any(c => c.FullName == "ДОП" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.GoodsId is null AND (c.ForChecking = 0 and c.ForAdding = 0 and c.IsOther = 1))");
+                }
+                //ДОП без категории
+                if (DataTypeStat.Any(c => c.FullName == "ДОП без категории" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.GoodsId is null AND c.IsOther = 1 AND c.GoodsCategoryId is null)");
+                }
+                //Данные на заведение
+                if (DataTypeStat.Any(c => c.FullName == "Данные на заведение" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.ForAdding = 1 and c.IsOther = 0)");
+                }
+                //Данные на проверку
+                if (DataTypeStat.Any(c => c.FullName == "Данные на проверку" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.ForChecking = 1 and c.IsOther = 0)");
+                }
+                //Данные на заведение ДОП
+                if (DataTypeStat.Any(c => c.FullName == "Данные на заведение ДОП" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.ForAdding = 1 and c.IsOther = 1)");
+                }
+                //Данные на проверку ДОП
+                if (DataTypeStat.Any(c => c.FullName == "Данные на проверку ДОП" && c.IsChecked))
+                {
+                    whereBlock.Add("(c.ForChecking = 1 and c.IsOther = 1)");
+                }
+                if (DataTypeStat.Where(w => w.IsChecked == true).Count() == 0)
+                {
+                    whereBlock.Add("(c.GoodsId is null and c.DrugId is null)");
+                }
+
+            }
+            //Для пользователей
+            var checkMoreThen5 = UserWorkStat.Where(u => u.IsChecked == true).Count() >= 5;
+
+            if (checkMoreThen5)
+            {
+                //ЛС
+                if (DataTypeStat.Any(c => c.FullName == "Лекарственные средства" && c.IsChecked))
+                {
+                    whereBlock.Add(string.Format(@" c.DrugId is not null and c.LastChangedUserId is not null"));
+                }
+                //"Данные на проверку" 
+                if (DataTypeStat.Any(c => c.FullName == "Данные на проверку" && c.IsChecked))
+                {
+                    whereBlock.Add(string.Format(@" c.IsOther = 0 AND c.ForChecking = 1 AND c.ForCheckingUserId is not null"));
+                }
+                //"Данные на заведение" 
+                if (DataTypeStat.Any(c => c.FullName == "Данные на заведение" && c.IsChecked))
+                {
+                    whereBlock.Add(string.Format(@" c.IsOther = 0 AND c.ForAdding = 1 AND c.ForAddingUserId is not null"));
+                }
+                //"Данные на заведение ДОП" 
+                if (DataTypeStat.Any(c => c.FullName == "Данные на заведение ДОП" && c.IsChecked))
+                {
+                    whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.ForAdding = 1 AND c.ForAddingUserId is not null"));
+                }
+                //"Данные на проверку ДОП" 
+                if (DataTypeStat.Any(c => c.FullName == "Данные на проверку ДОП" && c.IsChecked))
+                {
+                    whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.ForChecking = 1 AND c.ForCheckingUserId is not null"));
+                }
+                //"ДОП"
+                if (DataTypeStat.Any(c => c.FullName == "ДОП" && c.IsChecked))
+                {
+                    whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.IsOtherUserId is not null"));
+                }
+            }
+            else
+            {
+                foreach (var user in UserWorkStat.Where(u => u.IsChecked == true))
+                {
+                    //ЛС
+                    if (DataTypeStat.Any(c => c.FullName == "Лекарственные средства" && c.IsChecked))
+                    {
+                        whereBlock.Add(string.Format(@" c.DrugId is not null and c.LastChangedUserId = '{0}'", user.UserId));
+                    }
+                    //"Данные на проверку" 
+                    else if (DataTypeStat.Any(c => c.FullName == "Данные на проверку" && c.IsChecked))
+                    {
+                        whereBlock.Add(string.Format(@" c.IsOther = 0 AND c.ForChecking = 1 AND c.ForCheckingUserId = '{0}'", user.UserId));
+                    }
+                    //"Данные на заведение" 
+                    else if (DataTypeStat.Any(c => c.FullName == "Данные на заведение" && c.IsChecked))
+                    {
+                        whereBlock.Add(string.Format(@" c.IsOther = 0 AND c.ForAdding = 1 AND c.ForAddingUserId = '{0}'", user.UserId));
+                    }
+                    //"Данные на заведение ДОП" 
+                    else if (DataTypeStat.Any(c => c.FullName == "Данные на заведение ДОП" && c.IsChecked))
+                    {
+                        whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.ForAdding = 1 AND c.ForAddingUserId = '{0}'", user.UserId));
+                    }
+                    //"Данные  на проверку ДОП" 
+                    else if (DataTypeStat.Any(c => c.FullName == "Данные на проверку ДОП" && c.IsChecked))
+                    {
+                        whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.ForChecking = 1 AND c.ForCheckingUserId = '{0}'", user.UserId));
+                    }
+                    //"ДОП"
+                    else if (DataTypeStat.Any(c => c.FullName == "ДОП" && c.IsChecked))
+                    {
+                        whereBlock.Add(string.Format(@" c.IsOther = 1 AND c.IsOtherUserId = '{0}'", user.UserId));
+                    }
+                    else //по выбранным пользователям
+                        whereBlock.Add(string.Format(@" c.LastChangedUserId = '{0}'", user.UserId));
+                }
+            }
+
+            if (whereBlock.Count > 0)
+            {
+                StringBuilder whereQuery = new StringBuilder();
+                foreach (var block in whereBlock)
+                {
+                    if (whereQuery.Length > 0)
+                        whereQuery.Append(" OR ");
+
+                    whereQuery.Append(" (" + block + ") ");
+                }
+                query.Append(query.ToString().Trim().EndsWith("AND") ? "" : "and ( " + whereQuery.ToString() + " ) ");
+            }
+            //else
+            //    return String.Empty;
+
+            var s_PrioritetStat = new StringBuilder();
+            foreach (var PS in PrioritetStat.Where(u => u.IsChecked == true))
+            {
+                if (s_PrioritetStat.Length > 0)
+                    s_PrioritetStat.Append(" OR ");
+
+                s_PrioritetStat.Append("( c.Id in (select DrugClassifierId from [Systematization].[PrioritetDrugClassifier] with(nolock) where [isControl]=0 and [PrioritetWordsId]=" + Convert.ToString(PS.PrioritetWordsId) + ")");
+
+                if (PS.isReady)
+                    s_PrioritetStat.Append(" AND c.ClassifierId > 0");
+                else
+                    s_PrioritetStat.Append(" AND c.ClassifierId is null");
+
+                if (PS.IsOther)
+                    s_PrioritetStat.Append(" AND c.IsOther=1");
+                else
+                    s_PrioritetStat.Append(" AND c.IsOther=0");
+
+                s_PrioritetStat.Append(")");
+            }
+
+            if (s_PrioritetStat.Length > 0)
+                query.Append(query.ToString().Trim().EndsWith("AND") ? "" : "and (" + s_PrioritetStat.ToString() + ")");
+
+            //В обработку доп
+            if (CategoryStat != null && CategoryStat.Any(c => c.IsChecked))
+            {
+                var CategoryStatWhere = new StringBuilder();
+                foreach (var cat in CategoryStat.Where(w => w.IsChecked == true))
+                {
+                    if (CategoryStatWhere.Length > 0)
+                        CategoryStatWhere.Append(",");
+
+                    CategoryStatWhere.Append(cat.CategoryId.ToString());
+                }
+
+                if (CategoryStatWhere.Length > 0)
+                    query.Append(query.ToString().Trim().EndsWith("AND") ? "" : "and c.GoodsCategoryId in (" + CategoryStatWhere.ToString() + ")");
+            }
+
+            //Ограничения по дате
+            var date_where_in = new List<string>();
+            foreach (var date in DateStat.Where(u => u.IsChecked == true))
+                date_where_in.Add(string.Format(@"'" + date.date.Replace("-", "") + "'"));
+
+            if (date_where_in.Count > 0)
+            {
+                if (date_where_in.Count == 1)
+                {
+                    var minDate = DateStat.Where(w => w.SourceId == SourceId).Min(x => x.date);
+                    if (minDate == null)
+                        minDate = DateTime.Now.AddDays(-7).ToString("yyyyMMdd");
+                    else
+                        minDate = string.Format(@"'" + minDate.Replace("-", "") + "'");
+
+                    queryDrug.Append(queryDrug.ToString().Trim().EndsWith("AND") ? "" : string.Format(@" and drug.[date] >={0} and drug.[date] <= {1}", minDate, string.Join(",", date_where_in)));
+                }
+                else
+                    queryDrug.Append(queryDrug.ToString().Trim().EndsWith("AND") ? "" : string.Format(@" and drug.[date] in({0})", string.Join(",", date_where_in)));
+            }
+
+            //Накладываем дополнительный фильтр
+            if (Additional != null)
+            {
+                var additionalDrud = Additional.GetFilterDrug();
+                var additionalWhere = Additional.GetFilter();
+
+                if (!string.IsNullOrEmpty(additionalDrud))
+                    queryDrug.Append(" AND " + additionalDrud);
+
+                if (!string.IsNullOrEmpty(additionalWhere))
+                    query.Append(" AND " + additionalWhere);
+            }
+
+            query.Append(GetOrderCondition(userGuid));
+
+            query.Replace("#Drug", "(" + queryDrug.ToString() + ")");
+
+            query.Append(queryAdd.ToString());
+
+            return query.ToString();
+        }
         public string GetFilter_v2(Guid userGuid)
         {
             StringBuilder queryDrug = new StringBuilder();
@@ -130,7 +434,7 @@ namespace DataAggregator.Core.Filter
             }
 
             List<string> whereBlock = new List<string>();
-           
+
             if (DrugClearWorkStat.IsChecked == true) //Не проставленное
             {
                 //Лекарственные средства

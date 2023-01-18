@@ -60,7 +60,7 @@ namespace DataAggregator.Web.Controllers.Systematization
 
                     string drugFilter_string = "";
                     if (rettype == 1)
-                        drugFilter_string = drugFilter.GetFilter_v2(userGuid);
+                        drugFilter_string = drugFilter.GetFilter_v3(userGuid);
 
                     if (string.IsNullOrEmpty(drugFilter_string))
                     {
