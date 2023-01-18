@@ -80,7 +80,7 @@ namespace DataAggregator.Core.Filter
                 else
                     return String.Empty;
 
-                queryDrug.AppendFormat(" and drug.Id in ({0});", Additional.DrugClearId);
+                queryDrug.AppendFormat(" and drug.Id in ({0})", Additional.DrugClearId);
 
                 query.Replace("#Drug", "("+queryDrug.ToString()+")");
 
