@@ -81,7 +81,7 @@ namespace DataAggregator.Web.Models.GovernmentPurchases.GovernmentPurchases
 
             DateEnd = contract.DateEnd;
 
-            StatusDate = contract.StatusDate;
+            StatusDate = contract.StatusDate;  
 
             ActuallyPaid = contract.ActuallyPaid;
 
@@ -113,7 +113,7 @@ namespace DataAggregator.Web.Models.GovernmentPurchases.GovernmentPurchases
 
         public DateTime? DateEnd { get; set; }
 
-        public DateTime? StatusDate { get; set; }
+        public DateTime? StatusDate { get; set; }  
 
         public long Id { get; set; }
         //public long ContractStatusId { get; set; }
