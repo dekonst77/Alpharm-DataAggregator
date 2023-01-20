@@ -1588,6 +1588,9 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
             data: JSON.stringify({ id: contractId })
         }).then(function (response) {
             $scope.selectedContract = response.data.Contract;
+           
+            if ($scope.selectedContract.StatusDate === null) $scope.selectedContract.StatusDate=[];
+            
             if ($scope.PaymentType.length === 0) {
                 Array.prototype.push.apply($scope.PaymentType, response.data.PaymentType);
                 $scope.ContractPaymentStageGrid.Options.columnDefs = [
@@ -1632,6 +1635,9 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
 
             $scope.calcLotContractCoefficient();
             $scope.MayEditContactObj();
+
+          
+
         }, function () {
             $scope.message = 'Unexpected error';
             messageBoxService.showError($scope.message);
