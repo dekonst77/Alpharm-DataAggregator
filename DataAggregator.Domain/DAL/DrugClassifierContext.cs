@@ -280,6 +280,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<SourceStat> SourceStat { get; set; }
 
+        public DbSet<PrioritetWordsWithQueueView> PrioritetWordsWithQueueView { get; set; }
+
         #endregion Systematization
 
         #region GoodsSystematization

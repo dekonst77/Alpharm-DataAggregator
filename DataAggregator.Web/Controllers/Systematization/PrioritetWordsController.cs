@@ -19,7 +19,8 @@ namespace DataAggregator.Web.Controllers.Systematization
             {
                 var _context = new DrugClassifierContext(APP);
 
-                ViewData["Source"] = _context.Source.OrderBy(o => o.Name).ToList();
+                var list = _context.Source.OrderBy(o => o.Name).ToList();
+                ViewData["Source"] = list;
 
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -46,7 +47,8 @@ namespace DataAggregator.Web.Controllers.Systematization
             {
                 var _context = new DrugClassifierContext(APP);
 
-                ViewData["PrioritetWords"] = _context.PrioritetWords.OrderBy(o => o.Name).ToList();
+                var list = _context.PrioritetWordsWithQueueView.OrderBy(o => o.Name).ToList();
+                ViewData["PrioritetWords"] = list;
 
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
                 JsonNetResult jsonNetResult = new JsonNetResult

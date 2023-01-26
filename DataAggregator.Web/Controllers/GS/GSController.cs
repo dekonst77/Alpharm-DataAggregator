@@ -2353,6 +2353,10 @@ from [adr].[History_coding] where GSId>0 and GSId not in (select id from GS) and
 union
 select 5,cast('badAddress' as nvarchar(50)) as code,cast('Плохие Адреса' as nvarchar(50)) +' - '+ltrim(str(count(*))) as Status
 from [adr].[History_coding] where CheckStat=1
+union
+select 6,cast('noLPU' as nvarchar(50)) as code,cast('Нет ЛПУ' as nvarchar(50)) +' - '+ltrim(str(count(*))) as Status
+from [adr].[History_coding] where LPUId is null
+
 ").ToList();
 
 

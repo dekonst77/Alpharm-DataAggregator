@@ -17,7 +17,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Systematization
         public string Name { get; set; }
 
         [JsonIgnore]
-            public virtual IList<DrugClear> DrugClear { get; set; }
+        public virtual IList<DrugClear> DrugClear { get; set; }
         [JsonIgnore]
         public virtual IList<DrugRaw> DrugRaw { get; set; }
         [JsonIgnore]
@@ -47,5 +47,24 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Systematization
         public int PrioritetWordsId { get; set; }
 
         public bool isControl { get; set; }
+    }
+
+    [Table("PrioritetWordsWithQueueView", Schema = "Systematization")]
+    public class PrioritetWordsWithQueueView
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public long SourceId { get; set; }
+
+        public string Value { get; set; }
+        public string Name { get; set; }
+        public DateTime? DtStart { get; set; }
+        public DateTime? DtEnd { get; set; }
+        public string Note { get; set; }
+        public string StatusDescription { get; set; }
+        public int? Queuing_Order { get; set; }
+        public string StatusQueue { get; set; }
+
     }
 }
