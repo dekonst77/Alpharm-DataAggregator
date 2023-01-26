@@ -142,11 +142,11 @@ function DeliveryTimeController(messageBoxService, $scope, $http, $uibModal, uiG
         $scope.Grid.Options.columnDefs =
             [//'/#/Classifier/Manufacturer/Edit?id=0', '_blank'
                 { name: 'Id закупки', field: 'PurchaseId', filter: { condition: uiGridCustomService.condition }, type: 'number' },
-            { name: 'Номер закупки', field: 'PurchaseNumber', filter: { condition: uiGridCustomService.conditionSpace }, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/GovernmentPurchases/GovernmentPurchases?PurchaseNumber={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
+                { name: 'Номер закупки', field: 'PurchaseNumber', filter: { condition: uiGridCustomService.conditionSpace } },
                 { name: 'Ссылка на закупку', field: 'URL', filter: { condition: uiGridCustomService.condition }, cellTemplate: formatConstants.cellTemplateURL },
                 { name: 'Сроки поставки', field: 'DeliveryTime', filter: { condition: uiGridCustomService.condition } },
-            { name: 'DateBegin', field: 'DateBegin', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
-            { name: 'DateEnd', field: 'DateEnd', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
+                { name: 'DateBegin', field: 'DateBegin', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
+                { name: 'DateEnd', field: 'DateEnd', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
                 { name: 'Регион Заказчика', field: 'CustomerFederationSubject', filter: { condition: uiGridCustomService.condition } },
                 { name: 'Сокращенное наименование Заказчика', field: 'CustomerShortName', filter: { condition: uiGridCustomService.condition } },
                 { name: 'Наименование закупки', field: 'PurchaseName', filter: { condition: uiGridCustomService.condition }, cellTemplate: formatConstants.cellTemplateHint },
