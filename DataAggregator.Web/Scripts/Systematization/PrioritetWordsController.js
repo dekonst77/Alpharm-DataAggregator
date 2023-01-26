@@ -26,7 +26,9 @@ function PrioritetWordsController($scope, $route, $http, $uibModal, commonServic
             { enableCellEdit: true,headerTooltip: true, name: 'Value', field: 'Value', filter: { condition: uiGridCustomService.condition } },
             {
                 enableCellEdit: false, name: 'Обработка очереди',
-                cellTemplate: '<div class="ui-grid-cell-contents"><span ng-if="row.entity.Queuing_Order == null" title="Дата начала: {{row.entity.DtStart|date:\'dd.MM.yyyy HH:mm:ss\'}} Дата завершения: {{row.entity.DtEnd|date:\'dd.MM.yyyy HH:mm:ss\'}}">{{row.entity.StatusDescription}}</span><span ng-if="row.entity.Queuing_Order != null" title="Номер в очереди: {{row.entity.Queuing_Order}}">{{row.entity.StatusQueue}}</small></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents"><span class="text-warning" ng-if="row.entity.DtStart != null && row.entity.DtEnd == null" title="Дата начала: {{row.entity.DtStart|date:\'dd.MM.yyyy HH:mm:ss\'}}">{{row.entity.StatusDescription}}&nbsp;</span>' +
+                    '<span class="text-success" ng-if="row.entity.DtStart != null && row.entity.DtEnd != null" title="Дата начала: {{row.entity.DtStart|date:\'dd.MM.yyyy HH:mm:ss\'}} Дата завершения: {{row.entity.DtEnd|date:\'dd.MM.yyyy HH:mm:ss\'}}">{{row.entity.StatusDescription}}&nbsp;</span>' +
+                    '<span class="text-danger" ng-if="row.entity.Queuing_Order != null" title="Номер в очереди: {{ row.entity.Queuing_Order }}">{{row.entity.StatusQueue}}</small></div>',
                 filter: { condition: uiGridCustomService.condition }
             },
         ];
