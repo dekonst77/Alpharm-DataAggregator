@@ -36,6 +36,8 @@ namespace DataAggregator.Domain.Model.GovernmentPurchases
         public int COR_Count { get; set; }
         public string LastChangedObjectsUser { get; set; }
         public DateTime? LastChangedObjectsDate { get; set; }
+
+        public DateTime? LastChangedContract { get; set; }
         public string KKName { get; set; }
     }
 

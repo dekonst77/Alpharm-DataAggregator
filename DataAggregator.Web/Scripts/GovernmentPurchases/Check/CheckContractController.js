@@ -33,7 +33,8 @@ function CheckContractController($scope, $route, $http, $uibModal, messageBoxSer
         { name: '%Сумма новая-Фактически оплачено', field: 'Sum_new_ActuallyPaid_proc', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_Procent },
         { name: 'ТЗ', field: 'TZ', filter: { condition: uiGridCustomService.condition } },
         { name: 'Пользователь (Фамилия, Имя), последний изменивший Объекты контракта', field: 'LastChangedObjectsUser', filter: { condition: uiGridCustomService.condition } },
-        { name: 'Дата последнего изменения Объектов контракта', field: 'LastChangedObjectsDate', type: 'date', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Дата последнего изменения Объектов контракта', field: 'LastChangedObjectsDate', type: 'date', filter: { condition: uiGridCustomService.condition }, cellFilter: 'date:\'dd.MM.yyyy\'' },
+        { name: 'Дата последнего скачивания контракта', field: 'LastChangedContract', type: 'date', filter: { condition: uiGridCustomService.condition }, cellFilter: 'date:\'dd.MM.yyyy\''  },
         { name: 'количество позиций', field: 'COR_Count', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
 
     ];
