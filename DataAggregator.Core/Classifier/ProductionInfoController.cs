@@ -34,7 +34,6 @@ namespace DataAggregator.Core.Classifier
                 Action(change.From, change.To, userId, context);
             }
 
-
             //Так как ранее во всех изменениях в ProductionInfo поле ProductionStage уже обновлено, то новое значение можем взять оттуда, для каскадного изменения.
             //Field ProductionStage already updated early, and we can get new value this field from "to"
             ProductionInfoController.ChangeProductionStage(from ?? to, to.ProductionStageId, context);

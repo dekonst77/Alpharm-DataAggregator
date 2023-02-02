@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 using DataAggregator.Core.Models.Classifier;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
@@ -595,6 +596,7 @@ namespace DataAggregator.Core.Classifier
         /// <returns></returns>
         public ClassifierInfoModel MergeClassifier(ClassifierEditorModelJson model, bool saveClassifierId)
         {
+
             //Открываем транзакцию
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -605,8 +607,6 @@ namespace DataAggregator.Core.Classifier
                 var fromDrug = _context.Drugs.First(d => d.Id == model.DrugId);
                 var fromOwnerTradeMark = _context.Manufacturer.FirstOrDefault(m => m.Id == model.OwnerTradeMarkId);
                 var fromPacker = _context.Manufacturer.FirstOrDefault(m => m.Id == model.PackerId);
-
-
 
                 //Чистим входную модель.
                 model.Clear();
@@ -677,10 +677,9 @@ namespace DataAggregator.Core.Classifier
                 //Изменение ProductionInfo и ClassifierId
                 ProductionInfoController.ChangeProductionInfo(fromProductionInfo, changeProductionInfo, _user, _context);
 
-
-
                 //Если было объединение, то удаляем старый ProductionInfo
                 RemoveProductionInfoFromDrug(fromDrug, fromOwnerTradeMark, fromPacker);
+
                 _context.SaveChanges();
                 //Добавляем к PIо упаковки из PIс, которых у неё не было. 
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == changeProductionInfo.Id).Single();
@@ -688,9 +687,10 @@ namespace DataAggregator.Core.Classifier
                 {
                     CP.Id = 0;
                     var сlassifierPacking = _dictionary.FindClassifierPacking(CI, CP) ??
-                                      _dictionary.CreateClassifierPacking(CI, CP);
+                                        _dictionary.CreateClassifierPacking(CI, CP);
                 }
                 _context.SaveChanges();
+
                 transaction.Commit();
 
                 info.DrugId = toDrug.Id;
@@ -700,6 +700,7 @@ namespace DataAggregator.Core.Classifier
                 info.Comment = changeProductionInfo.Comment;
 
                 return info;
+
             }
         }
 
@@ -808,6 +809,7 @@ namespace DataAggregator.Core.Classifier
                 RemoveProductionInfoFromDrug(existDrug, existOwnerTradeMark, existPacker);
 
                 _context.SaveChanges();
+
                 //Собираем ClassifierPackings
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == changeProductionInfo.Id).Single();
                 foreach (var CP in model.ClassifierPackings)
@@ -1057,7 +1059,6 @@ namespace DataAggregator.Core.Classifier
 
                 _context.SaveChanges();
 
-
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == changeProductionInfo.Id).Single();
 
                 //Удаляем упаковки, которых нету.
@@ -1250,6 +1251,7 @@ namespace DataAggregator.Core.Classifier
                 _context.SaveChanges();
 
                 #region Собираем ClassifierPacking
+                
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
                 foreach (var CP in model.ClassifierPackings)
                 {
@@ -1257,6 +1259,7 @@ namespace DataAggregator.Core.Classifier
                     _dictionary.CreateClassifierPacking(CI, CP);
                 }
                 _context.SaveChanges();
+
                 #endregion
 
                 var dc = _context.DrugClassification.Single(c => c.DrugId == productionInfo.DrugId && c.OwnerTradeMarkId == productionInfo.OwnerTradeMarkId);

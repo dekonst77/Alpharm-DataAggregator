@@ -9,7 +9,6 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
     public class ClassifierInfo
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
         public long? ProductionInfoId { get; set; }     
         public long? GoodsProductionInfoId { get; set; }

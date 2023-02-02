@@ -726,8 +726,10 @@ namespace DataAggregator.Domain.DAL
                 command.Connection = (SqlConnection)this.Database.Connection;
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = "Classifier.UpdateMask";
-                command.Connection.Open();
+                if (command.Connection.State == ConnectionState.Closed)
+                    command.Connection.Open();
                 command.ExecuteNonQuery();
+                
             }
 
         }

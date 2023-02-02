@@ -47,24 +47,13 @@ namespace DataAggregator.Core.GoodsClassifier
                 classifierInfoTo = new ClassifierInfo { GoodsProductionInfoId = to.Id };
 
                 var classifierInfoHistory = context.ClassifierInfoHistory.FirstOrDefault(p => p.GoodsId == to.GoodsId && p.OwnerTradeMarkId == to.OwnerTradeMarkId && p.PackerId == to.PackerId);
-
-
-
+                
                 if (classifierInfoHistory != null)
                     classifierInfoTo.Id = classifierInfoHistory.ClassifierInfoId;
                 else
                 {
-                    if (context.ClassifierInfo.Any())
-                    {
-                        classifierInfoTo.Id = context.ClassifierInfo.Max(a => a.Id) + 1;
-                    }
-                    else
-                    {
-                        classifierInfoTo.Id = 1;
-                    }
+                    context.ClassifierInfo.Add(classifierInfoTo);
                 }
-
-                context.ClassifierInfo.Add(classifierInfoTo);
                 context.SaveChanges();
             }
 

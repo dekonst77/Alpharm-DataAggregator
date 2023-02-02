@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Changes;
-using DataAggregator.Domain.Model.DrugClassifier.Classifier;
-using DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
 
 namespace DataAggregator.Core.GoodsClassifier
 {
@@ -39,6 +38,21 @@ namespace DataAggregator.Core.GoodsClassifier
             };
 
             context.ClassifierReplacement.Add(classifier);
+
+            //сразу вставляем маску на основании replace
+            var mask = new Mask
+            {
+                FromClassifierId = classifierInfoFrom,
+                ToClassifierId = classifierInfoTo,
+                DateInsert = DateTime.Now,
+                Manual = false,
+                Use = true,
+                UserReplaceId = userId
+            };
+
+            context.Mask.Add(mask);
+
+            context.SaveChanges();
         }
 
        

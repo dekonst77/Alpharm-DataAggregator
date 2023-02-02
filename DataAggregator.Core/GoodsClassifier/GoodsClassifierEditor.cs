@@ -310,7 +310,7 @@ namespace DataAggregator.Core.GoodsClassifier
         }
 
         /// <summary>
-        /// Объединение двух позиций классфикатора
+        /// Объединение двух позиций классификатора
         /// </summary>
         /// <param name="model"></param>
         /// <param name="tryMode"></param>

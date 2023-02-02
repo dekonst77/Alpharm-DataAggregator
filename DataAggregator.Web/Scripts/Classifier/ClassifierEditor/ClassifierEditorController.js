@@ -97,7 +97,8 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
 
     //Очистить поля регистрационного сертификата
     $scope.clearCert = function (item) {
-
+        //$scope.classifier.DrugId = 0;
+        //$scope.classifier.DrugType = null;
         $scope.classifier.RegistrationCertificate = new RegistrationCertificateClass();
         $scope.classifier.IsExchangeable = false;
         $scope.classifier.IsReference = false;
@@ -314,7 +315,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         });
     }
     // $scope.classifierPackingGrid <-
-
+    
     $scope.classifier = {
         RegistrationCertificate: new RegistrationCertificateClass(),
         InnGroupDosage: [],
@@ -342,7 +343,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         ProductionLocalization: null,
         PackerLocalization: null
     };
-
+  
     $scope.checkRx = function (type_otc) {
         if (type_otc === "Otc") {
             if ($scope.classifier.IsOtc === true) {
@@ -1615,8 +1616,11 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         window.open('/#/Classifier/Manufacturer/Edit?id=0', '_blank');
     };
     $scope.changeTradeName = function () {
-        $scope.classifier.Brand.Value = "";
-        $scope.classifier.Brand.Id = 0;
+        
+        if ($scope.classifier.Brand !== null) {
+            $scope.classifier.Brand.Value = "";
+            $scope.classifier.Brand.Id = 0;
+        }
     };
     $scope.LoadInit = function () {
         var F_ClassifierId = $route.current.params["ClassifierId"];

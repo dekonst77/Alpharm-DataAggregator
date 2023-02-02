@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using DataAggregator.Core.GoodsClassifier;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Changes;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
 
 namespace DataAggregator.Core.Classifier
 {
@@ -60,20 +62,17 @@ namespace DataAggregator.Core.Classifier
             {
                 classifierInfoTo = new ClassifierInfo { ProductionInfoId = to.Id };
 
-                var classifierInfoHistory = context.ClassifierInfoHistory.FirstOrDefault(p =>
-                    p.DrugId == to.DrugId && p.OwnerTradeMarkId == to.OwnerTradeMarkId &&
-                    p.PackerId == to.PackerId);
+                //var classifierInfoHistory = context.ClassifierInfoHistory.FirstOrDefault(p =>
+                //   p.DrugId == to.DrugId && p.OwnerTradeMarkId == to.OwnerTradeMarkId &&
+                //   p.PackerId == to.PackerId);
 
-                if (context.ClassifierInfo.Any())
-                {
-                    classifierInfoTo.Id = context.ClassifierInfo.Max(a => a.Id) + 1;
-                }
-                else
-                {
-                    classifierInfoTo.Id = 1;
-                }
+                //if (classifierInfoHistory != null)
+                //    classifierInfoTo.Id = classifierInfoHistory.ClassifierInfoId;
+                //else
+                //{
+                    context.ClassifierInfo.Add(classifierInfoTo);
+                //}
 
-                context.ClassifierInfo.Add(classifierInfoTo);
                 context.SaveChanges();
             }
 
@@ -81,6 +80,7 @@ namespace DataAggregator.Core.Classifier
             //В случае если объединяют PI, который никогда не существовал в редакторе классификатора, то и записывать нечего
             if (classifierInfoFrom != null && classifierInfoFrom.Id != classifierInfoTo.Id)
             {
+               
                 var classifier = new ClassifierReplacement
                 {
                     ClassifierIdFrom = (int)classifierInfoFrom.Id,
@@ -89,6 +89,11 @@ namespace DataAggregator.Core.Classifier
                 };
 
                 context.ClassifierReplacement.Add(classifier);
+
+                context.SaveChanges();
+
+                //сразу вставляем маску на основании replace
+                GoodsClassifierReplacementController.Add(classifierInfoFrom.Id, classifierInfoTo.Id, userId, context);
             }
 
             context.SaveChanges();
