@@ -2596,7 +2596,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
     $scope.History_Set_Status = function (Status) {
         setIsShift(false);
         $scope.Grid.selectedRows().forEach(function (item) {
-            if (Status !== 5) {
+            if (Status !== 5 && Status !==110 ) {
                 $scope.Grid.GridCellsMod(item, "GSId", null);
                 $scope.Grid.GridCellsMod(item, "PharmacyId", null);
             }
@@ -2723,6 +2723,28 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
 
     };
+    $scope.LPU_add_from_History_coding = function () {
+        $scope.Grid.selectedRows().forEach(function (item, i, arr) {
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/GS/LPU_add_from_History_coding/',
+                    data: JSON.stringify({ History_codingId: item.Id })
+                }).then(function (response) {
+                    var data = response.data;
+                    if (data.Success) {
+                        $scope.Grid.GridCellsMod(item, "LPUId", data.Data);
+                    }
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                    return;
+                });
+        });
+
+
+    };
+
+
     $scope.History_Clear = function () {
         $scope.Grid.selectedRows().forEach(function (item) {
             $scope.Grid.GridCellsMod(item, "GSId", null);

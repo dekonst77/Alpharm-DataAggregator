@@ -164,7 +164,35 @@ namespace DataAggregator.Domain.DAL
             }
             return GSId;
         }
+        public int LPU_add_from_History_coding(int History_codingId, Guid Creator_User)
+        {
+            int LPUId = 0;
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
 
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@History_codingId", SqlDbType.Int).Value = History_codingId;
+                command.Parameters.Add("@user", SqlDbType.UniqueIdentifier).Value = Creator_User;
+                SqlParameter outparam = new SqlParameter()
+                {
+                    ParameterName = "@LPUId",
+                    SqlDbType = SqlDbType.Int,
+                    Direction = System.Data.ParameterDirection.Output
+                };
+                command.Parameters.Add(outparam);
+
+                command.CommandText = "dbo.LPU_add_from_History_coding";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+                LPUId = (int)outparam.Value;
+            }
+            return LPUId;
+        }
         //public void licenses_to_Use_To_LPU(string userId)
         //{
         //    using (var command = new SqlCommand())

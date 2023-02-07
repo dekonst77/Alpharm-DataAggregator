@@ -1940,7 +1940,27 @@ group by inn having count(*) > 1
                 return BadRequest(e);
             }
         }
-
+        [Authorize(Roles = "LPU_view")]
+        [HttpPost]
+        public ActionResult LPU_add_from_History_coding(int History_codingId)
+        {
+            try
+            {
+                var _context = new GSContext(APP);
+                var Creator_User =  new Guid(User.Identity.GetUserId());
+                int LPUId = _context.LPU_add_from_History_coding(History_codingId, Creator_User);             
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = LPUId, count = 0, status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
         [Authorize(Roles = "GS_Reestr")]
         public ActionResult Point_Init()
         {
@@ -2355,7 +2375,7 @@ select 5,cast('badAddress' as nvarchar(50)) as code,cast('Плохие Адре�
 from [adr].[History_coding] where CheckStat=1
 union
 select 6,cast('noLPU' as nvarchar(50)) as code,cast('Нет ЛПУ' as nvarchar(50)) +' - '+ltrim(str(count(*))) as Status
-from [adr].[History_coding] where LPUId is null
+from [adr].[History_coding] where LPUId is null and status<>110
 
 ").ToList();
 
