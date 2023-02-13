@@ -187,6 +187,13 @@ namespace DataAggregator.Domain.DAL
             return Database.SqlQuery<GetLocalizationByManufacturerTable_Result>("select Id, Value from Classifier.GetLocalizationByManufacturerTable (@ID)", param).ToList();
         }
 
+        public IEnumerable<ClassifierEditorFilterView> GetClassifierEditorView_Result(string filter)
+        {
+            return Database.SqlQuery<ClassifierEditorFilterView>("[Classifier].[GetClassifierEditorView] @Filter",
+                new SqlParameter { ParameterName = "@Filter", SqlDbType = SqlDbType.NVarChar, Value = filter }
+                );
+        }
+
         #region Blister Block
 
         public DbSet<BlisterBlockView> BlisterBlockView { get; set; }
@@ -470,7 +477,7 @@ namespace DataAggregator.Domain.DAL
         }
         public void CreateNew(string Name, int TableId, DateTime Date_Begin, DateTime Date_End, bool withRegion, int RaspredelenieId)
         {
- 
+
             using (var command = new SqlCommand())
             {
                 command.CommandTimeout = 0;
@@ -729,7 +736,7 @@ namespace DataAggregator.Domain.DAL
                 if (command.Connection.State == ConnectionState.Closed)
                     command.Connection.Open();
                 command.ExecuteNonQuery();
-                
+
             }
 
         }

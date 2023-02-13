@@ -2,17 +2,17 @@
 using DataAggregator.Core.Filter;
 using DataAggregator.Core.Models.Classifier;
 using DataAggregator.Domain.DAL;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
+using DataAggregator.Domain.Utils;
 using DataAggregator.Web.Models.Classifier;
+using Kendo.Mvc.Extensions;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Web.Mvc;
-using DataAggregator.Domain.Model.DrugClassifier.Classifier;
-using Kendo.Mvc.Extensions;
-using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
 
 namespace DataAggregator.Web.Controllers
 {
@@ -724,134 +724,10 @@ namespace DataAggregator.Web.Controllers
         {
             try
             {
-                var result = _context.ClassifierEditorFilterView.Select(cv => cv);
+                string xmlFilter = XmlToObjectSerializer<ClassifierFilter>.Serialize(filter);
 
-                if (!String.IsNullOrEmpty(filter.TradeName))
-                {
-                    if (filter.TradeNameId != null)
-                    {
-                        result = result.Where(sv => sv.TradeNameId == filter.TradeNameId);
-                    }
-                    else
-                    {
-                        var searchMask = filter.TradeName.Replace('*', '%');
-                        var idList =
-                            _context.TradeNames.Where(x => SqlFunctions.PatIndex(searchMask, x.Value) > 0).Select(x => x.Id).ToList();
-                        result = result.Where(sv => (idList.Contains(sv.TradeNameId ?? -1)));
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(filter.OwnerTradeMark))
-                {
-                    if (filter.OwnerTradeMarkId != null)
-                    {
-                        result = result.Where(sv => sv.OwnerTradeMarkId == filter.OwnerTradeMarkId);
-                    }
-                    else
-                    {
-                        var searchMask = filter.OwnerTradeMark.Replace('*', '%');
-                        var idList =
-                            _context.Manufacturer.Where(x => SqlFunctions.PatIndex(searchMask, x.Value) > 0).Select(x => x.Id).ToList();
-                        result = result.Where(sv => (idList.Contains(sv.OwnerTradeMarkId ?? -1)));
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(filter.INNGroup))
-                {
-                    if (filter.INNGroupId != null)
-                    {
-                        result = result.Where(sv => sv.INNGroupId == filter.INNGroupId);
-                    }
-                    else
-                    {
-                        var searchMask = filter.INNGroup.Replace('*', '%');
-                        var idList =
-                            _context.INNGroups.Where(x => SqlFunctions.PatIndex(searchMask, x.Description) > 0).Select(x => x.Id).ToList();
-                        result = result.Where(sv => (idList.Contains(sv.INNGroupId ?? -1)));
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(filter.Packer))
-                {
-                    if (filter.PackerId != null)
-                    {
-                        result = result.Where(sv => sv.PackerId == filter.PackerId);
-                    }
-                    else
-                    {
-                        var searchMask = filter.Packer.Replace('*', '%');
-                        var idList =
-                            _context.Manufacturer.Where(x => SqlFunctions.PatIndex(searchMask, x.Value) > 0).Select(x => x.Id).ToList();
-                        result = result.Where(sv => (idList.Contains(sv.PackerId ?? -1)));
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(filter.FormProduct))
-                {
-                    if (filter.FormProductId != null)
-                    {
-                        result = result.Where(sv => sv.FormProductId == filter.FormProductId);
-                    }
-                    else
-                    {
-                        var searchMask = filter.FormProduct.Replace('*', '%');
-                        var idList =
-                            _context.FormProducts.Where(x => SqlFunctions.PatIndex(searchMask, x.Value) > 0).Select(x => x.Id).ToList();
-                        result = result.Where(sv => (idList.Contains(sv.FormProductId ?? -1)));
-                    }
-                }
-
-                if (!String.IsNullOrEmpty(filter.RegistrationNumber))
-                {
-                    var searchMask = filter.RegistrationNumber.Replace('*', '%');
-                    var idList =
-                        _context.RegistrationCertificates.Where(x => SqlFunctions.PatIndex(searchMask, x.Number) > 0).Select(x => x.Id).ToList();
-
-                    result = result.Where(sv => (idList.Contains(sv.CertificateId ?? -1)));
-                }
-
-                if (!String.IsNullOrEmpty(filter.DosageGroup))
-                {
-                    if (filter.DosageGroupId != null)
-                    {
-                        result = result.Where(sv => sv.DosageGroupId == filter.DosageGroupId);
-                    }
-                    else
-                    {
-                        var searchMask = filter.DosageGroup.Replace('*', '%');
-                        var idList =
-                            _context.DosageGroups.Where(x => SqlFunctions.PatIndex(searchMask, x.Description) > 0).Select(x => x.Id).ToList();
-                        result = result.Where(sv => (idList.Contains(sv.DosageGroupId ?? -1)));
-                    }
-                }
-
-                if (filter.ConsumerPackingCount != null)
-                {
-                    result = result.Where(sv => sv.ConsumerPackingCount == filter.ConsumerPackingCount);
-                }
-
-                if (filter.Used != null)
-                {
-                    result = result.Where(sv => sv.Used == (filter.Used == 1));
-                }
-
-                if (filter.DrugId != null)
-                {
-                    result = result.Where(sv => sv.DrugId == filter.DrugId);
-                }
-
-                if (filter.OwnerTradeMarkId > 0)
-                {
-                    result = result.Where(sv => sv.OwnerTradeMarkId == filter.OwnerTradeMarkId);
-                }
-
-                if (filter.ClassifierId > 0)
-                {
-                    result = result.Where(sv => sv.ClassifierId == filter.ClassifierId);
-                }
-
-                var result_list = result.ToList();
-                return ReturnData(result.ToList());
+                IEnumerable<ClassifierEditorFilterView> result_list = _context.GetClassifierEditorView_Result(xmlFilter).ToList();
+                return ReturnData(result_list);                
             }
             catch (Exception e)
             {

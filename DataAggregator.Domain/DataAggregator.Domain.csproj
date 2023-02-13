@@ -542,6 +542,7 @@
     <Compile Include="Utils\CustomDateTimeConverter.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\ProcedureHelper.cs" />
+    <Compile Include="Utils\XmlToObjectSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
