@@ -15,11 +15,11 @@ namespace DataAggregator.Core.GoodsClassifier
             Merge = 3
         }
 
-        public static void Log(DrugClassifierContext context, long goodsProductionInfoId, GoodsActionType type,Guid user)
+        public static void Log(DrugClassifierContext context, long goodsProductionInfoId, GoodsActionType type, Guid user)
         {
             GoodsActionLog log = new GoodsActionLog
             {
-                ActionId = (long) type,
+                ActionId = (long)type,
                 GoodsProductionInfoId = goodsProductionInfoId,
                 UserId = user
 
@@ -31,17 +31,16 @@ namespace DataAggregator.Core.GoodsClassifier
             context.GoodsActionLog.Add(log);
         }
 
-        //Текстовое описание изменений
+        /// <summary>
+        /// Текстовое описание изменений
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private static string GetDescription(long id)
         {
-            using (new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions {IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted}))
+            using (DrugClassifierContext context = new DrugClassifierContext("GoodsLogAction"))
             {
-                using (DrugClassifierContext context = new DrugClassifierContext("GoodsLogAction"))
-                {
-                    var description = context.GoodsProductionInfoDescription.Single(p => p.Id == id);
-                    return description.Description;
-                }
+                return context.GetGoodsProductionInfoDescription_Result(id);
             }
         }
 

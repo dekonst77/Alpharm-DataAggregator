@@ -21,46 +21,32 @@ namespace DataAggregator.Core.Classifier
         {
             ActionLog log = new ActionLog
             {
-                ActionId = (long) type,
+                ActionId = (long)type,
                 ProductionInfoId = productionInfoId,
                 UserId = user
-             
+
             };
 
             if (type != ActionType.Add)
                 log.Description = GetDescription(productionInfoId);
 
             context.ActionLog.Add(log);
-          
+
+        }
+
+        /// <summary>
+        /// Текстовое описание изменений
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private static string GetDescription(long id)
+        {
+            using (DrugClassifierContext context = new DrugClassifierContext("LogAction"))
+            {
+                return context.GetProductionInfoDescription_Result(id);
+            }
         }
 
 
-        //Текстовое описание изменений
-        private static string GetDescription(long id)
-        {
-            using (new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions {IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted}))
-            {
-
-                using (DrugClassifierContext context = new DrugClassifierContext("LogAction"))
-                {
-
-                    var description = context.ProductionInfoDescription.Single(p => p.Id == id);
-
-                    return description.Description;
-
-                    //return string.Format(@"{0} {1} OwnerTrademark: {2} {3} Packer: {4} {5}",
-                    //    drug.TradeName,
-                    //    drug.DrugDescription,
-                    //    drug.OwnerTradeMarkId,
-                    //    drug.OwnerTradeMark,
-                    //    drug.PackerId,
-                    //    drug.Packer);
-                }
-            }
-        
-    }
-
-     
     }
 }

@@ -376,8 +376,26 @@ namespace DataAggregator.Web.Controllers.OFD
         [Authorize(Roles = "OFD_Boss")]
         public ActionResult Agg_search(long ClassifierId, int SupplierId, DateTime period, int BrickId)
         {
+            string periodStr = period.ToString("yyyyMMdd");
+
             try
             {
+                using (var _context = new OFDContext(APP))
+                {
+                    _context.Database.CommandTimeout = 0;
+
+                    ViewData["Agg"] = _context.GetAggsearch_Result(ClassifierId, SupplierId, period, BrickId).ToList();
+
+                    var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = Data
+                    };
+                    return jsonNetResult;
+                }
+                /*
                 using (var txn = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.ReadUncommitted }))
                 {
                     using (var _context = new OFDContext(APP))
@@ -395,6 +413,7 @@ namespace DataAggregator.Web.Controllers.OFD
                         return jsonNetResult;
                     }
                 }
+                */
             }
             catch (Exception e)
             {

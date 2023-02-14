@@ -442,22 +442,22 @@
                         <li>
                             <a ng-href="/#/Classifier/CheckReport" data-translate="CLASSIFIER.CHECK_REPORT.TITLE"></a>
                         </li>
-                        <li class="divider"></li>
+                        <li class="divider" ng-if="DAM_GZ_report !== undefined && DAM_GZ_report.length > 0"></li>
                         <li ng-repeat="item_rep in DAM_GZ_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
                             </a>
                         </li>
-                        <li class="divider"></li>
+                        <li class="divider" ng-if="DAM_GS_report.length > 0"></li>
                         <li ng-repeat="item_rep in DAM_GS_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
                             </a>
                         </li>
-                        <li class="divider"></li>
+                        <li class="divider" ng-if="DAM_Prov_report.length > 0"></li>
                         <li ng-repeat="item_rep in DAM_Prov_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
                             </a>
                         </li>
-                        <li class="divider"></li>
+                        <li class="divider" ng-if="DAM_Distr_report.length > 0"></li>
                         <li ng-repeat="item_rep in DAM_Distr_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
                             </a>

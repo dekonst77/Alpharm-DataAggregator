@@ -347,6 +347,30 @@ namespace DataAggregator.Domain.DAL
         public DbSet<VEDPeriodChange> VedPeriodChange { get; set; }
         public DbSet<VEDCheckedChange> VEDCheckedChange { get; set; }
 
+        /// <summary>
+        /// Получить текстовое описание изменений
+        /// </summary>
+        /// <param name="productionInfoId"></param>
+        /// <returns></returns>
+        public string GetProductionInfoDescription_Result(long productionInfoId)
+        {
+            return Database.SqlQuery<string>("[Log].[GetProductionInfoDescription] @ProductionInfoId",
+                new SqlParameter { ParameterName = "@ProductionInfoId", SqlDbType = SqlDbType.BigInt, Value = productionInfoId }
+                ).FirstOrDefault<string>();
+        }
+
+        /// <summary>
+        /// Получить текстовое описание изменений
+        /// </summary>
+        /// <param name="productionInfoId"></param>
+        /// <returns></returns>
+        public string GetGoodsProductionInfoDescription_Result(long goodsproductionInfoId)
+        {
+            return Database.SqlQuery<string>("[Log].[GetGoodsProductionInfoDescription] @GoodsProductionInfoId",
+                new SqlParameter { ParameterName = "@GoodsProductionInfoId", SqlDbType = SqlDbType.BigInt, Value = goodsproductionInfoId }
+                ).FirstOrDefault<string>();
+        }
+
         #endregion
 
         #region Certificate

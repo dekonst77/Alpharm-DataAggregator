@@ -157,5 +157,15 @@ namespace DataAggregator.Domain.DAL
             }
             return true;
         }
+
+        public IEnumerable<Aggregated_All> GetAggsearch_Result(long ClassifierId, int SupplierId, DateTime period, int BrickId)
+        {
+            return Database.SqlQuery<Aggregated_All>("[dbo].[GetAggsearch] @ClassifierId, @SupplierId, @period, @BrickId",
+                new SqlParameter { ParameterName = "@ClassifierId", SqlDbType = SqlDbType.BigInt, Value = ClassifierId },
+                new SqlParameter { ParameterName = "@SupplierId", SqlDbType = SqlDbType.Int, Value = SupplierId },
+                new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = period },
+                new SqlParameter { ParameterName = "@BrickId", SqlDbType = SqlDbType.Int, Value = BrickId }
+                );
+        }
     }
 }

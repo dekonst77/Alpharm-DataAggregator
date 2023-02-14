@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 namespace DataAggregator.Domain.Model.OFD
 {
     [Table("Log", Schema = "dbo")]
@@ -23,7 +18,7 @@ namespace DataAggregator.Domain.Model.OFD
     {
         [Key]
         public int Id { get; set; }
-        public string value { get; set; }        
+        public string value { get; set; }
         public DateTime dt_load { get; set; }
         public DateTime period { get; set; }
         public Int16 ActionType { get; set; }
@@ -64,7 +59,7 @@ namespace DataAggregator.Domain.Model.OFD
         public int OwnerAgrId { get; set; }
         public string Value { get; set; }
     }
-        [Table("Period", Schema = "4SC")]
+    [Table("Period", Schema = "4SC")]
     public class Period_4SC
     {
         [Key]
@@ -88,9 +83,9 @@ namespace DataAggregator.Domain.Model.OFD
 
         [ForeignKey("SupplierId")]
         public virtual Supplier Supplier { get; set; }
-        
-       [ForeignKey("OwnerAgrId")]
-       public virtual OwnerAgr OwnerAgr { get; set; }
+
+        [ForeignKey("OwnerAgrId")]
+        public virtual OwnerAgr OwnerAgr { get; set; }
     }
     [Table("Week_Periods", Schema = "dbo")]
     public class Week_Periods
