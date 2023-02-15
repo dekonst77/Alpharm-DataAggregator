@@ -1,39 +1,54 @@
 ﻿using DataAggregator.Domain.DAL;
-using System.Web.Mvc;
-using DataAggregator.Web.Models.Common;
+using DataAggregator.Domain.Model.DataReport;
+using DataAggregator.Web.App_Start;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNet.Identity.Owin;
-using System.Linq;
-using DataAggregator.Web.App_Start;
-
-using DataAggregator.Domain.Model.Project;
-using System.Web;
+using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.SqlServer;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers
 {
     public class GlobalController : BaseController
     {
+        //private DataReportContext _context;
+
+        //protected override void Initialize(RequestContext requestContext)
+        //{
+        //    base.Initialize(requestContext);
+        //    _context = new DataReportContext(APP);
+        //}
+
+        //~GlobalController()
+        //{
+        //    _context.Dispose();
+        //}
+
         [Authorize(Roles = "Admin")]
         public ActionResult query_Init()
         {
             try
             {
-                var _context = new DataReportContext(APP);
-
-                ViewData["Area"] = _context.WebAggReports.Select(s => s.Area).OrderBy(o => o).Distinct().ToList();
-
-                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
-                JsonNetResult jsonNetResult = new JsonNetResult
+                using (var context = new DataReportContext(APP))
                 {
-                    Formatting = Formatting.Indented,
-                    Data = Data
-                };
-                return jsonNetResult;
+                    ViewData["Area"] = context.WebAggReports.Select(s => s.Area).OrderBy(o => o).Distinct().ToList();
+
+                    var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = Data
+                    };
+                    return jsonNetResult;
+                }
             }
             catch (Exception e)
             {
@@ -51,17 +66,18 @@ namespace DataAggregator.Web.Controllers
         {
             try
             {
-                var _context = new DataReportContext(APP);
-
-                ViewData["query"] = _context.WebAggReports.OrderBy(o => o.Name).ToList();
-
-                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
-                JsonNetResult jsonNetResult = new JsonNetResult
+                using (var context = new DataReportContext(APP))
                 {
-                    Formatting = Formatting.Indented,
-                    Data = Data
-                };
-                return jsonNetResult;
+                    ViewData["query"] = context.WebAggReports.OrderBy(o => o.Name).ToList();
+
+                    var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = Data
+                    };
+                    return jsonNetResult;
+                }
             }
             catch (Exception e)
             {
@@ -80,41 +96,43 @@ namespace DataAggregator.Web.Controllers
         {
             try
             {
-                var _context = new DataReportContext(APP);
-                if (array != null)
-                    foreach (var item in array)
-                    {
-                        if (item.Id > 0)
-                        {
-                            var upd = _context.WebAggReports.Where(w => w.Id == item.Id).Single();
-                            upd.Name = item.Name;
-                            upd.Server = item.Server;
-                            upd.Area = item.Area;
-                            upd.Roles = item.Roles;
-                            upd.Query = item.Query;
-                            upd.Filters = item.Filters;
-                        }
-                        else
-                        {
-                            _context.WebAggReports.Add(
-                                new Domain.Model.DataReport.WebAggReports()
-                                {
-                                    Name = item.Name,
-                                    Server = item.Server,
-                                    Area = item.Area,
-                                    Roles = item.Roles,
-                                    Query = item.Query,
-                                    Filters = item.Filters
-                                });
-                        }
-                    }
-                _context.SaveChanges();
-                JsonNetResult jsonNetResult = new JsonNetResult
+                using (var context = new DataReportContext(APP))
                 {
-                    Formatting = Formatting.Indented,
-                    Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
-                };
-                return jsonNetResult;
+                    if (array != null)
+                        foreach (var item in array)
+                        {
+                            if (item.Id > 0)
+                            {
+                                var upd = context.WebAggReports.Where(w => w.Id == item.Id).Single();
+                                upd.Name = item.Name;
+                                upd.Server = item.Server;
+                                upd.Area = item.Area;
+                                upd.Roles = item.Roles;
+                                upd.Query = item.Query;
+                                upd.Filters = item.Filters;
+                            }
+                            else
+                            {
+                                context.WebAggReports.Add(
+                                    new Domain.Model.DataReport.WebAggReports()
+                                    {
+                                        Name = item.Name,
+                                        Server = item.Server,
+                                        Area = item.Area,
+                                        Roles = item.Roles,
+                                        Query = item.Query,
+                                        Filters = item.Filters
+                                    });
+                            }
+                        }
+                    context.SaveChanges();
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+                    };
+                    return jsonNetResult;
+                }
             }
             catch (Exception e)
             {
@@ -147,24 +165,26 @@ namespace DataAggregator.Web.Controllers
         {
             try
             {
-                var rrc = new DataReportContext(APP);
-                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                string[] Roles = userManager.GetRoles(User.Identity.GetUserId()).ToArray();
-                var GZ_report = rrc.WebAggReports.Where(w => w.Area == "GovernmentPurchases" && Roles.Contains(w.Roles)).ToList();
-                ViewBag.GZ_report = GZ_report;
-                var GS_report = rrc.WebAggReports.Where(w => w.Area == "geomarketing" && Roles.Contains(w.Roles)).ToList();
-                ViewBag.GS_report = GS_report;
-                var Prov_report = rrc.WebAggReports.Where(w => w.Area == "Prov" && Roles.Contains(w.Roles)).ToList();
-                ViewBag.Prov_report = Prov_report;
-                var Distr_report = rrc.WebAggReports.Where(w => w.Area == "Distr" && Roles.Contains(w.Roles)).ToList();
-                ViewBag.Distr_report = Distr_report;
-
-                JsonNetResult jsonNetResult = new JsonNetResult
+                using (var context = new DataReportContext(APP))
                 {
-                    Formatting = Formatting.Indented,
-                    Data = new JsonResult() { Data = ViewBag }
-                };
-                return jsonNetResult;
+                    var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                    string[] Roles = userManager.GetRoles(User.Identity.GetUserId()).ToArray();
+                    var GZ_report = context.WebAggReports.Where(w => w.Area == "GovernmentPurchases" && Roles.Contains(w.Roles)).ToList();
+                    ViewBag.GZ_report = GZ_report;
+                    var GS_report = context.WebAggReports.Where(w => w.Area == "geomarketing" && Roles.Contains(w.Roles)).ToList();
+                    ViewBag.GS_report = GS_report;
+                    var Prov_report = context.WebAggReports.Where(w => w.Area == "Prov" && Roles.Contains(w.Roles)).ToList();
+                    ViewBag.Prov_report = Prov_report;
+                    var Distr_report = context.WebAggReports.Where(w => w.Area == "Distr" && Roles.Contains(w.Roles)).ToList();
+                    ViewBag.Distr_report = Distr_report;
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResult() { Data = ViewBag }
+                    };
+                    return jsonNetResult;
+                }
             }
             catch (Exception e)
             {
@@ -173,96 +193,141 @@ namespace DataAggregator.Web.Controllers
         }
         private void GetWebReport(int id, bool isInit, List<cField> FLD, List<cField> Filters)
         {
-            var rrc = new DataReportContext(APP);
-            var report = rrc.WebAggReports.Where(w => w.Id == id).Single();
-            string query = report.Query;
-            if (isInit)
+            using (var context = new DataReportContext(APP))
             {
-                if (!string.IsNullOrEmpty(report.Filters))
+                WebAggReports report;
+                using (var _context = new DataReportContext(APP))
                 {
-                    foreach (string item in report.Filters.Split(','))
+                    report = _context.WebAggReports.Where(w => w.Id == id).Single();
+                }
+
+                var isRunningProcess = context.ReportsLogView.FirstOrDefault(x => x.ReportId == id && x.DateStart != null && x.DateEnd == null && x.StatusId == 0);
+                if (isRunningProcess != null)
+                {
+                    var stat = context.ReportsLog.Where(x => x.ReportId == id && x.DateStart != null && x.DateEnd != null && x.StatusId == 2)
+                        .Select(x => SqlFunctions.DateDiff("second", x.DateStart.Value, x.DateEnd.Value) / 60)
+                        .Average();
+                    
+                    var info = new StringBuilder();
+                    info.AppendFormat("Пользователь {0} уже запустил отчет \"{1}\" в {2} мск.<br/>" +
+                        "Среднее время выполнения данного отчета {3} минут(ы).<br/>" +
+                        "Попробуйте сформировать позже!",
+                        isRunningProcess.FullName,
+                        report.Name,
+                        (isRunningProcess.DateStart != null ? isRunningProcess.DateStart.Value.ToString("dd.MM.yyyy HH:mm:ss") : DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")),
+                        (stat == null || (stat.HasValue && stat.Value == 0) ? "5" : Math.Round(stat.Value, 2).ToString()));
+                    ViewBag.RunningProcess = info.ToString();
+                }
+                else
+                {
+                    string query = report.Query;
+                    if (isInit)
                     {
-                        switch (item.Split('-')[2])
+                        if (!string.IsNullOrEmpty(report.Filters))
                         {
-                            case "bool":
-                                Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = false });
-                                break;
-                            case "date":
-                                Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = DateTime.Now });
-                                break;
-                            case "string":
-                                Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = "" });
-                                break;
-                            case "int":
-                                Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = 0 });
-                                break;
-                            case "double":
-                                Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = 0 });
-                                break;
+                            foreach (string item in report.Filters.Split(','))
+                            {
+                                switch (item.Split('-')[2])
+                                {
+                                    case "bool":
+                                        Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = false });
+                                        break;
+                                    case "date":
+                                        Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = DateTime.Now });
+                                        break;
+                                    case "string":
+                                        Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = "" });
+                                        break;
+                                    case "int":
+                                        Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = 0 });
+                                        break;
+                                    case "double":
+                                        Filters.Add(new cField() { Name = item.Split('-')[0], DisplayName = item.Split('-')[1], IsEdit = true, IsKey = false, sType = item.Split('-')[2], Value = 0 });
+                                        break;
+                                }
+                            }
                         }
                     }
-                }
-            }
-            else
-            {
-                if (Filters != null)
-                {
-                    foreach (var flt in Filters)
+                    else
                     {
-                        switch (flt.sType)
+                        if (Filters != null)
                         {
-                            case "date":
-                                query = query.Replace(flt.Name, Convert.ToString(flt.Value).Substring(0, 10));
-                                break;
-                            case "string":
-                                query = query.Replace(flt.Name, Convert.ToString(flt.Value));
-                                break;
-                            case "int":
-                                query = query.Replace(flt.Name, Convert.ToString(flt.Value));
-                                break;
-                            case "bool":
-                                query = query.Replace(flt.Name, Convert.ToString(flt.Value));
-                                break;
-                            case "double":
-                                query = query.Replace(flt.Name, Convert.ToString(flt.Value));
-                                break;
+                            foreach (var flt in Filters)
+                            {
+                                switch (flt.sType)
+                                {
+                                    case "date":
+                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value).Substring(0, 10));
+                                        flt.Value = Convert.ToString(flt.Value).Substring(0, 10);
+                                        break;
+                                    case "string":
+                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value));
+                                        break;
+                                    case "int":
+                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value));
+                                        break;
+                                    case "bool":
+                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value));
+                                        break;
+                                    case "double":
+                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value));
+                                        break;
+                                }
+                            }
                         }
+
+                        DataTable tbl = null;
+                        var userId = User.Identity.GetUserId() != null ? new Guid(User.Identity.GetUserId()) : Guid.Empty;
+                        var log = context.LogStart(report, Filters, userId);
+                        try
+                        {
+                            using (var _context = new DataReportContext(APP))
+                            {
+                                tbl = _context.GetDataTableFromQuery(query);
+                            }
+                            log.Note = tbl.Rows.Count.ToString();
+                            context.LogEnd(log, 1);
+                        }
+                        catch (Exception ex)
+                        {
+                            var errorMsg = ex.Message;
+                            while (ex.InnerException != null)
+                            {
+                                ex = ex.InnerException;
+                                errorMsg += ex.Message;
+                            }
+                            log.Note = errorMsg;
+                            context.LogEnd(log, 2);
+                            throw ex;
+                        }
+
+                        if (FLD != null && tbl != null)
+                        {
+                            string sType = "";
+                            foreach (System.Data.DataColumn c in tbl.Columns)
+                            {
+                                sType = "string";
+                                if (c.DataType.Name.Contains("Int"))
+                                    sType = "int";
+                                if (c.DataType.Name.Contains("Decimal"))
+                                    sType = "double";
+                                if (c.DataType.Name.Contains("DateTime"))
+                                    sType = "datetime";
+                                FLD.Add(new cField() { Name = c.ColumnName, DisplayName = c.ColumnName, IsEdit = false, IsKey = false, sType = sType });
+                            }
+                        }
+                        if (tbl != null)
+                        {
+                            ViewBag.Result = tbl;
+                            ViewBag.Data = GetWebReportJson(tbl);
+                        }
+                        ViewBag.TypeData = "string";
                     }
                 }
-
-                System.Data.DataTable tbl = new System.Data.DataTable("tbl");
-                string strconnection = "Persist Security Info=true;Server=" + report.Server + ";Database=tempdb;Integrated Security=SSPI;APP=" + APP;
-                System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(strconnection);
-                conn.Open();
-
-                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand(query, conn)
-                {
-                    CommandTimeout = 0
-                };
-                tbl.Load(cmd.ExecuteReader());
-
-                if (FLD != null)
-                {
-                    string sType = "";
-                    foreach (System.Data.DataColumn c in tbl.Columns)
-                    {
-                        sType = "string";
-                        if (c.DataType.Name.Contains("Int"))
-                            sType = "int";
-                        if (c.DataType.Name.Contains("Decimal"))
-                            sType = "double";
-                        if (c.DataType.Name.Contains("DateTime"))
-                            sType = "datetime";
-                        FLD.Add(new cField() { Name = c.ColumnName, DisplayName = c.ColumnName, IsEdit = false, IsKey = false, sType = sType });
-                    }
-                }
-                ViewBag.Result = tbl;
                 ViewBag.Fields = FLD;
-                ViewBag.Data = GetWebReportJson(tbl);
-                ViewBag.TypeData = "string";
+                ViewBag.Name = report.Name;
+                ViewBag.title = report.Name;
             }
-            ViewBag.Name = report.Name;
-            ViewBag.title = report.Name;
         }
         public static string GetWebReportJson(System.Data.DataTable table)
         {
@@ -288,6 +353,7 @@ namespace DataAggregator.Web.Controllers
             }
             return jsSerializer.Serialize(parentRow);
         }
+
         [HttpPost]
         public ActionResult Init(string name, string param)
         {
@@ -407,21 +473,20 @@ namespace DataAggregator.Web.Controllers
                         ViewBag.Name = title;
                         var _context_w1 = new GovernmentPurchasesContext(APP);
                         _context_w1.Database.ExecuteSqlCommand(@"
-exec DrugClassifier.[GoodsClassifier].[Goods_create_GoodsDescription_id]
+                            exec DrugClassifier.[GoodsClassifier].[Goods_create_GoodsDescription_id]
 
-insert into [dbo].[AutoCorrectDosageRecount]([DosageGroupId],[FormProductId],[ConsumerPackingCount],CoeffConsumerPackingCount)
-select ev.DosageGroupId,IIF(ev.DrugId>0,ev.FormProductId,-1*DD.id),
-IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount),IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount)
-from DrugClassifier.Classifier.ExternalView_FULL ev
-left join DrugClassifier.[GoodsClassifier].[GoodsDescription_for_Hydra] DD on DD.Value=ev.DrugDescription and ev.GoodsId>0
-left join GovernmentPurchases.dbo.AutoCorrectDosageRecount as dr 
-on (ev.DosageGroupId = dr.DosageGroupId or dr.DosageGroupId is null and ev.DosageGroupId is null) 
-and IIF(ev.DrugId>0,ev.FormProductId,-1*DD.id) = dr.FormProductId and IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount) = dr.ConsumerPackingCount
-where dr.Id is null and IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount)>0
-group by ev.DosageGroupId,IIF(ev.DrugId>0,ev.FormProductId,-1*DD.id),
-IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount),IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount)
-
-");
+                            insert into [dbo].[AutoCorrectDosageRecount]([DosageGroupId],[FormProductId],[ConsumerPackingCount],CoeffConsumerPackingCount)
+                            select ev.DosageGroupId,IIF(ev.DrugId>0,ev.FormProductId,-1*DD.id),
+                            IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount),IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount)
+                            from DrugClassifier.Classifier.ExternalView_FULL ev
+                            left join DrugClassifier.[GoodsClassifier].[GoodsDescription_for_Hydra] DD on DD.Value=ev.DrugDescription and ev.GoodsId>0
+                            left join GovernmentPurchases.dbo.AutoCorrectDosageRecount as dr 
+                            on (ev.DosageGroupId = dr.DosageGroupId or dr.DosageGroupId is null and ev.DosageGroupId is null) 
+                            and IIF(ev.DrugId>0,ev.FormProductId,-1*DD.id) = dr.FormProductId and IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount) = dr.ConsumerPackingCount
+                            where dr.Id is null and IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount)>0
+                            group by ev.DosageGroupId,IIF(ev.DrugId>0,ev.FormProductId,-1*DD.id),
+                            IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount),IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount)
+                        ");
 
                         FLD.Add(new cField() { Name = "Id", DisplayName = "Id", IsEdit = false, IsKey = true, sType = "int" });
                         FLD.Add(new cField() { Name = "DosageGroupId", DisplayName = "DosageGroupId", IsEdit = false, IsKey = false, sType = "SPR", SPR = "DosageGroups" });
@@ -440,16 +505,16 @@ IIF(ev.DrugId>0, ev.ConsumerPackingCount,DD.ConsumerPackingCount),IIF(ev.DrugId>
 
                         var _context_AutoCorrectDosageRecount = new DrugClassifierContext(APP);
                         var FormProducts = _context_AutoCorrectDosageRecount.Database.SqlQuery<cSPRItem>(@"
-select Id,Value from Classifier.FormProduct
-union
-select -1*Id as Id,Value from [GoodsClassifier].[GoodsDescription_for_Hydra]
-");
+                            select Id,Value from Classifier.FormProduct
+                            union
+                            select -1*Id as Id,Value from [GoodsClassifier].[GoodsDescription_for_Hydra]
+                            ");
                         //.FormProducts.Select(s => s).OrderBy(o => o.Id);
                         var DosageGroups = _context_AutoCorrectDosageRecount.Database.SqlQuery<cSPRItem>(@"
-select Id,Description Value from Classifier.DosageGroup
---union
---select -1*Id as Id,Value from [GoodsClassifier].[GoodsDescription_for_Hydra]
-");
+                            select Id,Description Value from Classifier.DosageGroup
+                            --union
+                            --select -1*Id as Id,Value from [GoodsClassifier].[GoodsDescription_for_Hydra]
+                            ");
                         //DosageGroups.Select(s => s).OrderBy(o => o.Id);
 
                         SPR.Add(new cSPR()
@@ -474,6 +539,7 @@ select Id,Description Value from Classifier.DosageGroup
                 ViewBag.Search_now = Search_now;
                 if (title != "")
                     ViewBag.title = title;
+
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
@@ -490,13 +556,17 @@ select Id,Description Value from Classifier.DosageGroup
         public FileResult LoadExcel(string name, string param, List<cField> Filters)
         {
             Load(name, param, Filters);
-            Excel.Excel excel = new Excel.Excel();
-            excel.Create();
-            //ViewBag.Result = tbl;
-            excel.InsertDataTable("Отчёт", 1, 1, ViewBag.Result, true, true, null);
-
-            byte[] bb = excel.SaveAsByte();
-            return File(bb, "application/vnd.ms-excel", "Отчёт.xlsx");
+            if (ViewBag.Result != null)
+            {
+                Excel.Excel excel = new Excel.Excel();
+                excel.Create();
+                excel.InsertDataTable("Отчёт", 1, 1, ViewBag.Result, true, true, null);
+                byte[] bb = excel.SaveAsByte();
+                return File(bb, "application/vnd.ms-excel", "Отчёт.xlsx");
+            }
+            else {
+                return null;
+            }
         }
         [HttpPost]
         public ActionResult Load(string name, string param, List<cField> Filters)
@@ -881,39 +951,7 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
                 return BadRequest(e);
             }
         }
-        public class cField
-        {
-            public string Name { get; set; }
-            public string DisplayName { get; set; }
-            public string sType { get; set; }
-            public string SPR { get; set; }
-            public bool IsEdit { get; set; }
-            public bool IsKey { get; set; }
-            public object Value { get; set; }
-        }
-
-        public class cCommand
-        {
-            public string Name { get; set; }
-            public string DisplayName { get; set; }
-            public string command { get; set; }
-            public string typec { get; set; }
-        }
-        public class cSPRItem
-        {
-            public long Id { get; set; }
-            public string Value { get; set; }
-        }
-        public class cSPRItemStr
-        {
-            public string Id { get; set; }
-            public string Value { get; set; }
-        }
-        public class cSPR
-        {
-            public string Name { get; set; }
-            public List<cSPRItem> Data { get; set; }
-        }
+       
 
     }
 }

@@ -116,6 +116,7 @@
     <Compile Include="Model\ControlALG\ControlALG.cs" />
     <Compile Include="Model\DataAggregator\Projects.cs" />
     <Compile Include="Model\DataReport\DataReport.cs" />
+    <Compile Include="Model\DataReport\DataReportCommon.cs" />
     <Compile Include="Model\Distr\DistrModel.cs" />
     <Compile Include="Model\DrugClassifier\Certificate.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ATCBaa.cs" />

@@ -78,4 +78,42 @@ namespace DataAggregator.Domain.Model.DataReport
         public string Roles { get; set; } 
         public string Filters { get; set; }
     }
+
+    [Table("ReportsLog", Schema = "dbo")]
+    public class ReportsLog
+    {
+        [Key]
+        public Int64 Id { get; set; }
+        public int ReportId { get; set; }
+        public string Filters { get; set; }
+
+        public Guid UserId { get; set; }
+
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
+
+        public int? StatusId { get; set; }
+        public string Note { get; set; }
+    }
+
+    [Table("ReportsLogView", Schema = "dbo")]
+    public class ReportsLogView
+    {
+        [Key]
+        public Int64 Id { get; set; }
+        public int ReportId { get; set; }
+        public string Filters { get; set; }
+
+        public Guid UserId { get; set; }
+
+        public string FullName { get; set; }
+        public string Email { get; set; }
+
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
+
+        public int? StatusId { get; set; }
+        public string Note { get; set; }
+    }
+
 }

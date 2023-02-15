@@ -61,7 +61,11 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
         }).then(function (response) {
             document.title = response.data.Data.title;
             $scope.InitArrays(response.data.Data);    
-
+            
+            if ($scope.RunningProcess != undefined) {
+                messageBoxService.showInfo($scope.RunningProcess, 'Отчеты');
+                return;
+            }
             if (response.data.Data.Search_now === true || $scope.Filters.length===0) {
                 $scope.Search();
             }
@@ -73,7 +77,6 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
                 $scope.SetData(ddd);
             }
 
-            return 1;
         }, function (response) {
             console.log(response);
             messageBoxService.showError(response.data.message);
@@ -102,6 +105,7 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
                 }
             });
         }
+
         if (Data.Fields !== undefined && Data.Fields.length > 0) {
             $scope.Fields.splice(0, $scope.Fields.length);
             Array.prototype.push.apply($scope.Fields, Data.Fields);
@@ -167,7 +171,10 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
                 }
                 $scope.Grid.Options.columnDefs.push(item_new);
             });
-        }                
+        }
+        if (Data.RunningProcess != undefined) {
+            $scope.RunningProcess = Data.RunningProcess;
+        }
     };
     $scope.SetData = function (data) {
         $scope.Fields.forEach(function (item, i, arr) {
@@ -196,6 +203,10 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
             }).then(function (response) {
                 var data = response.data.Data.Data;
                 $scope.InitArrays(response.data.Data);
+                if ($scope.RunningProcess != undefined) {
+                    messageBoxService.showInfo($scope.RunningProcess, 'Отчеты');
+                    return;
+                }
                 if (response.data.Data.TypeData === "string")
                 {
                     data = JSON.parse(data);
@@ -246,6 +257,10 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
             },
             responseType: 'arraybuffer'
         }).then(function (response) {
+            if (response.data.byteLength == 0) {
+                messageBoxService.showError("Данные для загрузки файла отсутствуют!");
+                return
+            }
             var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             var fileName = 'Отчёт.xlsx';
             saveAs(blob, fileName);
