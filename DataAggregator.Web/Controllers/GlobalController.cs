@@ -201,13 +201,33 @@ namespace DataAggregator.Web.Controllers
                     report = _context.WebAggReports.Where(w => w.Id == id).Single();
                 }
 
-                var isRunningProcess = context.ReportsLogView.FirstOrDefault(x => x.ReportId == id && x.DateStart != null && x.DateEnd == null && x.StatusId == 0);
+                ReportsLogView isRunningProcess = null;
+                var fltTemp = "";
+                if (Filters != null && Filters.Count > 0)
+                {
+                    foreach (var flt in Filters)
+                    {
+                        switch (flt.sType)
+                        {
+                            case "date":
+                                flt.Value = Convert.ToString(flt.Value).Substring(0, 10);
+                                break;
+                        }
+                    }
+                    fltTemp = String.Join("", Filters.ToArray().Select(x => JsonConvert.SerializeObject(x)));
+                }
+
+                if (!string.IsNullOrEmpty(fltTemp))
+                {
+                    isRunningProcess = context.ReportsLogView.FirstOrDefault(x => x.ReportId == id && x.Filters == fltTemp && x.DateStart != null && x.DateEnd == null && x.StatusId == 0);
+                }
+
                 if (isRunningProcess != null)
                 {
-                    var stat = context.ReportsLog.Where(x => x.ReportId == id && x.DateStart != null && x.DateEnd != null && x.StatusId == 2)
-                        .Select(x => SqlFunctions.DateDiff("second", x.DateStart.Value, x.DateEnd.Value) / 60)
+                    var stat = context.ReportsLog.Where(x => x.ReportId == id && x.DateStart != null && x.DateEnd != null && x.StatusId == 1)
+                        .Select(x => SqlFunctions.DateDiff("second", x.DateStart.Value, x.DateEnd.Value) / 60.0)
                         .Average();
-                    
+
                     var info = new StringBuilder();
                     info.AppendFormat("Пользователь {0} уже запустил отчет \"{1}\" в {2} мск.<br/>" +
                         "Среднее время выполнения данного отчета {3} минут(ы).<br/>" +
@@ -220,6 +240,7 @@ namespace DataAggregator.Web.Controllers
                 }
                 else
                 {
+                    ViewBag.RunningProcess = null;
                     string query = report.Query;
                     if (isInit)
                     {
@@ -250,15 +271,14 @@ namespace DataAggregator.Web.Controllers
                     }
                     else
                     {
-                        if (Filters != null)
+                        if (Filters != null && Filters.Count > 0)
                         {
                             foreach (var flt in Filters)
                             {
                                 switch (flt.sType)
                                 {
                                     case "date":
-                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value).Substring(0, 10));
-                                        flt.Value = Convert.ToString(flt.Value).Substring(0, 10);
+                                        query = query.Replace(flt.Name, Convert.ToString(flt.Value));
                                         break;
                                     case "string":
                                         query = query.Replace(flt.Name, Convert.ToString(flt.Value));
