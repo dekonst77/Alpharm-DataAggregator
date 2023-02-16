@@ -233,11 +233,13 @@ namespace DataAggregator.Web.Controllers
         }
         private void Load()
         {
-            var _context = new DataAggregatorContext("BaseClassAuth");
-            var U = _context.UserViewAll.Where(w => w.Id == _User_guid.ToString()).Single();
-            _User_Email = U.Email;
-            _User_FullName = U.FullName;
-            _UserId = U.UserId;
+            using (var context = new DataAggregatorContext("BaseClassAuth"))
+            { 
+                var U = context.UserViewAll.Where(w => w.Id == _User_guid.ToString()).Single();
+                _User_Email = U.Email;
+                _User_FullName = U.FullName;
+                _UserId = U.UserId;
+            }
         }
         private void Load_Provizor()
         {
