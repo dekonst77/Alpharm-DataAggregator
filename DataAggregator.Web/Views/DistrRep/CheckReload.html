@@ -1,0 +1,35 @@
+﻿<div ng-controller="CheckController" ng-init="" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <ng_form name="fileInfoForm">
+                <div class="row form-group">
+                    <div class="col-md-1">
+                        <label>Компания</label>
+                        <select name="Company"                              
+                                class="form-control"
+                                ng-options="item as item.Company for item in Companylist track by item.Id"
+                                required
+                                ng-model="filter.Company"></select>
+                    </div>
+                    <div class="col-md-1">
+           
+                    </div>
+                </div>
+            </ng_form>
+        </div>
+    </div>
+
+
+
+    <div class="panel-body fullHeightGrid">
+     
+    </div>
+
+
+
+
+
+
+
+
+</div>

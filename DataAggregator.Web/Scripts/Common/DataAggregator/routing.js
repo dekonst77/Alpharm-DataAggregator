@@ -153,6 +153,12 @@
                     title: 'EditSource',
                     authorize: true
                 })
+            .when('/Check/CheckReload',
+                {
+                    templateUrl: 'Views/DistrRep/CheckReload.html',
+                    title: 'CheckReload',
+                    authorize: true
+                })
             .when('/DistrRep/HistoryGS',
                 {
                     templateUrl: 'Views/DistrRep/HistoryGS.html',
