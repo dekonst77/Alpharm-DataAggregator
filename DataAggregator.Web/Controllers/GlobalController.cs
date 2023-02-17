@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.SqlServer;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -301,9 +302,36 @@ namespace DataAggregator.Web.Controllers
                         var log = context.LogStart(report, Filters, userId);
                         try
                         {
-                            using (var _context = new DataReportContext(APP))
+                            using (var command = new SqlCommand())
                             {
-                                tbl = _context.GetDataTableFromQuery(query);
+                                command.Connection = new SqlConnection("Persist Security Info=true;Server=" + report.Server + ";Database=tempdb;Integrated Security=SSPI;APP=" + APP);
+
+                                if (command.Connection.State == ConnectionState.Closed)
+                                    command.Connection.Open();
+
+                                SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
+                                command.CommandTimeout = 0;
+                                command.CommandText = query;
+                                command.Transaction = sqlTran;
+                                tbl = new DataTable("tbl");
+                                try
+                                {
+                                    tbl.Load(command.ExecuteReader());
+                                    if (command.Transaction != null)
+                                        command.Transaction.Commit();
+                                }
+                                catch (Exception ex)
+                                {
+                                    try
+                                    {
+                                        if (command.Transaction != null)
+                                            command.Transaction.Rollback();
+                                    }
+                                    catch
+                                    {
+                                    }
+                                    throw ex;
+                                }
                             }
                             log.Note = tbl.Rows.Count.ToString();
                             context.LogEnd(log, 1);
