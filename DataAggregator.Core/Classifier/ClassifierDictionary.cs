@@ -533,8 +533,6 @@ namespace DataAggregator.Core.Classifier
             {
                 var dosage = dosageList[i];
 
-                List<INNDosage> inndosagesList = null;
-
                 if (dosage.Dosage == null && string.IsNullOrEmpty(dosage.DosageCount))
                     continue;
 
@@ -543,7 +541,7 @@ namespace DataAggregator.Core.Classifier
                 var dosageId = dosage.Dosage != null ? dosage.Dosage.Id : (long?)null;
 
 #if RELEASE
-                inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
+                List<INNDosage> inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
                                                                        inndosage.DosageId == dosageId &&
                                                                        inndosage.DosageCount == dosage.DosageCount).ToList();
 
