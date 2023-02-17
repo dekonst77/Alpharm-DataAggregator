@@ -319,10 +319,6 @@ namespace DataAggregator.Web.Controllers
                             else
                             {
                                 var errorMsg = sqlex.Message;
-                                while (sqlex.InnerException != null)
-                                {
-                                    errorMsg += sqlex.Message;
-                                }
                                 log.Note = errorMsg;
                                 context.LogEnd(log, 2);
                                 throw sqlex;
