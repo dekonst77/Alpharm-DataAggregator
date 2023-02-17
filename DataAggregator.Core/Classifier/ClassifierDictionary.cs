@@ -542,28 +542,20 @@ namespace DataAggregator.Core.Classifier
                 //{
                 var dosageId = dosage.Dosage != null ? dosage.Dosage.Id : (long?)null;
 
-
+#if !DEBUG
                 inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
                                                                        inndosage.DosageId == dosageId &&
                                                                        inndosage.DosageCount == dosage.DosageCount).ToList();
-                //}
-
-
-                //else
-                //{
-                //    inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
-                //                                                           inndosage.DosageId == null &&
-                //                                                           inndosage.DosageCount == dosage.DosageCount)
-                //        .ToList();
-                //}
-
-
 
                 dosageInnGroups = inndosagesList.Select(idl => idl.DosageGroup).ToList();
-
+#else
+                dosageInnGroups = _context.DosageGroups
+                    .Join(_context.INNDosage, lefttbl => lefttbl.Id, righttbl => righttbl.DosageGroupId, (lefttbl, righttbl) => new { lefttbl, righttbl })
+                    .Where(t => t.righttbl.Order == dosage.Order && t.righttbl.DosageId == dosageId && t.righttbl.DosageCount == dosage.DosageCount)
+                    .Select(t => t.lefttbl)
+                    .ToList();
+#endif
                 dosageGroupsFound = dosageGroupsFound.Intersect(dosageInnGroups).ToList();
-
-
 
                 if (dosageGroupsFound.Count == 0)
                     return null;
