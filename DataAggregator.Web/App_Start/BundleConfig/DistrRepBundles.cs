@@ -13,6 +13,7 @@ namespace DataAggregator.Web.App_Start.BundleConfig
 
             bundles.Add(new ComplexScriptBundle("~/bundles/DistrRep")
                 .Include("~/Scripts/DistrRep/DistrRepController.js")
+                .Include("~/Scripts/DistrRep/CheckController.js")                
              );
 
 
