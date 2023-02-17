@@ -30,19 +30,23 @@ namespace DataAggregator.Domain.DAL
         public DbSet<ReportsLog> ReportsLog { get; set; }
         public DbSet<ReportsLogView> ReportsLogView { get; set; }
 
-        public DataTable GetDataTableFromQuery(string query)
+        public DataTable GetDataTableFromQuery(string query, string server, string APP, bool snapshotOn)
         {
             using (var command = new SqlCommand())
             {
-                command.Connection = (SqlConnection)this.Database.Connection;
+                command.Connection = new SqlConnection("Persist Security Info=true;Server=" + server + ";Database=tempdb;Integrated Security=SSPI;APP=" + APP);
 
                 if (command.Connection.State == ConnectionState.Closed)
                     command.Connection.Open();
 
-                SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
+                if (snapshotOn)
+                {
+                    SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
+                    command.Transaction = sqlTran;
+                }
                 command.CommandTimeout = 0;
                 command.CommandText = query;
-                command.Transaction = sqlTran;
+                
                 var tbl = new DataTable("tbl");
                 try
                 {
