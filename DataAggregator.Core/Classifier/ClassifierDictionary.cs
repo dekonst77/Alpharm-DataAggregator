@@ -542,7 +542,7 @@ namespace DataAggregator.Core.Classifier
                 //{
                 var dosageId = dosage.Dosage != null ? dosage.Dosage.Id : (long?)null;
 
-#if !DEBUG
+#if RELEASE
                 inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
                                                                        inndosage.DosageId == dosageId &&
                                                                        inndosage.DosageCount == dosage.DosageCount).ToList();
@@ -564,7 +564,7 @@ namespace DataAggregator.Core.Classifier
 
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-#if !DEBUG
+#if RELEASE
             dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
 #else
             List<long> dosageGroupsFoundTest = dosageGroups
