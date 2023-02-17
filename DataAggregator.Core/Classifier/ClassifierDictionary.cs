@@ -527,6 +527,7 @@ namespace DataAggregator.Core.Classifier
             if (dosageGroupsFound.Count == 0)
                 return null;
 
+            List<DosageGroup> dosageInnGroups = null;
 
             for (int i = 0; i < dosageList.Count; i++)
             {
@@ -558,7 +559,7 @@ namespace DataAggregator.Core.Classifier
 
 
 
-                var dosageInnGroups = inndosagesList.Select(idl => idl.DosageGroup).ToList();
+                dosageInnGroups = inndosagesList.Select(idl => idl.DosageGroup).ToList();
 
                 dosageGroupsFound = dosageGroupsFound.Intersect(dosageInnGroups).ToList();
 
@@ -588,12 +589,10 @@ namespace DataAggregator.Core.Classifier
                 .Select(t => t.Key)
                 .ToList();
 
-            var dosageGroupsFoundTemp = _context.DosageGroups.Where(t => dosageGroupsFoundTest.Contains(t.Id)).ToList();
+            dosageGroupsFound = _context.DosageGroups.Where(t => dosageGroupsFoundTest.Contains(t.Id)).ToList();
 
             if (dosageInnGroups != null)
-                dosageGroupsFoundTemp.Intersect(dosageInnGroups).ToList();
-
-            dosageGroupsFound = dosageGroupsFoundTemp.ToList();
+                dosageGroupsFound.Intersect(dosageInnGroups).ToList();
 #endif
 
             if (dosageGroupsFound.Count == 1)
