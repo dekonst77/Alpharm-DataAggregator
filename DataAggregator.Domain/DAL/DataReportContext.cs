@@ -13,7 +13,7 @@ namespace DataAggregator.Domain.DAL
 {
     public class DataReportContext : DbContext
     {
-       
+
         public DataReportContext(string APP)
         {
             Database.SetInitializer<DataReportContext>(null);
@@ -46,7 +46,7 @@ namespace DataAggregator.Domain.DAL
                 }
                 command.CommandTimeout = 0;
                 command.CommandText = query;
-                
+
                 var tbl = new DataTable("tbl");
                 try
                 {
@@ -75,7 +75,7 @@ namespace DataAggregator.Domain.DAL
             var log = new ReportsLog()
             {
                 ReportId = report.Id,
-                Filters = String.Join("", filter.ToArray().Select(x => JsonConvert.SerializeObject(x))),
+                Filters = filter == null ? String.Empty : String.Join("", filter?.ToArray().Select(x => JsonConvert.SerializeObject(x))),
                 UserId = userId,
                 DateStart = DateTime.Now,
                 StatusId = 0
