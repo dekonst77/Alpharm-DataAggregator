@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataAggregator.Core.Models.Classifier;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
+using DataAggregator.Domain.Utils;
 
 namespace DataAggregator.Core.Classifier
 {
@@ -156,7 +157,7 @@ namespace DataAggregator.Core.Classifier
 
         }
 
-       
+
 
         private Packing FindPacking(Packing packing)
         {
@@ -178,7 +179,7 @@ namespace DataAggregator.Core.Classifier
 
         private Packing FindOrCreatePacking(Packing packing)
         {
-            if (packing == null || (packing.Id==null && packing.Value==null))
+            if (packing == null || (packing.Id == null && packing.Value == null))
                 return new Packing() { Id = null, Value = null };
 
             Packing findpacking = FindPacking(packing);
@@ -414,8 +415,8 @@ namespace DataAggregator.Core.Classifier
                 if (!equipments.Any())
                     equipments = _context.Equipment.Local.Where(e => e.Value == model.Equipment.Value).ToList();
 
-                if(equipments.Count > 1)
-                    throw  new ApplicationException("нарушение целостности комплектации");
+                if (equipments.Count > 1)
+                    throw new ApplicationException("нарушение целостности комплектации");
 
                 if (equipments.Count == 1)
                     return equipments.First();
@@ -570,7 +571,30 @@ namespace DataAggregator.Core.Classifier
 
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
+#if !DEBUG
             dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
+#else
+            List<long> dosageGroupsFoundTest = dosageGroups
+                .Where(d => d.DosageValueCount == model.DosageValueCount && d.TotalVolumeCount == model.TotalVolumeCount)
+                .LeftJoin(_context.INNDosage.DefaultIfEmpty(), d => d.Id, i => i.DosageGroupId, (d, i) => new { d.Id, DosageGroupIdCount = i.DosageGroupId == null ? 0 : 1 })
+                .GroupBy(elem => elem.Id)
+                .Select(group => new
+                {
+                    group.Key,
+                    Count = group.Sum(t => t.DosageGroupIdCount),
+                    DosageGroups = group.Select(p => p)
+                })
+                .Where(t => t.Count == dosageInnCount)
+                .Select(t => t.Key)
+                .ToList();
+
+            var dosageGroupsFoundTemp = _context.DosageGroups.Where(t => dosageGroupsFoundTest.Contains(t.Id)).ToList();
+
+            if (dosageInnGroups != null)
+                dosageGroupsFoundTemp.Intersect(dosageInnGroups).ToList();
+
+            dosageGroupsFound = dosageGroupsFoundTemp.ToList();
+#endif
 
             if (dosageGroupsFound.Count == 1)
                 return dosageGroupsFound.First();
@@ -594,13 +618,7 @@ namespace DataAggregator.Core.Classifier
                 //throw new ApplicationException("нарушение целостности группировки дозировок");
             }
 
-            if (dosageGroupsFound.Count == 1)
-            {
-                return dosageGroupsFound.First();
-            }
-
             return null;
-
         }
 
         private DosageGroup CreateDosageGroup(ClassifierEditorModelJson model)
@@ -754,7 +772,7 @@ namespace DataAggregator.Core.Classifier
 
 
 
-        
+
 
         public string GetDesription(ClassifierPacking packing)
         {
@@ -1034,7 +1052,7 @@ namespace DataAggregator.Core.Classifier
             //Ищем innGroup
             var innGroup = FindOrCreateInnGroup(model);
 
-            
+
 
             //Начинаем искать
             DosageGroup dosageGroup = FindDosageGroup(model) ?? CreateDosageGroup(model);
@@ -1051,7 +1069,7 @@ namespace DataAggregator.Core.Classifier
                 ConsumerPackingCount = model.ConsumerPackingCount,
                 UseShortDescription = model.UseShortDescription,
                 DrugTypeId = model.DrugType.Id,
-                Equipment =  equipment,
+                Equipment = equipment,
                 IsNew = isNew,
                 INNGroupNew = innGroup != null && innGroup.Id == 0
             };
@@ -1120,7 +1138,7 @@ namespace DataAggregator.Core.Classifier
 
             DrugProperty property = GetDrugProperty(model);
 
-            
+
             var drugs = _context.Drugs.Where(d => d.FormProductId == property.FormProduct.Id &&
                                                       d.TradeNameId == property.TradeName.Id &&
                                                       d.DrugTypeId == property.DrugTypeId);

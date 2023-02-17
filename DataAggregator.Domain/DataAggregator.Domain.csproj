@@ -537,6 +537,7 @@
     <Compile Include="Model\Retail\View\UniteUnderCommonTerritory.cs" />
     <Compile Include="Model\Retail\View\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\QueryableExtensions.cs" />
     <Compile Include="Utils\Utilities.cs" />
     <Compile Include="Utils\CustomDateTimeConverterWithTime.cs" />
     <Compile Include="Utils\DecimalPrecisionAttribute.cs" />
