@@ -40,10 +40,26 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
             $('#grid-block').removeClass('disableSelection');
         }
     }
-    $scope.Companylist = [];
+
+    $scope.Company6FPList = [];
+    //Инициализация блока Для перезагрузки чеков
+    $scope.CheckReload_Init = function () {
+        $scope.Title = "Правила определения региона";
+
+        $scope.dataLoading = $http({
+            method: "POST",
+            url: "/DistrRep/GetCompany/",
+            data: JSON.stringify({ ProjectId: 2 })
+        }).then(function (response) {
+            response.data;
+        }, function () {
+            //$scope.FileInfo_Grid.Options.data = null;
+        });
+    };
 
 
 
+   
 
 
 
