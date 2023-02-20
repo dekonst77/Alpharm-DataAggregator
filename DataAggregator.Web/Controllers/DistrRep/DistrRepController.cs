@@ -1253,7 +1253,44 @@ namespace DataAggregator.Web.Controllers.DistrRep
                 return BadRequest(msg);
             }
         }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///Блок Управления Загрузки чеков
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///
+
+        public ActionResult CheckReloadInit()
+        {
+            //var _context = new DistrContext(APP);
+            var SourceList = _context.DataSource.Where(a=> a.ProjectId==2).ToList();
+            SourceList.Add(new DataSource { Id = 0, Name = "_Все", NameFull = "_Все" });
+            var comp = _context.Comp.Where(a => a.ProjectId == 2).ToList();         
+            comp.Add(new Comp { Id = 0, Company = "_Все" });
+            var dictionaryList = new FileInfoJson { DataSourceList = SourceList.OrderBy(t => t.Name).ToList(), CompanyList = comp.OrderBy(t => t.Company).ToList() };
+
+            return new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = dictionaryList
+            };
+        }
+
+
+
+
+
+
+
+
     }
+
+
+
+
+
+
+
     public class DistrRep_RawData_Filter
     {
         public int top { get; set; }

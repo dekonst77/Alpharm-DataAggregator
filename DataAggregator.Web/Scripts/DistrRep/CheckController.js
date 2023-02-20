@@ -42,22 +42,45 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
     }
 
     $scope.Company6FPList = [];
+    $scope.Rules_filterList = null;
     //Инициализация блока Для перезагрузки чеков
     $scope.CheckReload_Init = function () {
-        $scope.Title = "Правила определения региона";
+        $scope.Title = "Невалидные чеки";
+
 
         $scope.dataLoading = $http({
-            method: "POST",
-            url: "/DistrRep/GetCompany/",
-            data: JSON.stringify({ ProjectId: 2 })
+            method: 'POST',
+            url: '/DistrRep/CheckReloadInit/',
+            data: JSON.stringify({ param: "CheckReloadInit" })
         }).then(function (response) {
-            response.data;
-        }, function () {
-            //$scope.FileInfo_Grid.Options.data = null;
+            var data = response.data;
+            $scope.filterList = data;
+            $scope.filter = data.Filter;
+            // $scope.filter.date = new Date(data.Filter.Year, data.Filter.Month - 1, 15);
+            //Отслеживаем изменения поисковой формы
+            $scope.$watch(function () { return $scope.filter.date; },
+                function () {
+                    if ($scope.filter.date) {
+                        $scope.filter.Year = $scope.filter.date.getFullYear();
+                        $scope.filter.Month = $scope.filter.date.getMonth() + 1;
+                    }
+
+                 //   if (!$scope.CheckReloadForm.$invalid)
+                    //    getRules_Clients();
+                    
+                }, true);
+
+            $scope.$watch(function () { return $scope.filter.Company; },
+                function () {
+                  //  if (!$scope.CheckReloadForm.$invalid)
+                      //  getRules_Clients();
+                }, true);
+            //return response.data;
+            str = JSON.stringify($scope.filter, null, 4); // (Optional) beautiful indented output.
+            console.log(str);
+
         });
     };
-
-
 
    
 

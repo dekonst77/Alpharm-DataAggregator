@@ -1,19 +1,18 @@
-﻿<div ng-controller="CheckController" ng-init="" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+﻿<div ng-controller="CheckController" ng-init="CheckReload_Init();" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
         <div class="panel-heading">
-            <ng_form name="fileInfoForm">
+            <ng_form name="CheckReloadForm">
                 <div class="row form-group">
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <label>Компания</label>
-                        <select name="Company"                              
+                        <select name="Company"
                                 class="form-control"
-                                ng-options="item as item.Company for item in CompanyFilterList track by item.Id"
+                                ng-options="item as item.Company for item in filterList.CompanyList track by item.Id"
                                 required
                                 ng-model="filter.Company"></select>
                     </div>
-                    <div class="col-md-1">
-           
-                    </div>
+
+
                 </div>
             </ng_form>
         </div>
@@ -22,7 +21,24 @@
 
 
     <div class="panel-body fullHeightGrid">
-     
+        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+            <li class="active"><a data-target="#CheckReloadNoValidFile" data-toggle="tab">Фалы</a></li>
+            <li><a data-target="#CheckReloadNoValidCheck" data-toggle="tab">Невалидные Чеки</a></li>
+
+        </ul>
+        <div id="my-tab-content" class="tab-content" style="border-left: 1px #dddddd solid; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; padding:5px;">
+            <div class="tab-pane active" id="CheckReloadNoValidFile">
+                <br>
+                <button type="button" class="btn btn-success" ng-click="" data-translate="BUTTONS.ADD"></button>
+                <button type="button" class="btn btn-danger" ng-click="" ng-disabled="selectedRules_Clients == null" data-translate="BUTTONS.DELETE"></button>
+                <ui-grid-control options="Rules_Clients_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+            </div>
+            <div class="tab-pane" id="CheckReloadNoValidCheck">
+                <h1>В разработке</h1>
+
+            </div>
+
+        </div>
     </div>
 
 
