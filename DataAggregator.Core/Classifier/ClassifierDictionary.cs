@@ -536,8 +536,6 @@ namespace DataAggregator.Core.Classifier
                 if (dosage.Dosage == null && string.IsNullOrEmpty(dosage.DosageCount))
                     continue;
 
-                //if (dosage.Order != null)
-                //{
                 var dosageId = dosage.Dosage != null ? dosage.Dosage.Id : (long?)null;
 
 #if !DEBUG
@@ -562,28 +560,27 @@ namespace DataAggregator.Core.Classifier
             // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-            dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
-/*
 #if !DEBUG
             dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
 #else
-            List<long?> dosageGroupsFoundTest = dosageGroups
-                .Where(d => d.DosageValueCount == model.DosageValueCount && d.TotalVolumeCount == model.TotalVolumeCount)
-                .Join(_context.INNDosage, d => d.Id, i => i.DosageGroupId, (d, i) => new { i })
-                .GroupBy(elem => elem.i.DosageGroupId)
+            var dosageGroupsFoundKeyList = dosageGroupsFound.Select(t => t.Id).ToList();
+            var inndosage = _context.INNDosage
+                .GroupBy(elem => elem.DosageGroupId)
                 .Select(group => new
                 {
                     group.Key,
                     Count = group.Count()
                 })
                 .Where(t => t.Count == dosageInnCount)
-                .Select(t => t.Key)
+                .Where(s=> dosageGroupsFoundKeyList.Contains(s.Key.Value))
                 .ToList();
 
-            dosageGroupsFound = _context.DosageGroups.Where(t => dosageGroupsFoundTest.Contains(t.Id)).ToList();
-            dosageGroupsFound = dosageGroupsFound.Intersect(dosageInnGroups).ToList();
+            dosageGroupsFound = inndosage
+                .Join(dosageGroupsFound, lefttbl => lefttbl.Key, righttbl => righttbl.Id, (lefttbl, righttbl) => new { righttbl })
+                .Select(t => t.righttbl)
+                .ToList();
 #endif
-*/
+
             if (dosageGroupsFound.Count == 1)
                 return dosageGroupsFound.First();
 
