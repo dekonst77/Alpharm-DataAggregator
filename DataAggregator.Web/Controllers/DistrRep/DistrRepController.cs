@@ -1267,7 +1267,7 @@ namespace DataAggregator.Web.Controllers.DistrRep
             SourceList.Add(new DataSource { Id = 0, Name = "_Все", NameFull = "_Все" });
             var comp = _context.Comp.Where(a => a.ProjectId == 2).ToList();         
             comp.Add(new Comp { Id = 0, Company = "_Все" });
-            var dictionaryList = new FileInfoJson { DataSourceList = SourceList.OrderBy(t => t.Name).ToList(), CompanyList = comp.OrderBy(t => t.Company).ToList() };
+            var dictionaryList = new FileInfoJson { CompanyList = comp.OrderBy(t => t.Company).ToList() };
 
             return new JsonNetResult
             {
@@ -1276,7 +1276,25 @@ namespace DataAggregator.Web.Controllers.DistrRep
             };
         }
 
+        [HttpPost]
+        public ActionResult GetCheckReloadFileInfo(CheckSelectFilter filter)
+        {
+            var ret = _context.Database.SqlQuery<FileInfo>("exec [Check].dbo.[W_CheckReloadFileInfo]  @CompanyId=@CompanyId1,@DateFrom=@DateFrom1,@DateTo=@DateTo1,@DataSourceId=@DataSourceId"
+                , new SqlParameter("@CompanyId1", filter.Company.Id)
+                , new SqlParameter("@DateFrom1", filter.DateFrom)
+                , new SqlParameter("@DateTo1", filter.DateTo)
+                , new SqlParameter("@DataSourceId1", filter.DataSource.Id)
+                ).ToList();
 
+
+
+            return new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = ret
+                //_context.GetFileInfo(Convert.ToInt32(filter.Month), Convert.ToInt32(filter.Year), filter.DataSource.Id,filter.Company.Id)
+            };
+        }
 
 
 

@@ -11,9 +11,22 @@
                                 required
                                 ng-model="filter.Company"></select>
                     </div>
+                    <div class="col-md-2">
+
+                        <label>c</label>
+                        <span>
+                            <date-period period="filter.DateFrom" ap-label="" required></date-period>
+                        </span>
+                    </div>
+                    <div class="col-md-2">
+                        <label>по</label>
+                        <span>
+                             <date-period period="filter.DateTo" ap-label="" required></date-period>
+                        </span>
 
 
-                </div>
+                    </div>
+                    </div>
             </ng_form>
         </div>
     </div>
@@ -29,9 +42,8 @@
         <div id="my-tab-content" class="tab-content" style="border-left: 1px #dddddd solid; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; padding:5px;">
             <div class="tab-pane active" id="CheckReloadNoValidFile">
                 <br>
-                <button type="button" class="btn btn-success" ng-click="" data-translate="BUTTONS.ADD"></button>
-                <button type="button" class="btn btn-danger" ng-click="" ng-disabled="selectedRules_Clients == null" data-translate="BUTTONS.DELETE"></button>
-                <ui-grid-control options="Rules_Clients_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+                <ui-grid-control options="CheckReloadFile_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+
             </div>
             <div class="tab-pane" id="CheckReloadNoValidCheck">
                 <h1>В разработке</h1>

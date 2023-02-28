@@ -470,4 +470,43 @@ namespace DataAggregator.Domain.Model.Distr
         public string DistributionTypeId_UserFullName { get; set; }
         public DateTime? DistributionTypeId_Date { get; set; }
     }
+
+    /// <summary>
+    /// CheckReloadFile
+    /// </summary>
+    public class CheckReloadFileInfo
+    {
+        [Key]
+        public long Id { get; set; }
+        public int CompanyId { get; set; }
+        public string DataSource { get; set; }
+        public DateTime DateInsert { get; set; }
+        public string FilePath { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Cnt          { get; set; }   //Всего Кол-во записей
+        public int CheckCnt     { get; set; }   //Кол-во чеков
+        public int IsBad6FP     { get; set; }   //Некорректные или отсутствующие 6ФП
+        public int CheckFound   { get; set; }   //Найденные чеки
+        public int CheckInWork  { get; set; }   //Чеки в обработке
+        public int CheckGood    { get; set; }   //Обработанные чеки(отправленные на классификацию)
+        public int CheckIsBad   { get; set; }   //Ошибки при скачивании или парсинге
+
+        public virtual Comp Company { get; set; }
+    }
+
+    public class CheckSelectFilter
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
+        public Comp Company { get; set; }
+        public Project Project { get; set; }
+        public DataSource DataSource { get; set; }
+    }
+
+
+
+
 }

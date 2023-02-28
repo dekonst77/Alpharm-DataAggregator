@@ -55,34 +55,70 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
         }).then(function (response) {
             var data = response.data;
             $scope.filterList = data;
-            $scope.filter = data.Filter;
+            $scope.filter = data;
             // $scope.filter.date = new Date(data.Filter.Year, data.Filter.Month - 1, 15);
             //Отслеживаем изменения поисковой формы
-            $scope.$watch(function () { return $scope.filter.date; },
+            $scope.$watch(function () { return $scope.filter.DateFrom; },
                 function () {
-                    if ($scope.filter.date) {
-                        $scope.filter.Year = $scope.filter.date.getFullYear();
-                        $scope.filter.Month = $scope.filter.date.getMonth() + 1;
+                    if ($scope.filter.DateFrom) {
+                        $scope.filter.Year = $scope.filter.DateFrom.getFullYear();
+                        $scope.filter.Month = $scope.filter.DateFrom.getMonth() + 1;
+                      //  alert($scope.filter.DateFrom);
                     }
 
-                 //   if (!$scope.CheckReloadForm.$invalid)
-                    //    getRules_Clients();
+                    if (!$scope.CheckReloadForm.$invalid) {
+                        //    getRules_Clients();
+                        alert($scope.filter.DateFrom);
+                    }
                     
                 }, true);
 
             $scope.$watch(function () { return $scope.filter.Company; },
                 function () {
-                  //  if (!$scope.CheckReloadForm.$invalid)
-                      //  getRules_Clients();
+                    if (!$scope.CheckReloadForm.$invalid) {
+                        alert('Выбрана компания');
+                        //  getRules_Clients();
+                    }
                 }, true);
             //return response.data;
-            str = JSON.stringify($scope.filter, null, 4); // (Optional) beautiful indented output.
-            console.log(str);
+          //  str = JSON.stringify($scope.filter, null, 4); // (Optional) beautiful indented output.
+           // console.log(str);
 
         });
+
+
+       
+
+
     };
 
-   
+    $scope.CheckReloadFile_Grid = uiGridCustomService.createGridClass($scope, 'CheckReloadFile_Grid');
+    $scope.CheckReloadFile_Grid.Options.columnDefs = [
+        { name: 'Id', field: 'Id', width: 50, type: 'number' },
+        { name: 'Год', field: 'Year', width: 50, type: 'number' },
+        { name: 'Месяц', field: 'Month', width: 50, type: 'number' },
+        { name: 'CompanyId', field: 'CompanyId', width: 50, type: 'number' },
+        { name: 'Дата добавления', field: 'DateInsert', type: 'date', cellFilter: formatConstants.FILTER_DATE_TIME, width: 180 },
+        { name: 'Путь', field: 'FilePath' },
+        { name: 'Источник', field: 'DataSource' },
+        { name: 'Кол-во записей', field: 'Cnt', width: 50, type: 'number' },
+        { name: 'Кол-во чеков', field: 'CheckCnt', width: 50, type: 'number' },
+        { name: 'Некорректные 6ФП', field: 'IsBad6FP', width: 50, type: 'number' },
+        { name: 'Найденные', field: 'CheckFound', width: 50, type: 'number' },
+        { name: 'В обработке', field: 'CheckInWork', width: 50, type: 'number' },
+        { name: 'Обработанные чеки', field: 'CheckGood', width: 50, type: 'number' },
+        { name: 'Ошибки', field: 'CheckIsBad', width: 50, type: 'number' },
+    ];
+
+
+    $scope.CheckReloadFile_Grid.Options.customEnableRowSelection = true;
+    $scope.CheckReloadFile_Grid.Options.multiSelect = true;
+    $scope.CheckReloadFile_Grid.Options.enableFullRowSelection = true;
+    $scope.CheckReloadFile_Grid.Options.enableRowHeaderSelection = false;
+    $scope.CheckReloadFile_Grid.Options.enableRowSelection = true;
+    $scope.CheckReloadFile_Grid.Options.noUnselect = true;
+    $scope.CheckReloadFile_Grid.Options.appScopeProvider = $scope;
+    $scope.CheckReloadFile_Grid.Options.showGridFooter = true;
 
 
 
