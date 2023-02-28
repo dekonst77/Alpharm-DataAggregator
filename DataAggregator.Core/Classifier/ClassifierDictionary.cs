@@ -536,11 +536,9 @@ namespace DataAggregator.Core.Classifier
                 if (dosage.Dosage == null && string.IsNullOrEmpty(dosage.DosageCount))
                     continue;
 
-                //if (dosage.Order != null)
-                //{
                 var dosageId = dosage.Dosage != null ? dosage.Dosage.Id : (long?)null;
 
-#if RELEASE
+#if !DEBUG
                 List<INNDosage> inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
                                                                        inndosage.DosageId == dosageId &&
                                                                        inndosage.DosageCount == dosage.DosageCount).ToList();
@@ -559,30 +557,28 @@ namespace DataAggregator.Core.Classifier
                     return null;
             }
 
-
+            // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-#if RELEASE
+#if !DEBUG
             dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
 #else
-            List<long> dosageGroupsFoundTest = dosageGroups
-                .Where(d => d.DosageValueCount == model.DosageValueCount && d.TotalVolumeCount == model.TotalVolumeCount)
-                .LeftJoin(_context.INNDosage.DefaultIfEmpty(), d => d.Id, i => i.DosageGroupId, (d, i) => new { d.Id, DosageGroupIdCount = i.DosageGroupId == null ? 0 : 1 })
-                .GroupBy(elem => elem.Id)
+            var dosageGroupsFoundKeyList = dosageGroupsFound.Select(t => t.Id).ToList();
+            var inndosage = _context.INNDosage
+                .GroupBy(elem => elem.DosageGroupId)
                 .Select(group => new
                 {
                     group.Key,
-                    Count = group.Sum(t => t.DosageGroupIdCount),
-                    DosageGroups = group.Select(p => p)
+                    Count = group.Count()
                 })
                 .Where(t => t.Count == dosageInnCount)
-                .Select(t => t.Key)
+                .Where(s=> dosageGroupsFoundKeyList.Contains(s.Key.Value))
                 .ToList();
 
-            dosageGroupsFound = _context.DosageGroups.Where(t => dosageGroupsFoundTest.Contains(t.Id)).ToList();
-
-            if (dosageInnGroups != null)
-                dosageGroupsFound.Intersect(dosageInnGroups).ToList();
+            dosageGroupsFound = inndosage
+                .Join(dosageGroupsFound, lefttbl => lefttbl.Key, righttbl => righttbl.Id, (lefttbl, righttbl) => new { righttbl })
+                .Select(t => t.righttbl)
+                .ToList();
 #endif
 
             if (dosageGroupsFound.Count == 1)
@@ -590,7 +586,7 @@ namespace DataAggregator.Core.Classifier
 
             if (dosageGroupsFound.Count > 1)
             {
-                //Попробуем взять ту, которая изначально была в модели, если такого не будет то береме первую
+                //Попробуем взять ту, которая изначально была в модели, если такого не будет то берём первую
 
                 if (model.DrugId > 0)
                 {
@@ -1022,9 +1018,7 @@ namespace DataAggregator.Core.Classifier
             else
                 _currentModel = model;
 
-
             //Ищем Equipment
-
             var equipment = FindOrCreateEquipment(model);
 
             //Ищем tradeName
@@ -1040,8 +1034,6 @@ namespace DataAggregator.Core.Classifier
 
             //Ищем innGroup
             var innGroup = FindOrCreateInnGroup(model);
-
-
 
             //Начинаем искать
             DosageGroup dosageGroup = FindDosageGroup(model) ?? CreateDosageGroup(model);
