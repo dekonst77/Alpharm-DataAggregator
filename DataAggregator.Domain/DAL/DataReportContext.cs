@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace DataAggregator.Domain.DAL
 {
@@ -43,6 +44,10 @@ namespace DataAggregator.Domain.DAL
                 {
                     SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
                     command.Transaction = sqlTran;
+                }
+                else
+                {
+                    Task.Delay(100);
                 }
                 command.CommandTimeout = 0;
                 command.CommandText = query;
