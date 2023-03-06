@@ -40,11 +40,13 @@ namespace DataAggregator.Domain.DAL
                 if (command.Connection.State == ConnectionState.Closed)
                     command.Connection.Open();
 
+                //по умолчанию все запросы с использование SNAPSHOT
                 if (snapshotOn)
                 {
                     SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
                     command.Transaction = sqlTran;
                 }
+                //если в запросе используются Linked сервера, то произойдет sql ошибка = 7420 и, чтобы не было наслоений транзакций ставим задержку в 100мс
                 else
                 {
                     Task.Delay(100);
