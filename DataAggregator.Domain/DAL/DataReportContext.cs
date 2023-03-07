@@ -46,11 +46,7 @@ namespace DataAggregator.Domain.DAL
                     SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
                     command.Transaction = sqlTran;
                 }
-                //если в запросе используются Linked сервера, то произойдет sql ошибка = 7420 и, чтобы не было наслоений транзакций ставим задержку в 100мс
-                else
-                {
-                    Task.Delay(100);
-                }
+
                 command.CommandTimeout = 0;
                 command.CommandText = query;
 

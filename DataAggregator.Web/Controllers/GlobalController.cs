@@ -312,9 +312,12 @@ namespace DataAggregator.Web.Controllers
                             if (sqlex.Number == 7420 && ss == 0)
                             {
                                 ss++;
-                                tbl = context.GetDataTableFromQuery(query, report.Server, APP, false);
-                                log.Note = tbl.Rows.Count.ToString();
-                                context.LogEnd(log, 1);
+                                using (var contextNew = new DataReportContext(APP))
+                                {
+                                    tbl = contextNew.GetDataTableFromQuery(query, report.Server, APP, false);
+                                    log.Note = tbl.Rows.Count.ToString();
+                                    contextNew.LogEnd(log, 1);
+                                }
                             }
                             else
                             {
