@@ -1,29 +1,24 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using DataAggregator.Core.Models.GovernmentPurchases.GovernmentPurchases;
-
 using DataAggregator.Domain.Model.GovernmentPurchases;
+
 using ExcelDataReader;
-using LinqToExcel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
+using ExcelLibrary.SpreadSheet;
 
-
-
-
-namespace DataAggregator.Core.XLS
+namespace DataAggregator.Web.GovernmentPurchasesExcel
 {
     public class PurchaseExcel: IDisposable
     {
-        IWorkbook workbook;
-        ISheet sheet;
-
         private static readonly object LockObject = new object();
+        
+        Workbook workbook;
+        Worksheet sheet;
 
         private byte[] GetByte(Stream input)
         {
@@ -44,43 +39,39 @@ namespace DataAggregator.Core.XLS
             //Наименование, Ед.изм, Кол-во, Цена, Сумма
             var purchaseObjects = objects == null ? new List<PurchaseObjectReadyJson>() : objects.ToList();
 
-            workbook = new XSSFWorkbook();
-            sheet = workbook.CreateSheet("Шаблон ТЗ");
+            workbook = new Workbook();
+            sheet = new Worksheet("Шаблон ТЗ");
 
-            var header = sheet.CreateRow(0);
-
-            header.CreateCell(0).SetCellValue("Наименование объекта закупки");
-            header.CreateCell(1).SetCellValue("Единица измерения");
-            header.CreateCell(2).SetCellValue("Количество");
-            header.CreateCell(3).SetCellValue("Цена за единицу");
-            header.CreateCell(4).SetCellValue("Сумма");
-            header.CreateCell(5).SetCellValue("ReceiverId");
-            header.CreateCell(6).SetCellValue("ReceiverRaw");
-            header.CreateCell(7).SetCellValue("ReceiverRawA");
-            header.CreateCell(8).SetCellValue("ReceiverRawB");
-
+            sheet.Cells[0, 0] = new Cell("Наименование объекта закупки");
+            sheet.Cells[0, 1] = new Cell("Единица измерения");
+            sheet.Cells[0, 2] = new Cell("Количество");
+            sheet.Cells[0, 3] = new Cell("Цена за единицу");
+            sheet.Cells[0, 4] = new Cell("Сумма");
+            sheet.Cells[0, 5] = new Cell("ReceiverId");
+            sheet.Cells[0, 6] = new Cell("ReceiverRaw");
+            sheet.Cells[0, 7] = new Cell("ReceiverRawA");
+            sheet.Cells[0, 8] = new Cell("ReceiverRawB");
 
             for (var i = 0; i < purchaseObjects.Count(); i++)
             {
-
                 var o = purchaseObjects[i];
-                var row = sheet.CreateRow(i + 1);
-                row.CreateCell(0).SetCellValue(o.Name);
-                row.CreateCell(1).SetCellValue(o.Unit.ToString());
-                row.CreateCell(2).SetCellType(CellType.Numeric);
-                row.CreateCell(2).SetCellValue(o.Amount.ToString());
-                row.CreateCell(3).SetCellType(CellType.Numeric);
-                row.CreateCell(3).SetCellValue(o.Price.ToString());
-                row.CreateCell(4).SetCellType(CellType.Numeric);
-                row.CreateCell(4).SetCellValue(o.Sum.ToString());
-                row.CreateCell(5).SetCellValue(o.ReceiverId.ToString());
-                row.CreateCell(6).SetCellValue(o.ReceiverRaw);
+
+                sheet.Cells[i + 1, 0] = new Cell(o.Name);
+                sheet.Cells[i + 1, 1] = new Cell(o.Unit);
+                sheet.Cells[i + 1, 2] = new Cell(o.Amount, new CellFormat(CellFormatType.General, ""));
+                sheet.Cells[i + 1, 3] = new Cell(o.Price, new CellFormat(CellFormatType.General, ""));
+                sheet.Cells[i + 1, 4] = new Cell(o.Sum, new CellFormat(CellFormatType.General, ""));
+                sheet.Cells[i + 1, 5] = new Cell(o.ReceiverId);
+                sheet.Cells[i + 1, 6] = new Cell(o.ReceiverRaw);
             }
+
+            workbook.Worksheets.Add(sheet);
+
             byte[] bytes = null;
 
             using (MemoryStream stream = new MemoryStream())
             {
-                workbook.Write(stream);
+                workbook.SaveToStream(stream);
 
                 bytes = stream.ToArray();
 

@@ -1,5 +1,4 @@
 ﻿using DataAggregator.Core.Models.GovernmentPurchases.GovernmentPurchases;
-using DataAggregator.Core.XLS;
 using DataAggregator.Domain.BulkInsert;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.GovernmentPurchases;
@@ -14,6 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
+//using DataAggregator.Web.GovernmentPurchasesExcel;
+using DataAggregator.Core.XLS;
 
 namespace DataAggregator.Web.Controllers.GovernmentPurchases
 {
@@ -1565,21 +1567,25 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
 
             var file = uploads.First();
 
-            PurchaseExcel excel = new PurchaseExcel();
-            var objects = excel.GetPurchaseObjectReady(file.InputStream).ToList();
+            using (var excel = new PurchaseExcel())
+            {
+                var objects = excel.GetPurchaseObjectReady(file.InputStream).ToList();
 
-            var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
-            jsonResult.MaxJsonLength = int.MaxValue;
+                var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
 
-            return jsonResult;
+                return jsonResult;
+            }
         }
 
         [HttpPost]
         public FileResult DownloadPurchaseTemplate(IEnumerable<PurchaseObjectReadyJson> objects)
         {
-            PurchaseExcel excel = new PurchaseExcel();
-            var bytes = excel.GetExcel(objects);
-            return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet, "Шаблон");
+            using (var excel = new PurchaseExcel())
+            {
+                var bytes = excel.GetExcel(objects);
+                return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet, "Шаблон");
+            }
         }
 
         [HttpPost]
@@ -1590,21 +1596,25 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
 
             var file = uploads.First();
 
-            ContractExcel excel = new ContractExcel();
-            var objects = excel.GetContractObjectReady(file.InputStream).ToList();
+            using (var excel = new ContractExcel())
+            {
+                var objects = excel.GetContractObjectReady(file.InputStream).ToList();
 
-            var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
-            jsonResult.MaxJsonLength = int.MaxValue;
+                var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
 
-            return jsonResult;
+                return jsonResult;
+            }
         }
 
         [HttpPost]
         public FileResult DownloadContractTemplate(IEnumerable<ContractObjectReadyJson> objects)
         {
-            ContractExcel excel = new ContractExcel();
-            var bytes = excel.GetExcel(objects);
-            return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet, "Шаблон");
+            using (var excel = new ContractExcel()) 
+            { 
+                var bytes = excel.GetExcel(objects);
+                return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet, "Шаблон");
+            }
         }
 
         /// <summary>

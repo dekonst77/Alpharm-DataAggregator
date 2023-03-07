@@ -1,29 +1,22 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using DataAggregator.Core.Models.GovernmentPurchases.GovernmentPurchases;
-
 using DataAggregator.Domain.Model.GovernmentPurchases;
+
 using ExcelDataReader;
-using LinqToExcel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
+using ExcelLibrary.SpreadSheet;
 
-
-
-
-namespace DataAggregator.Core.XLS
+namespace DataAggregator.Web.GovernmentPurchasesExcel
 {
-    public class PurchaseExcel: IDisposable
+    public class ContractExcel : IDisposable
     {
-        IWorkbook workbook;
-        ISheet sheet;
-
-        private static readonly object LockObject = new object();
+        Workbook workbook;
+        Worksheet sheet;
 
         private byte[] GetByte(Stream input)
         {
@@ -39,57 +32,46 @@ namespace DataAggregator.Core.XLS
             }
         }
 
-        public byte[] GetExcel(IEnumerable<PurchaseObjectReadyJson> objects)
+        public byte[] GetExcel(IEnumerable<ContractObjectReadyJson> objects)
         {
-            //Наименование, Ед.изм, Кол-во, Цена, Сумма
-            var purchaseObjects = objects == null ? new List<PurchaseObjectReadyJson>() : objects.ToList();
+            var contractObjects = objects == null ? new List<ContractObjectReadyJson>() : objects.ToList();
 
-            workbook = new XSSFWorkbook();
-            sheet = workbook.CreateSheet("Шаблон ТЗ");
+            workbook = new Workbook();
+            sheet = new Worksheet("Шаблон ТЗ");
 
-            var header = sheet.CreateRow(0);
+            sheet.Cells[0, 0] = new Cell("Наименование объекта закупки");
+            sheet.Cells[0, 1] = new Cell("Единица измерения");
+            sheet.Cells[0, 2] = new Cell("Количество");
+            sheet.Cells[0, 3] = new Cell("Цена за единицу");
+            sheet.Cells[0, 4] = new Cell("Сумма");
 
-            header.CreateCell(0).SetCellValue("Наименование объекта закупки");
-            header.CreateCell(1).SetCellValue("Единица измерения");
-            header.CreateCell(2).SetCellValue("Количество");
-            header.CreateCell(3).SetCellValue("Цена за единицу");
-            header.CreateCell(4).SetCellValue("Сумма");
-            header.CreateCell(5).SetCellValue("ReceiverId");
-            header.CreateCell(6).SetCellValue("ReceiverRaw");
-            header.CreateCell(7).SetCellValue("ReceiverRawA");
-            header.CreateCell(8).SetCellValue("ReceiverRawB");
-
-
-            for (var i = 0; i < purchaseObjects.Count(); i++)
+            for (var i = 0; i < contractObjects.Count(); i++)
             {
+                var o = contractObjects[i];
 
-                var o = purchaseObjects[i];
-                var row = sheet.CreateRow(i + 1);
-                row.CreateCell(0).SetCellValue(o.Name);
-                row.CreateCell(1).SetCellValue(o.Unit.ToString());
-                row.CreateCell(2).SetCellType(CellType.Numeric);
-                row.CreateCell(2).SetCellValue(o.Amount.ToString());
-                row.CreateCell(3).SetCellType(CellType.Numeric);
-                row.CreateCell(3).SetCellValue(o.Price.ToString());
-                row.CreateCell(4).SetCellType(CellType.Numeric);
-                row.CreateCell(4).SetCellValue(o.Sum.ToString());
-                row.CreateCell(5).SetCellValue(o.ReceiverId.ToString());
-                row.CreateCell(6).SetCellValue(o.ReceiverRaw);
+                sheet.Cells[i + 1, 0] = new Cell(o.Name);
+                sheet.Cells[i + 1, 1] = new Cell(o.Unit);
+                sheet.Cells[i + 1, 2] = new Cell((decimal)o.Amount);
+                sheet.Cells[i + 1, 3] = new Cell((decimal)o.Price);
+                sheet.Cells[i + 1, 4] = new Cell((decimal)o.Sum);
             }
+
+            workbook.Worksheets.Add(sheet);
+
             byte[] bytes = null;
 
             using (MemoryStream stream = new MemoryStream())
             {
-                workbook.Write(stream);
+                workbook.SaveToStream(stream);
 
                 bytes = stream.ToArray();
-
             }
 
             return bytes;
+            
         }
 
-        public IEnumerable<PurchaseObjectReady> GetPurchaseObjectReady(Stream data)
+        public IEnumerable<ContractObjectReady> GetContractObjectReady(Stream data)
         {
             const string worksheet = "Шаблон ТЗ";
 
@@ -150,23 +132,6 @@ namespace DataAggregator.Core.XLS
                     }
                     #endregion
 
-                    if (columns.Values.Contains("ReceiverId"))
-                    {
-                        reservedNamed.Add("ReceiverId");
-                    }
-                    if (columns.Values.Contains("ReceiverRaw"))
-                    {
-                        reservedNamed.Add("ReceiverRaw");
-                    }
-                    if (columns.Values.Contains("ReceiverRawA"))
-                    {
-                        reservedNamed.Add("ReceiverRawA");
-                    }
-                    if (columns.Values.Contains("ReceiverRawB"))
-                    {
-                        reservedNamed.Add("ReceiverRawB");
-                    }
-
                     #region Колонки Excel среди обязательных в формате <Имя столбца, порядковый номер>
                     Dictionary<string, int> ExistColumns = columns.Where(t => reservedNamed.Contains(t.Value)).ToDictionary(k => k.Value, k => k.Key);
                     #endregion
@@ -193,30 +158,12 @@ namespace DataAggregator.Core.XLS
                     #endregion
 
                     #region загружаем данные в dataClass по обязательным полям из списка reservedNamed
-                    List<ExcelObject> dataClass = rows.Select(d =>
+                    List<ExcelObject> dataClass = rows.Select(d => new ExcelObject()
                     {
-                        int index;
-
-                        var _Unit = ExistColumns.TryGetValue(Unit_FieldName, out index) ? d[index]?.ToString() : String.Empty;
-                        var _Amount = ExistColumns.TryGetValue(Amount_FieldName, out index) ? d[index]?.ToString() : String.Empty;
-                        var _Price = ExistColumns.TryGetValue(Price_FieldName, out index) ? d[index]?.ToString() : String.Empty;
-                        var _Sum = ExistColumns.TryGetValue(Sum_FieldName, out index) ? d[index]?.ToString() : String.Empty;
-                        var _ReceiverId = ExistColumns.TryGetValue("ReceiverId", out index) ? d[index]?.ToString() : String.Empty;
-                        var _ReceiverRaw = ExistColumns.TryGetValue("ReceiverRaw", out index) ? d[index]?.ToString() : String.Empty;
-                        var _ReceiverRawA = ExistColumns.TryGetValue("ReceiverRawA", out index) ? d[index]?.ToString() : String.Empty;
-                        var _ReceiverRawB = ExistColumns.TryGetValue("ReceiverRawB", out index) ? d[index]?.ToString() : String.Empty;
-
-                        return new ExcelObject()
-                        {
-                            Unit = _Unit,
-                            Amount = _Amount,
-                            Price = _Price,
-                            Sum = _Sum,
-                            ReceiverId = _ReceiverId,
-                            ReceiverRaw = _ReceiverRaw,
-                            ReceiverRawA = _ReceiverRawA,
-                            ReceiverRawB = _ReceiverRawB
-                        };
+                        Unit = d[ExistColumns[Unit_FieldName]].ToString(),
+                        Amount = d[ExistColumns[Amount_FieldName]].ToString(),
+                        Price = d[ExistColumns[Price_FieldName]].ToString(),
+                        Sum = d[ExistColumns[Sum_FieldName]].ToString()
                     }).ToList();
                     #endregion
 
@@ -242,7 +189,7 @@ namespace DataAggregator.Core.XLS
                                                 string.IsNullOrEmpty(d.Price) &&
                                                 string.IsNullOrEmpty(d.Sum) &&
                                                 string.IsNullOrEmpty(d.Unit) &&
-                                                string.IsNullOrEmpty(d.Name))).Select(d => d.GetPurchaseObjectReady());
+                                                string.IsNullOrEmpty(d.Name))).Select(d => d.GetContractObjectReady());
                 }
             }
             catch (Exception e)

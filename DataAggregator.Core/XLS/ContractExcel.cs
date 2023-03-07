@@ -15,8 +15,11 @@ using NPOI.XSSF.UserModel;
 
 namespace DataAggregator.Core.XLS
 {
-    public class ContractExcel
+    public class ContractExcel : IDisposable
     {
+        IWorkbook workbook;
+        ISheet sheet;
+
         private byte[] GetByte(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
@@ -36,12 +39,10 @@ namespace DataAggregator.Core.XLS
             //Наименование, Ед.изм, Кол-во, Цена, Сумма
             var contractObjects = objects == null ? new List<ContractObjectReadyJson>() : objects.ToList();
 
-            IWorkbook workbook = new XSSFWorkbook();
+            workbook = new XSSFWorkbook();
+            sheet = workbook.CreateSheet("Шаблон ТЗ");
 
-            //workbook.IsHidden = true;
-            ISheet sheet1 = workbook.CreateSheet("Шаблон ТЗ");
-
-            var header = sheet1.CreateRow(0);
+            var header = sheet.CreateRow(0);
 
             header.CreateCell(0).SetCellValue("Наименование объекта закупки");
             header.CreateCell(1).SetCellValue("Единица измерения");
@@ -53,7 +54,8 @@ namespace DataAggregator.Core.XLS
             for (var i = 0; i < contractObjects.Count(); i++)
             {
                 var o = contractObjects[i];
-                var row = sheet1.CreateRow(i + 1);
+                var row = sheet.CreateRow(i + 1);
+
                 row.CreateCell(0).SetCellValue(o.Name);
                 row.CreateCell(1).SetCellValue(o.Unit);
                 row.CreateCell(2).SetCellType(CellType.Numeric);
@@ -221,6 +223,12 @@ namespace DataAggregator.Core.XLS
 
             if (!string.IsNullOrEmpty(obj.Name))
                 obj.Name = obj.Name.Trim();
+        }
+
+        public void Dispose()
+        {
+            if (sheet != null) sheet = null;
+            if (workbook != null) workbook = null;
         }
     }
 
