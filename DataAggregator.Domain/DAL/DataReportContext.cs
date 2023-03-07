@@ -40,10 +40,16 @@ namespace DataAggregator.Domain.DAL
                 if (command.Connection.State == ConnectionState.Closed)
                     command.Connection.Open();
 
-                //по умолчанию все запросы с использование SNAPSHOT
+                SqlTransaction sqlTran;
+                //по умолчанию все запросы с использованием SNAPSHOT
                 if (snapshotOn)
                 {
-                    SqlTransaction sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
+                    sqlTran = command.Connection.BeginTransaction(IsolationLevel.Snapshot);
+                    command.Transaction = sqlTran;
+                }
+                else
+                {
+                    sqlTran = command.Connection.BeginTransaction(IsolationLevel.ReadCommitted);
                     command.Transaction = sqlTran;
                 }
 
