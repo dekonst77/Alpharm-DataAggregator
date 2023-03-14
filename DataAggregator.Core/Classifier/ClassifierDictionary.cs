@@ -572,7 +572,7 @@ namespace DataAggregator.Core.Classifier
                     Count = group.Count()
                 })
                 .Where(t => t.Count == dosageInnCount)
-                .Where(s=> dosageGroupsFoundKeyList.Contains(s.Key.Value))
+                .Where(s => dosageGroupsFoundKeyList.Contains(s.Key.Value))
                 .ToList();
 
             dosageGroupsFound = inndosage
@@ -923,9 +923,15 @@ namespace DataAggregator.Core.Classifier
             if (string.IsNullOrEmpty(registrationCeritifacte.Number))
                 return null;
 
+            // проверка на сушествующий номер РУ
+            var regCert = _context.RegistrationCertificates.Where(t => t.Number == registrationCeritifacte.Number).FirstOrDefault();
+
+            if (regCert != null)
+                return  regCert;
+
             var circulationPeriod = FindOrCreateCirculationPeriod(registrationCeritifacte.CirculationPeriod);
 
-            var regCert = new RegistrationCertificate()
+            regCert = new RegistrationCertificate()
             {
                 Number = registrationCeritifacte.Number,
                 CirculationPeriod = circulationPeriod,
@@ -937,7 +943,6 @@ namespace DataAggregator.Core.Classifier
             };
 
             _context.RegistrationCertificates.Add(regCert);
-
 
             return regCert;
         }
