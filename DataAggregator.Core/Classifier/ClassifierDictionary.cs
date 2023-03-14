@@ -957,7 +957,7 @@ namespace DataAggregator.Core.Classifier
         {
             ProductionInfo productionInfo = null;
 
-            if (drug.Id > 0 && ownerTradeMark.Id > 0 && packer.Id > 0)
+            if (drug.Id > 0 && ownerTradeMark?.Id > 0 && packer?.Id > 0)
             {
                 var productionInfoFound = _context.ProductionInfo.Where(p => p.OwnerTradeMarkId == ownerTradeMark.Id && p.PackerId == packer.Id && p.DrugId == drug.Id).ToList();
 
