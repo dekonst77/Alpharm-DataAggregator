@@ -1,22 +1,18 @@
-﻿using DataAggregator.Core.Classifier;
-using DataAggregator.Core.Filter;
-using DataAggregator.Core.Models.Classifier;
+﻿#define DebugOnProductDB
 using DataAggregator.Domain.DAL;
+using DataAggregator.Web.App_Start;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNet.Identity.Owin;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
-using System.Web.Mvc;
-
-using DataAggregator.Domain.Model.Retail.Report;
-using DataAggregator.Web.Models.Retail.Report;
-using DataAggregator.Web.App_Start;
 using System.Web;
-using System.Data.Entity;
-using System.Threading.Tasks;
-using System.Transactions;
+using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.OFD
 {
@@ -57,7 +53,7 @@ namespace DataAggregator.Web.Controllers.OFD
         [HttpGet]
         public ActionResult Action()
         {
-            
+
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,
@@ -151,7 +147,7 @@ namespace DataAggregator.Web.Controllers.OFD
                 return jsonNetResult;
             }
         }
-        public ActionResult FilesAction(string Filename,bool withFile)
+        public ActionResult FilesAction(string Filename, bool withFile)
         {
             using (var _ofd_context = new OFDContext(APP))
             {
@@ -166,21 +162,21 @@ namespace DataAggregator.Web.Controllers.OFD
         {
             using (var _ofd_context = new OFDContext(APP))
             {
-                    var brick_3 = _ofd_context.Brick_L3_all.OrderBy(o => o.L3_label).ToList();
-                    brick_3.Insert(0, new Domain.Model.OFD.Brick_L3_all() { Id = "%", L3_label = "Все" });
+                var brick_3 = _ofd_context.Brick_L3_all.OrderBy(o => o.L3_label).ToList();
+                brick_3.Insert(0, new Domain.Model.OFD.Brick_L3_all() { Id = "%", L3_label = "Все" });
 
-                    var res = _ofd_context.List.OrderByDescending(o => o.value).ToList();
+                var res = _ofd_context.List.OrderByDescending(o => o.value).ToList();
 
-                    JsonNetResult jsonNetResult = new JsonNetResult
-                    {
-                        Formatting = Formatting.Indented,
-                        Data = new JsonResult() { Data = res, Data2 = brick_3, count = res.Count(), status = "ок", Success = true }
-                    };
-                    return jsonNetResult;
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = res, Data2 = brick_3, count = res.Count(), status = "ок", Success = true }
+                };
+                return jsonNetResult;
             }
         }
         [HttpPost]
-        public ActionResult Report(int Id,int supplierID,string text, DateTime period_start, DateTime period_end, string Brick_L3)
+        public ActionResult Report(int Id, int supplierID, string text, DateTime period_start, DateTime period_end, string Brick_L3)
         {
             using (var _ofd_context = new OFDContext(APP))
             {
@@ -235,13 +231,13 @@ namespace DataAggregator.Web.Controllers.OFD
         public ActionResult Periods_4SC()
         {
             var _ofd_context = new OFDContext(APP);
-                ViewData["Period_4SC"] = _ofd_context.Period_4SC.OrderByDescending(o => o.period).ToList();
-                JsonNetResult jsonNetResult = new JsonNetResult
-                {
-                    Formatting = Formatting.Indented,
-                    Data = new JsonResult() { Data = ViewData, count = 0, status = "ок", Success = true }
-                };
-                return jsonNetResult;
+            ViewData["Period_4SC"] = _ofd_context.Period_4SC.OrderByDescending(o => o.period).ToList();
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = ViewData, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
         }
 
         [HttpPost]
@@ -487,7 +483,7 @@ namespace DataAggregator.Web.Controllers.OFD
             {
                 var _context = new OFDContext(APP);
                 //period = new DateTime(period.Year, period.Month, period.Day);
-                ViewData["D4SS"] = _context.Data_All_4SC.Where(w => w.ClassifierId_hand==null && w.ClassifierId_korr ==null).ToList();
+                ViewData["D4SS"] = _context.Data_All_4SC.Where(w => w.ClassifierId_hand == null && w.ClassifierId_korr == null).ToList();
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
 
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -554,7 +550,77 @@ namespace DataAggregator.Web.Controllers.OFD
             };
             return jsonNetResult;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult Network_FromExcel(IEnumerable<System.Web.HttpPostedFileBase> uploads)
+        {
+            if (uploads == null || !uploads.Any())
+                throw new ApplicationException("uploads not set");
+
+            var file = uploads.First();
+            string fileName = file.FileName;
+
+            ///<remarks>тестовая БД: [alph-r01-s-db02].[OFD_data]</remarks>
+#if DEBUG && !DebugOnProductDB
+            string ServerPath = @"S:\Report\";
+#else
+            string ServerPath = @"E:\OFD_data\temp\";
+#endif
+
+            string FullFileName = ServerPath + fileName;
+
+            byte[] data;
+            using (Stream inputStream = file.InputStream)
+            {
+                MemoryStream memoryStream = inputStream as MemoryStream;
+                if (memoryStream == null)
+                {
+                    memoryStream = new MemoryStream();
+                    inputStream.CopyTo(memoryStream);
+                }
+                data = memoryStream.ToArray();
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["OFDContext"].ConnectionString))
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand())
+                {
+                    command.CommandTimeout = 600;
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "dbo.usp_CreateFile";
+                    command.Parameters.Add("@File", SqlDbType.VarChar).Value = FullFileName;
+                    command.Parameters.Add("@Content", SqlDbType.VarBinary).Value = data;
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new SqlCommand())
+                {
+                    command.CommandTimeout = 600;
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "dbo.Aggregated_All_EditByExcel";
+                    command.Parameters.Add("@File", SqlDbType.VarChar).Value = FullFileName;
+                    command.Parameters.Add("@updData", SqlDbType.Bit).Value = 0;
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = null }
+            };
+
+            return jsonNetResult;
+        }
+
     }
+
     public class JsonResult
     {
         public object Data { get; set; }

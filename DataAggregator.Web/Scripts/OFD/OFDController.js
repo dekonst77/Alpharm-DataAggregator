@@ -1,13 +1,13 @@
 ﻿angular
     .module('DataAggregatorModule')
     .controller('OFDController', [
-        '$scope', '$route', '$http', '$uibModal', 'messageBoxService', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants','commonService', OFDController]);
+        '$scope', '$route', '$http', '$uibModal', 'messageBoxService', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'commonService', OFDController]);
 
 function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, commonService) {
     $scope.format = 'dd.MM.yyyy';
     $scope.log_dt = new dateClass();
     $scope.files_dt = new dateClass();
-   // $scope.Title = "ОФД";
+    // $scope.Title = "ОФД";
     $scope.OFD_job_ftp_upload_info = "";
 
     $scope.Log_show = function () {
@@ -53,7 +53,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             });
     };
     $scope.Init_Action = function () {
-        
+
     };
     $scope.Init_Files = function () {
         $scope.Grid_Files = uiGridCustomService.createGridClassMod($scope, "Grid_Files");
@@ -101,7 +101,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
                 errorHandlerService.showResponseError(response);
             });
     };
-    $scope.Files_Action = function (row,col, withFile) {
+    $scope.Files_Action = function (row, col, withFile) {
         var Filename = row.entity[col.field];
         $scope.dataLoading =
             $http({
@@ -128,7 +128,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             $http({
                 method: 'GET',
                 url: '/OFD/Report/',
-                data: JSON.stringify({  })
+                data: JSON.stringify({})
             }).then(function (response) {
                 var data = response.data;
                 if (data.Success) {
@@ -157,7 +157,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             $http({
                 method: 'POST',
                 url: '/OFD/Suppliers/',
-                data: JSON.stringify({ withDef: withDef})
+                data: JSON.stringify({ withDef: withDef })
             }).then(function (response) {
                 var data = response.data;
                 if (data.Success) {
@@ -171,8 +171,8 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
 
 
     $scope.Init_Periods = function () {
-        $scope.Grid = uiGridCustomService.createGridClassMod($scope,"Grid");
-       
+        $scope.Grid = uiGridCustomService.createGridClassMod($scope, "Grid");
+
         $scope.Grid.Options.columnDefs = [
             //cellTemplate: '<div class="ui-grid-cell-contents"><a href="{{row.entity.url_P}}" target="_blank">ссылка</a></div>'
             //type: 'date'
@@ -181,7 +181,8 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             { name: 'Период', field: 'period', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_PERIOD_YMD },
             {
                 name: 'Активный', field: 'period_type', filter: { condition: uiGridCustomService.condition },
-                cellTemplate: '<div class="btn-group"><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.period_type==30}" ng-click="grid.appScope.Periods_type_Set(30)">Кв</button><button type="button" class="btn" ng-class="{\'btn-success\' :row.entity.period_type==20}" ng-click="grid.appScope.Periods_type_Set(20)">Мс</button><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.period_type==10}" ng-click="grid.appScope.Periods_type_Set(10)">Дн</button><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.period_type==0}" ng-click="grid.appScope.Periods_type_Set(0)">Блок</button></div>'},
+                cellTemplate: '<div class="btn-group"><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.period_type==30}" ng-click="grid.appScope.Periods_type_Set(30)">Кв</button><button type="button" class="btn" ng-class="{\'btn-success\' :row.entity.period_type==20}" ng-click="grid.appScope.Periods_type_Set(20)">Мс</button><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.period_type==10}" ng-click="grid.appScope.Periods_type_Set(10)">Дн</button><button type="button" class="btn" ng-class="{\'btn-success\' : row.entity.period_type==0}" ng-click="grid.appScope.Periods_type_Set(0)">Блок</button></div>'
+            },
             { name: 'sum Квартал', field: 'sum_30', type: 'number', headerCellClass: 'beige', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'amount Квартал', field: 'amount_30', type: 'number', headerCellClass: 'beige', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Брики Квартал', field: 'count_brik_30', type: 'number', headerCellClass: 'beige', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
@@ -233,8 +234,8 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
 
 
     $scope.Init_PeriodsWK = function () {
-        $scope.Grid = uiGridCustomService.createGridClassMod($scope,"Grid");
-        
+        $scope.Grid = uiGridCustomService.createGridClassMod($scope, "Grid");
+
         $scope.Grid.Options.columnDefs = [
             //cellTemplate: '<div class="ui-grid-cell-contents"><a href="{{row.entity.url_P}}" target="_blank">ссылка</a></div>'
             //type: 'date'
@@ -269,24 +270,24 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             });
     };
     $scope.PeriodsWK_save = function () {
-            $scope.dataLoading =
-                $http({
-                    method: 'POST',
-                    url: '/OFD/PeriodsWK_save/',
-                    data: JSON.stringify({ array: $scope.Grid.GetArrayModify()})
-                }).then(function (response) {
-                    var data = response.data;
-                    if (data.Success) {
-                        $scope.Grid.ClearModify();
-                        alert("Сохранил");
-                    }
-                }, function (response) {
-                    errorHandlerService.showResponseError(response);
-                });
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/OFD/PeriodsWK_save/',
+                data: JSON.stringify({ array: $scope.Grid.GetArrayModify() })
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    $scope.Grid.ClearModify();
+                    alert("Сохранил");
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
     };
 
     $scope.Init_Periods_4SC = function () {
-        $scope.Grid = uiGridCustomService.createGridClassMod($scope,"Grid");
+        $scope.Grid = uiGridCustomService.createGridClassMod($scope, "Grid");
         $scope.Grid.Options.columnDefs = [
             //cellTemplate: '<div class="ui-grid-cell-contents"><a href="{{row.entity.url_P}}" target="_blank">ссылка</a></div>'
             //type: 'date'
@@ -324,17 +325,17 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             });
     };
     $scope.Periods_4SC_save = function () {
-            $scope.dataLoading =
-                $http({
-                    method: 'POST',
-                    url: '/OFD/Periods_4SC_save/',
-                    data: JSON.stringify({ array: $scope.Grid.GetArrayModify()})
-                }).then(function (response) {
-                    $scope.Grid.ClearModify();
-                    alert("Сохранил");
-                }, function (response) {
-                    errorHandlerService.showResponseError(response);
-                });
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/OFD/Periods_4SC_save/',
+                data: JSON.stringify({ array: $scope.Grid.GetArrayModify() })
+            }).then(function (response) {
+                $scope.Grid.ClearModify();
+                alert("Сохранил");
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
     };
 
 
@@ -345,34 +346,34 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         $scope.supplier = [];
         $scope.period = new Date();
         $scope.brickId = "1";
-        $scope.Grid_Agg = uiGridCustomService.createGridClassMod($scope,"Grid_Agg");
+        $scope.Grid_Agg = uiGridCustomService.createGridClassMod($scope, "Grid_Agg");
 
-            $scope.Grid_Agg.Options.columnDefs = [
-                { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition } },
-                { name: 'FilenameId', enableCellEdit: false, field: 'FilenameId', filter: { condition: uiGridCustomService.condition } },
-                { name: 'SupplierId', enableCellEdit: false, field: 'SupplierId', filter: { condition: uiGridCustomService.numberCondition } },
-                { name: 'classifier_id_psevdo', enableCellEdit: false, field: 'classifier_id_psevdo', filter: { condition: uiGridCustomService.condition } },
-                { name: 'BrickId', enableCellEdit: false, field: 'BrickId', filter: { condition: uiGridCustomService.condition } },
-                { name: 'amount', enableCellEdit: true, field: 'amount', filter: { condition: uiGridCustomService.condition } },
-                { name: 'summa', enableCellEdit: true, field: 'summa', filter: { condition: uiGridCustomService.condition } },
-                { name: 'period', enableCellEdit: false, field: 'period', filter: { condition: uiGridCustomService.condition } },
-                { name: 'amount_calc', enableCellEdit: false, field: 'amount_calc', filter: { condition: uiGridCustomService.condition } },
-                { name: 'ClassifierId', enableCellEdit: false, field: 'ClassifierId', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/Classifier/ClassifierEditor/Edit?ClassifierId={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
-                { name: 'Periodw', enableCellEdit: false, field: 'Periodw', filter: { condition: uiGridCustomService.condition } },
-                { name: 'period_type', enableCellEdit: false, field: 'period_type', filter: { condition: uiGridCustomService.condition } },
-                { name: 'Min_price', enableCellEdit: false, field: 'Min_price', filter: { condition: uiGridCustomService.condition } },
-                { name: 'Max_price', enableCellEdit: false, field: 'Max_price', filter: { condition: uiGridCustomService.condition } },
-                { name: 'Avg_price', enableCellEdit: false, field: 'Avg_price', filter: { condition: uiGridCustomService.condition } },
-                { name: 'Median_price', enableCellEdit: false, field: 'Median_price', filter: { condition: uiGridCustomService.condition } },
-                { name: 'Mode_price', enableCellEdit: false, field: 'Mode_price', filter: { condition: uiGridCustomService.condition } }
-            ];
-    $scope.dataLoading = $http({
+        $scope.Grid_Agg.Options.columnDefs = [
+            { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition } },
+            { name: 'FilenameId', enableCellEdit: false, field: 'FilenameId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'SupplierId', enableCellEdit: false, field: 'SupplierId', filter: { condition: uiGridCustomService.numberCondition } },
+            { name: 'classifier_id_psevdo', enableCellEdit: false, field: 'classifier_id_psevdo', filter: { condition: uiGridCustomService.condition } },
+            { name: 'BrickId', enableCellEdit: false, field: 'BrickId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'amount', enableCellEdit: true, field: 'amount', filter: { condition: uiGridCustomService.condition } },
+            { name: 'summa', enableCellEdit: true, field: 'summa', filter: { condition: uiGridCustomService.condition } },
+            { name: 'period', enableCellEdit: false, field: 'period', filter: { condition: uiGridCustomService.condition } },
+            { name: 'amount_calc', enableCellEdit: false, field: 'amount_calc', filter: { condition: uiGridCustomService.condition } },
+            { name: 'ClassifierId', enableCellEdit: false, field: 'ClassifierId', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/Classifier/ClassifierEditor/Edit?ClassifierId={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
+            { name: 'Periodw', enableCellEdit: false, field: 'Periodw', filter: { condition: uiGridCustomService.condition } },
+            { name: 'period_type', enableCellEdit: false, field: 'period_type', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Min_price', enableCellEdit: false, field: 'Min_price', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Max_price', enableCellEdit: false, field: 'Max_price', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Avg_price', enableCellEdit: false, field: 'Avg_price', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Median_price', enableCellEdit: false, field: 'Median_price', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Mode_price', enableCellEdit: false, field: 'Mode_price', filter: { condition: uiGridCustomService.condition } }
+        ];
+        $scope.dataLoading = $http({
             method: 'POST',
             url: '/OFD/Agg_Init/',
             data: JSON.stringify({})
-    }).then(function (response) {
-        Array.prototype.push.apply($scope.SupplierList, response.data.Data.Supplier);
-        $scope.supplier = $scope.SupplierList[0];
+        }).then(function (response) {
+            Array.prototype.push.apply($scope.SupplierList, response.data.Data.Supplier);
+            $scope.supplier = $scope.SupplierList[0];
             return 1;
         });
     };
@@ -443,7 +444,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         $scope.supplier = [];
         $scope.period = new Date();
         $scope.brickId = "1";
-        $scope.Grid_D4SS = uiGridCustomService.createGridClassMod($scope,"Grid_D4SS");
+        $scope.Grid_D4SS = uiGridCustomService.createGridClassMod($scope, "Grid_D4SS");
 
         $scope.Grid_D4SS.Options.columnDefs = [
             { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition } },
@@ -461,7 +462,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             { name: 'SellingPrice', enableCellEdit: false, field: 'SellingPrice', filter: { condition: uiGridCustomService.condition } },
             { name: 'SellingCount', enableCellEdit: false, field: 'SellingCount', filter: { condition: uiGridCustomService.condition } },
             { name: 'SellingSum', enableCellEdit: false, field: 'SellingSum', filter: { condition: uiGridCustomService.condition } },
-            { name: 'ClassifierId', enableCellEdit:false, field: 'ClassifierId', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/Classifier/ClassifierEditor/Edit?ClassifierId={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
+            { name: 'ClassifierId', enableCellEdit: false, field: 'ClassifierId', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/Classifier/ClassifierEditor/Edit?ClassifierId={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
             { name: 'period_type', enableCellEdit: false, field: 'period_type', filter: { condition: uiGridCustomService.condition } },
             { name: 'ClassifierId_korr', enableCellEdit: false, field: 'ClassifierId_korr', filter: { condition: uiGridCustomService.condition } },
             { name: 'ClassifierId_hand', enableCellEdit: true, field: 'ClassifierId_hand', filter: { condition: uiGridCustomService.condition } },
@@ -477,6 +478,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             return 1;
         });
     };
+
     $scope.D4SS_search_AC = function () {
         $scope.dataLoading =
             $http({
@@ -556,9 +558,34 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             }).then(function (response) {
                 alert('Загрузил')
             }, function (response) {
-                    $scope.Grid_D4SS.SetData([]);
+                $scope.Grid_D4SS.SetData([]);
                 messageBoxService.showError(JSON.stringify(response));
             });
         }
     };
+
+    $scope.Network_FromExcel = function (files) {
+        if (files && files.length)
+        {
+            var formData = new FormData();
+            files.forEach(function (item, i, arr) {
+                formData.append('uploads', item);
+            });
+
+            $scope.dataLoading = $http({
+                method: 'POST',
+                url: '/OFD/Network_FromExcel/',
+                data: formData,
+                headers: { 'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).then(function (response) {
+                $scope.Agg_search();
+            }, function (response) {
+                console.log(response);
+                var responseData = response.data;
+                messageBoxService.showError(responseData);
+            });
+        }
+    };
+
 }
