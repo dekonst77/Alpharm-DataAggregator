@@ -528,94 +528,101 @@ namespace DataAggregator.Core.GoodsClassifier
         /// <returns>Список изменений</returns>
         public GoodsClassifierInfoModel ChangeClassifier(GoodsClassifierEditorModelJson model, bool tryMode)
         {
+            GoodsClassifierInfoModel info = new GoodsClassifierInfoModel();
+            GoodsClassifierInfoController.GoodsClassifierInfoChange change;
+
             using (var transaction = _context.Database.BeginTransaction())
             {
-                GoodsClassifierInfoModel info = new GoodsClassifierInfoModel();
-
-                var good = _context.Goods.FirstOrDefault(d => d.Id == model.GoodsId);
-
-                //Изменяемый good не найден
-                if (good == null)
-                    throw new ApplicationException(string.Format("Не найден изменяемый GoodsId = {0}", model.GoodsId));
-
-                //Получаем описание всех параметров Good
-                var goodProperty = _dictionary.GetGoodProperty(model);
-
-                //Ищем Good по новым параметрам
-                var goodAlreadyExists = _dictionary.FindGood(goodProperty);
-
-                //С тамким характеристиками уже есть другой Drug
-                if (goodAlreadyExists != null && goodAlreadyExists.Id != model.GoodsId)
-                    throw new ApplicationException("Найден другой Good с такими же характеристиками");
-
-                good.GoodsTradeName = goodProperty.GoodsTradeName;
-                good.GoodsDescription = goodProperty.GoodsDescription;
-
-                var ownerTradeMark = _dictionary.FindOrCreateManufacturer(model.OwnerTradeMark);
-
-                var packer = _dictionary.FindOrCreateManufacturer(model.Packer);
-
-                //Исходное ProductionInfo
-                var goodsProductionInfo = _context.GoodsProductionInfo.First(p => p.Id == model.ProductionInfoId);
-
-                //Новое ProductionInfo
-                var existProductionInfo = _dictionary.FindGoodsProductionInfo(ownerTradeMark, packer, good);
-
-                //Проверка нового ProductionInfo
-                if (existProductionInfo != null && goodsProductionInfo.Id != existProductionInfo.Id)
-                    throw new ApplicationException("У выбранного Good уже есть такие производитель и упаковщик");
-
-                //Делаем первоночальную копию перед изменениями
-                var productionInfoFrom = goodsProductionInfo.Copy();
-
-                goodsProductionInfo.OwnerTradeMark = ownerTradeMark;
-                goodsProductionInfo.Packer = packer;
-                goodsProductionInfo.Used = model.Used;
-                goodsProductionInfo.Comment = model.Comment;
-
-                if (model.GoodsCategory.Id > 0)
+                try
                 {
-                    //Изменяем категорию
-                    goodsProductionInfo.GoodsCategoryId = model.GoodsCategory.Id;
+                    Goods good = _context.Goods.FirstOrDefault(d => d.Id == model.GoodsId);
+
+                    //Изменяемый good не найден
+                    if (good == null)
+                        throw new ApplicationException(string.Format("Не найден изменяемый GoodsId = {0}", model.GoodsId));
+
+                    //Получаем описание всех параметров Good
+                    var goodProperty = _dictionary.GetGoodProperty(model);
+
+                    //Ищем Good по новым параметрам
+                    var goodAlreadyExists = _dictionary.FindGood(goodProperty);
+
+                    //С тамким характеристиками уже есть другой Drug
+                    if (goodAlreadyExists != null && goodAlreadyExists.Id != model.GoodsId)
+                        throw new ApplicationException("Найден другой Good с такими же характеристиками");
+
+                    good.GoodsTradeName = goodProperty.GoodsTradeName;
+                    good.GoodsDescription = goodProperty.GoodsDescription;
+
+                    var ownerTradeMark = _dictionary.FindOrCreateManufacturer(model.OwnerTradeMark);
+
+                    var packer = _dictionary.FindOrCreateManufacturer(model.Packer);
+
+                    //Исходное ProductionInfo
+                    var goodsProductionInfo = _context.GoodsProductionInfo.First(p => p.Id == model.ProductionInfoId);
+
+                    //Новое ProductionInfo
+                    var existProductionInfo = _dictionary.FindGoodsProductionInfo(ownerTradeMark, packer, good);
+
+                    //Проверка нового ProductionInfo
+                    if (existProductionInfo != null && goodsProductionInfo.Id != existProductionInfo.Id)
+                        throw new ApplicationException("У выбранного Good уже есть такие производитель и упаковщик");
+
+                    //Делаем первоначальную копию перед изменениями
+                    var productionInfoFrom = goodsProductionInfo.Copy();
+
+                    goodsProductionInfo.OwnerTradeMark = ownerTradeMark;
+                    goodsProductionInfo.Packer = packer;
+                    goodsProductionInfo.Used = model.Used;
+                    goodsProductionInfo.Comment = model.Comment;
+
+                    if (model.GoodsCategory.Id > 0)
+                    {
+                        //Изменяем категорию
+                        goodsProductionInfo.GoodsCategoryId = model.GoodsCategory.Id;
+                    }
+                    else if (model.GoodsCategory.Id == 0)
+                    {
+                        //Изменяем категорию
+                        goodsProductionInfo.GoodsCategoryId = null;
+                    }
+
+                    var classifier = _context.ClassifierInfo.FirstOrDefault(t => t.GoodsProductionInfoId == goodsProductionInfo.Id);
+                    if (classifier == null)
+                        throw new ApplicationException("Классификатор для доп. материала с id " + goodsProductionInfo.Id + " не обнаружен!");
+
+                    classifier.ToRetail = model.ToRetail;
+
+                    //Сохраняем изменения в том числе, чтобы для нового OwnerTradeMarkId или PackerId повяились реальные Id
+                    GoodsLogAction.Log(_context, goodsProductionInfo.Id, GoodsLogAction.GoodsActionType.Change, _user);
+
+                    _context.SaveChanges();
+
+                    _dictionary.UpdateOrCreateGoodsBrandClassification(good.GoodsTradeName, ownerTradeMark, goodProperty.GoodsBrand);
+
+                    change = GoodsProductionInfoController.ChangeProductionInfo(productionInfoFrom, goodsProductionInfo, _user, _context);
+
+                    _dictionary.UpdateGoodsProductionInfoParameter(goodsProductionInfo.Id, model.ParameterIds);
+
+                    info.GoodsId = good.Id;
+                    info.GoodKey = good.Id.ToString();
+                    info.PackerId = packer.Id;
+                    info.OwnerTradeMarkId = ownerTradeMark.Id;
+
+                    _context.SaveChanges();
+
+                    transaction.Commit();
                 }
-                else if (model.GoodsCategory.Id == 0)
+                catch (Exception ex)
                 {
-                    //Изменяем категорию
-                    goodsProductionInfo.GoodsCategoryId = null;
+                    transaction.Rollback();
+                    throw new ApplicationException(ex.Message);
                 }
-
-                var classifier = _context.ClassifierInfo.FirstOrDefault(t => t.GoodsProductionInfoId == goodsProductionInfo.Id);
-                if (classifier == null)
-                    throw new ApplicationException("Классификатор для доп. материала с id " + goodsProductionInfo.Id + " не обнаружен!");
-
-                classifier.ToRetail = model.ToRetail;
-
-                //Сохраняем изменения в том числе, чтобы для нового OwnerTradeMarkId или PackerId повяились реальные Id
-                GoodsLogAction.Log(_context, goodsProductionInfo.Id, GoodsLogAction.GoodsActionType.Change, _user);
-
-                _context.SaveChanges();
-
-                _dictionary.UpdateOrCreateGoodsBrandClassification(good.GoodsTradeName, ownerTradeMark,
-                    goodProperty.GoodsBrand);
-
-                var change = GoodsProductionInfoController.ChangeProductionInfo(productionInfoFrom, goodsProductionInfo, _user,
-                     _context);
-
-                _dictionary.UpdateGoodsProductionInfoParameter(goodsProductionInfo.Id, model.ParameterIds);
-
-                _context.SaveChanges();
-
-                transaction.Commit();
-
-                GoodsProductionInfoController.PublishFull(change.ClassifierInfoFromId, _context);
-
-                info.GoodsId = good.Id;
-                info.GoodKey = good.Id.ToString();
-                info.PackerId = packer.Id;
-                info.OwnerTradeMarkId = ownerTradeMark.Id;
-
-                return info;
             }
+
+            GoodsProductionInfoController.PublishFull(change.ClassifierInfoFromId, _context);
+
+            return info;
         }
 
         /// <summary>
