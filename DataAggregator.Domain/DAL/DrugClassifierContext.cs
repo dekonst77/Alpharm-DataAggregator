@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using DataAggregator.Domain.Model.DrugClassifier.Bad;
+﻿using DataAggregator.Domain.Model.DrugClassifier.Bad;
 using DataAggregator.Domain.Model.DrugClassifier.Changes;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckReport;
@@ -16,6 +7,7 @@ using DataAggregator.Domain.Model.DrugClassifier.Classifier.Function;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
 using DataAggregator.Domain.Model.DrugClassifier.DataAnalyzer;
 using DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier;
+using DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier.AddingDOPMonitoringDatabase;
 using DataAggregator.Domain.Model.DrugClassifier.GoodsSystematization.View;
 using DataAggregator.Domain.Model.DrugClassifier.InputData;
 using DataAggregator.Domain.Model.DrugClassifier.Log;
@@ -26,6 +18,15 @@ using DataAggregator.Domain.Model.DrugClassifier.Stat;
 using DataAggregator.Domain.Model.DrugClassifier.Systematization;
 using DataAggregator.Domain.Model.DrugClassifier.Systematization.View;
 using DataAggregator.Domain.Model.Retail.SendToClassification;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 
 
 namespace DataAggregator.Domain.DAL
@@ -248,6 +249,10 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<GoodsSystematizationView> GoodsSystematizationView { get; set; }
 
+        public IEnumerable<GetDOPBlockingForMonitoringDatabase_Result> GetDOPBlockingForMonitoringDatabase_Result()
+        {
+            return Database.SqlQuery<GetDOPBlockingForMonitoringDatabase_Result>("[GoodsClassifier].[GetDOPBlockingForMonitoringDatabase]");
+        }
         #endregion
 
         #region Systematization

@@ -40,7 +40,7 @@
                 "CONTRACT_STATUS": 'Статус контракта',
                 "RECEIVER": 'Получатель',
                 "SUPPLIER": 'Поставщик',
-                "EDIT_DATE":"Дата изменения",
+                "EDIT_DATE": "Дата изменения",
             },
 
             "CREATE_CONTRACT": {
@@ -55,7 +55,7 @@
             "OFD": {
                 "PRICE_ETALON": {
                     "TITLE": 'Эталонные цены',
-                     "TITLE_v2": 'Эталонные цены v2'
+                    "TITLE_v2": 'Эталонные цены v2'
                 },
                 "PRICE_HISTORY": {
                     "TITLE": 'Эталонные цены - периоды'
@@ -104,7 +104,7 @@
             "OWNER_TRADE_MARK": 'Производитель',
             "PACKER": 'Упаковщик',
             "INN_GROUP": "МНН Групп",
-            "GENERIC":"Дженерик",
+            "GENERIC": "Дженерик",
 
             "BUTTONS":
             {
@@ -230,11 +230,11 @@
                     "TITLE": 'Редактор свойств доп. ассортимента'
                 },
                 "SQA": {
-                    "TITLE":"ПКУ"
+                    "TITLE": "ПКУ"
                 },
                 "MASK": {
-                    "TITLE":"Маска"
-                },               
+                    "TITLE": "Маска"
+                },
                 "FTG": {
                     "TITLE": 'Редактор ФТГ'
                 },
@@ -273,6 +273,10 @@
                 },
                 "CHECK_REPORT": {
                     "TITLE": 'Проверка классификатора'
+                },
+                "AddingDOPtotheMonitoringDatabase": {
+
+                    "TITLE": 'Добавление ДОП в БД мониторинг'
                 }
             },
 
@@ -414,7 +418,7 @@
                         "START_TIME": 'Время начала',
                         "END_TIME": 'Время конца',
                         "COMMENT": 'Комментарий',
-                        "CHECK" : 'Выбрать'
+                        "CHECK": 'Выбрать'
                     }
                 },
 

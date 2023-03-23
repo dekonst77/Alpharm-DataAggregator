@@ -733,7 +733,14 @@
                     templateUrl: 'Views/Classifier/Reports/CheckReport/CheckReport.html',
                     title: 'CLASSIFIER.CHECK_REPORT.TITLE',
                     authorize: true
-                });
+                })
+
+            // Модуль для добавления ДОП ассортимента в БД мониторинг, разработка #11668
+            .when('/Classifier/AddingDOPMonitoringDatabase', {
+                templateUrl: 'Views/Classifier/AddingDOPMonitoringDatabase/AddingDOPMonitoringDatabase.html',
+                title: 'CLASSIFIER.AddingDOPtotheMonitoringDatabase.TITLE',
+                authorize: true
+            });
     }
 
     // Розница

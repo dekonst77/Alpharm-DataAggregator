@@ -143,6 +143,7 @@
     <Compile Include="Model\DrugClassifier\Classifier\View\MaskView.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\View\ProductionInfoEtalonPriceView.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\View\SQAView.cs" />
+    <Compile Include="Model\DrugClassifier\GoodsClassifier\AddingDOPMonitoringDatabase\GetDOPBlockingForMonitoringDatabase_Result.cs" />
     <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsProductionInfoParameter.cs" />
     <Compile Include="Model\DrugClassifier\GoodsClassifier\ParameterGroup.cs" />
     <Compile Include="Model\DrugClassifier\GoodsClassifier\Parameter.cs" />
