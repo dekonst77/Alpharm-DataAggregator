@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace DataAggregator.Web.Controllers.Classifier
 {
@@ -25,7 +26,6 @@ namespace DataAggregator.Web.Controllers.Classifier
             _context.Dispose();
         }
 
-
         // GET: DOPMonitoringDatabase
         public ActionResult Init()
         {
@@ -47,5 +47,23 @@ namespace DataAggregator.Web.Controllers.Classifier
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        public ActionResult GetGoodsCategoryList()
+        {
+            using (var context = new DrugClassifierContext(APP))
+            {
+                try
+                {
+                    return ReturnData(context.GoodsCategory.Include(t => t.GoodsSection)
+                        .OrderBy(c => c.GoodsSection.Name).ThenBy(c => c.Name).ToList());
+                }
+                catch (ApplicationException e)
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+        }
+
     }
 }
