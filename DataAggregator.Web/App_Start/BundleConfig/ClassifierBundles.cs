@@ -97,6 +97,9 @@ namespace DataAggregator.Web
 
                 // Отчет проверки классификатора
                 .Include("~/Scripts/Classifier/Reports/CheckClassifireReportController.js")
+
+                 // Модуль для добавления ДОП ассортимента в БД мониторинг, разработка #11668
+                 .Include("~/Scripts/Classifier/AddingDOPMonitoringDatabase/AddingDOPMonitoringDatabase.js")
                 );
 
             bundles.Add(new ComplexStyleBundle("~/Content/Classifier/css")
