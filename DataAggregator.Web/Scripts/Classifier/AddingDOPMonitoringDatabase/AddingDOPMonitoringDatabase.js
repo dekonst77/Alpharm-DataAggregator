@@ -243,12 +243,12 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
             });
     }
 
-    // ================= Инициализация таблицы =================
+    // ================= Инициализация таблиц =================->
     $scope.AddingDOPMonitoringDatabase_Init = function () {
 
         $scope.message = 'Пожалуйста, ожидайте... Загрузка';
 
-        //******** Grid ******** ->
+        // Таблица СКЮ, блокировок ->
         $scope.GridDOPMonitoringDatabase = uiGridCustomService.createGridClassMod($scope, 'GridDOPMonitoringDatabase');
         $scope.GridDOPMonitoringDatabase.Options.showGridFooter = true;
         $scope.GridDOPMonitoringDatabase.Options.multiSelect = true;
@@ -287,15 +287,44 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
 
         $scope.GridDOPMonitoringDatabase.Options.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
-            //gridApi.edit.on.afterCellEdit($scope, editRowDataSource);
         };
+        // Таблица СКЮ, блокировок <-
 
-        $scope.DOPMonitoringDatabase_Refresh();
+        // Таблица блокировок ->
+        $scope.GridDBlocking = uiGridCustomService.createGridClassMod($scope, 'GridDBlocking');
+        $scope.GridDBlocking = uiGridCustomService.createGridClass($scope, 'GridDBlocking');
+        $scope.GridDBlocking.Options.showGridFooter = true;
+        $scope.GridDBlocking.Options.multiSelect = true;
+        $scope.GridDBlocking.Options.enableFiltering = true;
+        $scope.GridDBlocking.Options.enableSelectAll = true;
+        $scope.GridDBlocking.Options.modifierKeysToMultiSelect = true;
+        $scope.GridDBlocking.Options.flatEntityAccess = true;
+        $scope.GridDBlocking.Options.enableGridMenu = true;
+
+        $scope.GridDBlocking.Options.columnDefs = [
+            { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockingForMonitoringId', type: 'number', visible: true, nullable: false },
+            { headerTooltip: true, name: 'GoodsCategoryId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'GoodsCategoryName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryName', visible: true }
+        ];
+
+        $scope.GridDBlocking.SetDefaults();
+
+        //$scope.GridDBlocking.Options.onRegisterApi = function (gridApi) {
+        //    $scope.gridBlockApi = gridApi;
+        //};
+
+        // Таблица блокировок <-
     }
-    // ================= Инициализация таблицы =================
+    // ================= Инициализация таблиц =================<-
+
+    $scope.hideGridDOPMonitoringDatabase = true;
+    $scope.hideGridDBlocking = true;
 
     $scope.DOPMonitoringDatabase_Refresh = function () {
         $scope.message = 'Пожалуйста, ожидайте... Загрузка';
+
+        $scope.hideGridDOPMonitoringDatabase = false;
+        $scope.hideGridDBlocking = !$scope.hideGridDOPMonitoringDatabase;
 
         $scope.dataLoading = $http({
             method: 'POST',
@@ -304,8 +333,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
             var data = response.data;
 
             if (data.Success) {
-                $scope.GridDOPMonitoringDatabase.SetData(data.Data.DOPBlocking)
-
+                $scope.GridDOPMonitoringDatabase.SetData(data.Data.DOPBlocking);
             } else {
                 messageBoxService.showError(data.ErrorMessage);
             }
@@ -317,5 +345,29 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
         }).catch(error => alert(error.message));
     }
 
+    $scope.GridBlocking_Refresh = function () {
+        $scope.message = 'Пожалуйста, ожидайте... Загрузка';
+
+        $scope.hideGridDBlocking = false;
+        $scope.hideGridDOPMonitoringDatabase = !$scope.hideGridDBlocking;
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/DOPMonitoringDatabase/InitBlocking/'
+        }).then(function (response) {
+            var data = response.data;
+
+            if (data.Success) {
+                $scope.GridDBlocking.Options.data = data.Data.Blocking;
+            } else {
+                messageBoxService.showError(data.ErrorMessage);
+            }
+
+        }, function (response) {
+            console.log(response);
+
+            messageBoxService.showError(response.data);
+        }).catch(error => alert(error.message));
+    }
 
 }

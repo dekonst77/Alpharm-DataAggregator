@@ -28,6 +28,7 @@
         <div class="col-md-4" style="height: 100%">
             <ui-grid-control options="gridParameterGroup.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
         </div>
+
         <div class="col-md-4" style="height: 100%">
             <ui-grid-control options="gridParameterLevel1.Options" class="ui-grid-header-wrap-text"></ui-grid-control>
         </div>
@@ -41,42 +42,20 @@
                 <button type="button" class="btn btn-danger" ng-click="" ng-disabled="selectedParameterLevel1 == null" data-translate="BUTTONS.SET_PLUG_OFF"></button>
             </div>
         </div>
-
     </div>
-    <br />
 
-    <div class="panel-body fullHeightGrid">
-
-        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-            <li class="active">
-                <a data-target="#CheckReloadNoValidFile" data-toggle="tab">Классификаторы</a>
-            </li>
-            <li>
-                <a data-target="#CheckReloadNoValidCheck" data-toggle="tab">Блокировки</a>
-            </li>
-        </ul>
-
-        <div id="my-tab-content" class="tab-content" style="border-left: 1px #dddddd solid; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; padding:5px;">
-
-            <div class="tab-pane active" id="CheckReloadNoValidFile">
-                <br>
-
-                <!--<ui-grid-control options="CheckReloadFile_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>-->
-                <div id="grid-block" class="auto-item-panel" style="height: calc(70%)">
-                    <ui-grid-control options="GridDOPMonitoringDatabase.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
-                </div>
-
-            </div>
-
-            <div class="tab-pane" id="CheckReloadNoValidCheck">
-                <h1>В разработке</h1>
-            </div>
-
+    <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-info" aria-pressed="true" ng-disabled="!hideGridDOPMonitoringDatabase" ng-click="DOPMonitoringDatabase_Refresh()">Классификаторы</button>
+            <button type="button" class="btn btn-info" aria-pressed="true" ng-disabled="!hideGridDBlocking" ng-click="GridBlocking_Refresh()">Блокировки</button>
         </div>
     </div>
 
-    <!--<div id="grid-block" class="auto-item-panel" style="height: calc(70%)">
+    <div id="grid-block" ng-hide="hideGridDOPMonitoringDatabase" class="auto-item-panel" style="height: calc(55%)">
         <ui-grid-control options="GridDOPMonitoringDatabase.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
-    </div>-->
+    </div>
+    <div id="grid-block2" ng-hide="hideGridDBlocking" class="auto-item-panel" style="height: calc(55%)">
+        <ui-grid-control options="GridDBlocking.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+    </div>
 
 </div>

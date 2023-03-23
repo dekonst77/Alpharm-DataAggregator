@@ -33,6 +33,29 @@ namespace DataAggregator.Web.Controllers.Classifier
             {
                 var result = _context.GetDOPBlockingForMonitoringDatabase_Result().ToList();
                 ViewData["DOPBlocking"] = result;
+
+                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = Data
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        public ActionResult InitBlocking()
+        {
+            try
+            {
+                var result = _context.GetBlocking_Result().ToList();
+                ViewData["Blocking"] = result;
+
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
 
                 JsonNetResult jsonNetResult = new JsonNetResult

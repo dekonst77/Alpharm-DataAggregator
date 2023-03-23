@@ -249,9 +249,22 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<GoodsSystematizationView> GoodsSystematizationView { get; set; }
 
+        /// <summary>
+        /// проц-ра [GoodsClassifier].[GetDOPBlockingForMonitoringDatabase]
+        /// </summary>
+        /// <returns>таблица</returns>
         public IEnumerable<GetDOPBlockingForMonitoringDatabase_Result> GetDOPBlockingForMonitoringDatabase_Result()
         {
             return Database.SqlQuery<GetDOPBlockingForMonitoringDatabase_Result>("[GoodsClassifier].[GetDOPBlockingForMonitoringDatabase]");
+        }
+
+        /// <summary>
+        /// проц-ра [GoodsClassifier].[GetBlocking_Result]
+        /// </summary>
+        /// <returns>таблица</returns>
+        public IEnumerable<GetBlocking_Result> GetBlocking_Result()
+        {
+            return Database.SqlQuery<GetBlocking_Result>("[GoodsClassifier].[GetBlocking]");
         }
         #endregion
 
