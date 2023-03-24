@@ -266,6 +266,36 @@ namespace DataAggregator.Domain.DAL
         {
             return Database.SqlQuery<GetBlocking_Result>("[GoodsClassifier].[GetBlocking]");
         }
+
+        /// <summary>
+        /// Поставить заглушку целой категории
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        public void SetPlugOnByCategory_SP(long GoodsCategoryId)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@GoodsCategoryId", SqlDbType = SqlDbType.BigInt, Value = GoodsCategoryId}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOnByCategory] @GoodsCategoryId", parameters);
+        }
+
+        /// <summary>
+        /// Снять заглушку c категории
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <param name="PouringStartDate"></param>
+        public void SetPlugOffByCategory_SP(long GoodsCategoryId, DateTime PouringStartDate)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@GoodsCategoryId", SqlDbType = SqlDbType.BigInt, Value = GoodsCategoryId},
+                new SqlParameter() { ParameterName = "@PouringStartDate", SqlDbType = SqlDbType.Date, Value = PouringStartDate}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategory] @GoodsCategoryId, @PouringStartDate", parameters);
+        }
         #endregion
 
         #region Systematization

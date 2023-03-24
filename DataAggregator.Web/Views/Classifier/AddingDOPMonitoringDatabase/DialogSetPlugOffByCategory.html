@@ -1,0 +1,25 @@
+﻿
+<div class="modal-header col-md-12">
+    <h3 class="modal-title">Снять заглушку</h3>
+</div>
+
+<!--Календарь-->
+
+<div class="row col-md-12">
+    <pre>Выбранный день: <em>{{dt | date:'fullDate' }}</em></pre>
+
+    <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="options"></div>
+
+    <button type="button" class="btn btn-sm btn-info" ng-click="today()">Today</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+</div>
+
+
+<!--Календарь-->
+
+<div class="modal-footer">
+
+    <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="!CanClose()" data-translate="BUTTONS.OK"></button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+
+</div>

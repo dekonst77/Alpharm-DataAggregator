@@ -727,6 +727,7 @@
     <Content Include="Scripts\ckeditor\styles.js" />
     <Content Include="Scripts\ckeditor\vendor\promise.js" />
     <Content Include="Scripts\Classifier\AddingDOPMonitoringDatabase\AddingDOPMonitoringDatabase.js" />
+    <Content Include="Scripts\Classifier\AddingDOPMonitoringDatabase\DialogSetPlugOffByCategoryController.js" />
     <Content Include="Scripts\Classifier\BlisterBlock\BlisterBlockController.js" />
     <Content Include="Scripts\Classifier\CertificateController.js" />
     <Content Include="Scripts\Classifier\CheckedController.js" />
@@ -2121,6 +2122,7 @@
     <Content Include="Scripts\ui-select-pagination.js" />
     <None Include="Service References\RetailFileInfoService\FileInfoService.disco" />
     <Content Include="Views\Classifier\AddingDOPMonitoringDatabase\AddingDOPMonitoringDatabase.html" />
+    <Content Include="Views\Classifier\AddingDOPMonitoringDatabase\DialogSetPlugOffByCategory.html" />
     <Content Include="Views\Classifier\BlisterBlock\BlisterBlock.html" />
     <Content Include="Views\Classifier\Certificate\Certificate.html" />
     <Content Include="Views\Classifier\Certificate\Certificates.html" />

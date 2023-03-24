@@ -88,5 +88,47 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        public ActionResult SetPlugOnByCategory(long GoodsCategoryId)
+        {
+            try
+            {
+                _context.SetPlugOnByCategory_SP(GoodsCategoryId);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        public ActionResult SetPlugOffByCategory(long GoodsCategoryId, DateTime PouringStartDate)
+        {
+            try
+            {
+                _context.SetPlugOffByCategory_SP(GoodsCategoryId, PouringStartDate);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
     }
 }

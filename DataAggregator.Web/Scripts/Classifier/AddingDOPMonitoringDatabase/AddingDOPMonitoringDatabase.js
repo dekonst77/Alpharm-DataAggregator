@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('AddingDOPMonitoringDatabaseController', ['$scope', '$http', '$q', '$cacheFactory', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', AddingDOPMonitoringDatabaseController]);
+    .controller('AddingDOPMonitoringDatabaseController', ['$scope', '$http', '$q', '$uibModal', '$cacheFactory', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', AddingDOPMonitoringDatabaseController]);
 
-function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants) {
+function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $cacheFactory, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants) {
     $scope.Title = "Модуль для добавления ДОП ассортимента в БД мониторинг";
     $scope.user = userService.getUser();
 
@@ -12,6 +12,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
     $scope.goodsCategory = null;
     $scope.selectedParameterGroup = null;
     $scope.selectedParameterLevel1 = null;
+    $scope.ClassifierId = null;
 
     var getGoodsCategoryList = function () {
         $scope.goodsCategory = null;
@@ -327,6 +328,24 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
     $scope.hideGridDOPMonitoringDatabase = true;
     $scope.hideGridDBlocking = true;
 
+    // показать таблицу блокировок и классификаторов
+    $scope.GridDOPMonitoringDatabase_Show = function () {
+        $scope.hideGridDOPMonitoringDatabase = false;
+        $scope.hideGridDBlocking = !$scope.hideGridDOPMonitoringDatabase;
+
+        if ($scope.GridDOPMonitoringDatabase.Options.data.length == 0)
+            $scope.DOPMonitoringDatabase_Refresh();
+    }
+
+    // показать таблицу блокировок и классификаторов
+    $scope.GridBlocking_Show = function () {
+        $scope.hideGridDBlocking = false;
+        $scope.hideGridDOPMonitoringDatabase = !$scope.hideGridDBlocking;
+
+        if ($scope.GridDBlocking.Options.data.length == 0)
+            $scope.GridBlocking_Refresh();
+    }
+
     $scope.RefreshTables = function () {
         if (!$scope.hideGridDOPMonitoringDatabase)
             $scope.DOPMonitoringDatabase_Refresh();
@@ -385,5 +404,72 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
             messageBoxService.showError(response.data);
         }).catch(error => alert(error.message));
     }
+
+    // установить заглушку на категорию
+    $scope.SetPlugOnByCategory = function () {
+
+        console.log($scope.goodsCategory);
+
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/DOPMonitoringDatabase/SetPlugOnByCategory/',
+                data: JSON.stringify({ GoodsCategoryId: $scope.goodsCategory.Id })
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Data.Success) {
+                    $scope.RefreshTables();
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    }
+
+
+    $scope.PouringStartDate = null; // дата начала выливки
+
+    // снять заглушку с категории ->
+    $scope.DialogSetPlugOffByCategory = function () {
+
+        var modalDialogInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOffByCategory.html',
+            controller: 'DialogSetPlugOffByCategoryController',
+            size: 'md',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                PlugInfo: function () {
+                    return { GoodsCategory: $scope.goodsCategory, Parameter: null, ClassifierId: null };
+                }
+            }
+        });
+
+        modalDialogInstance.result.then(function (DialogData) {
+            console.log(Date.parse(DialogData));
+            $scope.PouringStartDate = new Date(DialogData).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            console.log($scope.PouringStartDate);
+            SetPlugOffByCategory($scope.goodsCategory.Id, $scope.PouringStartDate);
+        }, function (DialogData) {
+
+        });
+    }
+
+    SetPlugOffByCategory = function (GoodsCategoryId, PouringStartDate) {
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/DOPMonitoringDatabase/SetPlugOffByCategory/',
+                data: JSON.stringify({ GoodsCategoryId: GoodsCategoryId, PouringStartDate: PouringStartDate })
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Data.Success) {
+                    $scope.RefreshTables();
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    }
+    // снять заглушку с категории <-
 
 }

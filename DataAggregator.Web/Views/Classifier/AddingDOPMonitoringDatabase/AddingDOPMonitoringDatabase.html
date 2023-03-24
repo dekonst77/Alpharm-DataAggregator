@@ -4,8 +4,8 @@
         <div class="panel-heading">
             <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-info btn-sm" aria-pressed="true" ng-disabled="!hideGridDOPMonitoringDatabase" ng-click="DOPMonitoringDatabase_Refresh()">Классификаторы</button>
-                    <button type="button" class="btn btn-info btn-sm" aria-pressed="true" ng-disabled="!hideGridDBlocking" ng-click="GridBlocking_Refresh()">Блокировки</button>
+                    <button type="button" class="btn btn-info btn-sm" aria-pressed="true" ng-disabled="!hideGridDOPMonitoringDatabase" ng-click="GridDOPMonitoringDatabase_Show()">Классификаторы</button>
+                    <button type="button" class="btn btn-info btn-sm" aria-pressed="true" ng-disabled="!hideGridDBlocking" ng-click="GridBlocking_Show()">Блокировки</button>
                     <button type="button" class="btn btn-success btn-sm" ng-click="RefreshTables();"><span class="glyphicon glyphicon-refresh"> Обновить</span> </button>
                 </div>
             </div>
@@ -22,8 +22,8 @@
         </div>
 
         <div class="col-md-4">
-            <button type="button" class="btn btn-primary" ng-click="" ng-disabled="goodsCategory == null" data-translate="BUTTONS.SET_PLUG_ON"></button>
-            <button type="button" class="btn btn-danger" ng-click="" ng-disabled="goodsCategory == null" data-translate="BUTTONS.SET_PLUG_OFF"></button>
+            <button type="button" class="btn btn-primary" ng-click="SetPlugOnByCategory()" ng-disabled="goodsCategory == null" data-translate="BUTTONS.SET_PLUG_ON"></button>
+            <button type="button" class="btn btn-danger" ng-click="DialogSetPlugOffByCategory()" ng-disabled="goodsCategory == null" data-translate="BUTTONS.SET_PLUG_OFF"></button>
         </div>
 
     </div>
