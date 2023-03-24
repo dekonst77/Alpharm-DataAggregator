@@ -292,7 +292,6 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
 
         // Таблица блокировок ->
         $scope.GridDBlocking = uiGridCustomService.createGridClassMod($scope, 'GridDBlocking');
-        $scope.GridDBlocking = uiGridCustomService.createGridClass($scope, 'GridDBlocking');
         $scope.GridDBlocking.Options.showGridFooter = true;
         $scope.GridDBlocking.Options.multiSelect = true;
         $scope.GridDBlocking.Options.enableFiltering = true;
@@ -308,7 +307,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
             { headerTooltip: true, name: 'ParameterId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: false, nullable: true },
             { headerTooltip: true, name: 'ParameterValue', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ParameterValue', visible: true },
             { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: true },
-            { headerTooltip: true, name: 'Status', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: false, nullable: false },
+            { headerTooltip: true, name: 'Status', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: true, nullable: false },
             { headerTooltip: true, name: 'StatusDesc', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StatusDesc', visible: true },
             { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: false, nullable: false },
             { headerTooltip: true, name: 'BlockTypeName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeName', visible: true },
