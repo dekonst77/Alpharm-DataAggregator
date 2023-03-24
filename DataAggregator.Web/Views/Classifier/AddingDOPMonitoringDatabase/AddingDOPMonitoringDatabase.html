@@ -2,8 +2,12 @@
 
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
         <div class="panel-heading">
-            <div class="row">
-                <button type="button" class="btn btn-success btn-sm" ng-click="DOPMonitoringDatabase_Refresh();"><span class="glyphicon glyphicon-refresh"> Обновить</span> </button>
+            <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info btn-sm" aria-pressed="true" ng-disabled="!hideGridDOPMonitoringDatabase" ng-click="DOPMonitoringDatabase_Refresh()">Классификаторы</button>
+                    <button type="button" class="btn btn-info btn-sm" aria-pressed="true" ng-disabled="!hideGridDBlocking" ng-click="GridBlocking_Refresh()">Блокировки</button>
+                    <button type="button" class="btn btn-success btn-sm" ng-click="RefreshTables();"><span class="glyphicon glyphicon-refresh"> Обновить</span> </button>
+                </div>
             </div>
         </div>
     </div>
@@ -44,12 +48,7 @@
         </div>
     </div>
 
-    <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
-        <div class="col-md-4">
-            <button type="button" class="btn btn-info" aria-pressed="true" ng-disabled="!hideGridDOPMonitoringDatabase" ng-click="DOPMonitoringDatabase_Refresh()">Классификаторы</button>
-            <button type="button" class="btn btn-info" aria-pressed="true" ng-disabled="!hideGridDBlocking" ng-click="GridBlocking_Refresh()">Блокировки</button>
-        </div>
-    </div>
+    <br />
 
     <div id="grid-block" ng-hide="hideGridDOPMonitoringDatabase" class="auto-item-panel" style="height: calc(55%)">
         <ui-grid-control options="GridDOPMonitoringDatabase.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>

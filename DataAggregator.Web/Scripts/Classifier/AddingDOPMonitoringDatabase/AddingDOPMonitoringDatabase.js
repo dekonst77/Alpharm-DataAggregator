@@ -327,6 +327,15 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
     $scope.hideGridDOPMonitoringDatabase = true;
     $scope.hideGridDBlocking = true;
 
+    $scope.RefreshTables = function () {
+        if (!$scope.hideGridDOPMonitoringDatabase)
+            $scope.DOPMonitoringDatabase_Refresh();
+
+        if (!$scope.hideGridDBlocking) {
+            $scope.GridBlocking_Refresh();
+        }
+    }
+
     $scope.DOPMonitoringDatabase_Refresh = function () {
         $scope.message = 'Пожалуйста, ожидайте... Загрузка';
 
