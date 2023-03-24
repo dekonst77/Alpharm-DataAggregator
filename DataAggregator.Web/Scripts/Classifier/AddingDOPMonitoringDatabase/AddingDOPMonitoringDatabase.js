@@ -28,12 +28,13 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
     // ======================== Свойства (ParameterGroup) =======================
     $scope.getParameterGroups = function (selectedItemId) {
         $scope.gridParameterLevel1.Options.data = [];
+        $scope.selectedParameterLevel1 = null;
 
         $scope.loading = $http.post('/GoodsParametersEditor/GetParameterGroups/', { goodsCategoryId: $scope.goodsCategory.Id })
             .then(function (response) {
                 $scope.gridParameterGroup.Options.data = response.data.Data;
 
-                var selectedItemIndex = selectedItemId == null ? 0 : response.data.Data.map(function (d) { return d.Id; }).indexOf(selectedItemId);;
+                var selectedItemIndex = selectedItemId == null ? 0 : response.data.Data.map(function (d) { return d.Id; }).indexOf(selectedItemId);
 
                 $scope.gridParameterGroupApi.grid.modifyRows($scope.gridParameterGroup.Options.data);
                 $scope.gridParameterGroupApi.selection.selectRow($scope.gridParameterGroup.Options.data[selectedItemIndex]);
@@ -65,7 +66,6 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
             $scope.selectedParameterGroup = null;
         }
         $scope.selectedParameterLevel1 = null;
-        $scope.selectedParameterLevel2 = null;
         $scope.getParametersLevel1();
     }
 
@@ -304,7 +304,15 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $cacheFactory,
         $scope.GridDBlocking.Options.columnDefs = [
             { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockingForMonitoringId', type: 'number', visible: true, nullable: false },
             { headerTooltip: true, name: 'GoodsCategoryId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: false, nullable: false },
-            { headerTooltip: true, name: 'GoodsCategoryName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryName', visible: true }
+            { headerTooltip: true, name: 'GoodsCategoryName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryName', visible: true },
+            { headerTooltip: true, name: 'ParameterId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: false, nullable: true },
+            { headerTooltip: true, name: 'ParameterValue', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ParameterValue', visible: true },
+            { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: true },
+            { headerTooltip: true, name: 'Status', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: false, nullable: false },
+            { headerTooltip: true, name: 'StatusDesc', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StatusDesc', visible: true },
+            { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'BlockTypeName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeName', visible: true },
+            { headerTooltip: true, name: 'StartDate', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false }
         ];
 
         $scope.GridDBlocking.SetDefaults();
