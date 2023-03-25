@@ -251,6 +251,7 @@ namespace DataAggregator.Domain.DAL
 
         /// <summary>
         /// проц-ра [GoodsClassifier].[GetDOPBlockingForMonitoringDatabase]
+        /// <remark>(СКЮ + блокировки)</remark>
         /// </summary>
         /// <returns>таблица</returns>
         public IEnumerable<GetDOPBlockingForMonitoringDatabase_Result> GetDOPBlockingForMonitoringDatabase_Result()
@@ -260,8 +261,9 @@ namespace DataAggregator.Domain.DAL
 
         /// <summary>
         /// проц-ра [GoodsClassifier].[GetBlocking_Result]
+        /// <remark>(только блокировки)</remark>
         /// </summary>
-        /// <returns>таблица</returns>
+        /// <returns>таблица блокировок</returns>
         public IEnumerable<GetBlocking_Result> GetBlocking_Result()
         {
             return Database.SqlQuery<GetBlocking_Result>("[GoodsClassifier].[GetBlocking]");
@@ -282,6 +284,22 @@ namespace DataAggregator.Domain.DAL
         }
 
         /// <summary>
+        /// Поставить заглушку целой категории + доп. свойство
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <param name="ParameterID"></param>
+        public void SetPlugOnByCategoryAndProperty_SP(long GoodsCategoryId, long ParameterID)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@GoodsCategoryId", SqlDbType = SqlDbType.BigInt, Value = GoodsCategoryId},
+                new SqlParameter() { ParameterName = "@ParameterID", SqlDbType = SqlDbType.BigInt, Value = ParameterID}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOnByCategoryAndProperty] @GoodsCategoryId, @ParameterID", parameters);
+        }
+
+        /// <summary>
         /// Снять заглушку c категории
         /// </summary>
         /// <param name="GoodsCategoryId"></param>
@@ -295,6 +313,24 @@ namespace DataAggregator.Domain.DAL
             }.Cast<object>().ToArray();
 
             Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategory] @GoodsCategoryId, @PouringStartDate", parameters);
+        }
+
+        /// <summary>
+        /// Снять заглушку c категории + доп. свойство
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <param name="ParameterID"></param>
+        /// <param name="PouringStartDate"></param>
+        public void SetPlugOffByCategoryAndProperty_SP(long GoodsCategoryId, long ParameterID, DateTime PouringStartDate)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@GoodsCategoryId", SqlDbType = SqlDbType.BigInt, Value = GoodsCategoryId},
+                new SqlParameter() { ParameterName = "@ParameterID", SqlDbType = SqlDbType.BigInt, Value = ParameterID},
+                new SqlParameter() { ParameterName = "@PouringStartDate", SqlDbType = SqlDbType.Date, Value = PouringStartDate}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategoryAndProperty] @GoodsCategoryId, @ParameterID, @PouringStartDate", parameters);
         }
         #endregion
 

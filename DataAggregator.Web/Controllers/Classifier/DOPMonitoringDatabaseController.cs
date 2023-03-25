@@ -88,6 +88,11 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        /// <summary>
+        /// Заглушка на категорию
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <returns></returns>
         public ActionResult SetPlugOnByCategory(long GoodsCategoryId)
         {
             try
@@ -109,6 +114,39 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        /// <summary>
+        /// Поставить заглушку целой категории + доп. свойство
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <param name="ParameterID"></param>
+        /// <returns></returns>
+        public ActionResult SetPlugOnByCategoryAndProperty(long GoodsCategoryId, long ParameterID)
+        {
+            try
+            {
+                _context.SetPlugOnByCategoryAndProperty_SP(GoodsCategoryId, ParameterID);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        /// <summary>
+        /// Снять заглушку c категории
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <param name="PouringStartDate"></param>
+        /// <returns></returns>
         public ActionResult SetPlugOffByCategory(long GoodsCategoryId, DateTime PouringStartDate)
         {
             try
@@ -129,6 +167,35 @@ namespace DataAggregator.Web.Controllers.Classifier
                 return BadRequest(e);
             }
         }
+
+        /// <summary>
+        /// снять заглушку с категории и доп. свойства
+        /// </summary>
+        /// <param name="GoodsCategoryId"></param>
+        /// <param name="ParameterID"></param>
+        /// <param name="PouringStartDate">День, за который будут отдаваться отклассифицированные данные ОФД, получать от них агрегаты, выливаться в клик БД [Мониторинг розничных продаж]</param>
+        /// <returns></returns>
+        public ActionResult SetPlugOffByCategoryAndProperty(long GoodsCategoryId, long ParameterID, DateTime PouringStartDate)
+        {
+            try
+            {
+                _context.SetPlugOffByCategoryAndProperty_SP(GoodsCategoryId, ParameterID, PouringStartDate);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
 
     }
 }

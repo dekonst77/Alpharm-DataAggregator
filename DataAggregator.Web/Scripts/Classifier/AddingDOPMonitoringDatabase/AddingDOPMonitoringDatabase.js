@@ -303,16 +303,16 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
 
         $scope.GridDBlocking.Options.columnDefs = [
             { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockingForMonitoringId', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'GoodsCategoryId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'GoodsCategoryId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: true, nullable: false },
             { headerTooltip: true, name: 'GoodsCategoryName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryName', visible: true },
-            { headerTooltip: true, name: 'ParameterId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: false, nullable: true },
+            { headerTooltip: true, name: 'ParameterId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ParameterId', type: 'number', visible: false, nullable: true },
             { headerTooltip: true, name: 'ParameterValue', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ParameterValue', visible: true },
             { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: true },
-            { headerTooltip: true, name: 'Status', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: true, nullable: false },
-            { headerTooltip: true, name: 'StatusDesc', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StatusDesc', visible: true },
+            { headerTooltip: true, name: 'Status', displayName: 'Статус', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: true, nullable: false },
+            { headerTooltip: true, name: 'StatusDesc', displayName: 'Выливать в БД мониторинг', enableCellEdit: false, width: 300, cellTooltip: true, field: 'StatusDesc', visible: true },
             { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: false, nullable: false },
-            { headerTooltip: true, name: 'BlockTypeName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeName', visible: true },
-            { headerTooltip: true, name: 'StartDate', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false }
+            { headerTooltip: true, name: 'BlockTypeName', displayName: 'Тип блокировки', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeName', visible: true },
+            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала', enableCellEdit: false, width: 200, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false }
         ];
 
         $scope.GridDBlocking.SetDefaults();
@@ -346,6 +346,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             $scope.GridBlocking_Refresh();
     }
 
+    // обновить все таблицы
     $scope.RefreshTables = function () {
         if (!$scope.hideGridDOPMonitoringDatabase)
             $scope.DOPMonitoringDatabase_Refresh();
@@ -425,9 +426,31 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             });
     }
 
+    // установить заглушку на категорию и доп свойство
+    $scope.SetPlugOnByCategoryAndProperty = function () {
+
+        console.log($scope.goodsCategory);
+        console.log($scope.selectedParameterLevel1);
+
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/DOPMonitoringDatabase/SetPlugOnByCategoryAndProperty/',
+                data: JSON.stringify({ GoodsCategoryId: $scope.goodsCategory.Id, ParameterID: $scope.selectedParameterLevel1.Id })
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Data.Success) {
+                    $scope.RefreshTables();
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    }
+
 
     $scope.PouringStartDate = null; // дата начала выливки
 
+    // =============================
     // снять заглушку с категории ->
     $scope.DialogSetPlugOffByCategory = function () {
 
@@ -471,5 +494,61 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             });
     }
     // снять заглушку с категории <-
+    // =============================
 
+    // ============================================
+    // снять заглушку с категории и доп свойства ->
+    $scope.DialogSetPlugOffByCategoryAndProperty = function () {
+        var GoodsCategoryId = $scope.goodsCategory.Id;
+        var ParameterID = $scope.selectedParameterLevel1.Id;
+
+        if (GoodsCategoryId == null)
+            throw "Не выбрана категория"
+
+        if (ParameterID == null)
+            throw "Не выбран параметр"
+
+        var modalDialogInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOffByCategory.html',
+            controller: 'DialogSetPlugOffByCategoryController',
+            size: 'md',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                PlugInfo: function () {
+                    return { GoodsCategory: $scope.goodsCategory, Parameter: $scope.selectedParameterLevel1, ClassifierId: null };
+                }
+            }
+        });
+
+        modalDialogInstance.result.then(function (DialogData) {
+            $scope.PouringStartDate = new Date(DialogData).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
+
+            console.log($scope.PouringStartDate);
+
+            SetPlugOffByCategoryAndProperty(GoodsCategoryId, ParameterID, $scope.PouringStartDate);
+        }, function (DialogData) {
+
+        });
+
+        SetPlugOffByCategoryAndProperty = function (GoodsCategoryId, ParameterID, PouringStartDate) {
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/DOPMonitoringDatabase/SetPlugOffByCategoryAndProperty/',
+                    data: JSON.stringify({ GoodsCategoryId: GoodsCategoryId, ParameterID: ParameterID, PouringStartDate: PouringStartDate })
+                }).then(function (response) {
+                    var data = response.data;
+                    if (data.Data.Success) {
+                        $scope.RefreshTables();
+                    }
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+        }
+    }
+
+    // снять заглушку с категории и доп свойства <-
+    // ============================================
 }
