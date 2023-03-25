@@ -253,6 +253,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
         $scope.GridDOPMonitoringDatabase = uiGridCustomService.createGridClassMod($scope, 'GridDOPMonitoringDatabase');
         $scope.GridDOPMonitoringDatabase.Options.showGridFooter = true;
         $scope.GridDOPMonitoringDatabase.Options.multiSelect = true;
+        $scope.GridDOPMonitoringDatabase.Options.noUnselect = true;
         $scope.GridDOPMonitoringDatabase.Options.enableFiltering = true;
         $scope.GridDOPMonitoringDatabase.Options.enableSelectAll = true;
         $scope.GridDOPMonitoringDatabase.Options.modifierKeysToMultiSelect = true;
@@ -260,28 +261,30 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
         $scope.GridDOPMonitoringDatabase.Options.enableGridMenu = true;
 
         $scope.GridDOPMonitoringDatabase.Options.columnDefs = [
-            { headerTooltip: true, name: 'GoodsId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsId', type: 'number', visible: true, nullable: false },
-
+            { headerTooltip: true, name: 'GoodsId', displayName: 'Код препарата', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsId', type: 'number', visible: true, nullable: false },
             { headerTooltip: true, name: 'GoodsTradeNameId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsTradeNameId', type: 'number', visible: false, nullable: false },
-            { headerTooltip: true, name: 'GoodsTradeName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsTradeName', visible: true },
-            { headerTooltip: true, name: 'GoodsDescription', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsDescription', visible: true },
-            { headerTooltip: true, name: 'OwnerTradeMarkId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'OwnerTradeMarkId', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'OwnerTradeMarkKey', enableCellEdit: false, width: 100, cellTooltip: true, field: 'OwnerTradeMarkKey', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'OwnerTradeMark', enableCellEdit: false, width: 100, cellTooltip: true, field: 'OwnerTradeMark', visible: true },
-            { headerTooltip: true, name: 'PackerId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'PackerId', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'PackerKey', enableCellEdit: false, width: 100, cellTooltip: true, field: 'PackerKey', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'Packer', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Packer', visible: true },
+            { headerTooltip: true, name: 'GoodsTradeName', displayName: 'Торговое наименование', enableCellEdit: false, width: 300, cellTooltip: true, field: 'GoodsTradeName', visible: true },
+            { headerTooltip: true, name: 'GoodsDescription', displayName: 'ФВ + Ф + Д', enableCellEdit: false, width: 300, cellTooltip: true, field: 'GoodsDescription', visible: true },
+
+            { headerTooltip: true, name: 'OwnerTradeMarkId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'OwnerTradeMarkId', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'OwnerTradeMarkKey', enableCellEdit: false, width: 100, cellTooltip: true, field: 'OwnerTradeMarkKey', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'OwnerTradeMark', displayName: 'Правообладатель', enableCellEdit: false, width: 200, cellTooltip: true, field: 'OwnerTradeMark', visible: true },
+
+            { headerTooltip: true, name: 'PackerId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'PackerId', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'PackerKey', enableCellEdit: false, width: 100, cellTooltip: true, field: 'PackerKey', type: 'number', visible: false, nullable: false },
+            { headerTooltip: true, name: 'Packer', displayName: 'Упаковщик', enableCellEdit: false, width: 200, cellTooltip: true, field: 'Packer', visible: true },
+
             { headerTooltip: true, name: 'GoodsCategoryId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'GoodsCategoryName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryName', visible: true },
-            { headerTooltip: true, name: 'BrandId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BrandId', type: 'number', visible: true, nullable: false },
+            { headerTooltip: true, name: 'GoodsCategoryName', displayName: 'Категория', enableCellEdit: false, width: 200, cellTooltip: true, field: 'GoodsCategoryName', visible: true },
+            { headerTooltip: true, name: 'BrandId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BrandId', type: 'number', visible: false, nullable: false },
             { headerTooltip: true, name: 'Brand', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Brand', visible: true },
-            { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: false },
+            { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: false, filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
             { headerTooltip: true, name: 'Status', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: true, nullable: false },
-            { headerTooltip: true, name: 'StatusDesc', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StatusDesc', visible: false },
-            { headerTooltip: true, name: 'StartDate', enableCellEdit: false, width: 100, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false },
-            { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: false, nullable: true },
-            { headerTooltip: true, name: 'BlockTypeName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeName', visible: false },
-            { headerTooltip: true, name: 'BlockTypeDescription', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeDescription', visible: false }
+            { headerTooltip: true, name: 'StatusDesc', displayName: 'Выливать в БД мониторинг', enableCellEdit: false, width: 300, cellTooltip: true, field: 'StatusDesc', visible: false },
+            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала', enableCellEdit: false, width: 150, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: true },
+            { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: true, nullable: true },
+            { headerTooltip: true, name: 'BlockTypeName', displayName: 'Тип блокировки', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeName', visible: true },
+            { headerTooltip: true, name: 'BlockTypeDescription', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeDescription', visible: false }
         ];
 
         $scope.GridDOPMonitoringDatabase.SetDefaults();
@@ -304,15 +307,15 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
         $scope.GridDBlocking.Options.columnDefs = [
             { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockingForMonitoringId', type: 'number', visible: true, nullable: false },
             { headerTooltip: true, name: 'GoodsCategoryId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryId', type: 'number', visible: true, nullable: false },
-            { headerTooltip: true, name: 'GoodsCategoryName', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsCategoryName', visible: true },
+            { headerTooltip: true, name: 'GoodsCategoryName', displayName: 'Категория', enableCellEdit: false, width: 200, cellTooltip: true, field: 'GoodsCategoryName', visible: true },
             { headerTooltip: true, name: 'ParameterId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ParameterId', type: 'number', visible: false, nullable: true },
-            { headerTooltip: true, name: 'ParameterValue', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ParameterValue', visible: true },
-            { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: true },
+            { headerTooltip: true, name: 'ParameterValue', displayName: 'Доп. свойство', enableCellEdit: false, width: 200, cellTooltip: true, field: 'ParameterValue', visible: true },
+            { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: false, filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
             { headerTooltip: true, name: 'Status', displayName: 'Статус', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: true, nullable: false },
             { headerTooltip: true, name: 'StatusDesc', displayName: 'Выливать в БД мониторинг', enableCellEdit: false, width: 300, cellTooltip: true, field: 'StatusDesc', visible: true },
             { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: false, nullable: false },
             { headerTooltip: true, name: 'BlockTypeName', displayName: 'Тип блокировки', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeName', visible: true },
-            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала', enableCellEdit: false, width: 200, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false }
+            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала', enableCellEdit: false, width: 150, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false }
         ];
 
         $scope.GridDBlocking.SetDefaults();
@@ -325,26 +328,43 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
     }
     // ================= Инициализация таблиц =================<-
 
+    // ============>
+    // Блок панелей
+    $scope.PanelCategoryListIsShow = true;
+    $scope.PanelAdditionalPropertyIsShow = true;
+
+    $scope.PanelCategoryListToogle = function () {
+        $scope.PanelCategoryListIsShow = !$scope.PanelCategoryListIsShow;
+        setTimeout(function () { if (!$scope.$$phase) $scope.$apply(); });
+    }
+
+    $scope.PanelAdditionalPropertyToogle = function () {
+        $scope.PanelAdditionalPropertyIsShow = !$scope.PanelAdditionalPropertyIsShow;
+        setTimeout(function () { if (!$scope.$$phase) $scope.$apply(); });
+    }
+
     $scope.hideGridDOPMonitoringDatabase = true;
     $scope.hideGridDBlocking = true;
 
     // показать таблицу блокировок и классификаторов
     $scope.GridDOPMonitoringDatabase_Show = function () {
-        $scope.hideGridDOPMonitoringDatabase = false;
-        $scope.hideGridDBlocking = !$scope.hideGridDOPMonitoringDatabase;
-
         if ($scope.GridDOPMonitoringDatabase.Options.data.length == 0)
             $scope.DOPMonitoringDatabase_Refresh();
+
+        $scope.hideGridDBlocking = true;
+        $scope.hideGridDOPMonitoringDatabase = false;
     }
 
-    // показать таблицу блокировок и классификаторов
+    // показать таблицу блокировок
     $scope.GridBlocking_Show = function () {
-        $scope.hideGridDBlocking = false;
-        $scope.hideGridDOPMonitoringDatabase = !$scope.hideGridDBlocking;
-
         if ($scope.GridDBlocking.Options.data.length == 0)
             $scope.GridBlocking_Refresh();
+
+        $scope.hideGridDOPMonitoringDatabase = true;
+        $scope.hideGridDBlocking = false;
     }
+    // Блок панелей
+    // ============<
 
     // обновить все таблицы
     $scope.RefreshTables = function () {
@@ -359,9 +379,6 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
     $scope.DOPMonitoringDatabase_Refresh = function () {
         $scope.message = 'Пожалуйста, ожидайте... Загрузка';
 
-        $scope.hideGridDOPMonitoringDatabase = false;
-        $scope.hideGridDBlocking = !$scope.hideGridDOPMonitoringDatabase;
-
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/DOPMonitoringDatabase/Init/'
@@ -375,17 +392,14 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             }
 
         }, function (response) {
-            console.log(response);
+            console.error(response);
 
-            messageBoxService.showError(response.data);
+            messageBoxService.showError(response.data.message);
         }).catch(error => alert(error.message));
     }
 
     $scope.GridBlocking_Refresh = function () {
         $scope.message = 'Пожалуйста, ожидайте... Загрузка';
-
-        $scope.hideGridDBlocking = false;
-        $scope.hideGridDOPMonitoringDatabase = !$scope.hideGridDBlocking;
 
         $scope.dataLoading = $http({
             method: 'POST',
@@ -400,9 +414,9 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             }
 
         }, function (response) {
-            console.log(response);
+            console.error(response);
 
-            messageBoxService.showError(response.data);
+            messageBoxService.showError(response.data.message);
         }).catch(error => alert(error.message));
     }
 
