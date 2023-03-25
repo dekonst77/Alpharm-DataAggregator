@@ -71,7 +71,11 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Загрузить список категорий
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]        
         public ActionResult GetGoodsCategoryList()
         {
             using (var context = new DrugClassifierContext(APP))
