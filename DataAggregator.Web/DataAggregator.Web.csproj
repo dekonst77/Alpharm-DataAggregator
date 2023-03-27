@@ -2122,6 +2122,7 @@
     <Content Include="Scripts\ui-select-pagination.js" />
     <None Include="Service References\RetailFileInfoService\FileInfoService.disco" />
     <Content Include="Views\Classifier\AddingDOPMonitoringDatabase\AddingDOPMonitoringDatabase.html" />
+    <Content Include="Views\Classifier\AddingDOPMonitoringDatabase\AddingDOPMonitoringDatabase_context_menu.html" />
     <Content Include="Views\Classifier\AddingDOPMonitoringDatabase\DialogSetPlugOffByCategory.html" />
     <Content Include="Views\Classifier\BlisterBlock\BlisterBlock.html" />
     <Content Include="Views\Classifier\Certificate\Certificate.html" />

@@ -70,7 +70,13 @@
         <div class="panel-body" style="height: 90%">
 
             <div class="row" style="padding-top: 10px;  height: 100%">
-                <ui-grid-control options="GridDOPMonitoringDatabase.Options" ng-hide="hideGridDOPMonitoringDatabase" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+
+                <div id="grid-block" class="auto-item-panel" ng-hide="hideGridDOPMonitoringDatabase" data-context-menu="Views/Classifier/AddingDOPMonitoringDatabase/AddingDOPMonitoringDatabase_context_menu.html">
+                    <ui-grid-control options="GridDOPMonitoringDatabase.Options"
+                                     class="ui-grid-enable-content-selection grid-block grid-block_md">
+                    </ui-grid-control>
+                </div>
+
                 <ui-grid-control options="GridDBlocking.Options" ng-hide="hideGridDBlocking" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
             </div>
 

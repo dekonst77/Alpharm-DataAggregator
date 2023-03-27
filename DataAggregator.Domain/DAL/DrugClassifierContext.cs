@@ -315,6 +315,17 @@ namespace DataAggregator.Domain.DAL
             Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategory] @GoodsCategoryId, @PouringStartDate", parameters);
         }
 
+
+        public void SetPlugOnByClassifierList_SP(long[] ClassifierIdList)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@ClassifierIdList", SqlDbType = SqlDbType.VarChar, Value = String.Join(",", ClassifierIdList)}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOnByClassifierList] @ClassifierIdList", parameters);
+        }
+
         /// <summary>
         /// Снять заглушку c категории + доп. свойство
         /// </summary>

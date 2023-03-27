@@ -245,6 +245,8 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
     }
 
     // ================= Инициализация таблиц =================->
+    $scope.selectedRows = [];
+
     $scope.AddingDOPMonitoringDatabase_Init = function () {
 
         $scope.message = 'Пожалуйста, ожидайте... Загрузка';
@@ -291,6 +293,16 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
 
         $scope.GridDOPMonitoringDatabase.Options.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
+
+            // Что-то выделили
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                $scope.selectedRows = $scope.gridApi.selection.getSelectedRows();
+            });
+
+            // Что-то выделили
+            gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
+                $scope.selectedRows = $scope.gridApi.selection.getSelectedRows();
+            });
         };
         // Таблица СКЮ, блокировок <-
 
@@ -461,6 +473,37 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             });
     }
 
+    // Поставить заглушку на СКЮ
+    $scope.SetPlugOnByClassifier = function () {
+
+        if ($scope.selectedRows.length == 0)
+            return;
+
+        console.log($scope.selectedRows);
+
+        var ClassifierArray = [];
+
+        Array.prototype.push.apply(ClassifierArray, $scope.selectedRows.map(function (obj) {
+            return obj.ClassifierId;
+        }));
+
+        console.log(ClassifierArray);
+
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/DOPMonitoringDatabase/SetPlugOnByClassifierList/',
+                data: JSON.stringify({ ClassifierIdList: ClassifierArray})
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Data.Success) {
+                    $scope.RefreshTables();
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+
+    }
 
     $scope.PouringStartDate = null; // дата начала выливки
 

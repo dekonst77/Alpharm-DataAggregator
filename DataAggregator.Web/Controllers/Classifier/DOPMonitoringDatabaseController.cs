@@ -75,7 +75,7 @@ namespace DataAggregator.Web.Controllers.Classifier
         /// Загрузить список категорий
         /// </summary>
         /// <returns></returns>
-        [HttpPost]        
+        [HttpPost]
         public ActionResult GetGoodsCategoryList()
         {
             using (var context = new DrugClassifierContext(APP))
@@ -91,6 +91,8 @@ namespace DataAggregator.Web.Controllers.Classifier
                 }
             }
         }
+
+        #region Установка заглушек
 
         /// <summary>
         /// Заглушка на категорию
@@ -144,6 +146,28 @@ namespace DataAggregator.Web.Controllers.Classifier
                 return BadRequest(e);
             }
         }
+
+        public ActionResult SetPlugOnByClassifierList(long[] ClassifierIdList)
+        {
+            try
+            {
+                _context.SetPlugOnByClassifierList_SP(ClassifierIdList);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Снять заглушку c категории
