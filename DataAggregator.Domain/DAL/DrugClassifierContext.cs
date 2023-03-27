@@ -343,6 +343,17 @@ namespace DataAggregator.Domain.DAL
 
             Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategoryAndProperty] @GoodsCategoryId, @ParameterID, @PouringStartDate", parameters);
         }
+
+        public void SetPlugOffByClassifierList_SP(long[] ClassifierIdList, DateTime PouringStartDate)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@ClassifierIdList", SqlDbType = SqlDbType.VarChar, Value = String.Join(",", ClassifierIdList)},
+                new SqlParameter() { ParameterName = "@PouringStartDate", SqlDbType = SqlDbType.Date, Value = PouringStartDate}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByClassifierList] @ClassifierIdList, @PouringStartDate", parameters);
+        }
         #endregion
 
         #region Systematization

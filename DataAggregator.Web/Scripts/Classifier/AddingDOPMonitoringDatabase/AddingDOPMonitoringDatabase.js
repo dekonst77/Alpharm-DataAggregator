@@ -493,7 +493,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             $http({
                 method: 'POST',
                 url: '/DOPMonitoringDatabase/SetPlugOnByClassifierList/',
-                data: JSON.stringify({ ClassifierIdList: ClassifierArray})
+                data: JSON.stringify({ ClassifierIdList: ClassifierArray })
             }).then(function (response) {
                 var data = response.data;
                 if (data.Data.Success) {
@@ -608,4 +608,63 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
 
     // снять заглушку с категории и доп свойства <-
     // ============================================
+
+    // ===============================
+    // снять заглушку со списка СКЮ ->
+
+    $scope.DialogSetPlugOffByClassifier = function () {
+
+        if ($scope.selectedRows.length == 0)
+            return;
+
+        var ClassifierArray = [];
+
+        Array.prototype.push.apply(ClassifierArray, $scope.selectedRows.map(function (obj) {
+            return obj.ClassifierId;
+        }));
+        console.log(ClassifierArray);
+
+        var modalDialogInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOffByCategory.html',
+            controller: 'DialogSetPlugOffByCategoryController',
+            size: 'md',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                PlugInfo: function () {
+                    return { GoodsCategory: $scope.goodsCategory, Parameter: null, ClassifierId: null };
+                }
+            }
+        });
+
+        modalDialogInstance.result.then(function (DialogData) {
+            console.log(Date.parse(DialogData));
+            $scope.PouringStartDate = new Date(DialogData).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            console.log($scope.PouringStartDate);
+
+            SetPlugOffByClassifier(ClassifierArray, $scope.PouringStartDate);
+        }, function (DialogData) {
+
+        });
+
+        SetPlugOffByClassifier = function (ClassifierArray, PouringStartDate) {
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/DOPMonitoringDatabase/SetPlugOffByClassifierList/',
+                    data: JSON.stringify({ ClassifierIdList: ClassifierArray, PouringStartDate: PouringStartDate })
+                }).then(function (response) {
+                    var data = response.data;
+                    if (data.Data.Success) {
+                        $scope.RefreshTables();
+                    }
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+        }
+    }
+    // ===============================
+    // снять заглушку со списка СКЮ -<
+
 }

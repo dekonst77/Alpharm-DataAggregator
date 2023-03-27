@@ -147,6 +147,11 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        /// <summary>
+        /// Поставить заглушку на список СКЮ
+        /// </summary>
+        /// <param name="ClassifierIdList"></param>
+        /// <returns></returns>
         public ActionResult SetPlugOnByClassifierList(long[] ClassifierIdList)
         {
             try
@@ -167,6 +172,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 return BadRequest(e);
             }
         }
+
         #endregion
 
         /// <summary>
@@ -224,6 +230,26 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        public ActionResult SetPlugOffByClassifierList(long[] ClassifierIdList, DateTime PouringStartDate)
+        {
+            try
+            {
+                _context.SetPlugOffByClassifierList_SP(ClassifierIdList, PouringStartDate);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
 
     }
 }
