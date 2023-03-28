@@ -3914,7 +3914,7 @@ group by OperationMode
                 var _context = new GSContext(APP);
 
                 var file = uploads.First();
-                string filename = @"\\alph-r01-s-db02\Upload\Книга перемен_" + User.Identity.GetUserId() + ".xlsx";
+                string filename = @"\\s-sql2\Upload\Книга перемен_" + User.Identity.GetUserId() + ".xlsx";
 
                 if (System.IO.File.Exists(filename))
                     System.IO.File.Delete(filename);
