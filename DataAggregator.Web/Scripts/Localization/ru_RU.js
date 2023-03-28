@@ -453,6 +453,28 @@
                 },
                 "Licenses": {
                     "TITLE": 'Лицензии Росздравнадзор'
+                },
+                "BookOfChange": {
+                    "FormingTransaction": {
+                        "CodeAS1": "Код сети 1",
+                        "Who": "Кто",
+                        "CodeAS2": "Код сети 2",
+                        "Whom": "Кого",
+                        "Region": "Регион",
+                        "WhenPeriod": "Когда",
+                        "CountAS": "Сколько",
+                        "Comment": "Комментарий",
+                        "Show": "Показывать",
+                    },
+                    "Rebranding": {
+                        "CodeAS1": "Код сети 1",
+                        "PrevName": "Было",
+                        "CodeAS2": "Код сети 2",
+                        "CurrentName": "Стало",
+                        "WhenPeriod": "С какого периода",
+                        "Comment": "Комментарий",
+                        "Show": "Показывать",
+                    }
                 }
             },
             "REPORTS": {

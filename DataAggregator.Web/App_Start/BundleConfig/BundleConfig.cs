@@ -39,7 +39,8 @@ namespace DataAggregator.Web
         internal static void ADD_GS(BundleCollection bundles)
         {
             bundles.Add(new ComplexScriptBundle("~/bundles/GS")
-.Include("~/Scripts/GS/GSController.js")
+                .Include("~/Scripts/GS/GSController.js")
+                .Include("~/Scripts/GS/BookOfChangeController.js")
              );
         }
     }

@@ -781,6 +781,7 @@
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsChangeRegionController.js" />
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsMergeController.js" />
     <Content Include="Scripts\GovernmentPurchases\Reports\Reports.js" />
+    <Content Include="Scripts\GS\BookOfChangeController.js" />
     <Content Include="Scripts\GS\GSController.js" />
     <Content Include="Content\OFD\PriceCurrent.scss" />
     <Content Include="Content\Fonts\ui-grid.ttf" />
@@ -2179,6 +2180,7 @@
     <Content Include="Views\GovernmentPurchases\Reports\Reports.html" />
     <Content Include="Views\GS\base_address.html" />
     <Content Include="Views\GS\base_address_context_menu.html" />
+    <Content Include="Views\GS\BookOfChange.html" />
     <Content Include="Views\GS\Bricks.html" />
     <Content Include="Views\GS\Bricks_Region.html" />
     <Content Include="Views\GS\DistributorBranch.html" />
