@@ -639,7 +639,11 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
         });
 
         modalDialogInstance.result.then(function (DialogData) {
-            console.log(Date.parse(DialogData));
+
+            if (!DialogData)
+                return;
+
+            console.log(DialogData);
             $scope.PouringStartDate = new Date(DialogData).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             console.log($scope.PouringStartDate);
 
