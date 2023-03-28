@@ -98,6 +98,9 @@ namespace DataAggregator.Domain.DAL
         public DbSet<spr_NetworkName> spr_NetworkName { get; set; }
         public DbSet<spr_NetworkName_Period> spr_NetworkName_Period { get; set; }
         public DbSet<GS_Period_Network_Anket> GS_Period_Network_Anket { get; set; }
+
+        public DbSet<BookOfChange_FormingTransaction> BookOfChangeFormingTransaction { get; set; }
+        public DbSet<BookOfChange_Rebranding> BookOfChangeRebranding { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -287,6 +290,26 @@ namespace DataAggregator.Domain.DAL
                 command.ExecuteNonQuery();
             }
         }
+
+        public void BookOfChange_from_Excel(string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "dbo.BookOfChange_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
         public void SummsPeriod_OFD_Update(DateTime Period)
         {
             using (var command = new SqlCommand())

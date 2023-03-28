@@ -446,7 +446,14 @@
                     title: 'Организации без ИНН',
                     authorize: true,
                     isEditor: true
-                });
+                })
+            .when('/GS/BookOfChange',
+             {
+                 templateUrl: 'Views/GS/BookOfChange.html',
+                 title: 'Книга перемен',
+                 authorize: true,
+                 isEditor: true
+             });
     }
     //ЛПУ
     function setupLPURouting() {

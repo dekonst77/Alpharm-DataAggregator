@@ -1,0 +1,34 @@
+﻿<div ng-controller="BookOfChangeController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        
+
+        <uib-tabset active="active">
+            <uib-tab heading="Системообразующие сделки" select="setTabIndex(0)">
+            </uib-tab>
+
+            <uib-tab heading="Ребрендинг сетей" select="setTabIndex(1)">
+            </uib-tab>
+
+            <div class="btn-group" role="group" aria-label="Basic example" style="margin-top:5px;float:right">
+                <div class="btn btn-info btn-sm"
+                     ngf-select="BookOfChange_from_Excel($file)"
+                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <span><img src="/Content/Icons/Excel.png" style="width:17px;height:17px" /> Импорт Книги перемен</span>
+                </div>
+            </div>
+        </uib-tabset>
+
+    </div>        
+
+        <div ng-if="currentTabIndex == 0" class="auto-item-panel">
+            <ui-grid-control options="FormingTransactionDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
+        <div ng-if="currentTabIndex == 1" class="auto-item-panel">
+            <ui-grid-control options="RebrandingDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
+    </div>
+
+

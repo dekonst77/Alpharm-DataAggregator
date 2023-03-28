@@ -1562,5 +1562,38 @@ namespace DataAggregator.Domain.Model.GS
         public string GAR_Address { get; set; }
     }
 
+    [Table("BookOfChange_FormingTransaction", Schema = "dbo")]
+    public class BookOfChange_FormingTransaction
+    {
+        [Key]
+        public int Id { get; set; }
+        public string CodeAS1 { get; set; }
+
+        public string Who { get; set; }
+        public string CodeAS2 { get; set; }
+        public string Whom { get; set; }
+        public string Region { get; set; }
+        public string WhenPeriod { get; set; }
+        public string CountAS { get; set; }
+        public string Comment { get; set; }
+        public string Show { get; set; }
+
+    }
+
+    [Table("BookOfChange_Rebranding", Schema = "dbo")]
+    public class BookOfChange_Rebranding
+    {
+        [Key]
+        public int Id { get; set; }
+        public string CodeAS1 { get; set; }
+
+        public string PrevName { get; set; }
+        public string CodeAS2 { get; set; }
+        public string CurrentName { get; set; }
+        public string WhenPeriod { get; set; }
+        public string Comment { get; set; }
+        public string Show { get; set; }
+
+    }
 }
 

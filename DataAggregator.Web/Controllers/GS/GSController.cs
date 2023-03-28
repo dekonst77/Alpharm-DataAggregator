@@ -100,9 +100,9 @@ GS_Brick*/
                     new System.Data.SqlClient.SqlParameter("@isDateAddLic", filter.isDateAddLic),
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@dt", SqlDbType = System.Data.SqlDbType.Date, Value = filter.dt },
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@period", SqlDbType = System.Data.SqlDbType.Date, Value = currentperiod },
-                     new System.Data.SqlClient.SqlParameter("@BrickError", filter.BrickError)
+                    new System.Data.SqlClient.SqlParameter("@BrickError", filter.BrickError)
 
-                    ).ToList();
+                ).ToList();
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
@@ -3874,6 +3874,68 @@ group by OperationMode
                 System.IO.File.Delete(filename);
             }
         }
+
+        [Authorize(Roles = "GS_View")]
+        [HttpPost]
+        public ActionResult BookOfChange_Init()
+        {
+            try
+            {
+                var _context = new GSContext(APP);
+
+                var formingTransaction = _context.BookOfChangeFormingTransaction.ToList();
+                var formingRebranding = _context.BookOfChangeRebranding.ToList();
+    
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { 
+                        Data = formingTransaction, 
+                        Data2 = formingRebranding,
+                        count = 1, status = "ок", Success = true 
+                    }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult BookOfChange_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    return null;
+
+                var _context = new GSContext(APP);
+
+                var file = uploads.First();
+                string filename = @"\\alph-r01-s-db02\Upload\Книга перемен_" + User.Identity.GetUserId() + ".xlsx";
+
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                file.SaveAs(filename);
+
+                _context.BookOfChange_from_Excel(filename);
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
     public class HystoryFilter
     {

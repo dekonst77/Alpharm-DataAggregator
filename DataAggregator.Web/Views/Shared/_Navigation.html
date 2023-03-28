@@ -355,12 +355,14 @@
 
                         <!--разделитель-->
                         <li in-roles="GS_History" class="divider"></li>
-
+                       
                         <li in-roles="GS_History"><a ng-href="/#/GS/History" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг точек</a></li>
 
                         <li in-roles="GS_History"><a ng-href="/#/GS/History?TypeClient=1" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг Онлайн</a></li>
 
                         <li class="divider"></li>
+
+                        <li in-roles="GS_View"><a ng-href="/#/GS/BookOfChange" class="padding_menu_item"><span class="glyphicon glyphicon-book" style="padding-right:10px;"></span>Книга перемен</a></li>
 
                         <li ng-repeat="item_rep in DAM_GS_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" data-translate="{{item_rep.Name}}"></a>
