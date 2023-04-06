@@ -61,8 +61,8 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
         }).then(function (response) {
             document.title = response.data.Data.title;
             $scope.InitArrays(response.data.Data);    
-            
-            if ($scope.RunningProcess != undefined) {
+
+            if ($scope.RunningProcess != undefined && $scope.RunningProcess != '') {
                 messageBoxService.showInfo($scope.RunningProcess, 'Отчеты');
                 return;
             }
@@ -172,8 +172,11 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
                 $scope.Grid.Options.columnDefs.push(item_new);
             });
         }
-        if (Data.RunningProcess != undefined) {
+        if (Data.RunningProcess != undefined && Data.RunningProcess != '') {
             $scope.RunningProcess = Data.RunningProcess;
+        }
+        else {
+            $scope.RunningProcess = null;
         }
     };
     $scope.SetData = function (data) {
@@ -203,7 +206,8 @@ function GlobalController($scope, $route, $http, $uibModal, commonService, messa
             }).then(function (response) {
                 var data = response.data.Data.Data;
                 $scope.InitArrays(response.data.Data);
-                if ($scope.RunningProcess != undefined) {
+
+                if ($scope.RunningProcess != undefined && $scope.RunningProcess != '') {
                     messageBoxService.showInfo($scope.RunningProcess, 'Отчеты');
                     return;
                 }
