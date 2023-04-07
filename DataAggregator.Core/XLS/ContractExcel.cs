@@ -106,16 +106,20 @@ namespace DataAggregator.Core.XLS
                 using (var reader = ExcelReaderFactory.CreateReader(data))
                 {
                     #region проверка на существование листа <Шаблон ТЗ>
-                    while (reader != null)
-                    {
-                        if (reader.Name == worksheet)
-                            break;
-                        else
-                            reader.NextResult();
-                    }
+                    bool findSheet = false;
+                    if (reader != null) { 
+                        for (int sheet = 0; sheet < reader.ResultsCount; sheet++)
+                        {
+                            if (!findSheet && reader.Name == worksheet)
+                                findSheet = true;
 
-                    if (reader == null)
-                        throw new ApplicationException(String.Format(" В шаблоне отсутствует лист: {0}", reader.Name));
+                            reader.NextResult();
+                        }
+                    }
+                    if (!findSheet)
+                    {
+                        throw new ApplicationException(String.Format(" В шаблоне отсутствует лист: {0}", worksheet));
+                    }
                     #endregion
 
                     #region Список всех колонок
@@ -203,7 +207,7 @@ namespace DataAggregator.Core.XLS
             }
             catch (Exception e)
             {
-                throw new ApplicationException("Ошибка анализа файла", e);
+                throw new ApplicationException(e.Message);
             }
         }
 
