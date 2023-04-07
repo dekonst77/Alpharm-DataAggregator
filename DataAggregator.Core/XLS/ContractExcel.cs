@@ -107,7 +107,8 @@ namespace DataAggregator.Core.XLS
                 {
                     #region проверка на существование листа <Шаблон ТЗ>
                     bool findSheet = false;
-                    if (reader != null) { 
+                    if (reader != null) 
+                    { 
                         for (int sheet = 0; sheet < reader.ResultsCount; sheet++)
                         {
                             if (!findSheet && reader.Name == worksheet)
