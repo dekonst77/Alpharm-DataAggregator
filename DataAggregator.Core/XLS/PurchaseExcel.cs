@@ -122,19 +122,16 @@ namespace DataAggregator.Core.XLS
                         {
                             if (!findSheet && reader.Name == worksheet)
                                 findSheet = true;
-
-                            reader.NextResult();
+                            else
+                                reader.NextResult();
                         }
                     }
                     if (!findSheet)
-                    {
                         throw new ApplicationException(String.Format(" В шаблоне отсутствует лист: {0}", worksheet));
-                    }
                     #endregion
 
                     #region Список всех колонок
                     reader.Read();
-
                     Dictionary<int, string> columns = new Dictionary<int, string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
