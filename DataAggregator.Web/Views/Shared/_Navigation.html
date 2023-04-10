@@ -352,17 +352,16 @@
                         <li in-roles="GS_View"><a ng-href="/#/GS/OperationMode" class="padding_menu_item"><span class="glyphicon glyphicon-time" style="padding-right:10px;"></span>Режим Работы</a></li>
                         <li in-roles="GS_View"><a ng-href="/#/GS/Network" class="padding_menu_item"><span class="glyphicon glyphicon-compressed" style="padding-right:10px;"></span>Карточки АС</a></li>
                         <li in-roles="GS_View"><a ng-href="/#/GS/NetworkBrand" class="padding_menu_item"><span class="glyphicon glyphicon-screenshot" style="padding-right:10px;"></span>Бренды Сетей</a></li>
+                        <li in-roles="GS_View"><a ng-href="/#/GS/BookOfChange" class="padding_menu_item"><span class="glyphicon glyphicon-book" style="padding-right:10px;"></span>Книга перемен</a></li>
 
                         <!--разделитель-->
                         <li in-roles="GS_History" class="divider"></li>
-                       
+
                         <li in-roles="GS_History"><a ng-href="/#/GS/History" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг точек</a></li>
 
                         <li in-roles="GS_History"><a ng-href="/#/GS/History?TypeClient=1" class="padding_menu_item"><span class="glyphicon glyphicon-list-alt" style="padding-right:10px;"></span>Мэчинг Онлайн</a></li>
 
                         <li class="divider"></li>
-
-                        <li in-roles="GS_View"><a ng-href="/#/GS/BookOfChange" class="padding_menu_item"><span class="glyphicon glyphicon-book" style="padding-right:10px;"></span>Книга перемен</a></li>
 
                         <li ng-repeat="item_rep in DAM_GS_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" data-translate="{{item_rep.Name}}"></a>
@@ -439,7 +438,7 @@
                 </li>
 
                 <!--Отчёты-->
-                <li class="dropdown" ng-if="isAuthenticated()">
+                <li class="dropdown" ng-if="isAuthenticated() && (DAM_GZ_report.length > 0 || DAM_GS_report.length > 0 || DAM_Prov_report.length > 0 || DAM_Distr_report.length > 0)">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Отчёты"></span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>

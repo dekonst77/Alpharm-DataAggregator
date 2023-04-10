@@ -115,21 +115,23 @@ namespace DataAggregator.Core.XLS
                 using (var reader = ExcelReaderFactory.CreateReader(data))
                 {
                     #region проверка на существование листа <Шаблон ТЗ>
-                    while (reader != null)
+                    bool findSheet = false;
+                    if (reader != null)
                     {
-                        if (reader.Name == worksheet)
-                            break;
-                        else
-                            reader.NextResult();
+                        for (int sheet = 0; sheet < reader.ResultsCount; sheet++)
+                        {
+                            if (!findSheet && reader.Name == worksheet)
+                                findSheet = true;
+                            else
+                                reader.NextResult();
+                        }
                     }
-
-                    if (reader == null)
-                        throw new ApplicationException(String.Format(" В шаблоне отсутствует лист: {0}", reader.Name));
+                    if (!findSheet)
+                        throw new ApplicationException(String.Format(" В шаблоне отсутствует лист: {0}", worksheet));
                     #endregion
 
                     #region Список всех колонок
                     reader.Read();
-
                     Dictionary<int, string> columns = new Dictionary<int, string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
@@ -247,7 +249,7 @@ namespace DataAggregator.Core.XLS
             }
             catch (Exception e)
             {
-                throw new ApplicationException("Ошибка анализа файла", e);
+                throw new ApplicationException(e.Message);
             }
         }
 

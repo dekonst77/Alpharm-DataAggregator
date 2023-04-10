@@ -1379,10 +1379,9 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
                 $scope.objectsReadyGrid.Options.data = response.data;
 
                 updateObjectReceiver(0);
-            }, function () {
+            }).catch (function (error) {
                 $scope.objectsReadyGrid.Options.data = [];
-                $scope.message = 'Unexpected error';
-                messageBoxService.showError($scope.message);
+                messageBoxService.showError(error.data);
             });
         }
     };
@@ -2225,10 +2224,9 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
                 transformRequest: angular.identity
             }).then(function (response) {
                 $scope.contractObjectsReadyGrid.Options.data = response.data;
-            }, function () {
+            }).catch(function (error) {
                 $scope.contractObjectsReadyGrid.Options.data = [];
-                $scope.message = 'Unexpected error';
-                messageBoxService.showError($scope.message);
+                messageBoxService.showError(error.data);
             });
         }
     };

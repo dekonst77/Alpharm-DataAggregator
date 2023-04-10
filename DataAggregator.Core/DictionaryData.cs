@@ -76,7 +76,7 @@ namespace DataAggregator.Core
                     return context.Corporation.Where(d => d.Value.Contains(value)).Take(count).Select(c => new DictionaryItem() { Id = c.Id, Value = c.Value }).ToList();
                 case "drugType":
                     return context.DrugType.Where(d => d.Value.Contains(value)).Take(count).Select(c => new DictionaryItem() { Id = c.Id, Value = c.Value }).ToList();
-                case "equipment":
+                case "Equipment":
                     return context.Equipment.Where(d => d.Value.Contains(value)).Take(count).Select(c => new DictionaryItem() { Id = c.Id, Value = c.Value }).ToList();
                 case "productionStage":
                     return context.ProductionStage.Where(d => d.Value.Contains(value)).Take(count).Select(c => new DictionaryItem() { Id = c.Id, Value = c.Value }).ToList();

@@ -1565,16 +1565,22 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-
             using (var excel = new PurchaseExcel())
             {
-                var objects = excel.GetPurchaseObjectReady(file.InputStream).ToList();
+                var file = uploads.FirstOrDefault();
+                if (file != null)
+                {
+                    var objects = excel.GetPurchaseObjectReady(file.InputStream).ToList();
 
-                var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
-                jsonResult.MaxJsonLength = int.MaxValue;
+                    var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
 
-                return jsonResult;
+                    return jsonResult;
+                }
+                else
+                {
+                    return Json(new EmptyResult(), JsonRequestBehavior.AllowGet);
+                }
             }
         }
 
@@ -1594,16 +1600,21 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-
             using (var excel = new ContractExcel())
             {
-                var objects = excel.GetContractObjectReady(file.InputStream).ToList();
+                var file = uploads.FirstOrDefault();
+                if (file != null)
+                {
+                    var objects = excel.GetContractObjectReady(file.InputStream).ToList();
 
-                var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
-                jsonResult.MaxJsonLength = int.MaxValue;
-
-                return jsonResult;
+                    var jsonResult = Json(objects, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                    return jsonResult;
+                }
+                else
+                {
+                    return Json(new EmptyResult(), JsonRequestBehavior.AllowGet);
+                }
             }
         }
 
