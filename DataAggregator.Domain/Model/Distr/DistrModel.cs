@@ -188,6 +188,8 @@ namespace DataAggregator.Domain.Model.Distr
         public string FileStatusT { get; set; }
     }
 
+   		
+
     public class FileInfo_Detail
     {
         public long FileInfoId { get; set; }
@@ -491,7 +493,7 @@ namespace DataAggregator.Domain.Model.Distr
         public int CheckInWork  { get; set; }   //Чеки в обработке
         public int CheckGood    { get; set; }   //Обработанные чеки(отправленные на классификацию)
         public int CheckIsBad   { get; set; }   //Ошибки при скачивании или парсинге
-
+        public string CompanyName { get; set; }
         public virtual Comp Company { get; set; }
     }
 

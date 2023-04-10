@@ -46,17 +46,20 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
     //Инициализация блока Для перезагрузки чеков
     $scope.CheckReload_Init = function () {
         $scope.Title = "Невалидные чеки";
-
+ 
 
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/DistrRep/CheckReloadInit/',
             data: JSON.stringify({ param: "CheckReloadInit" })
         }).then(function (response) {
+            var d = new Date();
             var data = response.data;
             $scope.filterList = data;
             $scope.filter = data;
-            // $scope.filter.date = new Date(data.Filter.Year, data.Filter.Month - 1, 15);
+            $scope.filter.DateFrom = new Date();
+            $scope.filter.DateFrom.setMonth(d.getMonth() - 1);
+            $scope.filter.DateTo = new Date();
             //Отслеживаем изменения поисковой формы
             $scope.$watch(function () { return $scope.filter.DateFrom; },
                 function () {
@@ -67,17 +70,32 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
                     }
 
                     if (!$scope.CheckReloadForm.$invalid) {
-                        //    getRules_Clients();
-                        alert($scope.filter.DateFrom);
+                        //    getRules_Clients();         
+                        LoadCheckFile();
                     }
                     
                 }, true);
+            $scope.$watch(function () { return $scope.filter.DateTo; },
+                function () {
+                    if ($scope.filter.DateTo) {
+                      //  $scope.filter.Year = $scope.filter.DateTo.getFullYear();
+                       // $scope.filter.Month = $scope.filter.DateTo.getMonth() + 1;
+                        //  alert($scope.filter.DateFrom);
+                    }
+
+                    if (!$scope.CheckReloadForm.$invalid) {
+                        //    getRules_Clients();         
+                        LoadCheckFile();
+                    }
+
+                }, true);
 
             $scope.$watch(function () { return $scope.filter.Company; },
-                function () {
+                function () {                  
                     if (!$scope.CheckReloadForm.$invalid) {
-                        alert('Выбрана компания');
+                      //  alert('Выбрана компания');
                         //  getRules_Clients();
+                        LoadCheckFile();
                     }
                 }, true);
             //return response.data;
@@ -98,6 +116,7 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
         { name: 'Год', field: 'Year', width: 50, type: 'number' },
         { name: 'Месяц', field: 'Month', width: 50, type: 'number' },
         { name: 'CompanyId', field: 'CompanyId', width: 50, type: 'number' },
+        { name: 'Компания', field: 'CompanyName', width: 50, type: 'number' },
         { name: 'Дата добавления', field: 'DateInsert', type: 'date', cellFilter: formatConstants.FILTER_DATE_TIME, width: 180 },
         { name: 'Путь', field: 'FilePath' },
         { name: 'Источник', field: 'DataSource' },
@@ -120,6 +139,23 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
     $scope.CheckReloadFile_Grid.Options.appScopeProvider = $scope;
     $scope.CheckReloadFile_Grid.Options.showGridFooter = true;
 
+    function LoadCheckFile() {
 
+        $scope.CheckReloadFile_Grid.Options.data = [];
+
+      //  if ($scope.selectedTemplate == null)
+        //    return;
+
+        $scope.templatesLoading = $http({
+            method: "POST",
+            url: "/DistrRep/GetCheckReloadFileInfo/",
+            data: JSON.stringify({ filter:$scope.filter })
+        }).then(function (response) {
+
+            $scope.CheckReloadFile_Grid.Options.data = response.data;
+        }, function () {
+            $scope.message = "Unexpected Error";
+        });
+    }
 
 }

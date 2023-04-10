@@ -21,29 +21,50 @@
                     <div class="col-md-2">
                         <label>по</label>
                         <span>
-                             <date-period period="filter.DateTo" ap-label="" required></date-period>
+                            <date-period period="filter.DateTo" ap-label="" required></date-period>
                         </span>
 
 
                     </div>
-                    </div>
+                </div>
             </ng_form>
         </div>
     </div>
 
 
 
+    <script type="text/ng-template" id="_organization.html">
+        '
+        <div class="ui-grid-cell-contents">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary"
+                            type="button">
+                        <span class="glyphicon glyphicon-pencil">
+                        </span>
+                    </button>
+                </span>
+            </div>
+        </div>'
+    </script>
     <div class="panel-body fullHeightGrid">
         <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
             <li class="active"><a data-target="#CheckReloadNoValidFile" data-toggle="tab">Фалы</a></li>
             <li><a data-target="#CheckReloadNoValidCheck" data-toggle="tab">Невалидные Чеки</a></li>
 
         </ul>
+
+
         <div id="my-tab-content" class="tab-content" style="border-left: 1px #dddddd solid; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; padding:5px;">
             <div class="tab-pane active" id="CheckReloadNoValidFile">
                 <br>
-                <ui-grid-control options="CheckReloadFile_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
-
+                <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
+                    <div id="CheckReloadFile_Grid-block" class="auto-item-panel" style="width:100%">
+                        <ui-grid-control options="CheckReloadFile_Grid.Options" class="ui-grid-enable-content-selection myGrid"></ui-grid-control>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane" id="CheckReloadNoValidCheck">
                 <h1>В разработке</h1>
@@ -55,9 +76,39 @@
 
 
 
+    <!-- Modal -->
+    <div class="modal" id="DepModal" tabindex="-1" role="dialog" aria-labelledby="DepModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="DepModalLabel">Отделения</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
+
+                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#AddDepModal" ng-disabled="Grid.NeedSave||Grid.selectedRows() == undefined || Grid.selectedRows().length > 1 || Grid.selectedRows()[0].IsDepartment>0" data-translate="BUTTONS.ADD"></button>
+                    <button type="button" class="btn btn-danger" ng-click="removeDept()" ng-disabled="selectedDept == null" data-translate="BUTTONS.DELETE"></button>
+
+                    <br />
+                    <div class="container-fluid" style="height: 400px;" title="">
+                        <ui-grid-control options="Dep_GridOptions" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
 </div>
+
+

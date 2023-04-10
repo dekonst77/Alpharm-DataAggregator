@@ -1279,11 +1279,11 @@ namespace DataAggregator.Web.Controllers.DistrRep
         [HttpPost]
         public ActionResult GetCheckReloadFileInfo(CheckSelectFilter filter)
         {
-            var ret = _context.Database.SqlQuery<FileInfo>("exec [Check].dbo.[W_CheckReloadFileInfo]  @CompanyId=@CompanyId1,@DateFrom=@DateFrom1,@DateTo=@DateTo1,@DataSourceId=@DataSourceId"
+            var ret = _context.Database.SqlQuery<CheckReloadFileInfo>("exec [Check].dbo.[W_CheckReloadFileInfo]  @CompanyId=@CompanyId1,@DateFrom=@DateFrom1,@DateTo=@DateTo1"
                 , new SqlParameter("@CompanyId1", filter.Company.Id)
                 , new SqlParameter("@DateFrom1", filter.DateFrom)
                 , new SqlParameter("@DateTo1", filter.DateTo)
-                , new SqlParameter("@DataSourceId1", filter.DataSource.Id)
+              //  , new SqlParameter("@DataSourceId1", 0)
                 ).ToList();
 
 
