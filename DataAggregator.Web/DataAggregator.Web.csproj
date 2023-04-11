@@ -2157,6 +2157,7 @@
     <Content Include="Views\Clients\Workers.html" />
     <Content Include="Views\Common\query.html" />
     <Content Include="Views\Common\Table.html" />
+    <Content Include="Views\DistrRep\CheckReloadFileContextMenu.html" />
     <Content Include="Views\DistrRep\CompanyPeriod.html" />
     <Content Include="Views\DistrRep\DataFiles.html" />
     <Content Include="Views\DistrRep\EditSource.html" />
