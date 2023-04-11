@@ -171,10 +171,10 @@ namespace DataAggregator.Core.XLS
                     #region загружаем данные в dataClass по обязательным полям из списка reservedNamed
                     List<ExcelObject> dataClass = rows.Select(d => new ExcelObject()
                     {
-                        Unit = d[ExistColumns[Unit_FieldName]].ToString(),
-                        Amount = d[ExistColumns[Amount_FieldName]].ToString(),
-                        Price = d[ExistColumns[Price_FieldName]].ToString(),
-                        Sum = d[ExistColumns[Sum_FieldName]].ToString()
+                        Unit = d[ExistColumns[Unit_FieldName]] != null ? d[ExistColumns[Unit_FieldName]].ToString() : String.Empty,
+                        Amount = d[ExistColumns[Amount_FieldName]] != null ? d[ExistColumns[Amount_FieldName]].ToString() : String.Empty,
+                        Price = d[ExistColumns[Price_FieldName]] != null ? d[ExistColumns[Price_FieldName]].ToString() : String.Empty,
+                        Sum = d[ExistColumns[Sum_FieldName]] != null ? d[ExistColumns[Sum_FieldName]].ToString() : String.Empty
                     }).ToList();
                     #endregion
 
