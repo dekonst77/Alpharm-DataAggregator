@@ -508,6 +508,16 @@ namespace DataAggregator.Domain.Model.Distr
         public DataSource DataSource { get; set; }
     }
 
+ 
+    public class OFD_API
+    {
+        [Key]
+        public Int16 Id { get; set; }
+        public string OFD { get; set; }
+        public string Site_Check { get; set; }
+        public bool IsActive { get; set; }
+        public string Name { get; set; }
+    }
 
 
 

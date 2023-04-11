@@ -43,10 +43,27 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
 
     $scope.Company6FPList = [];
     $scope.Rules_filterList = null;
+    $scope.OFDAPIList = [];
+
+   
+
     //Инициализация блока Для перезагрузки чеков
     $scope.CheckReload_Init = function () {
         $scope.Title = "Невалидные чеки";
- 
+
+
+        $http({
+            method: "POST",
+            url: "/DistrRep/GetOFDAPIList/",
+            data: JSON.stringify({ param: "CheckReloadInit" })
+        }).then(function (response) {
+            $scope.OFDAPIList =  response.data;
+            //  $scope.DataSourceType = response.data;
+
+        }, function () {
+            $scope.message = "Unexpected Error";
+        });
+
 
         $scope.dataLoading = $http({
             method: 'POST',

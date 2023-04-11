@@ -41,6 +41,7 @@ namespace DataAggregator.Domain.DAL
         public DbSet<RawData_Out_View> RawData_Out_View { get; set; }
         public DbSet<RawData_Out> RawData_Out { get; set; }
         public DbSet<Project> Project { get; set; }
+     
 
     }
 }

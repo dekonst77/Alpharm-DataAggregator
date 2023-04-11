@@ -1267,6 +1267,7 @@ namespace DataAggregator.Web.Controllers.DistrRep
             SourceList.Add(new DataSource { Id = 0, Name = "_Все", NameFull = "_Все" });
             var comp = _context.Comp.Where(a => a.ProjectId == 2).ToList();         
             comp.Add(new Comp { Id = 0, Company = "_Все" });
+         
             var dictionaryList = new FileInfoJson { CompanyList = comp.OrderBy(t => t.Company).ToList() };
 
             return new JsonNetResult
@@ -1277,6 +1278,19 @@ namespace DataAggregator.Web.Controllers.DistrRep
         }
 
         [HttpPost]
+        public ActionResult GetOFDAPIList()
+        {
+            var OFDAPI = _context.Database.SqlQuery<OFD_API>("select * from [Check].dbo.OFD_API where IsActive=1").ToList();
+            return new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = OFDAPI
+                //_context.GetFileInfo(Convert.ToInt32(filter.Month), Convert.ToInt32(filter.Year), filter.DataSource.Id,filter.Company.Id)
+            };
+
+        }
+
+            [HttpPost]
         public ActionResult GetCheckReloadFileInfo(CheckSelectFilter filter)
         {
             var ret = _context.Database.SqlQuery<CheckReloadFileInfo>("exec [Check].dbo.[W_CheckReloadFileInfo]  @CompanyId=@CompanyId1,@DateFrom=@DateFrom1,@DateTo=@DateTo1"
