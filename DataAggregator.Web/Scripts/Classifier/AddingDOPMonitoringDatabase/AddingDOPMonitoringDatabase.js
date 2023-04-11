@@ -530,8 +530,8 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             $scope.PouringStartDate = new Date(DialogData).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
             console.log($scope.PouringStartDate);
             SetPlugOffByCategory($scope.goodsCategory.Id, $scope.PouringStartDate);
-        }, function (DialogData) {
-
+        }, function (err) {
+            console.log(err);
         });
     }
 
@@ -585,8 +585,8 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             console.log($scope.PouringStartDate);
 
             SetPlugOffByCategoryAndProperty(GoodsCategoryId, ParameterID, $scope.PouringStartDate);
-        }, function (DialogData) {
-
+        }, function (err) {
+            console.log(err);
         });
 
         SetPlugOffByCategoryAndProperty = function (GoodsCategoryId, ParameterID, PouringStartDate) {

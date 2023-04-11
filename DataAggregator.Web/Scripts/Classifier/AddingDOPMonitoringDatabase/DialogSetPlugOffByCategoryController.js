@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('DialogSetPlugOffByCategoryController', ['$scope', '$http', '$uibModalInstance', 'PlugInfo', DialogSetPlugOffByCategoryController]);
+    .controller('DialogSetPlugOffByCategoryController', ['$scope', '$uibModalInstance', 'PlugInfo', DialogSetPlugOffByCategoryController]);
 
-function DialogSetPlugOffByCategoryController($scope, $http, $modalInstance, PlugInfo) {
+function DialogSetPlugOffByCategoryController($scope, $modalInstance, PlugInfo) {
 
     // календарь
     $scope.today = function () {
@@ -27,6 +27,6 @@ function DialogSetPlugOffByCategoryController($scope, $http, $modalInstance, Plu
     };
 
     $scope.cancel = function () {
-        $modalInstance.close(false);
+        $modalInstance.dismiss('Отмена операции');
     };
 }
