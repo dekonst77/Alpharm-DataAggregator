@@ -15,7 +15,14 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading" ng-dblclick="PanelCategoryListToogle()">Категория</div>
+            <div class="panel-heading" ng-dblclick="PanelCategoryListToogle()" dropdown-toggle>
+                Категория
+
+                <button type="button" class="close" aria-label="Close" ng-click="PanelCategoryListToogle()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                
+            </div>
             <div class="panel-body" ng-show="PanelCategoryListIsShow">
 
                 <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
@@ -37,7 +44,12 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading" ng-dblclick=" PanelAdditionalPropertyToogle()">Доп. свойство</div>
+            <div class="panel-heading" ng-dblclick="PanelAdditionalPropertyToogle()">Доп. свойство
+            
+                <button type="button" class="close" aria-label="Close" ng-click="PanelAdditionalPropertyToogle()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="panel-body" style="height: 250px" ng-show="PanelAdditionalPropertyIsShow">
 
                 <div class="row" style="padding-top: 10px; padding-bottom: 10px; height: 100%">
