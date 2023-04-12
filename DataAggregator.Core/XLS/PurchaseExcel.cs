@@ -121,7 +121,10 @@ namespace DataAggregator.Core.XLS
                         for (int sheet = 0; sheet < reader.ResultsCount; sheet++)
                         {
                             if (!findSheet && reader.Name == worksheet)
+                            {
                                 findSheet = true;
+                                break;
+                            }
                             else
                                 reader.NextResult();
                         }
@@ -135,7 +138,8 @@ namespace DataAggregator.Core.XLS
                     Dictionary<int, string> columns = new Dictionary<int, string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        columns.Add(i, reader.GetValue(i).ToString());
+                        if (reader.GetValue(i) != null)
+                            columns.Add(i, reader.GetValue(i).ToString());
                     }
                     #endregion
 
