@@ -3936,7 +3936,30 @@ group by OperationMode
             }
         }
 
+        [HttpPost]
+        public ActionResult BookOfChange_relodQlik()
+        {
+            try
+            {
+                using (var _context = new GSContext(APP))
+                {
+                    _context.Database.CommandTimeout = 30;
+                    _context.Database.ExecuteSqlCommand("exec [dbo].[BookOfChange_relodQlik]");
+                }
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+
     public class HystoryFilter
     {
         public int top { get; set; }

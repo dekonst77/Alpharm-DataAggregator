@@ -265,6 +265,7 @@
     <Content Include="Content\Icons\CheckGreen.png" />
     <Content Include="Content\Icons\cross.png" />
     <Content Include="Content\Icons\favicon.ico" />
+    <Content Include="Content\Icons\qlik.png" />
     <Content Include="Content\Icons\shit.png" />
     <Content Include="Content\GoodsSystematization\GoodsSystematization.scss" />
     <Content Include="Content\loading-bar.min.css" />

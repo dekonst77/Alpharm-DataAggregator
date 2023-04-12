@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('BookOfChangeController', ['$scope', '$http', '$uibModal', '$interval', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'formatConstants', 'Upload', 'cfpLoadingBar', BookOfChangeController]);
+    .controller('BookOfChangeController', ['$scope', '$http', '$uibModal', '$interval', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'formatConstants', 'Upload', 'cfpLoadingBar', 'messageBoxService', BookOfChangeController]);
 
-function BookOfChangeController($scope, $http, $uibModal, $interval, $timeout, uiGridCustomService, errorHandlerService, formatConstants, Upload, cfpLoadingBar) {
+function BookOfChangeController($scope, $http, $uibModal, $interval, $timeout, uiGridCustomService, errorHandlerService, formatConstants, Upload, cfpLoadingBar, messageBoxService) {
 
     $scope.setTabIndex = function (index) {
         $scope.currentTabIndex = index;
@@ -174,6 +174,25 @@ function BookOfChangeController($scope, $http, $uibModal, $interval, $timeout, u
         });
 
         $scope.dataLoading = $q.all([upload])
+    };
+
+    $scope.BookOfChange_relodQlik = function (file) {
+
+        messageBoxService.showConfirm('Вы уверены, что хотите выгрузить книгу перемен в Qlik sense?', 'Экспорт в Qlik')
+            .then(function () {
+                cfpLoadingBar.start();
+                $scope.loading = $http({
+                    method: "POST",
+                    url: "/GS/BookOfChange_relodQlik"
+                }).then(function (response) {
+                    messageBoxService.showInfo('Успешно', 'Экспорт в Qlik');
+                    cfpLoadingBar.set(1);
+                    cfpLoadingBar.complete();
+                }, function (error) {
+                    cfpLoadingBar.complete();
+                    messageBoxService.showError(error.data.message);
+                });
+            }, function () { });
     };
   
 }
