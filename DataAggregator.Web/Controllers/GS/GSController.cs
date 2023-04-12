@@ -3937,14 +3937,14 @@ group by OperationMode
         }
 
         [HttpPost]
-        public ActionResult BookOfChange_relodQlik()
+        public ActionResult BookOfChange_reloadQlik()
         {
             try
             {
                 using (var _context = new GSContext(APP))
                 {
                     _context.Database.CommandTimeout = 30;
-                    _context.Database.ExecuteSqlCommand("exec [dbo].[BookOfChange_relodQlik]");
+                    _context.Database.ExecuteSqlCommand("exec [dbo].[BookOfChange_reloadQlik]");
                 }
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {

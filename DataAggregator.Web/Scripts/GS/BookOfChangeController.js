@@ -176,14 +176,14 @@ function BookOfChangeController($scope, $http, $uibModal, $interval, $timeout, u
         $scope.dataLoading = $q.all([upload])
     };
 
-    $scope.BookOfChange_relodQlik = function (file) {
+    $scope.BookOfChange_reloadQlik = function (file) {
 
         messageBoxService.showConfirm('Вы уверены, что хотите выгрузить книгу перемен в Qlik sense?', 'Экспорт в Qlik')
             .then(function () {
                 cfpLoadingBar.start();
                 $scope.loading = $http({
                     method: "POST",
-                    url: "/GS/BookOfChange_relodQlik"
+                    url: "/GS/BookOfChange_reloadQlik"
                 }).then(function (response) {
                     messageBoxService.showInfo('Успешно', 'Экспорт в Qlik');
                     cfpLoadingBar.set(1);
