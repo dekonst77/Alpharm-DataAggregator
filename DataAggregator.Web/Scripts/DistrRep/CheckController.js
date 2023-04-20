@@ -27,7 +27,7 @@
         };
     });
 function CheckController($scope, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, userService) {
-
+    $scope.ColorButton = ['btn-primary', 'btn-success', 'btn-danger', 'btn-warning', 'btn-info'];
     //Функция обработки выделения через Shift
     function setIsShift(value) {
         if (value && !$('#grid-block').hasClass('disableSelection')) {
@@ -41,6 +41,14 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
         }
     }
 
+    $scope.GetButtonColor = function (value) {
+           
+        alert(value % 7);
+        alert($scope.ColorButton[value % 7])
+        
+    }
+
+
     $scope.Company6FPList = [];
     $scope.Rules_filterList = null;
     $scope.OFDAPIList = [];
@@ -49,6 +57,44 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
 
     //Инициализация блока Для перезагрузки чеков
     $scope.CheckReload_Init = function () {
+
+
+        $scope.CheckReloadFile_Grid = uiGridCustomService.createGridClass($scope, 'CheckReloadFile_Grid');
+        $scope.CheckReloadFile_Grid.Options.data = [];
+        $scope.CheckReloadFile_Grid.Options.columnDefs = [
+            { name: 'Id', field: 'Id', width: 50, type: 'number' },
+            { name: 'Год', field: 'Year', width: 50, type: 'number' },
+            { name: 'Месяц', field: 'Month', width: 50, type: 'number' },
+            { name: 'CompanyId', field: 'CompanyId', width: 50, type: 'number' },
+            { name: 'Компания', field: 'CompanyName', width: 50, type: 'number' },
+            { name: 'Дата добавления', field: 'DateInsert', type: 'date', cellFilter: formatConstants.FILTER_DATE_TIME, width: 180 },
+            { name: 'Путь', field: 'FilePath' },
+            { name: 'Источник', field: 'DataSource' },
+            { name: 'Кол-во записей', field: 'Cnt', width: 50, type: 'number' },
+            { name: 'Кол-во чеков', field: 'CheckCnt', width: 50, type: 'number' },
+            { name: 'Некорректные 6ФП', field: 'IsBad6FP', width: 50, type: 'number' },
+            { name: 'Найденные', field: 'CheckFound', width: 50, type: 'number' },
+            { name: 'В обработке', field: 'CheckInWork', width: 50, type: 'number' },
+            { name: 'Обработанные чеки', field: 'CheckGood', width: 50, type: 'number' },
+            { name: 'Ошибки', field: 'CheckIsBad', width: 50, type: 'number' },
+        ];
+
+
+        $scope.CheckReloadFile_Grid.Options.customEnableRowSelection = true;
+        $scope.CheckReloadFile_Grid.Options.multiSelect = true;
+        $scope.CheckReloadFile_Grid.Options.enableFullRowSelection = true;
+        $scope.CheckReloadFile_Grid.Options.enableRowHeaderSelection = false;
+        $scope.CheckReloadFile_Grid.Options.enableRowSelection = true;
+        $scope.CheckReloadFile_Grid.Options.noUnselect = true;
+        $scope.CheckReloadFile_Grid.Options.appScopeProvider = $scope;
+        $scope.CheckReloadFile_Grid.Options.showGridFooter = true;
+
+        $scope.CheckReloadFile_Grid.Options.onRegisterApi = function (gridApi) {
+            $scope.CheckReloadFiledApi = gridApi;
+        };
+
+
+
         $scope.Title = "Невалидные чеки";
 
 
@@ -65,13 +111,22 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
         });
 
 
+
+
+
+
+
+
+
+
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/DistrRep/CheckReloadInit/',
             data: JSON.stringify({ param: "CheckReloadInit" })
         }).then(function (response) {
+            var data = [];
             var d = new Date();
-            var data = response.data;
+             data = response.data;
             $scope.filterList = data;
             $scope.filter = data;
             $scope.filter.DateFrom = new Date();
@@ -125,43 +180,29 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
        
 
 
-    };
-
-    $scope.CheckReloadFile_Grid = uiGridCustomService.createGridClass($scope, 'CheckReloadFile_Grid');
-    $scope.CheckReloadFile_Grid.Options.columnDefs = [
-        { name: 'Id', field: 'Id', width: 50, type: 'number' },
-        { name: 'Год', field: 'Year', width: 50, type: 'number' },
-        { name: 'Месяц', field: 'Month', width: 50, type: 'number' },
-        { name: 'CompanyId', field: 'CompanyId', width: 50, type: 'number' },
-        { name: 'Компания', field: 'CompanyName', width: 50, type: 'number' },
-        { name: 'Дата добавления', field: 'DateInsert', type: 'date', cellFilter: formatConstants.FILTER_DATE_TIME, width: 180 },
-        { name: 'Путь', field: 'FilePath' },
-        { name: 'Источник', field: 'DataSource' },
-        { name: 'Кол-во записей', field: 'Cnt', width: 50, type: 'number' },
-        { name: 'Кол-во чеков', field: 'CheckCnt', width: 50, type: 'number' },
-        { name: 'Некорректные 6ФП', field: 'IsBad6FP', width: 50, type: 'number' },
-        { name: 'Найденные', field: 'CheckFound', width: 50, type: 'number' },
-        { name: 'В обработке', field: 'CheckInWork', width: 50, type: 'number' },
-        { name: 'Обработанные чеки', field: 'CheckGood', width: 50, type: 'number' },
-        { name: 'Ошибки', field: 'CheckIsBad', width: 50, type: 'number' },
-    ];
+   
 
 
-    $scope.CheckReloadFile_Grid.Options.customEnableRowSelection = true;
-    $scope.CheckReloadFile_Grid.Options.multiSelect = true;
-    $scope.CheckReloadFile_Grid.Options.enableFullRowSelection = true;
-    $scope.CheckReloadFile_Grid.Options.enableRowHeaderSelection = false;
-    $scope.CheckReloadFile_Grid.Options.enableRowSelection = true;
-    $scope.CheckReloadFile_Grid.Options.noUnselect = true;
-    $scope.CheckReloadFile_Grid.Options.appScopeProvider = $scope;
-    $scope.CheckReloadFile_Grid.Options.showGridFooter = true;
+
+        $scope.SetCheckReloadOFD = function (Ofdid) {
+            //  if ($scope.Grid.selectedRows() === undefined || $scope.Grid.selectedRows().length < 1 || $scope.TypeGridApi.selection.getSelectedRows() === undefined || $scope.TypeGridApi.selection.getSelectedRows() === null || $scope.TypeGridApi.selection.getSelectedRows().length < 1) {
+            //      return;
+            //  }
+            var Ids = $scope.CheckReloadFiledApi.selection.getSelectedRows();
+            // var selectedRows = $scope.Grid.selectedRows();
+            // selectedRows.forEach(function (item) {
+            //     $scope.Grid.GridCellsMod(item, "TypeId", Id);
+            alert(Ofdid);
+            alert(Ids)
+    }
+
+
+
 
     function LoadCheckFile() {
+        if ($scope.CheckReloadForm.$invalid) return;
 
         $scope.CheckReloadFile_Grid.Options.data = [];
-
-      //  if ($scope.selectedTemplate == null)
-        //    return;
 
         $scope.templatesLoading = $http({
             method: "POST",
@@ -173,6 +214,10 @@ function CheckController($scope, $route, $http, $uibModal, commonService, messag
         }, function () {
             $scope.message = "Unexpected Error";
         });
-    }
+        }
+
+
+
+    };
 
 }

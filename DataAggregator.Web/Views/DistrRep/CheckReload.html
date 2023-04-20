@@ -32,23 +32,7 @@
     </div>
 
 
-
-    <script type="text/ng-template" id="_organization.html">
-        '
-        <div class="ui-grid-cell-contents">
-            <div class="input-group">
-                <input type="text"
-                       class="form-control" />
-                <span class="input-group-btn">
-                    <button class="btn btn-secondary"
-                            type="button">
-                        <span class="glyphicon glyphicon-pencil">
-                        </span>
-                    </button>
-                </span>
-            </div>
-        </div>'
-    </script>
+       
     <div class="panel-body fullHeightGrid">
         <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
             <li class="active"><a data-target="#CheckReloadNoValidFile" data-toggle="tab">Фалы</a></li>
@@ -73,40 +57,6 @@
 
         </div>
     </div>
-
-
-
-    <!-- Modal -->
-    <div class="modal" id="DepModal" tabindex="-1" role="dialog" aria-labelledby="DepModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:80%;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="DepModalLabel">Отделения</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-
-                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#AddDepModal" ng-disabled="Grid.NeedSave||Grid.selectedRows() == undefined || Grid.selectedRows().length > 1 || Grid.selectedRows()[0].IsDepartment>0" data-translate="BUTTONS.ADD"></button>
-                    <button type="button" class="btn btn-danger" ng-click="removeDept()" ng-disabled="selectedDept == null" data-translate="BUTTONS.DELETE"></button>
-
-                    <br />
-                    <div class="container-fluid" style="height: 400px;" title="">
-                        <ui-grid-control options="Dep_GridOptions" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 
 
 </div>
