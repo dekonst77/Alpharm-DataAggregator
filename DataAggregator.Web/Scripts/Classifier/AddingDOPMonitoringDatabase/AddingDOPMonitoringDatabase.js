@@ -51,7 +51,8 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
     $scope.gridParameterGroup.Options.multiSelect = false;
     $scope.gridParameterGroup.Options.noUnselect = true;
     $scope.gridParameterGroup.Options.columnDefs = [
-        { name: 'Свойство', field: 'Name', filter: { condition: uiGridCustomService.condition }, enableCellEdit: true }
+        { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false, visible: false },
+        { name: 'Свойство', field: 'Name', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false }
     ];
 
     $scope.gridParameterGroup.Options.onRegisterApi = function (gridApi) {
@@ -138,7 +139,9 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
     $scope.gridParameterLevel1.Options.multiSelect = false;
     $scope.gridParameterLevel1.Options.noUnselect = true;
     $scope.gridParameterLevel1.Options.columnDefs = [
-        { name: 'Подуровень 1', field: 'Value', filter: { condition: uiGridCustomService.condition }, enableCellEdit: true }
+        { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false, visible: false },
+        { name: 'ParentId', field: 'ParentId', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false, visible: false },        
+        { name: 'Подуровень 1', field: 'Value', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false }
     ];
 
     $scope.gridParameterLevel1.Options.onRegisterApi = function (gridApi) {
