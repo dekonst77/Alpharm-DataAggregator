@@ -745,6 +745,7 @@
     <Content Include="Scripts\Classifier\GoodsClassifierEditor\GoodsClassifierEditorController.js" />
     <Content Include="Scripts\Classifier\GoodsClassifierEditor\GoodsClassifierEditorFilterController.js" />
     <Content Include="Scripts\Classifier\GoodsCategoryEditor\GoodsCategoryEditorController.js" />
+    <Content Include="Scripts\Classifier\GoodsClassifierReport\GoodsClassifierReport.js" />
     <Content Include="Scripts\Classifier\GoodsParametersEditor\GoodsParametersEditorController.js" />
     <Content Include="Scripts\Classifier\GoodsParametersEditor\AddParameterViewController.js" />
     <Content Include="Scripts\Classifier\Manufacturer\ManufacturerController.js" />
@@ -2132,6 +2133,7 @@
     <Content Include="Views\Classifier\Certificate\ESKLP.html" />
     <Content Include="Views\Classifier\Certificate\MnfWay.html" />
     <Content Include="Views\Classifier\Certificate\Subtance.html" />
+    <Content Include="Views\Classifier\GoodsClassifierReport\GoodsClassifierReport.html" />
     <Content Include="Views\Classifier\Mask.html" />
     <Content Include="Views\Classifier\Checkeds.html" />
     <Content Include="Views\Classifier\ClassifierEditor\Blocked.html" />
@@ -2314,6 +2316,7 @@
     <Compile Include="Controllers\Classifier\DOPMonitoringDatabaseController.cs" />
     <Compile Include="Controllers\Classifier\MaskController.cs" />
     <Compile Include="Controllers\Classifier\Reports\CheckClassifireReportController.cs" />
+    <Compile Include="Controllers\Classifier\Reports\GoodsClassifierReportController.cs" />
     <Compile Include="Controllers\Classifier\SQAController.cs" />
     <Compile Include="Controllers\Classifier\CertificateController.cs" />
     <Compile Include="Controllers\Classifier\CheckedController.cs" />

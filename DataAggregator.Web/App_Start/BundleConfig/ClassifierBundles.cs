@@ -23,6 +23,9 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/Classifier/GoodsParametersEditor/GoodsParametersEditorController.js")
                 .Include("~/Scripts/Classifier/GoodsParametersEditor/AddParameterViewController.js")
 
+                // Отчёт по классификатору доп. ассортимента
+                .Include("~/Scripts/Classifier/GoodsClassifierReport/GoodsClassifierReport.js")
+
                 // Редактор классификатора
                 .Include("~/Scripts/Classifier/ClassifierEditor/ClassifierEditorController.js")
                 .Include("~/Scripts/Classifier/ClassifierEditor/ClassifierEditorHistoryController.js")

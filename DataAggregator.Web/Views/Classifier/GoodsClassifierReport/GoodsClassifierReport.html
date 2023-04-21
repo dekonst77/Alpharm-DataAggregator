@@ -1,0 +1,55 @@
+﻿<style type="text/css">
+    .yellowColor {
+        background-color: yellow;
+    }
+</style>
+<div ng-controller="GoodsClassifierReportController" cg-busy="{promise:dataLoading, message:message}" ng-init="GoodsClassifierReport_Init();" ng-cloak class="auto-grid-parent classifier-editor" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="auto-item-top-part" auto-size-saver="topPartSize">
+
+        <div class="panel panel-default">
+            <div class="panel-heading" ng-dblclick="PanelCategoryListToogle()" dropdown-toggle>
+                Категория
+
+                <button type="button" class="close" aria-label="Close" ng-click="PanelCategoryListToogle()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="panel-body" ng-show="PanelCategoryListIsShow">
+
+                <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                    <div class="col-md-4">
+                        <select class="form-control" required
+                                ng-options="category as category.Id + '. ' + category.Name group by category.GoodsSection.Name for category in goodsCategoryList track by category.Id"
+                                ng-model="goodsCategory" ng-change="getParameterGroups()">
+                            <option value="" disabled selected hidden>Выберите категорию...</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success btn" ng-click="GoodsClassifierReport_Refresh();"><span class="glyphicon glyphicon-refresh"> Обновить</span> </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel panel-default auto-item-panel">
+        <div class="panel-heading">Данные</div>
+        <div class="panel-body" style="height: 95%">
+
+            <div class="row" style="padding-top: 10px;  height: 100%">
+
+                <div id="grid-block" class="auto-item-panel" ng-hide="hideGridDOPMonitoringDatabase" data-context-menu="Views/Classifier/AddingDOPMonitoringDatabase/AddingDOPMonitoringDatabase_context_menu.html">
+                    <ui-grid-control options="GoodsClassifierReport.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

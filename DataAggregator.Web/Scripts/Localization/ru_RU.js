@@ -230,6 +230,9 @@
                 "GOODS_PARAMETERS_EDITOR": {
                     "TITLE": 'Редактор свойств доп. ассортимента'
                 },
+                "GOODS_CLASSIFIER_REPORT": {
+                    "TITLE": 'Отчет по классификатору доп. ассортимента'
+                },
                 "SQA": {
                     "TITLE": "ПКУ"
                 },

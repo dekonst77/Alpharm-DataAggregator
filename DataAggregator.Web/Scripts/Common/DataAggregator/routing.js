@@ -591,6 +591,13 @@
                     isEditor: true
                 })
 
+            // Отчет по классификатору доп. ассортимента
+            .when('/Classifier/GoodsClassifierReport',
+                {
+                    templateUrl: 'Views/Classifier/GoodsClassifierReport/GoodsClassifierReport.html',
+                    title: 'CLASSIFIER.GOODS_CLASSIFIER_REPORT.TITLE',
+                    authorize: true
+                })
 
             // Редактор категорий дополнительного ассортимента
             .when('/Classifier/GoodsCategoryEditor',
