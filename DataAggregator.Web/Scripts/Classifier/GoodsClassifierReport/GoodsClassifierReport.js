@@ -124,8 +124,8 @@ function GoodsClassifierReportController($scope, $http, $q, $uibModal, $cacheFac
                 }
 
             }, function (response) {
-                console.error(response);
-                messageBoxService.showError(response.data);
+                console.error(response.data.message);
+                messageBoxService.showError(response.data.message);
             }).catch(
                 error => {
                     console.error(error);
