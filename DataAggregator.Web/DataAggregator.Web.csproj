@@ -782,6 +782,7 @@
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsChangeOrganizationTypeController.js" />
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsChangeRegionController.js" />
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsMergeController.js" />
+    <Content Include="Scripts\GovernmentPurchases\Reports\ExecutionTerminatedContractController.js" />
     <Content Include="Scripts\GovernmentPurchases\Reports\Reports.js" />
     <Content Include="Scripts\GS\BookOfChangeController.js" />
     <Content Include="Scripts\GS\GSController.js" />
@@ -2181,6 +2182,7 @@
     <Content Include="Views\GovernmentPurchases\OrganizationsEditor\_OrganizationsChangeOrganizationTypeView.html" />
     <Content Include="Views\GovernmentPurchases\OrganizationsEditor\_OrganizationsChangeRegionView.html" />
     <Content Include="Views\GovernmentPurchases\OrganizationsEditor\_OrganizationsMergeView.html" />
+    <Content Include="Views\GovernmentPurchases\Reports\ExecutionTerminatedContractReport\Index.html" />
     <Content Include="Views\GovernmentPurchases\Reports\Reports.html" />
     <Content Include="Views\GS\base_address.html" />
     <Content Include="Views\GS\base_address_context_menu.html" />
@@ -2339,6 +2341,7 @@
     <Compile Include="Controllers\GovernmentPurchases\HandMadePositionController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\KBKController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\OrganizationRawController.cs" />
+    <Compile Include="Controllers\GovernmentPurchases\Reports\ExecutionTerminatedContractReportController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\Reports\ReportsController.cs" />
     <Compile Include="Controllers\GS\GSController.cs" />
     <Compile Include="Controllers\LPU\LPUController.cs" />
@@ -2694,6 +2697,7 @@
     <Folder Include="Service References\App_Data\" />
     <Folder Include="Views\CheckClassifireReport\" />
     <Folder Include="Views\DOPMonitoringDatabase\" />
+    <Folder Include="Views\ExecutionTerminatedContract\" />
     <Folder Include="Views\LPUDictionaries\" />
     <Folder Include="Views\Mask\" />
   </ItemGroup>

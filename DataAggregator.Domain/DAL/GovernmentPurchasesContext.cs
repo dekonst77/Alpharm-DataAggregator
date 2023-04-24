@@ -192,6 +192,10 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<MassFixesDataView> MassFixesDataView { get; set; }
 
+        #region Report
+        public DbSet<ExecutionTerminatedContractView> ExecutionTerminatedContractView { get; set; }
+        #endregion Report
+
         #endregion views
 
 

@@ -1060,6 +1060,14 @@
                     authorize: true
                 })
 
+            // Исполнение прекращено
+            .when('/GovernmentPurchases/ExecutionTerminatedContractReport',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Reports/ExecutionTerminatedContractReport/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.REPORT_EXECUTION_TERMINATED_CONTRACT.TITLE',
+                    authorize: true
+                })
+
             // Статистика по закупкам/контрактам
             .when('/GovernmentPurchases/PurchasesAndContractsStatistics',
                 {

@@ -328,6 +328,9 @@
                 "REPORT_NOT_EXPORTED_TO_EXTERNAL_PURCHASES": {
                     "TITLE": 'Не вылитые в External базу закупки'
                 },
+                "REPORT_EXECUTION_TERMINATED_CONTRACT": {
+                    "TITLE": 'Исполнение прекращено'
+                },
                 "STATISTICS_PURCHASES_AND_CONTRACTS": {
                     "TITLE": 'Статистика по закупкам/контрактам'
                 },
