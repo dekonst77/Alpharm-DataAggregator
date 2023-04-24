@@ -25,8 +25,12 @@ namespace DataAggregator.Web.Controllers.Classifier
         {
             _context.Dispose();
         }
-
-        // GET: DOPMonitoringDatabase
+        
+        /// <summary>
+        /// получить СКЮ доп. ассортимента + блокировки
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResult Init()
         {
             try
@@ -49,6 +53,11 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        /// <summary>
+        /// получить все блокировки (по категории, по доп. свойству, по СКЮ)
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResult InitBlocking()
         {
             try
