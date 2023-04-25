@@ -2050,10 +2050,19 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
         { name: 'Количество ei', field: 'amount_ei_in', type: 'number', cellFilter: formatConstants.FILTER_FLOAT_COUNT },
         { name: 'Количество', field: 'amount', type: 'number', cellFilter: formatConstants.FILTER_FLOAT_COUNT },
         { name: 'СТРАНА ПРОИСХОЖДЕНИЯ ТОВАРА', field: 'country_reg' },
-        { name: 'СУММА', field: 'sumObject', type: 'number', cellFilter: formatConstants.FILTER_FLOAT_COUNT }
+        { name: 'СУММА', field: 'sumObject', type: 'number', cellFilter: formatConstants.FILTER_PRICE }
     ];
     $scope.contractstageObjectsGrid.Options.showGridFooter = true;
     $scope.contractstageObjectsGrid.Options.showColumnFooter = false;
+
+    $scope.contractstageObjectsGrid_Sum = function () {
+        var ret = 0;
+        if ($scope.contractstageObjectsGrid.Options.data !== undefined)
+            $scope.contractstageObjectsGrid.Options.data.forEach(function (item) {
+                ret += item.sumObject;
+            });
+        return ret;
+    };
 
     $scope.contractObjectsReadyGrid.Options.columnDefs = [
        { name: 'Наименование', field: 'Name', enableHiding: false, enableCellEdit: true, cellEditableCondition: canEditContractObjectsReadyGrid },
