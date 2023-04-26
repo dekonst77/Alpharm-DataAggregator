@@ -173,6 +173,7 @@
     <Compile Include="Model\GovernmentPurchases\Source.cs" />
     <Compile Include="Model\GovernmentPurchases\StoredProcedures\NotExportedToExternalLots.cs" />
     <Compile Include="Model\GovernmentPurchases\TriggerLog.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\ExecutionTerminatedContractView.cs" />
     <Compile Include="Model\GovernmentPurchases\View\OrganizationView.cs" />
     <Compile Include="Model\GovernmentPurchases\View\View.cs" />
     <Compile Include="Model\GS\licenses_roszdravnadzor.cs" />

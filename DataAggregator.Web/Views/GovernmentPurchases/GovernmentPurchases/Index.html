@@ -980,6 +980,13 @@
                         </div>
                     </uib-tab>
                     <uib-tab heading="Исполнение контракта" select="contractObjectsTab=3" style="background-color:lightblue !important;">
+                        <div style="height: 50px; margin-top: 5px">
+                            <div class="row">
+                                <div class="col-md-3 padding3">
+                                    <div class="ui-grid-cell-contents">Сумма: {{contractstageObjectsGrid_Sum() | number:2 }} </div>
+                                </div>
+                            </div>
+                        </div>
                         <div ng-if="contractObjectsTab == 3" style="height: 390px">
                             <ui-grid-control options="contractstageObjectsGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
                         </div>
