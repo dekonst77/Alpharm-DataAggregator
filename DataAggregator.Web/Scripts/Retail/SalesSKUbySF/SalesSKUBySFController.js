@@ -554,7 +554,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
         var json_str = JSON.stringify({ year: year, month: month, region_model: JSON.stringify($scope.selectByGroupModel) });
         console.log('$scope.Search -> json_str = ' + json_str);
 
-        $scope.message = 'Пожалуйста, ожидайте... Загрузка';
+        $scope.message = 'Пожалуйста, ожидайте... Загрузка данных.';
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/SalesSKUbySF/ViewSalesByGroupModel/',
@@ -586,6 +586,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
                     const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
                     const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
 
+                    $scope.message = 'Пожалуйста, ожидайте... Идёт расчёт дистрибьюторской отчётности.';
                     $scope.dataLoading =
                         $http({
                             method: 'POST',
@@ -618,6 +619,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
                     const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
                     const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
 
+                    $scope.message = 'Пожалуйста, ожидайте... Идёт расчёт исходных данных.';
                     $scope.dataLoading =
                         $http({
                             method: 'POST',
@@ -650,6 +652,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
                     const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
                     const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
 
+                    $scope.message = 'Пожалуйста, ожидайте... Идёт расчёт ОФД данных.';
                     $scope.dataLoading =
                         $http({
                             method: 'POST',
@@ -683,6 +686,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
                     const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
                     const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
 
+                    $scope.message = 'Пожалуйста, ожидайте... Идёт расчёт данных.';
                     $scope.dataLoading =
                         $http({
                             method: 'POST',
