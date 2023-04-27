@@ -104,8 +104,7 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         /// <summary>
         /// Импорт в Excel
         /// </summary>
-        /// <param name="year"></param>
-        /// <param name="month"></param>
+        /// <param name="GoodsCategoryId">Id категории</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult ExportToExcel(int GoodsCategoryId)
