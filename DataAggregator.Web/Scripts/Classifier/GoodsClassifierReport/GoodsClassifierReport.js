@@ -100,16 +100,6 @@ function GoodsClassifierReportController($scope, $http, $q, $uibModal, $cacheFac
         columnsAddTemp.then((columns) => {
             console.log(columns);
 
-            $scope.GoodsClassifierReport.Options.columnDefs = PermanentColumns;
-
-            if (columns.length > 0) {
-                let columnsAdd = [];
-                Array.prototype.push.apply(columnsAdd, columns.map(function (obj) {
-                    return { field: obj.field, headerCellClass: 'yellowColor' };
-                }));
-                $scope.GoodsClassifierReport.Options.columnDefs = PermanentColumns.concat(columnsAdd);
-            }
-
             $scope.dataLoading = $http({
                 method: 'POST',
                 url: '/GoodsClassifierReport/Init/',
@@ -118,6 +108,18 @@ function GoodsClassifierReportController($scope, $http, $q, $uibModal, $cacheFac
                 var data = response.data;
 
                 if (data.Success) {
+                    // добавляем постоянные поля
+                    $scope.GoodsClassifierReport.Options.columnDefs = PermanentColumns;
+
+                    // добавляем доп. поля
+                    if (columns.length > 0) {
+                        let columnsAdd = [];
+                        Array.prototype.push.apply(columnsAdd, columns.map(function (obj) {
+                            return { field: obj.field, headerCellClass: 'yellowColor' };
+                        }));
+                        $scope.GoodsClassifierReport.Options.columnDefs = PermanentColumns.concat(columnsAdd);
+                    }
+
                     $scope.GoodsClassifierReport.SetData(data.Data.GoodsClassifierReport);
                 } else {
                     messageBoxService.showError(data.ErrorMessage);
@@ -155,4 +157,10 @@ function GoodsClassifierReportController($scope, $http, $q, $uibModal, $cacheFac
         })
     }
 
+    $scope.IsSelectedCategory = function () {
+        if (($scope.goodsCategory == undefined) || ($scope.goodsCategory == null))
+            return false
+        else
+            return true;
+    }
 }
