@@ -51,6 +51,7 @@ function GoodsClassifierReportController($scope, $http, $q, $uibModal, $cacheFac
                 { headerTooltip: true, name: 'GoodsCategoryName', displayName: 'Категория', enableCellEdit: false, width: 200, cellTooltip: true, field: 'GoodsCategoryName', visible: false },
 
                 { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: false, filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
+                { headerTooltip: true, name: 'Обязательно к простановке', enableCellEdit: false, width: 100, field: 'ToRetail', type: 'boolean', visible: true, },
 
                 { headerTooltip: true, name: 'GoodsId', displayName: 'Код препарата', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsId', type: 'number', visible: true, nullable: false },
                 { headerTooltip: true, name: 'GoodsTradeNameId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'GoodsTradeNameId', type: 'number', visible: false, nullable: false },
