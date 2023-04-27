@@ -1,13 +1,10 @@
 ﻿using DataAggregator.Domain.DAL;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 
 namespace DataAggregator.Web.Controllers.Classifier.Reports
 {
@@ -104,5 +101,43 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             }
         }
 
-    }
-}
+        /// <summary>
+        /// Импорт в Excel
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ExportToExcel(int GoodsCategoryId)
+        {
+            DataTable Raw = new DataTable();
+
+            using (var conn = _context.Database.Connection)
+            {
+                conn.Open();
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "GoodsClassifier.ReportOnClassifierOfAdditionalAssortment";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("GoodsCategoryId", GoodsCategoryId));
+
+                    using (var reader = cmd.ExecuteReader())
+                        Raw.Load(reader);
+                }
+            }
+
+            using (Excel.Excel excel = new Excel.Excel())
+            {
+                excel.Create();
+
+                excel.InsertDataTable("Отчёт по классификатору ДОП ассортимента", 1, 1, Raw, true, true, null);
+
+                byte[] bb = excel.SaveAsByte();
+
+                return File(bb, "application/vnd.ms-excel");
+            }           
+        }
+
+    } // class
+} // namespace

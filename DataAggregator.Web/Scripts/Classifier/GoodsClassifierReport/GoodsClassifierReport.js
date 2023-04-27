@@ -163,4 +163,22 @@ function GoodsClassifierReportController($scope, $http, $q, $uibModal, $cacheFac
         else
             return true;
     }
+
+    $scope.GoodsClassifierReportToExcel = function () {
+        $scope.message = 'Пожалуйста, ожидайте... Идёт импорт в Excel.';
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/GoodsClassifierReport/ExportToExcel/',
+            data: JSON.stringify({ GoodsCategoryId: $scope.goodsCategory !== null ? $scope.goodsCategory.Id : 0 }),
+            headers: { 'Content-type': 'application/json' },
+            responseType: 'arraybuffer'
+        }).then(function (response) {
+            var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var fileName = 'GoodsClassifierReport_' + $scope.goodsCategory.Id + '.xlsx';
+            saveAs(blob, fileName);
+        }, function (error) {
+            messageBoxService.showError('Rejected:' + error);
+        });
+    }
 }

@@ -19,7 +19,7 @@
             <div class="panel-body" ng-show="PanelCategoryListIsShow">
 
                 <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
-                    <div class="col-md-4">
+                    <div class="col-md-4 padding3">
                         <select class="form-control" required
                                 ng-options="category as category.Id + '. ' + category.Name group by category.GoodsSection.Name for category in goodsCategoryList track by category.Id"
                                 ng-model="goodsCategory" ng-change="getParameterGroups()">
@@ -27,8 +27,9 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-success btn" ng-click="GoodsClassifierReport_Refresh();"><span class="glyphicon glyphicon-refresh"> Обновить</span> </button>
+                    <div class="btn-group col-md-8 padding3" role="group">
+                        <button type="button" class="btn btn-success btn" ng-click="GoodsClassifierReport_Refresh();" ng-disabled="!IsSelectedCategory()"><span class="glyphicon glyphicon-refresh"> Обновить</span> </button>
+                        <button type="button" class="btn btn-info btn-sm" ng-click="GoodsClassifierReportToExcel();" ng-disabled="!IsSelectedCategory()"><span class="glyphicon glyphicon-download"> Экспорт в Excel</span> </button>
                     </div>
                 </div>
 
