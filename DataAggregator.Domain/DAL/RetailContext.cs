@@ -924,10 +924,11 @@ namespace DataAggregator.Domain.DAL
             {
                 new SqlParameter() { ParameterName = "@currPeriod", SqlDbType = SqlDbType.Date, Value = currPeriod},
                 new SqlParameter() { ParameterName = "@RegionName", SqlDbType = SqlDbType.VarChar, Size = 150, Value = regionName},
+                new SqlParameter() { ParameterName = "@ClassifierId", SqlDbType = SqlDbType.BigInt, Value = DBNull.Value, IsNullable = true},                
                 new SqlParameter() { ParameterName = "@isdebug", SqlDbType = SqlDbType.Bit, Value = isdebug}
             }.Cast<object>().ToArray();
 
-            Database.ExecuteSqlCommand("exec [SalesSKU].[SalesCalculationAlgorithmByRegion] @currPeriod, @RegionName, @isdebug", parameters);
+            Database.ExecuteSqlCommand("exec [SalesSKU].[SalesCalculationAlgorithmByRegion] @currPeriod, @RegionName, @ClassifierId, @isdebug", parameters);
         }
 
         public IEnumerable<ViewSalesSKUByFederationSubject_SP_Result> Load_SalesSKUByFederationSubject_Record(ViewSalesSKUByFederationSubject_SP_Result record, string fieldname)
