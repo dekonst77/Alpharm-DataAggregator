@@ -2738,7 +2738,28 @@ from [adr].[History_coding] where LPUId is null and status<>110
             };
             return jsonNetResult;
         }
-        [Authorize(Roles = "GS_Summs")]
+
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_FreezeGetSource() 
+        {
+            var _context = new GSContext(APP);
+            _context.Database.CommandTimeout = 0;
+            var result = _context.Database.SqlQuery<Domain.Model.GS.History_coding_FreezeList>(" [adr].[History_coding_FreezeList] @user",
+                new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                 ).ToList();
+            
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = result, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
+        }
+
+
+       [Authorize(Roles = "GS_Summs")]
         public ActionResult SummsPeriod_Init()
         {
             try

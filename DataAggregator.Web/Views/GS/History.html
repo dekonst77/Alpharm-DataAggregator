@@ -90,6 +90,7 @@
                         <select name="Users" ng-show="!IsOnline"
                                 class="form-control" style="width:200px;display:inline-block;" ng-options="item as item.Status for item in spr_Users track by item.code" ng-model="UsersCL"></select>
                         <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click="History_SetOtherData();"><span class="glyphicon glyphicon-backward">Сдать</span></button>
+                        <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click=""><span class="glyphicon glyphicon-backward">Заморозка</span></button>
                 </div>
                 </div>
         </div>

@@ -1521,6 +1521,17 @@ namespace DataAggregator.Domain.Model.GS
         public string BricksId { get; set; }
     }
 
+
+    public class History_coding_FreezeList
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Source_client { get; set; }
+        public Boolean? IsFreeze { get; set; }
+        public string UsersWork { get; set; }     
+    }
+
+
     /// <summary>
     /// proc [dbo].[GetPharmacys]
     /// </summary>
