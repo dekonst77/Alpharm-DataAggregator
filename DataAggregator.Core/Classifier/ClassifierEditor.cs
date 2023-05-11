@@ -266,7 +266,7 @@ namespace DataAggregator.Core.Classifier
                 changes.Add(new ChangeDescription("МНН", oldValue, newValue));
             }
 
-            //Сравниваем INN
+            //Сравниваем Комплектацию
             if ((drug.Equipment != null && drugProperty.Equipment == null) ||
                 (drug.Equipment == null && drugProperty.Equipment != null) ||
                 (drug.Equipment != null && drugProperty.Equipment != null && drug.Equipment.Id != drugProperty.Equipment.Id))
@@ -284,8 +284,8 @@ namespace DataAggregator.Core.Classifier
             }
 
             if ((drug.DosageGroup != null && drugProperty.DosageGroup == null) ||
-                    (drug.DosageGroup == null && drugProperty.DosageGroup != null) ||
-                    (drug.DosageGroup != null && drugProperty.DosageGroup != null && drug.DosageGroup.Id != drugProperty.DosageGroup.Id))
+                (drug.DosageGroup == null && drugProperty.DosageGroup != null) ||
+                (drug.DosageGroup != null && drugProperty.DosageGroup != null && drug.DosageGroup.Id != drugProperty.DosageGroup.Id))
             {
                 var oldValue = String.Empty;
                 if (drug.DosageGroup != null)
@@ -295,7 +295,8 @@ namespace DataAggregator.Core.Classifier
                 if (drugProperty.DosageGroup != null)
                     newValue = drugProperty.DosageGroup.Description;
 
-                changes.Add(new ChangeDescription("Дозировка", oldValue, newValue));
+                if (!String.Equals(oldValue, newValue))
+                    changes.Add(new ChangeDescription("Дозировка", oldValue, newValue));
             }
 
             if (drug.TradeName.Value != drugProperty.TradeName.Value)
@@ -1251,7 +1252,7 @@ namespace DataAggregator.Core.Classifier
                 _context.SaveChanges();
 
                 #region Собираем ClassifierPacking
-                
+
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
                 foreach (var CP in model.ClassifierPackings)
                 {
