@@ -560,26 +560,7 @@ namespace DataAggregator.Core.Classifier
             // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-#if !DEBUG
             dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
-#else
-            var dosageGroupsFoundKeyList = dosageGroupsFound.Select(t => t.Id).ToList();
-            var inndosage = _context.INNDosage
-                .GroupBy(elem => elem.DosageGroupId)
-                .Select(group => new
-                {
-                    group.Key,
-                    Count = group.Count()
-                })
-                .Where(t => t.Count == dosageInnCount)
-                .Where(s => dosageGroupsFoundKeyList.Contains(s.Key.Value))
-                .ToList();
-
-            dosageGroupsFound = inndosage
-                .Join(dosageGroupsFound, lefttbl => lefttbl.Key, righttbl => righttbl.Id, (lefttbl, righttbl) => new { righttbl })
-                .Select(t => t.righttbl)
-                .ToList();
-#endif
 
             if (dosageGroupsFound.Count == 1)
                 return dosageGroupsFound.First();
@@ -927,7 +908,7 @@ namespace DataAggregator.Core.Classifier
             var regCert = _context.RegistrationCertificates.Where(t => t.Number == registrationCeritifacte.Number).FirstOrDefault();
 
             if (regCert != null)
-                return  regCert;
+                return regCert;
 
             var circulationPeriod = FindOrCreateCirculationPeriod(registrationCeritifacte.CirculationPeriod);
 
