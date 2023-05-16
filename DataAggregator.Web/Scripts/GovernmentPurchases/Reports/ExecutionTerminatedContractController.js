@@ -51,7 +51,10 @@ function ExecutionTerminatedContractReportController(messageBoxService, $scope, 
             },
             { name: 'Сумма контракта', field: 'Sum', enableHiding: false, filter: { condition: uiGridCustomService.numberCondition }, type: 'number', cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Дата начала подачи заявок', field: 'DateBegin', type: 'date', cellFilter: formatConstants.FILTER_DATE, filter: { condition: uiGridCustomService.condition } },
-            { name: 'Примечание', field: 'Comment', filter: { condition: uiGridCustomService.condition } },
+            {
+                name: 'Примечание', field: 'Comment', filter: { condition: uiGridCustomService.condition },
+                cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
+            },
         ];
 
     //Фильтр
