@@ -370,17 +370,15 @@ namespace DataAggregator.Web.Controllers.OFD
         }
         [HttpPost]
         [Authorize(Roles = "OFD_Boss")]
-        public ActionResult Agg_search(long ClassifierId, int SupplierId, DateTime period, int BrickId)
+        public ActionResult Agg_search(int SupplierId, DateTime periodStart, DateTime periodEnd, int BrickId, long? ClassifierId = null)
         {
-            string periodStr = period.ToString("yyyyMMdd");
-
             try
             {
                 using (var _context = new OFDContext(APP))
                 {
                     _context.Database.CommandTimeout = 0;
 
-                    ViewData["Agg"] = _context.GetAggsearch_Result(ClassifierId, SupplierId, period, BrickId).ToList();
+                    ViewData["Agg"] = _context.GetAggsearch_Result(SupplierId, periodStart, periodEnd, BrickId, ClassifierId).ToList();
 
                     var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
 
@@ -433,6 +431,34 @@ namespace DataAggregator.Web.Controllers.OFD
                         UPD.summa = item.summa;
                     }
                 _context.SaveChanges();
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult Agg_remove(
+            List<long> aggToDelete
+            )
+        {
+            try
+            {
+                var _context = new OFDContext(APP);
+                if (aggToDelete != null)
+                {
+                    _context.Aggregated_All.RemoveRange(_context.Aggregated_All.Where(agg => aggToDelete.Contains(agg.Id)));
+                    _context.SaveChanges();
+                }
+                
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,

@@ -61,20 +61,24 @@
                             class="form-control" ng-options="item as item.value for item in SupplierList track by item.Id" ng-model="supplier"></select>
                 </div>
                 <div class="col-md-1">
-                    <datetime ng-model="period" ap-label="Период" format="dd.MM.yyyy"></datetime>
+                    <datetime ng-model="periodStart" ap-label="Период с" format="dd.MM.yyyy"></datetime>
                 </div>
+                <div class="col-md-1">
+                    <datetime ng-model="periodEnd" ap-label="Период по" format="dd.MM.yyyy"></datetime>
+                </div>
+
                 <div class="col-md-1 padding3">
                     <label>Брик ИД</label>
                     <input name="filtercommon" type="number" class="form-control" ng-model="brickId" ng-change="">
                 </div>
-                <div class="col-md-7 padding3">
+                <div class="col-md-6 padding3">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button class="btn btn-success btn-sm" ng-click="Agg_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
                         <button class="btn btn-warning btn-sm" ng-click="Agg_save();" ng-disabled="!Grid_Agg.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
-
                         <div class="btn btn-info btn-sm" ngf-select="Network_FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                             <span class="glyphicon glyphicon-import" data-translate="BUTTONS.IMPORT"></span>
                         </div>
+                        <button class="btn btn-danger btn-sm" ng-click="Agg_remove();" ng-disabled="!Grid_Agg.NeedSave && selectedRows.length === 0"><span class="glyphicon glyphicon-remove">Удалить</span></button>
                     </div>
                 </div>
             </div>
