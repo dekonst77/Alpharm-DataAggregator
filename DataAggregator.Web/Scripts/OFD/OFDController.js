@@ -386,6 +386,15 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             $scope.gridApi_Grid_Agg = gridApi;
               //Что-то выделили
             $scope.gridApi_Grid_Agg.selection.on.rowSelectionChanged($scope, Grid_Agg_select);
+
+            $scope.gridApi_Grid_Agg.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
+                if (colDef.field !== '@modify') {
+                    if (newValue !== oldValue) {
+                        rowEntity["@modify"] = true;
+                        $scope.Grid_Agg.NeedSave = true;
+                    }
+                }
+            });
         };
 
         function Grid_Agg_select() {
