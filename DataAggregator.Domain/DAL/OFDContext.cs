@@ -158,12 +158,13 @@ namespace DataAggregator.Domain.DAL
             return true;
         }
 
-        public IEnumerable<Aggregated_All> GetAggsearch_Result(long ClassifierId, int SupplierId, DateTime period, int BrickId)
+        public IEnumerable<Aggregated_All> GetAggsearch_Result(int SupplierId, DateTime periodStart, DateTime periodEnd, int BrickId, long? ClassifierId = null)
         {
-            return Database.SqlQuery<Aggregated_All>("[dbo].[GetAggsearch] @ClassifierId, @SupplierId, @period, @BrickId",
-                new SqlParameter { ParameterName = "@ClassifierId", SqlDbType = SqlDbType.BigInt, Value = ClassifierId },
+            return Database.SqlQuery<Aggregated_All>("[dbo].[GetAggsearch] @ClassifierId, @SupplierId, @periodStart, @periodEnd, @BrickId",
+                new SqlParameter { ParameterName = "@ClassifierId", SqlDbType = SqlDbType.BigInt, Value = (object)ClassifierId ?? DBNull.Value, IsNullable = true },
                 new SqlParameter { ParameterName = "@SupplierId", SqlDbType = SqlDbType.Int, Value = SupplierId },
-                new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = period },
+                new SqlParameter { ParameterName = "@periodStart", SqlDbType = SqlDbType.Date, Value = periodStart },
+                new SqlParameter { ParameterName = "@periodEnd", SqlDbType = SqlDbType.Date, Value = periodEnd },
                 new SqlParameter { ParameterName = "@BrickId", SqlDbType = SqlDbType.Int, Value = BrickId }
                 );
         }

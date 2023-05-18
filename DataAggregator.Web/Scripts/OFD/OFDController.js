@@ -344,9 +344,22 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         var SupplierList = [];
         $scope.classifierID = "0";
         $scope.supplier = [];
-        $scope.period = new Date();
+        $scope.periodStart = new Date();
+        $scope.periodEnd = new Date();
         $scope.brickId = "1";
+
+        $scope.selectedRows = [];
+
         $scope.Grid_Agg = uiGridCustomService.createGridClassMod($scope, "Grid_Agg");
+
+        $scope.Grid_Agg.Options.enableSelectAll = true;
+        $scope.Grid_Agg.Options.multiSelect = true;
+        $scope.Grid_Agg.Options.enableRowSelection = true;
+        $scope.Grid_Agg.Options.enableFullRowSelection = false;
+        $scope.Grid_Agg.Options.enableSelectionBatchEvent = false;
+        $scope.Grid_Agg.Options.enableRowHeaderSelection = true;
+        $scope.Grid_Agg.Options.noUnselect = false;
+        
 
         $scope.Grid_Agg.Options.columnDefs = [
             { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition } },
@@ -367,6 +380,18 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             { name: 'Median_price', enableCellEdit: false, field: 'Median_price', filter: { condition: uiGridCustomService.condition } },
             { name: 'Mode_price', enableCellEdit: false, field: 'Mode_price', filter: { condition: uiGridCustomService.condition } }
         ];
+
+        //События изменения грида
+        $scope.Grid_Agg.Options.onRegisterApi = function (gridApi) {
+            $scope.gridApi_Grid_Agg = gridApi;
+              //Что-то выделили
+            $scope.gridApi_Grid_Agg.selection.on.rowSelectionChanged($scope, Grid_Agg_select);
+        };
+
+        function Grid_Agg_select() {
+            $scope.selectedRows = $scope.gridApi_Grid_Agg.selection.getSelectedRows();
+        }
+
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/OFD/Agg_Init/',
@@ -377,12 +402,13 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             return 1;
         });
     };
+
     $scope.Agg_search_AC = function () {
         $scope.dataLoading =
             $http({
                 method: 'POST',
                 url: '/OFD/Agg_search/',
-                data: JSON.stringify({ ClassifierId: $scope.classifierID, SupplierId: $scope.supplier.Id, period: $scope.period, BrickId: $scope.brickId })
+                data: JSON.stringify({ ClassifierId: $scope.classifierID, SupplierId: $scope.supplier.Id, periodStart: $scope.periodStart, periodEnd: $scope.periodEnd, BrickId: $scope.brickId })
             }).then(function (response) {
                 if (response.data.Success) {
                     $scope.Grid_Agg.SetData(response.data.Data.Agg);
@@ -437,6 +463,28 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             });
     };
 
+    $scope.Agg_remove = function () {
+        messageBoxService.showConfirm('Удалить выбранные агрегаторы?', 'Удаление').then(
+            function (result) {
+                let selectedArray = $scope.selectedRows.map(agg => agg.Id);
+                $scope.dataLoading =
+                    $http({
+                        method: 'POST',
+                        url: '/OFD/Agg_remove/',
+                        data: JSON.stringify({
+                            aggToDelete: selectedArray
+                        })
+                    }).then(function (response) {
+                        var data = response.data;
+                        if (data.Success) {
+                            $scope.Agg_search_AC();
+                            $scope.selectedRows = [];
+                        }
+                    }, function (response) {
+                        errorHandlerService.showResponseError(response);
+                    });
+            });
+    };
 
     $scope.D4SS_Init = function () {
         var SupplierList = [];
