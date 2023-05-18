@@ -2757,9 +2757,48 @@ from [adr].[History_coding] where LPUId is null and status<>110
             };
             return jsonNetResult;
         }
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_ToFreeze(string Source_client)
+        {
+            var _context = new GSContext(APP);
+            _context.Database.CommandTimeout = 0;
+            var result = _context.Database.ExecuteSqlCommand(" [adr].[History_coding_ToFreeze] @Source_client ,@user",
+                new System.Data.SqlClient.SqlParameter { ParameterName = "@Source_client", SqlDbType = System.Data.SqlDbType.NVarChar, Value = Source_client },
+                new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                 );
 
 
-       [Authorize(Roles = "GS_Summs")]
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
+        }
+
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_UnFreeze(string Source_client)
+        {
+            var _context = new GSContext(APP);
+            _context.Database.CommandTimeout = 0;
+            var result = _context.Database.ExecuteSqlCommand(" [adr].[History_coding_UnFreeze] @Source_client ,@user",
+                new System.Data.SqlClient.SqlParameter { ParameterName = "@Source_client", SqlDbType = System.Data.SqlDbType.NVarChar, Value = Source_client },
+                new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                 );
+
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
+        }
+
+
+        [Authorize(Roles = "GS_Summs")]
         public ActionResult SummsPeriod_Init()
         {
             try

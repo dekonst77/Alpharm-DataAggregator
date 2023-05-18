@@ -57,7 +57,7 @@
                     <input name="text" type="text" class="form-control" ng-model="filter.INN" ng-change="" placeholder="ИНН">
                     <input name="text" type="text" class="form-control" ng-model="filter.NetworkName" ng-change="" placeholder="Имя Сети">
                     <!--<select name="NetworkName"
-        class="form-control" ng-options="item as item.Status for item in spr_NetworkName track by item.code" ng-model="filter.spr_NetworkName"></select>-->
+                    class="form-control" ng-options="item as item.Status for item in spr_NetworkName track by item.code" ng-model="filter.spr_NetworkName"></select>-->
                 </div>
                 <div class="col-md-1 padding3">
                     <input name="text" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="Адрес">
@@ -67,7 +67,7 @@
                     <!--<input name="text" type="text" class="form-control" ng-model="filter.Address" ng-change="" placeholder="Адрес">-->
                     <select name="Spec"
                             class="form-control" ng-options="item as item.Status for item in spr_Spec track by item.code" ng-model="filter.spr_Spec"></select>
-                    
+
                     <select name="Comments"
                             class="form-control" ng-options="item as item.Status for item in spr_Comments track by item.code" ng-model="filter.spr_Comments"></select>
 
@@ -87,12 +87,12 @@
                         <button class="btn btn-warning btn-sm" ng-click="History_ReSync();" ng-disabled="Grid.NeedSave"><span class="glyphicon glyphicon-flash">Перестянуть поля</span></button>
                     </div>
                     <br />
-                        <select name="Users" ng-show="!IsOnline"
-                                class="form-control" style="width:200px;display:inline-block;" ng-options="item as item.Status for item in spr_Users track by item.code" ng-model="UsersCL"></select>
-                        <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click="History_SetOtherData();"><span class="glyphicon glyphicon-backward">Сдать</span></button>
-                        <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click=""><span class="glyphicon glyphicon-backward">Заморозка</span></button>
+                    <select name="Users" ng-show="!IsOnline"
+                            class="form-control" style="width:200px;display:inline-block;" ng-options="item as item.Status for item in spr_Users track by item.code" ng-model="UsersCL"></select>
+                    <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click="History_SetOtherData();"><span class="glyphicon glyphicon-backward">Сдать</span></button>
+                    <button class="btn btn-danger btn-xs" ng-show="!IsOnline" ng-click="History_FreezeList();" data-toggle="modal" data-target="#FreezeModal" style="margin-left:10px;"><span class="glyphicon glyphicon-remove-sign">Заморозка</span></button>
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -110,6 +110,51 @@
                 <button class="btn btn-danger btn-sm" ng-click="History_classifier_Search_btn();" ng-disabled="!HaveData"><span class="glyphicon glyphicon-search">Искать</span></button>
             </div>
         </div>
-            <ui-grid-control options="Grid_SPR.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
-        </div>
+        <ui-grid-control options="Grid_SPR.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal" id="FreezeModal" tabindex="-1" role="dialog" aria-labelledby="FreezeModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:85%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="FreezeModalLabel">Заморозка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid" style="height: 300px;" title="Выберите Тип подразделения!">
+                        <div id="grid-sel-block" class="auto-item-panel">
+                            <ui-grid-control options="Grid_Freeze.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
+                        </div>
+                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+
+
+
+
+
+
+
+
+</div>
+

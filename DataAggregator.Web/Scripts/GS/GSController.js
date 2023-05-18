@@ -2387,6 +2387,12 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 else { $scope.History_ShowData(); }
             }
         });
+
+
+
+
+
+
     };
     $scope.GetFromSPR = function (SPR, value, def) {
         SPR.forEach(function (item, i, arr) {
@@ -2462,6 +2468,128 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 errorHandlerService.showResponseError(response);
             });
     };
+
+
+
+    ///Grid для заморозки
+    $scope.History_FreezePermission = 0;
+    $scope.Grid_Freeze = uiGridCustomService.createGridClass($scope, 'Grid_Freeze');
+    $scope.Grid_Freeze.Options.showGridFooter = false;
+    $scope.Grid_Freeze.Options.multiSelect = false;
+    $scope.Grid_Freeze.Options.modifierKeysToMultiSelect = true;
+    $scope.Grid_Freeze.Options.customEnableRowSelection = true;
+    $scope.Grid_Freeze.Options.enableRowSelection = false;
+    $scope.Grid_Freeze.Options.enableRowHeaderSelection = false;
+    $scope.Grid_Freeze.Options.enableSelectAll = false;
+    $scope.Grid_Freeze.Options.selectionRowHeaderWidth = 20;
+    $scope.Grid_Freeze.Options.rowHeight = 20;
+    $scope.Grid_Freeze.Options.appScopeProvider = $scope;
+    $scope.Grid_Freeze.Options.enableFullRowSelection = true;
+    $scope.Grid_Freeze.Options.enableSelectionBatchEvent = true;
+    $scope.Grid_Freeze.Options.enableHighlighting = true;
+    $scope.Grid_Freeze.Options.noUnselect = false;
+    $scope.Grid_Freeze.Options.appScopeProvider = $scope;
+    $scope.Grid_Freeze.Options.columnDefs = [
+         { headerTooltip: true, name: 'Id', width: 100, field: 'Id'},
+         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Клиент', field: 'Source_client', filter: { condition: uiGridCustomService.condition } },
+         { headerTooltip: true, enableCellEdit: false, name: 'Заморожено', field: 'IsFreeze', filter: { condition: uiGridCustomService.booleanCondition }, width: 95,
+             cellTemplate:
+
+                 ' <button ng-show="{{row.entity.IsFreeze==null||row.entity.IsFreeze<1  ?\'true\':\'false\'}}" class= "btn btn-xs btn-success"  ng-disabled="{{row.entity.Permission<1  ?\'true\':\'false\'}}" style = "width:90px;" ng-click="grid.appScope.History_ToFreeze(row.entity.Source_client);" >Заморозить</button> <button ng-show="{{row.entity.IsFreeze==null||row.entity.IsFreeze<1  ?\'false\':\'true\'}}"  class= "btn btn-xs btn-danger"  ng-disabled="{{row.entity.Permission<1  ?\'true\':\'false\'}}" style = "width:90px;" ng-click="grid.appScope.History_UnFreeze(row.entity.Source_client);">Разморозить</button>'
+
+                   },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Кол-во записей в работе', field: 'CountInWork', filter: { condition: uiGridCustomService.condition } },
+       
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'У кого в работе', field: 'UsersWork', filter: { condition: uiGridCustomService.condition } },
+        { visible:false, headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Permission', field: 'Permission', filter: { condition: uiGridCustomService.condition } }
+
+    ];
+
+   
+  /* 
+   * '<button class="btn btn-xs {{(row.entity.IsFreeze==null||row.entity.IsFreeze<1  ?\'btn-success\':\'btn-danger\')}}"  ng-disabled="{{row.entity.Permission<1  ?\'true\':\'false\'}}" style="width:90px;" ng-click="{{row.entity.Permission < 1 ? \' \': \' History_ToFreeze(\'test\'); \'}}"> {{(row.entity.IsFreeze == null || row.entity.IsFreeze < 1 ?\'Заморозить\':\'Разморозить\')}}</button>'
+    */
+    
+
+    
+    $('FreezeModal').on('show.bs.modal', function (event) {
+    
+        History_FreezeList();
+    });
+
+
+
+    $scope.History_ToFreeze = function (Source_client) {        
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_ToFreeze/',
+                data: JSON.stringify({ Source_client: Source_client })
+            }).then(function (response) {
+
+                var data = response.data;
+                if (data.Success) {
+                    alert(Source_client + ' заблокирован');
+                    $scope.History_FreezeList();
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+    $scope.History_UnFreeze = function (Source_client) {     
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_UnFreeze/',
+                data: JSON.stringify({ Source_client: Source_client })
+            }).then(function (response) {
+
+                var data = response.data;
+                if (data.Success) {
+                    alert(Source_client + ' разблокирован');
+                    $scope.History_FreezeList();
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+
+    $scope.History_FreezeList = function () {
+
+        $scope.Grid_Freeze.Options.data = [];
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_FreezeGetSource/',             
+            }).then(function (response) {
+              
+                var data = response.data;
+                if (data.Success) {
+                    //$scope.Grid.NeedSave = false;
+                    //if (data.Data.length > 0) {
+                   //     $scope.Grid_Freeze.Options.data = data.Data;
+                     //   $scope.HaveData = true;
+                       // if (data.Data.length < response.data.count) {
+                       //     alert("Внимание показано не все.");
+                     //   }
+                   // }
+                    
+                    $scope.Grid_Freeze.Options.data = data.Data;
+                    if (data.Data.length > 0) {
+                        if (data.Data[0].Permission != null) {
+                            $scope.History_FreezePermission =  data.Data[0].Permission;
+                         //   alert($scope.History_FreezePermission)
+                        }
+                    }
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+
     $scope.History_SetData = function (level) {
         var array_upd = $scope.Grid.GetArrayModify();
         $scope.dataLoading =

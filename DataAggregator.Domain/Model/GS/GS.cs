@@ -1525,10 +1525,12 @@ namespace DataAggregator.Domain.Model.GS
     public class History_coding_FreezeList
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Source_client { get; set; }
-        public Boolean? IsFreeze { get; set; }
-        public string UsersWork { get; set; }     
+        public int? IsFreeze { get; set; }
+        public int? CountInWork { get; set; }
+        public string UsersWork { get; set; }
+        public int? Permission { get; set; }
     }
 
 
