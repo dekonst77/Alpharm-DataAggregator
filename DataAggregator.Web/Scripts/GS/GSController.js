@@ -3949,6 +3949,19 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 errorHandlerService.showResponseError(response);
             });
     };
+
+    $scope.Point_ColumnCheck_Set = function () {
+        var selectedRows = $scope.Grid.selectedRows();
+        selectedRows.forEach(function (item) {         
+            $scope.Grid.GridCellsMod(item, "IsChecked", true);
+        });
+    };
+    $scope.Point_ColumnCheck_UnSet = function () {
+        var selectedRows = $scope.Grid.selectedRows();
+        selectedRows.forEach(function (item) {
+            $scope.Grid.GridCellsMod(item, "IsChecked", false);
+        });
+    };
     $scope.Point_Search = function () {
         if ($scope.Grid.NeedSave === true) {
             messageBoxService.showConfirm('Есть несохранёные результаты. Сохранить?', 'Изменение')

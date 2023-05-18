@@ -2284,6 +2284,7 @@
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Error\InternalServerError.cshtml" />
     <Content Include="Views\DistrRep\CheckReload.html" />
+    <Content Include="Views\GS\Point_context_menu.html" />
     <None Include="Web.DebugOnProductDB.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
