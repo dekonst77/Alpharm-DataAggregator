@@ -1,0 +1,59 @@
+﻿<div ng-controller="OFDController" cg-busy="dataLoading" ng-init="D4SC_Agreement_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .modify {
+            color: red;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-4 padding3">
+                    <label>ОФД</label>
+                    <select name="nSupplier" ng-class="{'has-error': Supplier.$invalid}" class="form-control" ng-options="item as item.value for item in SupplierList track by item.Id"
+                            ng-change="filterNetworks(supplier.Id)" ng-model="supplier"></select>
+                </div>
+                <div class="col-md-4 padding3">
+                    <label>NetworkName</label>
+                    <select name="nNetworkName" class="form-control" ng-options="item as item for item in filteredNetworkNames track by item"
+                            ng-change="filterEntityINN(supplier.Id, networkName)"
+                            ng-model="networkName"></select>
+                </div>
+                <div class="col-md-4 padding3">
+                    <label>EntityINN</label>
+                    <multiselect class="input-xlarge multiselect" ng-model="entityINN" options="item as item for item in filteredEntityINNs" check-all-label="Выбрать всё" uncheck-all-label="Снять всё"
+                                 header="Выбрать ИНН" selected-header="Выбранные значения" multiple="true" enable-filter="true" filter-placeholder="EntityINN">
+                    </multiselect>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <datetime ng-model="periodStart" ap-label="Период с"></datetime>
+                </div>
+                <div class="col-md-2">
+                    <datetime ng-model="periodEnd" ap-label="Период по" format="dd.MM.yyyy"></datetime>
+                </div>
+                <div class="col-md-8 padding3">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-success btn-sm" ng-click="D4SC_Agreement_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="D4SC_Agreement_editDates();" ng-disabled="selectedAgreementIds.length == 0"><span class="glyphicon glyphicon-edit">Изменить даты согласий</span></button>
+
+                        <div class="btn btn-info btn-sm" ng-click="D4SC_Agreement_import();">
+                            <span class="glyphicon glyphicon-import" data-translate="BUTTONS.IMPORT"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel">
+        <div class="row" style="height:100%">
+            <div class="col-md-9" style="height:100%">
+                <ui-grid-control options="Grid_D4SC_Agreement.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+            </div>
+            <div class="col-md-3" style="height:100%">
+                <ui-grid-control options="Grid_D4SC_Classifiers.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+            </div>
+        </div>
+    </div>
+</div>
