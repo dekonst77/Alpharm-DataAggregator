@@ -470,6 +470,7 @@ namespace DataAggregator.Domain.Model.GS
         public string fias_id { get; set; }
         public string Post_Index { get; set; }
         public bool? IsChecked { get; set; }
+        public string Comment { get; set; }
     }
     [Table("Organization", Schema = "dbo")]
     public class Organization
@@ -1564,6 +1565,7 @@ namespace DataAggregator.Domain.Model.GS
         public string fias_id { get; set; }
         public string Post_Index { get; set; }
         public bool? IsChecked { get; set; }
+        public string Comment { get; set; }
         /// <summary>
         /// ГАР поля
         /// </summary>

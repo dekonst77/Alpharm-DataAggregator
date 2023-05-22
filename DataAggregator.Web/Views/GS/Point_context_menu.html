@@ -16,6 +16,21 @@
                 </div>
             </div>
         </div>
-      
+        <div class="row padding1">
+            <div class="col-md-3 padding1">
+                <label>Комментарий</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group ">
+                    <div class="btn-group">
+                        <button ng-repeat="item in comments" type="button" class="btn btn-primary btn-xs"
+                                ng-click="Point_Comment(item)" 
+                                style="margin-right:5px;"
+                                data-translate="{{item}}">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
