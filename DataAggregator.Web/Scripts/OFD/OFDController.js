@@ -1,9 +1,9 @@
 ﻿angular
     .module('DataAggregatorModule')
     .controller('OFDController', [
-        '$scope', '$route', '$http', '$uibModal', 'messageBoxService', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'commonService', OFDController]);
+        '$scope', '$route', '$http', '$uibModal', 'messageBoxService', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'commonService', 'Upload', OFDController]);
 
-function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, commonService) {
+function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, commonService, Upload) {
     $scope.format = 'dd.MM.yyyy';
     $scope.log_dt = new dateClass();
     $scope.files_dt = new dateClass();
@@ -356,7 +356,6 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         $scope.Grid_Agg.Options.multiSelect = true;
         $scope.Grid_Agg.Options.enableRowSelection = true;
         $scope.Grid_Agg.Options.enableFullRowSelection = false;
-        $scope.Grid_Agg.Options.enableSelectionBatchEvent = false;
         $scope.Grid_Agg.Options.enableRowHeaderSelection = true;
         $scope.Grid_Agg.Options.noUnselect = false;
         
@@ -645,4 +644,235 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         }
     };
 
+
+    /*#12117 - Редактор Согласий 4СС*/
+    $scope.D4SC_Agreement_Init = function () {
+        $scope.supplier = [];
+
+        $scope.selectedAgreementIds = [];
+
+        $scope.NetworkNames = [];
+        $scope.EntityINNs = [];
+        $scope.AgreementList = [];
+
+        $scope.filteredNetworkNames = [];
+        $scope.filteredEntityINNs = [];
+
+        $scope.periodStart = null;
+        $scope.periodEnd = null;
+
+        $scope.entityINN = [];
+        $scope.networkName = null;
+
+        $scope.Grid_D4SC_Agreement = uiGridCustomService.createGridClassMod($scope, "Grid_D4SC_Agreement");
+        $scope.Grid_D4SC_Classifiers = uiGridCustomService.createGridClassMod($scope, "Grid_D4SC_Classifiers");
+
+        $scope.Grid_D4SC_Agreement.Options.enableSelectAll = true;
+        $scope.Grid_D4SC_Agreement.Options.multiSelect = true;
+        $scope.Grid_D4SC_Agreement.Options.enableRowSelection = true;
+        $scope.Grid_D4SC_Agreement.Options.enableFullRowSelection = false;
+        $scope.Grid_D4SC_Agreement.Options.enableRowHeaderSelection = true;
+        $scope.Grid_D4SC_Agreement.Options.noUnselect = false;
+
+
+        $scope.Grid_D4SC_Agreement.Options.columnDefs = [
+            { name: 'AgreementId', field: 'AgreementId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'EntityINN', enableCellEdit: false, field: 'EntityINN', filter: { condition: uiGridCustomService.condition } },
+            { name: 'OwnerAgrId', enableCellEdit: false, field: 'OwnerAgrId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'SupplierId', enableCellEdit: false, field: 'SupplierId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Name', enableCellEdit: false, field: 'Name', filter: { condition: uiGridCustomService.condition } },
+            { name: 'NetworkName', enableCellEdit: false, field: 'NetworkName', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Date_begin', enableCellEdit: false, field: 'Date_begin', type: 'date', cellFilter: formatConstants.FILTER_DATE, filter: { condition: uiGridCustomService.condition } },
+            { name: 'Date_end', enableCellEdit: false, field: 'Date_end', type: 'date', cellFilter: formatConstants.FILTER_DATE, filter: { condition: uiGridCustomService.condition } },
+        ];
+
+        $scope.Grid_D4SC_Agreement.Options.onRegisterApi = function (gridApi) {
+            $scope.gridApi_Grid_D4SC_Agreement = gridApi;
+            $scope.gridApi_Grid_D4SC_Agreement.selection.on.rowSelectionChanged($scope, D4SC_Agreement_select);
+
+            $scope.gridApi_Grid_D4SC_Agreement.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
+                if (colDef.field !== '@modify') {
+                    if (newValue !== oldValue) {
+                        rowEntity["@modify"] = true;
+                        $scope.Grid_D4SC_Agreement.NeedSave = true;
+                    }
+                }
+            });
+        };
+
+        $scope.Grid_D4SC_Classifiers.Options.columnDefs = [
+            { name: 'AgreementId', enableCellEdit: false, field: 'AgreementId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'ClassifierId', enableCellEdit: false, field: 'ClassifierId', filter: { condition: uiGridCustomService.condition } }
+        ];
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/OFD/D4SC_Agreement_Init/',
+            data: JSON.stringify({})
+        }).then(function (response) {
+            Array.prototype.push.apply($scope.SupplierList, response.data.Data.Supplier);
+            Array.prototype.push.apply($scope.NetworkNames, response.data.Data.NetworkNames);
+            Array.prototype.push.apply($scope.EntityINNs, response.data.Data.EntityINNs);
+
+            $scope.supplier = $scope.SupplierList[0];
+
+            return 1;
+        });
+    };
+
+    $scope.filterNetworks = function (supplierId) {
+        let data = $scope.NetworkNames.filter((n) => n.SupplierId === supplierId);
+        if (data && data[0] && data[0].Networks)
+            $scope.filteredNetworkNames = data[0].Networks;
+        else
+            $scope.filteredNetworkNames = [];
+    }
+
+    $scope.filterEntityINN = function (supplierId, networkName) {
+        let data = $scope.EntityINNs.filter((n) => n.SupplierId === supplierId && n.NetworkName == networkName);
+        if (data && data[0] && data[0].INNs)
+            $scope.filteredEntityINNs = data[0].INNs;
+        else
+            $scope.filteredEntityINNs = [];
+    }
+
+    function D4SC_Agreement_select(row) {
+        if (row.entity && row.entity.AgreementId) {
+            let AgreementId = row.entity.AgreementId;
+            $scope.D4SC_GetClassifiers(AgreementId);
+
+            var index = $scope.selectedAgreementIds.indexOf(AgreementId);
+            if (index !== -1) 
+                $scope.selectedAgreementIds.splice(index, 1);
+            else
+                $scope.selectedAgreementIds.push(AgreementId);
+        }
+    }
+
+    $scope.D4SC_Agreement_search = function () {
+        $scope.selectedAgreementIds = [];
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/OFD/D4SC_Agreement_search/',
+                data: JSON.stringify({ SupplierId: $scope.supplier.Id, periodStart: $scope.periodStart, periodEnd: $scope.periodEnd, NetworkName: $scope.networkName, EntityINNs: $scope.entityINN.length > 0 ? $scope.entityINN : null })
+            }).then(function (response) {
+                if (response.data.Success) {
+                    if (response.data.Data.D4SC_Agreement) {
+                        $scope.AgreementList = response.data.Data.D4SC_Agreement;
+                        //let data = response.data.Data.D4SC_Agreement;
+                        //data.forEach(x => {
+                        //    x.Date_begin = new Date(x.Date_begin);
+                        //    x.Date_end = new Date(x.Date_end);
+                        //});
+                        $scope.Grid_D4SC_Agreement.SetData($scope.AgreementList);
+                    }
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+    $scope.D4SC_GetClassifiers = function (AgreementId) {
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/OFD/D4SC_Agreement_Classifiers/',
+                data: JSON.stringify({ AgreementId: AgreementId })
+            }).then(function (response) {
+                if (response.data.Success) {
+                    $scope.Grid_D4SC_Classifiers.SetData(response.data.Data.Data.Classifiers);
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    }
+
+    $scope.D4SC_Agreement_import = function () {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/OFD/4SC_Agreement_Import.html',
+            size: 'lg',
+            controller: 'AgreementImportController',
+            windowClass: 'center-modal',
+            backdrop: 'static'
+        });
+    };
+
+    $scope.D4SC_Agreement_editDates = function () {
+        let rootScope = $scope;
+
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/OFD/4SC_Agreement_EditDates.html',
+            size: 'lg',
+            controller: 'AgreementEditDatesController',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                AgreementIds: function () {
+                    return $scope.selectedAgreementIds;
+                },
+                rootScope: rootScope
+            }
+        });
+    }
+}
+
+angular
+    .module('DataAggregatorModule')
+    .controller('AgreementImportController', [
+        '$scope', 'Upload', 'errorHandlerService', '$uibModalInstance', AgreementImportController]);
+
+function AgreementImportController($scope, Upload, errorHandlerService, $modalInstance) {
+    $scope.isForce = false;
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    $scope.import = function (file) {
+        Upload.upload({
+            url: '/OFD/ImportAgreements_from_Excel/',
+            data: {
+                uploads: file,
+                force: $scope.isForce
+            }
+        }).then(function () {
+            alert("Файл загружен");
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    };
+}
+
+angular
+    .module('DataAggregatorModule')
+    .controller('AgreementEditDatesController', [
+        '$scope', '$http', 'errorHandlerService', '$uibModalInstance', '$rootScope', AgreementEditDatesController]);
+
+function AgreementEditDatesController($scope, $http, errorHandlerService, $modalInstance, $rootScope) {
+    $scope.dateBegin = new Date();
+    $scope.dateEnd = new Date();
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    $scope.save = function () {
+        $http({
+            method: 'POST',
+            url: '/OFD/D4SC_Agreement_save/',
+            data: JSON.stringify({
+                array: $scope.$resolve.AgreementIds,
+                dateBegin: $scope.dateBegin,
+                dateEnd: $scope.dateEnd
+            })
+        }).then(function () {
+            $modalInstance.dismiss();
+            $scope.$resolve.rootScope.D4SC_Agreement_search();
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    }
 }
