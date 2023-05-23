@@ -3871,6 +3871,25 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
         $scope.Grid.Options.showGridFooter = true;
         $scope.Grid.Options.multiSelect = true;
         $scope.Grid.Options.modifierKeysToMultiSelect = true;
+        $scope.Grid.Options.enableRowSelection = true;
+
+        $scope.Grid.Options.onRegisterApi = function (gridApi) {
+            $scope.gridApi = gridApi;
+            //gridApi.selection.on.rowSelectionChanged($scope, doSelection);
+        };
+
+        //function doSelection(row) {
+        //    _.each($scope.gridApi.selection.getSelectedRows(), function (row) {
+        //        console.log(row)
+        //    });
+        //}
+
+        $scope.rightClick = function (event) {
+            var scope = angular.element(event.target).scope();
+            $scope.gridApi.selection.clearSelectedRows();
+            $scope.gridApi.grid.modifyRows($scope.Grid.Options.data);
+            $scope.gridApi.selection.selectRow(scope.row.entity); 
+        };
 
         //$scope.YandexAddress
         $scope.Grid.Options.columnDefs = [
@@ -3963,20 +3982,20 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
 
     $scope.Point_ColumnCheck_Set = function () {
-        var selectedRows = $scope.Grid.selectedRows();
+        var selectedRows = $scope.gridApi.selection.getSelectedRows()
         selectedRows.forEach(function (item) {         
             $scope.Grid.GridCellsMod(item, "IsChecked", true);
         });
     };
     $scope.Point_ColumnCheck_UnSet = function () {
-        var selectedRows = $scope.Grid.selectedRows();
+        var selectedRows = $scope.gridApi.selection.getSelectedRows()
         selectedRows.forEach(function (item) {
             $scope.Grid.GridCellsMod(item, "IsChecked", false);
         });
     };
 
     $scope.Point_Comment = function (comment) {
-        var selectedRows = $scope.Grid.selectedRows();
+        var selectedRows = $scope.gridApi.selection.getSelectedRows()
         selectedRows.forEach(function (item) {
             var finalComment = "";
             if (item.Comment && item.Comment.indexOf(comment) >= 0) {
