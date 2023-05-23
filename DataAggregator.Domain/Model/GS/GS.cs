@@ -1544,16 +1544,28 @@ namespace DataAggregator.Domain.Model.GS
         public System.DateTime date_add { get; set; }
         public int GSId_first { get; set; }
         public Nullable<decimal> koor_широта { get; set; }
+        [NotMapped]
+        public string koor_широта_string { get => koor_широта.ToString(); }
         public Nullable<decimal> koor_долгота { get; set; }
+        [NotMapped]
+        public string koor_долгота_string { get => koor_долгота.ToString(); }
         public Nullable<System.DateTime> koor_DT { get; set; }
         public string Address { get; set; }
         public string BricksId { get; set; }
         public string fias_id_manual { get; set; }
         public string fias_code_manual { get; set; }
         public Nullable<decimal> geo_lat_manual { get; set; }
+        [NotMapped]
+        public string geo_lat_manual_string { get => geo_lat_manual.ToString(); }
         public Nullable<decimal> geo_lon_manual { get; set; }
+        [NotMapped]
+        public string geo_lon_manual_string { get => geo_lon_manual.ToString(); }
         public Nullable<decimal> Address_koor_lat { get; set; }
+        [NotMapped]
+        public string Address_koor_lat_string { get => Address_koor_lat.ToString(); }
         public Nullable<decimal> Address_koor_long { get; set; }
+        [NotMapped]
+        public string Address_koor_long_string { get => Address_koor_long.ToString(); }
         public string Address_region { get; set; }
         public string Address_city { get; set; }
         public string Address_index { get; set; }

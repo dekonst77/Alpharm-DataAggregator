@@ -3900,13 +3900,13 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
             { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Брик', field: 'BricksId', headerCellClass: 'Green', filter: { condition: uiGridCustomService.condition }, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/GS/Bricks?ids={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_широта', field: 'koor_широта', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_широта', field: 'koor_широта_string', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_долгота', field: 'koor_долгота', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_долгота', field: 'koor_долгота_string', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_lat', field: 'Address_koor_lat', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_lat', field: 'Address_koor_lat_string', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_long', field: 'Address_koor_long', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_long', field: 'Address_koor_long_string', filter: { condition: uiGridCustomService.condition } },
 
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Post_Index', field: 'Post_Index', filter: { condition: uiGridCustomService.condition } },
 
@@ -3914,8 +3914,8 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'fias_id_manual', field: 'fias_id_manual', filter: { condition: uiGridCustomService.condition } },
             //{ headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'fias_code_manual', field: 'fias_code_manual', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'geo_lat_manual', field: 'geo_lat_manual', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'geo_lat_manual', field: 'geo_lat_manual_string', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual_string', filter: { condition: uiGridCustomService.condition } },
 
             { headerTooltip: true, name: 'Проверено', enableCellEdit: true, width: 100, field: 'IsChecked', type: 'boolean' },
             { headerTooltip: true, name: 'Комментарий', enableCellEdit: false, width: 100, field: 'Comment', filter: { condition: uiGridCustomService.condition } },
