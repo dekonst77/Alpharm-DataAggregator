@@ -552,7 +552,8 @@ GS_Brick*/
                     IDS = "%";
                 }
                 _context.Database.CommandTimeout = 0;
-                var ret = _context.Database.SqlQuery<Domain.Model.GS.GS_View_SP>("dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,@isCloseOFD,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError",
+                var ret = _context.Database.SqlQuery<Domain.Model.GS.GS_View_SP>(@"dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,@isCloseOFD
+                        ,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError,@isSameAddressDiffCoords,@isSameCoordsDiffAddress",
                     new System.Data.SqlClient.SqlParameter("@filter", ""),
                     new System.Data.SqlClient.SqlParameter("@IDS", IDS),
                     new System.Data.SqlClient.SqlParameter("@PHids", ""),
@@ -571,7 +572,9 @@ GS_Brick*/
                     new System.Data.SqlClient.SqlParameter("@isDateAddLic", false),
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@period", SqlDbType = System.Data.SqlDbType.Date, Value = currentperiod },
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@dt", SqlDbType = System.Data.SqlDbType.Date, Value = DBNull.Value },
-                    new System.Data.SqlClient.SqlParameter("@BrickError", false)
+                    new System.Data.SqlClient.SqlParameter("@BrickError", false),
+                    new SqlParameter("@isSameAddressDiffCoords", false),
+                    new SqlParameter("@isSameCoordsDiffAddress", false)
                     ).ToList();
 
 
