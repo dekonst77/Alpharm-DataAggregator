@@ -691,19 +691,21 @@ namespace DataAggregator.Web.Controllers.OFD
 
         [HttpPost]
         [Authorize(Roles = "OFD_Boss")]
-        public ActionResult D4SC_Agreement_search(int? SupplierId = null, DateTime? periodStart = null, DateTime? periodEnd = null, string NetworkName = null, string[] EntityINNs = null)
+        public ActionResult D4SC_Agreement_search(int? SupplierId = null, DateTime? periodStart = null, DateTime? periodEnd = null, string NetworkName = null, string[] EntityINNs = null, bool isCurrent = false)
         {
             try
             {
                 var _context = new OFDContext(APP);
                 var innList = EntityINNs != null && EntityINNs.Length > 0 ? EntityINNs.ToList() : null;
+                var today = DateTime.Today;
 
                 var data = _context.Agreement_All
                     .AsNoTracking()
                     .Where(x => (SupplierId == null || x.SupplierId == SupplierId)
                         && (periodStart == null || x.Date_begin >= periodStart)
                         && (periodEnd == null || x.Date_end <= periodEnd)
-                        && (NetworkName == null || x.NetworkName == NetworkName));
+                        && (NetworkName == null || x.NetworkName == NetworkName)
+                        && (isCurrent == false || x.Date_end >= today));
 
                 if (innList != null)
                     data = data.Where(x => innList.Contains(x.EntityINN));
@@ -799,9 +801,10 @@ namespace DataAggregator.Web.Controllers.OFD
                     foreach (var item in array)
                     {
                         var UPD = _context.Agreement_All.Where(x => x.AgreementId == item).FirstOrDefault();
-                        if (UPD != null && UPD.Date_end >= dateBegin)
+                        if (UPD != null)
                         {
-                            UPD.Date_end = beforeDatEnd;
+                            if (UPD.Date_end >= beforeDatEnd)
+                                UPD.Date_end = beforeDatEnd;
 
                             var ADD = new Domain.Model.OFD.Agreement
                             {

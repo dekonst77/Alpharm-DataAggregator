@@ -26,13 +26,18 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-1">
+                    <label>
+                        <input name="isCurrent" type="checkbox" class="" ng-model="isCurrent" ng-change="">&nbsp;Только действующие
+                    </label>
+                </div>
                 <div class="col-md-2">
                     <datetime ng-model="periodStart" ap-label="Период с"></datetime>
                 </div>
                 <div class="col-md-2">
                     <datetime ng-model="periodEnd" ap-label="Период по" format="dd.MM.yyyy"></datetime>
                 </div>
-                <div class="col-md-8 padding3">
+                <div class="col-md-7 padding3">
                     <div class="btn-group" role="group">
                         <button class="btn btn-success btn-sm" ng-click="D4SC_Agreement_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
                         <button class="btn btn-warning btn-sm" ng-click="D4SC_Agreement_editDates();" ng-disabled="selectedAgreementIds.length == 0"><span class="glyphicon glyphicon-edit">Изменить даты согласий</span></button>

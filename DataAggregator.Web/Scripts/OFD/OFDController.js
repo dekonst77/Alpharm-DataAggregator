@@ -660,6 +660,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
 
         $scope.periodStart = null;
         $scope.periodEnd = null;
+        $scope.isCurrent = true;
 
         $scope.entityINN = [];
         $scope.networkName = null;
@@ -755,7 +756,10 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             $http({
                 method: 'POST',
                 url: '/OFD/D4SC_Agreement_search/',
-                data: JSON.stringify({ SupplierId: $scope.supplier.Id, periodStart: $scope.periodStart, periodEnd: $scope.periodEnd, NetworkName: $scope.networkName, EntityINNs: $scope.entityINN.length > 0 ? $scope.entityINN : null })
+                data: JSON.stringify({
+                    SupplierId: $scope.supplier.Id, periodStart: $scope.periodStart, periodEnd: $scope.periodEnd, NetworkName: $scope.networkName
+                    , EntityINNs: $scope.entityINN.length > 0 ? $scope.entityINN : null, isCurrent: $scope.isCurrent || false
+                })
             }).then(function (response) {
                 if (response.data.Success) {
                     if (response.data.Data.D4SC_Agreement) {
@@ -789,13 +793,17 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
     }
 
     $scope.D4SC_Agreement_import = function () {
+        let rootScope = $scope;
         $uibModal.open({
             animation: true,
             templateUrl: 'Views/OFD/4SC_Agreement_Import.html',
             size: 'lg',
             controller: 'AgreementImportController',
             windowClass: 'center-modal',
-            backdrop: 'static'
+            backdrop: 'static',
+            resolve: {
+                rootScope: rootScope
+            }
         });
     };
 
@@ -840,6 +848,8 @@ function AgreementImportController($scope, Upload, errorHandlerService, $modalIn
             }
         }).then(function () {
             alert("Файл загружен");
+            $modalInstance.dismiss();
+            $scope.$resolve.rootScope.D4SC_Agreement_search();
         }, function (response) {
             errorHandlerService.showResponseError(response);
         });
@@ -851,7 +861,7 @@ angular
     .controller('AgreementEditDatesController', [
         '$scope', '$http', 'errorHandlerService', '$uibModalInstance', '$rootScope', AgreementEditDatesController]);
 
-function AgreementEditDatesController($scope, $http, errorHandlerService, $modalInstance, $rootScope) {
+function AgreementEditDatesController($scope, $http, errorHandlerService, $modalInstance) {
     $scope.dateBegin = new Date();
     $scope.dateEnd = new Date();
 
