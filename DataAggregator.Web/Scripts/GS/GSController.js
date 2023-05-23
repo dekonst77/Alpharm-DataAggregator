@@ -250,7 +250,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
         isLicExists: false,
         isCall: false,
         dt: null,
-        isDateAddLic: false
+        isDateAddLic: false,
+        isSameAddressDiffCoords: false,
+        isSameCoordsDiffAddress: false,
     };
     $scope.DT_filter = new dateClass();
     $scope.Get_currentperiod = function (val, inc) {
