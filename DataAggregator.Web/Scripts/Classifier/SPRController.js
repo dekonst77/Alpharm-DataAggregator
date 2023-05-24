@@ -49,6 +49,37 @@ function SPRController($scope, $window, $route, $http, $uibModal, commonService,
                 { name: 'Описание', enableCellEdit: true, field: 'Description', filter: { condition: uiGridCustomService.condition } }
             ];
         }
+        if ($scope.type === "t5") {
+            $scope.Grid_SPR.Options.columnDefs = [
+                { name: 'Код', enableCellEdit: false, field: 'Id', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Код ТН', visible: false, enableCellEdit: false, field: 'GoodsTradeNameId', filter: { condition: uiGridCustomService.condition } },
+                { name: 'ТН', enableCellEdit: false, field: 'GoodsTradeName', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Описание', enableCellEdit: true, field: 'GoodsDescription', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Description', enableCellEdit: true, field: 'GoodsDescription_Eng', filter: { condition: uiGridCustomService.condition } }
+            ];
+        }
+        // справочник ДОП -> Категории
+        if ($scope.type === "GoodsCategory") {
+            $scope.Grid_SPR.Options.columnDefs = [
+                { name: 'Код', enableCellEdit: false, field: 'Id', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Код секции', enableCellEdit: false, visible: false, field: 'GoodsSectionId', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Секция', enableCellEdit: false, field: 'GoodsSectionName', filter: { condition: uiGridCustomService.condition } },
+
+                { name: 'Категория', enableCellEdit: true, field: 'Value', filter: { condition: uiGridCustomService.condition } },
+              { name: 'Description', enableCellEdit: true, field: 'Value_Eng', filter: { condition: uiGridCustomService.condition } }
+            ];
+        }
+        // справочник ДОП -> Форма выпуска
+        if ($scope.type === "Goods") {
+            $scope.Grid_SPR.Options.columnDefs = [
+                { name: 'Код', enableCellEdit: false, field: 'Id', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Код ТН', visible: false, enableCellEdit: false, field: 'GoodsTradeNameId', filter: { condition: uiGridCustomService.condition } },
+                { name: 'ТН', enableCellEdit: false, field: 'GoodsTradeName', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Описание', enableCellEdit: true, field: 'GoodsDescription', filter: { condition: uiGridCustomService.condition } },
+                { name: 'Description', enableCellEdit: true, field: 'GoodsDescription_Eng', filter: { condition: uiGridCustomService.condition } }
+            ];
+        }
+
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/SPR/SPR_Init/',
@@ -142,6 +173,14 @@ function SPRController($scope, $window, $route, $http, $uibModal, commonService,
         });
     };
 
+    $scope.IsExistUse = function () {
+        var item = $scope.Grid_SPR.Options.data[0];
+
+        if (item.IsUse === undefined)
+            return false;
+        else
+            return true;
+    }
 
     $scope.SPR_FromExcel = function (files) {
         /*    db: $scope.db, shema: $scope.shema,
@@ -190,7 +229,7 @@ function SPRController($scope, $window, $route, $http, $uibModal, commonService,
 
     //Поиск вниз следующей строки с пустым полем Value_Eng
     $scope.searchEmptyDown = function () {
-        var visibleRows = $scope.Grid_SPR.gridApi.core.getVisibleRows().map(function (item) { return item.entity });        
+        var visibleRows = $scope.Grid_SPR.gridApi.core.getVisibleRows().map(function (item) { return item.entity });
         var selectedRows = $scope.Grid_SPR.selectedRows();
 
         var lastSelectedRowIndex = getLastRowIndex(visibleRows, selectedRows);
@@ -210,7 +249,7 @@ function SPRController($scope, $window, $route, $http, $uibModal, commonService,
         //console.debug(lastSelectedRowIndex);
         //console.debug(emptydata);        
 
-        return;       
+        return;
     }
 
     //Поиск вверх следующей строки с пустым полем Value_Eng

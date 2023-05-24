@@ -3886,7 +3886,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
         $scope.rightClick = function (event) {
             var scope = angular.element(event.target).scope();
-            $scope.gridApi.selection.clearSelectedRows();
+            //$scope.gridApi.selection.clearSelectedRows();
             $scope.gridApi.grid.modifyRows($scope.Grid.Options.data);
             $scope.gridApi.selection.selectRow(scope.row.entity); 
         };
