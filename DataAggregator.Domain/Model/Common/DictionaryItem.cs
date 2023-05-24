@@ -38,6 +38,7 @@
         public long Id { get; set; }
         public long GoodsTradeNameId { get; set; }
         public string GoodsTradeName { get; set; }
+        public string MiniName { get; set; }
         public string GoodsDescription { get; set; }
         public string GoodsDescription_Eng { get; set; }
     }
@@ -67,6 +68,7 @@
         public long Id { get; set; }
         public string Value { get; set; }
         public string Value_Eng { get; set; }
+        public string MiniName { get; set; }        
         public string Description { get; set; }
         public string Description_Eng { get; set; }
         public bool IsUse { get; set; }

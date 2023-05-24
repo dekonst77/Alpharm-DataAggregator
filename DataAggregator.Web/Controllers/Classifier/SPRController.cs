@@ -162,8 +162,9 @@ namespace DataAggregator.Web.Controllers.Classifier
                 if (array_SPR != null)
                     foreach (var item in array_SPR)
                     {
-                        if (item.Value == null) item.Value = "";
-                        if (item.Value_Eng == null) item.Value_Eng = "";
+                        item.Value = item.Value ?? "";
+                        item.Value_Eng = item.Value_Eng ?? "";
+                        item.MiniName = item.MiniName ?? "";
 
                         if (item.Description == null) item.Description = "";
                         if (item.Description_Eng == null) item.Description_Eng = "";
@@ -235,7 +236,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                                 _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.GoodsDescription), new SqlParameter("@Value_Eng", item.GoodsDescription_Eng), new SqlParameter("@id", item.Id));
                                 break;
 
-                            // справочник <Форма выпуска>
+                            // справочник ДОП <Форма выпуска>
                             case "Goods":
                                 if (item.Id > 0)
                                 {
@@ -249,18 +250,18 @@ namespace DataAggregator.Web.Controllers.Classifier
                                 _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.GoodsDescription), new SqlParameter("@Value_Eng", item.GoodsDescription_Eng), new SqlParameter("@id", item.Id));
                                 break;
 
-                            // справочник ДООП -> Категории
+                            // справочник ДОП -> Категории
                             case "GoodsCategory":
                                 if (item.Id > 0)
                                 {
-                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [Name] = @Value, [Name_Eng] = @Value_Eng where id = @id ";
+                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [Name] = @Value, [Name_Eng] = @Value_Eng, [MiniName] = @MiniValue where id = @id ";
                                 }
                                 if (item.Id < 0)
                                 {
                                     query = " delete from [" + db + "].[" + shema + "].[" + name + "] where id = @id ";
                                     item.Id = -1 * item.Id;
                                 }
-                                _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.Value), new SqlParameter("@Value_Eng", item.Value_Eng), new SqlParameter("@id", item.Id));
+                                _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.Value), new SqlParameter("@Value_Eng", item.Value_Eng), new SqlParameter("@MiniValue", item.MiniName), new SqlParameter("@id", item.Id));
                                 break;
                         }
 
@@ -349,7 +350,7 @@ drop table if exists [tempdb].dbo.[SPR_{0}];
 commit transaction;
 ", User.Identity.GetUserId(), db, shema, name);
 
-            if ((type == "GoodsCategory")||(type == "Goods"))
+            if ((type == "GoodsCategory") || (type == "Goods"))
             {
                 command = $"use [{db}]; exec GoodsClassifier.ExportXLSToSPR @Sourcefilename = '{filename}', @UserId = '{User.Identity.GetUserId()}', @sheetName = '{name}'";
             }
