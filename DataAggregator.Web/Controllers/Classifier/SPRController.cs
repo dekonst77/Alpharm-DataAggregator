@@ -14,38 +14,43 @@ namespace DataAggregator.Web.Controllers.Classifier
     public class SPRController : BaseController
     {
         class AllowC
-        { 
-        public string TableName { get; set; }
+        {
+            public string TableName { get; set; }
             public string Role { get; set; }
             public string Cmd { get; set; }
         }
         public bool AllowTbl(string db, string shema, string name)
         {
-            System.Collections.Generic.List<AllowC> Arr = new List<AllowC>();
-            //не забывать размножать тригерры
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Manufacturer]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Corporation]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Dosage]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[TradeName]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[ManufacturerClear]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Brand]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[INN]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Dosage]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Equipment]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[FormProduct]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[FTG]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[Packing]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[ATCWho]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[ATCEphmra]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[ATCBaa]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].Classifier.[NFC]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[DrugClassifier].grls.[ChemicalSPR]", Role = "SBoss", Cmd = "" });
-            Arr.Add(new AllowC() { TableName = "[GovernmentPurchases].dbo.[spr_SiteName]", Role = "GManager", Cmd = @"
-            insert into [GovernmentPurchases].[dbo].[spr_SiteName](Value,Description)
-            select SiteName,SiteName from 
-            (select SiteName from [GovernmentPurchases].[dbo].[Purchase] group by SiteName) GG
-            
-            where SiteName not in (select Value from [GovernmentPurchases].[dbo].[spr_SiteName])" });
+            System.Collections.Generic.List<AllowC> Arr = new List<AllowC>
+            {
+                //не забывать размножать тригерры
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Manufacturer]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Corporation]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Dosage]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[TradeName]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[ManufacturerClear]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Brand]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[INN]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Dosage]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Equipment]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[FormProduct]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[FTG]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[Packing]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[ATCWho]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[ATCEphmra]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[ATCBaa]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].Classifier.[NFC]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].grls.[ChemicalSPR]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[GovernmentPurchases].dbo.[spr_SiteName]", Role = "GManager", Cmd = @"
+                    insert into [GovernmentPurchases].[dbo].[spr_SiteName](Value,Description)
+                    select SiteName,SiteName from 
+                    (select SiteName from [GovernmentPurchases].[dbo].[Purchase] group by SiteName) GG                    
+                    where SiteName not in (select Value from [GovernmentPurchases].[dbo].[spr_SiteName])" },
+                new AllowC() { TableName = "[DrugClassifier].GoodsClassifier.[GoodsTradeName]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].GoodsClassifier.[Goods]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].GoodsSystematization.[GoodsCategory]", Role = "SBoss", Cmd = "" }
+            };
+
             var res = Arr.Where(w => w.TableName == "[" + db + "]." + shema + ".[" + name + "]").FirstOrDefault();
             if (res != null)
             {
@@ -100,7 +105,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 switch (type)
                 {
                     case "t1":
-                        query = "select Id,Value,Value_Eng from [" + db + "].[" + shema + "].[" + name + "]";                        
+                        query = "select Id,Value,Value_Eng from [" + db + "].[" + shema + "].[" + name + "]";
                         var SPR_t1 = _context.Database.SqlQuery<DataAggregator.Domain.Model.Common.DictionaryItem_t1>(query);
                         ViewData["SPR"] = SPR_t1.ToList();
                         break;
@@ -119,6 +124,16 @@ namespace DataAggregator.Web.Controllers.Classifier
                         var SPR_t4 = _context.Database.SqlQuery<DataAggregator.Domain.Model.Common.DictionaryItem_t4>(query);
                         ViewData["SPR"] = SPR_t4.ToList();
                         break;
+                    case "Goods":
+                        query = "exec[GoodsClassifier].[GetGoodsSPR]";
+                        var SPR_t5 = _context.Database.SqlQuery<DataAggregator.Domain.Model.Common.DictionaryItem_t5>(query);
+                        ViewData["SPR"] = SPR_t5.ToList();
+                        break;
+                    case "GoodsCategory":
+                        query = "exec[GoodsClassifier].[GetGoodsCategorySPR]";
+                        var SPR_GoodsCategory = _context.Database.SqlQuery<DataAggregator.Domain.Model.Common.DictionaryItem_GoodsCategory>(query);
+                        ViewData["SPR"] = SPR_GoodsCategory.ToList();
+                        break;
                 }
 
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
@@ -136,8 +151,7 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
         [HttpPost]
-        public ActionResult SPR_save(string db, string shema, string name, string type,
-            ICollection<DataAggregator.Domain.Model.Common.SPRItem_t_return> array_SPR
+        public ActionResult SPR_save(string db, string shema, string name, string type, ICollection<DataAggregator.Domain.Model.Common.SPRItem_t_return> array_SPR
             )
         {
             if (!AllowTbl(db, shema, name))
@@ -148,21 +162,27 @@ namespace DataAggregator.Web.Controllers.Classifier
                 if (array_SPR != null)
                     foreach (var item in array_SPR)
                     {
-                        if (item.Description == null) item.Description = "";
                         if (item.Value == null) item.Value = "";
                         if (item.Value_Eng == null) item.Value_Eng = "";
+
+                        if (item.Description == null) item.Description = "";
                         if (item.Description_Eng == null) item.Description_Eng = "";
+
+                        if (item.GoodsDescription == null) item.GoodsDescription = "";
+                        if (item.GoodsDescription_Eng == null) item.GoodsDescription_Eng = "";
+
                         string query = "";
                         switch (type)
                         {
-                            case "t1": case "t4":
+                            case "t1":
+                            case "t4":
                                 if (item.Id > 0)
                                 {
-                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [Value]=@Value,[Value_Eng]=@Value_Eng where id=@id ";
+                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [Value] = @Value, [Value_Eng] = @Value_Eng where id = @id ";
                                 }
                                 if (item.Id < 0)
                                 {
-                                    query = " delete from [" + db + "].[" + shema + "].[" + name + "] where id=@id ";
+                                    query = " delete from [" + db + "].[" + shema + "].[" + name + "] where id = @id ";
                                     item.Id = -1 * item.Id;
                                     if (name == "INN")
                                     {
@@ -180,8 +200,6 @@ namespace DataAggregator.Web.Controllers.Classifier
                                 {
                                     query += @" exec [Classifier].[INNGroup_Restore] ";
                                 }
-
-
                                 _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.Value), new SqlParameter("@Value_Eng", item.Value_Eng), new SqlParameter("@id", item.Id));
                                 break;
                             case "t2":
@@ -203,7 +221,49 @@ namespace DataAggregator.Web.Controllers.Classifier
                                 }
                                 _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.Value), new SqlParameter("@id", item.Id), new SqlParameter("@Description", item.Description), new SqlParameter("@IsUse", item.IsUse));
                                 break;
+
+                            case "t5":
+                                if (item.Id > 0)
+                                {
+                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [GoodsDescription] = @Value, [GoodsDescription_Eng] = @Value_Eng where id = @id ";
+                                }
+                                if (item.Id < 0)
+                                {
+                                    query = " delete from [" + db + "].[" + shema + "].[" + name + "] where id = @id ";
+                                    item.Id = -1 * item.Id;
+                                }
+                                _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.GoodsDescription), new SqlParameter("@Value_Eng", item.GoodsDescription_Eng), new SqlParameter("@id", item.Id));
+                                break;
+
+                            // справочник <Форма выпуска>
+                            case "Goods":
+                                if (item.Id > 0)
+                                {
+                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [GoodsDescription] = @Value, [GoodsDescription_Eng] = @Value_Eng where id = @id ";
+                                }
+                                if (item.Id < 0)
+                                {
+                                    query = " delete from [" + db + "].[" + shema + "].[" + name + "] where id = @id ";
+                                    item.Id = -1 * item.Id;
+                                }
+                                _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.GoodsDescription), new SqlParameter("@Value_Eng", item.GoodsDescription_Eng), new SqlParameter("@id", item.Id));
+                                break;
+
+                            // справочник ДООП -> Категории
+                            case "GoodsCategory":
+                                if (item.Id > 0)
+                                {
+                                    query = " update [" + db + "].[" + shema + "].[" + name + "] set [Name] = @Value, [Name_Eng] = @Value_Eng where id = @id ";
+                                }
+                                if (item.Id < 0)
+                                {
+                                    query = " delete from [" + db + "].[" + shema + "].[" + name + "] where id = @id ";
+                                    item.Id = -1 * item.Id;
+                                }
+                                _context.Database.ExecuteSqlCommand(query, new SqlParameter("@Value", item.Value), new SqlParameter("@Value_Eng", item.Value_Eng), new SqlParameter("@id", item.Id));
+                                break;
                         }
+
                     }
 
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -219,20 +279,27 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
         [HttpPost]
-        public ActionResult SPR_FromExcel(string db, string shema, string name, string type,
-            IEnumerable<System.Web.HttpPostedFileBase> uploads)
+        public ActionResult SPR_FromExcel(string db, string shema, string name, string type, IEnumerable<System.Web.HttpPostedFileBase> uploads)
         {
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
             var file = uploads.First();
+
+#if DEBUG
+            string filename = @"\\alph-r01-s-db02\Upload\SPR_" + User.Identity.GetUserId() + ".xlsx";
+#else
             string filename = @"\\s-sql1\Upload\SPR_" + User.Identity.GetUserId() + ".xlsx";
+#endif
+
             if (System.IO.File.Exists(filename))
                 System.IO.File.Delete(filename);
+
             file.SaveAs(filename);
             var _context = new GSContext(APP);
             _context.Database.CommandTimeout = 0;
             string command = "";
+
             if (type == "t1" || type == "t4")
                 command = string.Format(@"use [{1}];
 SET XACT_ABORT ON;
@@ -244,18 +311,19 @@ drop table if exists [tempdb].dbo.[SPR_{0}];
 
 	delete from [tempdb].dbo.[SPR_{0}] where [Код] is null;
 
-	update CL set CL.Value=NN.[Значение],CL.Value_Eng=NN.[Value]
+	update CL set CL.Value=NN.[Значение], CL.Value_Eng = isnull(NN.[Value], '')
 	--select * 
 	from
 	[{2}].[{3}] CL
 	inner join  tempdb.dbo.[SPR_{0}] NN
 	on NN.[Код]=CL.Id --and NN.[Значение]=CL.Value
-where (CL.Value Collate Cyrillic_General_CS_AS <>NN.[Значение]  Collate Cyrillic_General_CS_AS
-OR CL.Value_Eng Collate Cyrillic_General_CS_AS <>NN.[Value]  Collate Cyrillic_General_CS_AS);
+where (CL.Value Collate Cyrillic_General_CS_AS <> NN.[Значение]  Collate Cyrillic_General_CS_AS
+OR isnull(CL.Value_Eng, '') Collate Cyrillic_General_CS_AS <> isnull(NN.[Value], '')  Collate Cyrillic_General_CS_AS);
 
 drop table if exists [tempdb].dbo.[SPR_{0}];
 commit transaction;
 ", User.Identity.GetUserId(), db, shema, name);
+
             if (type == "t2")
                 command = string.Format(@"use [{1}];
 SET XACT_ABORT ON;
@@ -267,7 +335,7 @@ drop table if exists [tempdb].dbo.[SPR_{0}];
 
 	delete from [tempdb].dbo.[SPR_{0}] where [Код] is null;
 
-	update CL set CL.Description=NN.[Описание],CL.Description_Eng=NN.[Description]
+	update CL set CL.Description=NN.[Описание], CL.Description_Eng=NN.[Description]
 	--select * 
 	from
 	[{2}].[{3}] CL
@@ -281,6 +349,10 @@ drop table if exists [tempdb].dbo.[SPR_{0}];
 commit transaction;
 ", User.Identity.GetUserId(), db, shema, name);
 
+            if ((type == "GoodsCategory")||(type == "Goods"))
+            {
+                command = $"use [{db}]; exec GoodsClassifier.ExportXLSToSPR @Sourcefilename = '{filename}', @UserId = '{User.Identity.GetUserId()}', @sheetName = '{name}'";
+            }
 
             try
             {

@@ -265,7 +265,7 @@
             ;
     }
 
-    // Cliets
+    // Clients
     function setupClietsRouting() {
         $routeProvider  // Клиенты-компании
             .when('/Clients/Companies',
@@ -507,7 +507,7 @@
                     authorize: true,
                     isEditor: true
                 })
-            // Редактор классификатора - изменение
+            // Редактор классификатора - изменение справочника
             .when('/Classifier/SPR',
                 {
                     templateUrl: 'Views/Classifier/SPR.html',

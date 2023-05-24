@@ -10,6 +10,8 @@ namespace DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier
 
         public string GoodsDescription { get; set; }
 
+        public string GoodsDescription_Eng { get; set; }
+
         public long GoodsTradeNameId { get; set; }
 
         public virtual GoodsTradeName GoodsTradeName { get; set; }

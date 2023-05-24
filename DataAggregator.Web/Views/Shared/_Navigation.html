@@ -47,7 +47,7 @@
                         <!--разделитель-->
                         <li in-roles="SBoss,SPharmacist" class="divider"></li>
 
-                        <li in-roles="SBoss,SOperator,SPharmacist"><a ng-href="/#/Systematization/GoodsSystematization" data-translate="SYSTEMATIZATION.GOODS_SYSTEMATIZATION.TITLE"></a></li>                        
+                        <li in-roles="SBoss,SOperator,SPharmacist"><a ng-href="/#/Systematization/GoodsSystematization" data-translate="SYSTEMATIZATION.GOODS_SYSTEMATIZATION.TITLE"></a></li>
                         <li in-roles="SBoss"><a ng-href="/#/Classifier/GoodsClassifierReport" data-translate="CLASSIFIER.GOODS_CLASSIFIER_REPORT.TITLE"></a></li>
                         <li in-roles="SBoss"><a ng-href="/#/Classifier/GoodsCategoryEditor" data-translate="CLASSIFIER.GOODS_CATEGORY_EDITOR.TITLE"></a></li>
                         <li in-roles="SBoss"><a ng-href="/#/Classifier/GoodsParametersEditor" data-translate="CLASSIFIER.GOODS_PARAMETERS_EDITOR.TITLE"></a></li>
@@ -115,6 +115,15 @@
                                 <li in-roles="SBoss"><a ng-href="/#/Classifier/NFC" data-translate="CLASSIFIER.NFC.TITLE"></a></li>
                                 <li in-roles="SBoss"><a ng-href="/#/Classifier/GENERIC" data-translate="CLASSIFIER.GENERIC.TITLE"></a></li>
                                 <li in-roles="SBoss"><a ng-href="/#/Classifier/SQA" data-translate="CLASSIFIER.SQA.TITLE"></a></li>
+                            </ul>
+                        </li>
+
+                        <li in-roles="SBoss,SPharmacist" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1">Справочники ДОП</a>
+                            <ul class="dropdown-menu">
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=GoodsClassifier&name=GoodsTradeName&type=t1">ТН</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=GoodsClassifier&name=Goods&type=Goods">Форма выпуска</a></li>
+                                <li in-roles="SBoss"><a ng-href="/#/Classifier/SPR?db=DrugClassifier&shema=GoodsSystematization&name=GoodsCategory&type=GoodsCategory">Категория</a></li>
                             </ul>
                         </li>
 
