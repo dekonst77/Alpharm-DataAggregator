@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace DataAggregator.Domain.Model.OFD
@@ -181,6 +182,37 @@ namespace DataAggregator.Domain.Model.OFD
         public decimal? SellingCountCorr { get; set; }
 
 
+    }
+
+    [Table("Agreement", Schema = "4SC")]
+    public class Agreement
+    {
+        [Key]
+        public int AgreementId { get; set; }
+        public string Name { get; set; }
+        public System.Int16 SupplierId { get; set; }
+        public string NetworkName { get; set; }
+        public int OwnerAgrId { get; set; }
+        public string OwnerAgr { get; set; }
+        public DateTime Date_begin { get; set; }
+        public DateTime Date_end { get; set; }
+        public string EntityINN { get; set; }
+
+        public virtual List<Classifier> Classifiers { get; set; }
+    }
+
+    [Table("Classifier", Schema = "4SC")]
+    public class Classifier
+    {
+        [Key]
+        public int Id { get; set; }
+        public int AgreementId { get; set; }
+        public long ClassifierId { get; set; }
+        public long DrugId { get; set; } = 0;
+        public long GoodId { get; set; } = 0;
+
+
+        
     }
 
 }

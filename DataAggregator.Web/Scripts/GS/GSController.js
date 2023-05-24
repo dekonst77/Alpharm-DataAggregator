@@ -250,7 +250,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
         isLicExists: false,
         isCall: false,
         dt: null,
-        isDateAddLic: false
+        isDateAddLic: false,
+        isSameAddressDiffCoords: false,
+        isSameCoordsDiffAddress: false,
     };
     $scope.DT_filter = new dateClass();
     $scope.Get_currentperiod = function (val, inc) {
@@ -3861,7 +3863,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
     };
     ////////////////////////////////// SummsNetwork Окончание
 
-    ////////////////////////////////// Point Начало
+    //#region Point Начало
     $scope.Point_Init = function () {
         $scope.IsNoKoord = false;
         $scope.PHids = "";
@@ -3869,6 +3871,25 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
         $scope.Grid.Options.showGridFooter = true;
         $scope.Grid.Options.multiSelect = true;
         $scope.Grid.Options.modifierKeysToMultiSelect = true;
+        $scope.Grid.Options.enableRowSelection = true;
+
+        $scope.Grid.Options.onRegisterApi = function (gridApi) {
+            $scope.gridApi = gridApi;
+            //gridApi.selection.on.rowSelectionChanged($scope, doSelection);
+        };
+
+        //function doSelection(row) {
+        //    _.each($scope.gridApi.selection.getSelectedRows(), function (row) {
+        //        console.log(row)
+        //    });
+        //}
+
+        $scope.rightClick = function (event) {
+            var scope = angular.element(event.target).scope();
+            $scope.gridApi.selection.clearSelectedRows();
+            $scope.gridApi.grid.modifyRows($scope.Grid.Options.data);
+            $scope.gridApi.selection.selectRow(scope.row.entity); 
+        };
 
         //$scope.YandexAddress
         $scope.Grid.Options.columnDefs = [
@@ -3898,24 +3919,25 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
             { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Брик', field: 'BricksId', headerCellClass: 'Green', filter: { condition: uiGridCustomService.condition }, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/GS/Bricks?ids={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_широта', field: 'koor_широта', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_широта', field: 'koor_широта_string', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_долгота', field: 'koor_долгота', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'koor_долгота', field: 'koor_долгота_string', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_lat', field: 'Address_koor_lat', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_lat', field: 'Address_koor_lat_string', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_long', field: 'Address_koor_long', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Address_koor_long', field: 'Address_koor_long_string', filter: { condition: uiGridCustomService.condition } },
 
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'Post_Index', field: 'Post_Index', filter: { condition: uiGridCustomService.condition } },
 
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'PapayaWhip', name: 'fias_id', field: 'fias_id', filter: { condition: uiGridCustomService.condition } },
 
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'fias_id_manual', field: 'fias_id_manual', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'fias_id_manual', field: 'fias_id_manual', filter: { condition: uiGridCustomService.condition } },
             //{ headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'fias_code_manual', field: 'fias_code_manual', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lat_manual', field: 'geo_lat_manual', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'geo_lat_manual', field: 'geo_lat_manual_string', filter: { condition: uiGridCustomService.condition } },
+            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, headerCellClass: 'LightCyan', name: 'geo_lon_manual', field: 'geo_lon_manual_string', filter: { condition: uiGridCustomService.condition } },
 
             { headerTooltip: true, name: 'Проверено', enableCellEdit: true, width: 100, field: 'IsChecked', type: 'boolean' },
+            { headerTooltip: true, name: 'Комментарий', enableCellEdit: false, width: 100, field: 'Comment', filter: { condition: uiGridCustomService.condition } },
             { visible: false, headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ГАР Guid', field: 'HOUSEGUID', filter: { condition: uiGridCustomService.condition } },
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 500, headerCellClass: 'Yellow', name: 'ГАР СФ', field: 'GAR_Address', filter: { condition: uiGridCustomService.condition } }
         ];
@@ -3934,7 +3956,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             // $scope.Point_Search_AC();
         });
     };
+
     $scope.Point_Search_AC = function () {
+        
         $scope.dataLoading =
             $http({
                 method: 'POST',
@@ -3943,26 +3967,57 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             }).then(function (response) {
                 var data = response.data;
                 if (data.Success) {
+
                     $scope.Grid.Options.data = data.Data;
+
+                    $scope.comments = [
+                        "центр НП",
+                        "привязка верна"
+                    ];
                 }
             }, function (response) {
                 errorHandlerService.showResponseError(response);
             });
     };
 
+
     $scope.Point_ColumnCheck_Set = function () {
-        var selectedRows = $scope.Grid.selectedRows();
+        var selectedRows = $scope.gridApi.selection.getSelectedRows()
         selectedRows.forEach(function (item) {         
             $scope.Grid.GridCellsMod(item, "IsChecked", true);
         });
     };
     $scope.Point_ColumnCheck_UnSet = function () {
-        var selectedRows = $scope.Grid.selectedRows();
+        var selectedRows = $scope.gridApi.selection.getSelectedRows()
         selectedRows.forEach(function (item) {
             $scope.Grid.GridCellsMod(item, "IsChecked", false);
         });
     };
+
+    $scope.Point_Comment = function (comment) {
+        var selectedRows = $scope.gridApi.selection.getSelectedRows()
+        selectedRows.forEach(function (item) {
+            var finalComment = "";
+            if (item.Comment && item.Comment.indexOf(comment) >= 0) {
+                finalComment = item.Comment.replace(comment, "")
+                finalComment = finalComment.replace(";;", ";")
+                if (finalComment.startsWith(";"))
+                    finalComment = finalComment.substring(1, finalComment.length);
+                if (finalComment.endsWith(";"))
+                    finalComment = finalComment.substring(0, finalComment.length - 1);
+            }
+            else {
+                if (item.Comment)
+                    finalComment = item.Comment + ";" + comment;
+                else
+                    finalComment = comment;
+            }
+            $scope.Grid.GridCellsMod(item, "Comment", finalComment);
+        });
+    };
+
     $scope.Point_Search = function () {
+
         if ($scope.Grid.NeedSave === true) {
             messageBoxService.showConfirm('Есть несохранёные результаты. Сохранить?', 'Изменение')
                 .then(//да сохранить
@@ -4009,7 +4064,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 });
         }
     };
-    ////////////////////////////////// Point Окончание
+
+    //#region Point Окончание
+
     $scope.CopyToBuffer = function (value) {
         navigator.clipboard.writeText(value)
             .then(() => {

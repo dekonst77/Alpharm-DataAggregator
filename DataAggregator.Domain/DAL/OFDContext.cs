@@ -29,6 +29,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<Aggregated_All> Aggregated_All { get; set; }
         public DbSet<Data_All_4SC> Data_All_4SC { get; set; }
+        public DbSet<Agreement> Agreement_All { get; set; }
+        public DbSet<Classifier> AgreementClassifiers { get; set; }
 
         public DbSet<PriceCurrentView> PriceCurrentView { get; set; }
         public DbSet<PriceCurrent> PriceCurrent { get; set; }
@@ -167,6 +169,26 @@ namespace DataAggregator.Domain.DAL
                 new SqlParameter { ParameterName = "@periodEnd", SqlDbType = SqlDbType.Date, Value = periodEnd },
                 new SqlParameter { ParameterName = "@BrickId", SqlDbType = SqlDbType.Int, Value = BrickId }
                 );
+        }
+
+        public void ImportAgreements_from_Excel(string filename, bool force = false)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+                command.Parameters.Add("@force", SqlDbType.Bit).Value = force;
+
+                command.CommandText = "4SC.ImportAgreements_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

@@ -48,6 +48,13 @@
                     authorize: true,
                     isEditor: true
                 })
+            .when('/OFD/4SC_Agreement_Edit',
+                {
+                    templateUrl: 'Views/OFD/4SC_Agreement_Edit.html',
+                    title: 'Редактор 4CC',
+                    authorize: true,
+                    isEditor: true
+                })
             .when('/OFD/Files',
                 {
                     templateUrl: 'Views/OFD/Files.html',

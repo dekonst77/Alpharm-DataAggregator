@@ -84,27 +84,29 @@ GS_Brick*/
                 using (var _context = new GSContext(APP))
                 {
                     _context.Database.CommandTimeout = 0;
-                    var result = _context.Database.SqlQuery<Domain.Model.GS.GS_View_SP>("dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,@isCloseOFD,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError",
-                        new System.Data.SqlClient.SqlParameter("@filter", filter.common),
-                        new System.Data.SqlClient.SqlParameter("@IDS", filter.IDS),
-                        new System.Data.SqlClient.SqlParameter("@PHids", filter.PHids),
-                        new System.Data.SqlClient.SqlParameter("@OperationMode", filter.OperationMode),
-                        new System.Data.SqlClient.SqlParameter("@adress", filter.adress),
-                        new System.Data.SqlClient.SqlParameter("@BrickId", filter.BrickId),
-                        new System.Data.SqlClient.SqlParameter("@NetworkName", filter.NetworkName),
-                        new System.Data.SqlClient.SqlParameter("@PharmacyBrand", filter.PharmacyBrand),
-                        new System.Data.SqlClient.SqlParameter("@isNotChecked", filter.isNotChecked),
-                        new System.Data.SqlClient.SqlParameter("@isNew", filter.isNew),
-                        new System.Data.SqlClient.SqlParameter("@isCloseOFD", filter.isCloseOFD),
-                        new System.Data.SqlClient.SqlParameter("@isCloseAlphaBit", filter.isCloseAlphaBit),
-                        new System.Data.SqlClient.SqlParameter("@isDoubleA", filter.isDoubleA),
-                        new System.Data.SqlClient.SqlParameter("@isLicExists", filter.isLicExists),
-                        new System.Data.SqlClient.SqlParameter("@isCall", filter.isCall),
-                        new System.Data.SqlClient.SqlParameter("@isDateAddLic", filter.isDateAddLic),
-                        new System.Data.SqlClient.SqlParameter { ParameterName = "@dt", SqlDbType = System.Data.SqlDbType.Date, Value = filter.dt },
-                        new System.Data.SqlClient.SqlParameter { ParameterName = "@period", SqlDbType = System.Data.SqlDbType.Date, Value = currentperiod },
-                        new System.Data.SqlClient.SqlParameter("@BrickError", filter.BrickError)
-
+                    var result = _context.Database.SqlQuery<GS_View_SP>(@"dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,
+                            @isCloseOFD,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError,@isSameAddressDiffCoords,@isSameCoordsDiffAddress",
+                        new SqlParameter("@filter", filter.common),
+                        new SqlParameter("@IDS", filter.IDS),
+                        new SqlParameter("@PHids", filter.PHids),
+                        new SqlParameter("@OperationMode", filter.OperationMode),
+                        new SqlParameter("@adress", filter.adress),
+                        new SqlParameter("@BrickId", filter.BrickId),
+                        new SqlParameter("@NetworkName", filter.NetworkName),
+                        new SqlParameter("@PharmacyBrand", filter.PharmacyBrand),
+                        new SqlParameter("@isNotChecked", filter.isNotChecked),
+                        new SqlParameter("@isNew", filter.isNew),
+                        new SqlParameter("@isCloseOFD", filter.isCloseOFD),
+                        new SqlParameter("@isCloseAlphaBit", filter.isCloseAlphaBit),
+                        new SqlParameter("@isDoubleA", filter.isDoubleA),
+                        new SqlParameter("@isLicExists", filter.isLicExists),
+                        new SqlParameter("@isCall", filter.isCall),
+                        new SqlParameter("@isDateAddLic", filter.isDateAddLic),
+                        new SqlParameter { ParameterName = "@dt", SqlDbType = SqlDbType.Date, Value = filter.dt },
+                        new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = currentperiod },
+                        new SqlParameter("@BrickError", filter.BrickError),
+                        new SqlParameter("@isSameAddressDiffCoords", filter.isSameAddressDiffCoords),
+                        new SqlParameter("@isSameCoordsDiffAddress", filter.isSameCoordsDiffAddress)
                     ).ToList();
 
                     JsonNetResult jsonNetResult = new JsonNetResult
@@ -550,7 +552,8 @@ GS_Brick*/
                     IDS = "%";
                 }
                 _context.Database.CommandTimeout = 0;
-                var ret = _context.Database.SqlQuery<Domain.Model.GS.GS_View_SP>("dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,@isCloseOFD,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError",
+                var ret = _context.Database.SqlQuery<Domain.Model.GS.GS_View_SP>(@"dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,@isCloseOFD
+                        ,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError,@isSameAddressDiffCoords,@isSameCoordsDiffAddress",
                     new System.Data.SqlClient.SqlParameter("@filter", ""),
                     new System.Data.SqlClient.SqlParameter("@IDS", IDS),
                     new System.Data.SqlClient.SqlParameter("@PHids", ""),
@@ -569,7 +572,9 @@ GS_Brick*/
                     new System.Data.SqlClient.SqlParameter("@isDateAddLic", false),
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@period", SqlDbType = System.Data.SqlDbType.Date, Value = currentperiod },
                     new System.Data.SqlClient.SqlParameter { ParameterName = "@dt", SqlDbType = System.Data.SqlDbType.Date, Value = DBNull.Value },
-                    new System.Data.SqlClient.SqlParameter("@BrickError", false)
+                    new System.Data.SqlClient.SqlParameter("@BrickError", false),
+                    new SqlParameter("@isSameAddressDiffCoords", false),
+                    new SqlParameter("@isSameCoordsDiffAddress", false)
                     ).ToList();
 
 
@@ -2156,6 +2161,7 @@ group by inn having count(*) > 1
                             UPD_0.fias_id_manual = item.fias_id_manual;
                             UPD_0.geo_lat_manual = item.geo_lat_manual;
                             UPD_0.geo_lon_manual = item.geo_lon_manual;
+                            UPD_0.Comment = item.Comment;
                             UPD_0.IsChecked = item.IsChecked;
                         }
                     }
@@ -4469,6 +4475,8 @@ from [adr].[History_coding] where LPUId is null and status<>110
         public bool isDateAddLic { get; set; }
         public DateTime? dt { get; set; }
         public bool BrickError { get; set; }
+        public bool isSameAddressDiffCoords { get; set; }
+        public bool isSameCoordsDiffAddress { get; set; }
     }
     public class filter_base_address
     {

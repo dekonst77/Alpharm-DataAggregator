@@ -645,6 +645,204 @@ namespace DataAggregator.Web.Controllers.OFD
             return jsonNetResult;
         }
 
+
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult D4SC_Agreement_Init()
+        {
+            try
+            {
+                var _context = new OFDContext(APP);
+                ViewData["Supplier"] = _context.Supplier.OrderBy(o => o.Id).ToList();
+
+                ViewData["NetworkNames"] = _context.Agreement_All
+                    .GroupBy(x => new { x.SupplierId } )
+                    .Select(x => new {
+                        SupplierId = x.Key.SupplierId,
+                        Networks = x.Select(n => n.NetworkName).Distinct()
+                    }).ToList();
+
+                ViewData["EntityINNs"] = _context.Agreement_All
+                    .GroupBy(x => new { x.SupplierId, x.NetworkName })
+                    .Select(x => new {
+                        SupplierId = x.Key.SupplierId,
+                        NetworkName = x.Key.NetworkName,
+                        INNs = x.Select(n => n.EntityINN).Distinct()
+                    }).ToList();
+
+                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = Data
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult D4SC_Agreement_search(int? SupplierId = null, DateTime? periodStart = null, DateTime? periodEnd = null, string NetworkName = null, string[] EntityINNs = null, bool isCurrent = false)
+        {
+            try
+            {
+                var _context = new OFDContext(APP);
+                var innList = EntityINNs != null && EntityINNs.Length > 0 ? EntityINNs.ToList() : null;
+                var today = DateTime.Today;
+
+                var data = _context.Agreement_All
+                    .AsNoTracking()
+                    .Where(x => (SupplierId == null || x.SupplierId == SupplierId)
+                        && (periodStart == null || x.Date_begin >= periodStart)
+                        && (periodEnd == null || x.Date_end <= periodEnd)
+                        && (NetworkName == null || x.NetworkName == NetworkName)
+                        && (isCurrent == false || x.Date_end >= today));
+
+                if (innList != null)
+                    data = data.Where(x => innList.Contains(x.EntityINN));
+
+                ViewData["D4SC_Agreement"] = data.OrderByDescending(x => x.AgreementId).ToList();
+
+                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = Data
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult D4SC_Agreement_Classifiers(int AgreementId)
+        {
+            try
+            {
+                var _context = new OFDContext(APP);
+                ViewData["Classifiers"] = _context.AgreementClassifiers
+                    .AsNoTracking()
+                    .Where(x => x.AgreementId == AgreementId).ToArray();
+                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data, status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult ImportAgreements_from_Excel(IEnumerable<HttpPostedFileBase> uploads, bool force = false)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    return null;
+
+                using (var _context = new OFDContext(APP))
+                {
+
+                    var file = uploads.First();
+                    string filename = @"\\s-sql2\Upload\Agreements_" + User.Identity.GetUserId() + ".xlsx";
+
+                    if (System.IO.File.Exists(filename))
+                        System.IO.File.Delete(filename);
+
+                    file.SaveAs(filename);
+
+                    _context.ImportAgreements_from_Excel(filename, force);
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult D4SC_Agreement_save(int[] array, DateTime dateBegin, DateTime dateEnd)
+        {
+            try
+            {
+                var _context = new OFDContext(APP);
+                if (array != null)
+                {
+                    DateTime beforeDatEnd = dateBegin.AddDays(-1);
+
+                    foreach (var item in array)
+                    {
+                        var UPD = _context.Agreement_All.Where(x => x.AgreementId == item).FirstOrDefault();
+                        if (UPD != null)
+                        {
+                            if (UPD.Date_end >= beforeDatEnd)
+                                UPD.Date_end = beforeDatEnd;
+
+                            var ADD = new Domain.Model.OFD.Agreement
+                            {
+                                SupplierId = UPD.SupplierId,
+                                Name = UPD.Name,
+                                NetworkName = UPD.NetworkName,
+                                EntityINN = UPD.EntityINN,
+                                OwnerAgrId = UPD.OwnerAgrId,
+                                OwnerAgr = UPD.OwnerAgr,
+                                Date_begin = dateBegin,
+                                Date_end = dateEnd
+                            };
+                            _context.Agreement_All.Add(ADD);
+
+                            var Classifiers = _context.AgreementClassifiers.Where(x => x.AgreementId == item).ToList();
+                            if (Classifiers != null && Classifiers.Any())
+                            {
+                                ADD.Classifiers = new List<Domain.Model.OFD.Classifier>();
+                                ADD.Classifiers.AddRange(Classifiers.Select(x => new Domain.Model.OFD.Classifier { AgreementId = 0, ClassifierId = x.ClassifierId }).ToList());
+                            }
+                        }
+                    }
+
+                    _context.SaveChanges();
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 
     public class JsonResult
