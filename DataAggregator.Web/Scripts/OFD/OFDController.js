@@ -840,6 +840,10 @@ function AgreementImportController($scope, Upload, errorHandlerService, $modalIn
     };
 
     $scope.import = function (file) {
+
+        if (file == null)
+            return;
+
         Upload.upload({
             url: '/OFD/ImportAgreements_from_Excel/',
             data: {
