@@ -48,7 +48,8 @@ namespace DataAggregator.Web.Controllers.Classifier
                     where SiteName not in (select Value from [GovernmentPurchases].[dbo].[spr_SiteName])" },
                 new AllowC() { TableName = "[DrugClassifier].GoodsClassifier.[GoodsTradeName]", Role = "SBoss", Cmd = "" },
                 new AllowC() { TableName = "[DrugClassifier].GoodsClassifier.[Goods]", Role = "SBoss", Cmd = "" },
-                new AllowC() { TableName = "[DrugClassifier].GoodsSystematization.[GoodsCategory]", Role = "SBoss", Cmd = "" }
+                new AllowC() { TableName = "[DrugClassifier].GoodsSystematization.[GoodsCategory]", Role = "SBoss", Cmd = "" },
+                new AllowC() { TableName = "[DrugClassifier].GoodsSystematization.[GoodsSectionView]", Role = "SBoss", Cmd = "" }
             };
 
             var res = Arr.Where(w => w.TableName == "[" + db + "]." + shema + ".[" + name + "]").FirstOrDefault();
@@ -105,7 +106,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 switch (type)
                 {
                     case "t1":
-                        query = "select Id,Value,Value_Eng from [" + db + "].[" + shema + "].[" + name + "]";
+                        query = "select Id, Value, Value_Eng from [" + db + "].[" + shema + "].[" + name + "]";
                         var SPR_t1 = _context.Database.SqlQuery<DataAggregator.Domain.Model.Common.DictionaryItem_t1>(query);
                         ViewData["SPR"] = SPR_t1.ToList();
                         break;
