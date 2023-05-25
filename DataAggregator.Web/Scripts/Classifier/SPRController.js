@@ -64,9 +64,9 @@ function SPRController($scope, $window, $route, $http, $uibModal, commonService,
                 { name: 'Код', enableCellEdit: false, field: 'Id', filter: { condition: uiGridCustomService.condition } },
                 { name: 'Код секции', enableCellEdit: false, visible: false, field: 'GoodsSectionId', filter: { condition: uiGridCustomService.condition } },
                 { name: 'Секция', enableCellEdit: false, field: 'GoodsSectionName', filter: { condition: uiGridCustomService.condition } },
-                { name: 'MiniName', enableCellEdit: true, field: 'MiniName', filter: { condition: uiGridCustomService.condition } },
                 { name: 'Категория', enableCellEdit: true, field: 'Value', filter: { condition: uiGridCustomService.condition } },
-                { name: 'Description', enableCellEdit: true, field: 'Value_Eng', filter: { condition: uiGridCustomService.condition } }
+                { name: 'Description', enableCellEdit: true, field: 'Value_Eng', filter: { condition: uiGridCustomService.condition } },
+                { name: 'MiniName', enableCellEdit: true, field: 'MiniName', filter: { condition: uiGridCustomService.condition } }
             ];
         }
         // справочник ДОП -> Форма выпуска
