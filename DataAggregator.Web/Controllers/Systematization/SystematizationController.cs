@@ -42,7 +42,7 @@ namespace DataAggregator.Web.Controllers.Systematization
                     var us = context.UserSource.Where(w => w.UserId == userGuid).FirstOrDefault();
                     if (us == null)
                         throw new ArgumentNullException("Нет данных о блоке обработки");
-                
+
                     var drugFilter = new DrugFilter(APP, us.SourceId, us.PeriodId)
                     {
                         Count = drugFilterParameters.Count,
@@ -66,14 +66,14 @@ namespace DataAggregator.Web.Controllers.Systematization
                     {
                         throw new ArgumentNullException("Задайте корректные значения для фильтров (drugFilter)");
                     }
-               
+
                     context.GetDrugs(drugFilter_string, userGuid, drugFilterParameters.Count);
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
-                
+
             }
             return LoadDrugs();
         }
@@ -99,7 +99,7 @@ namespace DataAggregator.Web.Controllers.Systematization
                     return 50;
                 }
 
-                if (count > 100000) 
+                if (count > 100000)
                     return 100000;
 
                 return count;
@@ -179,11 +179,12 @@ namespace DataAggregator.Web.Controllers.Systematization
             {
                 var res = context.GoodsCategory
                     .OrderBy(o => o.GoodsSection.Name)
-                    .Select(s => new GoodsSection_view() { 
-                        Id = (byte)s.Id, 
-                        Name = s.Name, 
-                        MiniName = s.MiniName, 
-                        Section = s.GoodsSection.Name 
+                    .Select(s => new GoodsSection_view()
+                    {
+                        Id = (byte)s.Id,
+                        Name = s.Name,
+                        MiniName = String.IsNullOrEmpty(s.MiniName) ? s.Name : s.MiniName,
+                        Section = s.GoodsSection.Name
                     })
                     .ToList();
 
