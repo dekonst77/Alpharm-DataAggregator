@@ -1622,5 +1622,30 @@ namespace DataAggregator.Domain.Model.GS
         public string Show { get; set; }
 
     }
+
+    [Table("BookOfChange_Network2", Schema = "dbo")]
+    public class Network2
+    {
+        [Key]
+        public int XlsId { get; set; }
+        public int PharmacyId { get; set; }
+
+        public string EntityINN { get; set; }
+        public string EntityName { get; set; }
+        public string NetworkName { get; set; }
+        public string Comment { get; set; }
+
+    }
+    [Table("BookOfChange_Asna", Schema = "dbo")]
+    public class Asna
+    {
+        [Key]
+        public int XlsId { get; set; }
+        public int PharmacyId { get; set; }
+
+        public string ASNA { get; set; }
+        public string NetworkName { get; set; }
+
+    }
 }
 

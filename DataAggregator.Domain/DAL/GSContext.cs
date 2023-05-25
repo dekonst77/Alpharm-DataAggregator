@@ -83,7 +83,6 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
-
         }
 
         public DbSet<History_SPR_LPU_view> History_SPR_LPU_view { get; set; }
@@ -101,6 +100,9 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<BookOfChange_FormingTransaction> BookOfChangeFormingTransaction { get; set; }
         public DbSet<BookOfChange_Rebranding> BookOfChangeRebranding { get; set; }
+        public DbSet<Network2> Network2 { get; set; }
+        public DbSet<Asna> Asna { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -303,6 +305,26 @@ namespace DataAggregator.Domain.DAL
                 command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
 
                 command.CommandText = "dbo.BookOfChange_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Network2Asna_from_Excel(string filename, int period_key)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+                command.Parameters.Add("@period_key", SqlDbType.Int).Value = period_key;
+
+                command.CommandText = "dbo.Network2Asna_from_Excel";
 
                 Database.Connection.Open();
 

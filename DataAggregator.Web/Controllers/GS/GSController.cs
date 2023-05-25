@@ -4236,6 +4236,40 @@ from [adr].[History_coding] where LPUId is null and status<>110
             }
         }
 
+        [Authorize(Roles = "GS_View")]
+        [HttpPost]
+        public ActionResult Network2Asna_Init()
+        {
+            try
+            {
+                using (var _context = new GSContext(APP))
+                {
+                    var periods = _context.GS_Period.Select(s => s.period).Distinct().OrderByDescending(o => o).ToList().Select(s => s.ToString("yyyy-MM"));
+                    var Network2 = _context.Network2.ToList();
+                    var Asna = _context.Asna.ToList();
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResult()
+                        {
+                            Data = Network2,
+                            Data2 = Asna,
+                            Data3 = periods,
+                            count = 1,
+                            status = "ок",
+                            Success = true
+                        }
+                    };
+                    return jsonNetResult;
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
         [HttpPost]
         public ActionResult BookOfChange_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads)
         {
@@ -4280,6 +4314,70 @@ from [adr].[History_coding] where LPUId is null and status<>110
                 {
                     _context.Database.CommandTimeout = 30;
                     _context.Database.ExecuteSqlCommand("exec [dbo].[BookOfChange_reloadQlik]");
+                }
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Network2Asna_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads, string periodKey)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    return null;
+
+                int period_key = 0;
+                if (string.IsNullOrEmpty(periodKey))
+                    return null;
+
+                period_key = int.Parse(periodKey.Replace("-", ""));
+
+                using (var _context = new GSContext(APP))
+                {
+
+                    var file = uploads.First();
+                    string filename = @"\\s-sql2\Upload\Сеть2Асна_" + User.Identity.GetUserId() + ".xlsx";
+
+                    if (System.IO.File.Exists(filename))
+                        System.IO.File.Delete(filename);
+
+                    file.SaveAs(filename);
+
+                    _context.Network2Asna_from_Excel(filename, period_key);
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Network2Asna_reloadQlik()
+        {
+            try
+            {
+                using (var _context = new GSContext(APP))
+                {
+                    _context.Database.CommandTimeout = 30;
+                    _context.Database.ExecuteSqlCommand("exec [dbo].[Network2Asna_reloadQlik]");
                 }
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
@@ -4426,6 +4524,7 @@ from [adr].[History_coding] where LPUId is null and status<>110
     {
         public object Data { get; set; }
         public object Data2 { get; set; }
+        public object Data3 { get; set; }
         public int count { get; set; }
         public string status { get; set; }
         public bool Success { get; set; }

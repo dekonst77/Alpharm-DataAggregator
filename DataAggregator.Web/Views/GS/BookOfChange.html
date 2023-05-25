@@ -1,15 +1,14 @@
-﻿<div ng-controller="BookOfChangeController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+﻿<div ng-controller="BookOfChangeController" cg-busy="{promise:dataLoading, message:message}" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
 
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
 
         <uib-tabset active="active">
-            <uib-tab heading="Системообразующие сделки" select="setTabIndex(0)">
-            </uib-tab>
+            <uib-tab heading="Системообразующие сделки" select="setTabIndex(0)"></uib-tab>
+            <uib-tab heading="Ребрендинг сетей" select="setTabIndex(1)"></uib-tab>
+            <uib-tab heading="Сеть 2" select="setTabIndex(2)"></uib-tab>
+            <uib-tab heading="АСНА" select="setTabIndex(3)"></uib-tab>
 
-            <uib-tab heading="Ребрендинг сетей" select="setTabIndex(1)">
-            </uib-tab>
-
-            <div class="btn-group" role="group" aria-label="Basic example" style="margin-top: 5px; margin-right: 5px;float: right">
+            <div ng-if="currentTabIndex == 0 || currentTabIndex == 1" class="btn-group pull-right" role="group" aria-label="Basic example" style="margin-top: 5px; margin-right: 5px;">
                 <div class="btn btn-info btn-sm"
                      ngf-select="BookOfChange_from_Excel($file)"
                      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -19,18 +18,48 @@
                     <span><img src="/Content/Icons/qlik.png" style="width:17px;height:17px" /> Экспорт в Qlik</span>
                 </div>
             </div>
+
+
+
+            <div ng-if="currentTabIndex == 2 || currentTabIndex == 3" class="btn-group pull-right" role="group" aria-label="Basic example" style="margin-top: 5px; margin-right: 5px;">
+                
+                <div class="btn btn-info btn-sm"
+                     ngf-select="Network2Asna_from_Excel($file)"
+                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <span><img src="/Content/Icons/Excel.png" style="width:17px;height:17px" /> Импорт Cеть2/ASNA</span>
+                </div>
+                <div class="btn btn-default btn-sm" ng-click="Network2Asna_reloadQlik()">
+                    <span><img src="/Content/Icons/qlik.png" style="width:17px;height:17px" /> Экспорт в Qlik</span>
+                </div>
+            </div>
+
+            <div ng-if="currentTabIndex == 2 || currentTabIndex == 3" class="row pull-right" style="margin-top: 3px;">
+                <div class="col-md-4">
+                    <label>Период</label>
+                </div>
+                <div class="col-md-8">
+                    <select name="period" class="form-control" ng-options="item as item for item in periods" ng-model="currentperiod.myModel"></select>
+                </div>
+            </div>
         </uib-tabset>
 
-    </div>        
-
-        <div ng-if="currentTabIndex == 0" class="auto-item-panel">
-            <ui-grid-control options="FormingTransactionDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
-        </div>
-
-        <div ng-if="currentTabIndex == 1" class="auto-item-panel">
-            <ui-grid-control options="RebrandingDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
-        </div>
-
     </div>
+
+    <div ng-if="currentTabIndex == 0" class="auto-item-panel">
+        <ui-grid-control options="FormingTransactionDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+    <div ng-if="currentTabIndex == 1" class="auto-item-panel">
+        <ui-grid-control options="RebrandingDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+    <div ng-if="currentTabIndex == 2" class="auto-item-panel">
+        <ui-grid-control options="Network2DataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+
+    <div ng-if="currentTabIndex == 3" class="auto-item-panel">
+        <ui-grid-control options="AsnaDataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+    </div>
+</div>
 
 
