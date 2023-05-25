@@ -317,7 +317,6 @@ function BookOfChangeController($scope, $http, $uibModal, $interval, $timeout, $
         $scope.dataLoading = $q.all([upload])
             .then(function () {
                 init()
-                $scope.uploadedFile = [];
             });
     };
 
