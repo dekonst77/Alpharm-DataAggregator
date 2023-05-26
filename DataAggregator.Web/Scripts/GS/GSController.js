@@ -2043,6 +2043,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
     $scope.NeoFarm_from_Excel = function (file) {
 
+        if (file == null)
+            return;
+
         cfpLoadingBar.start();
 
         var upload = Upload.upload({
