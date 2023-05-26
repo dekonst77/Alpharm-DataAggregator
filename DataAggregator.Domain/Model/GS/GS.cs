@@ -84,6 +84,8 @@ namespace DataAggregator.Domain.Model.GS
         public DateTime? UserControl_dt { get; set; }
         [Display(Name = "Категория")]
         public Byte PointCategoryId { get; set; }
+        public bool ToOFD { get; set; }
+        public string ToOFDComment { get; set; }
 
 
         public GS()

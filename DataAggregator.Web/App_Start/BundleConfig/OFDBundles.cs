@@ -15,9 +15,10 @@ namespace DataAggregator.Web.App_Start.BundleConfig
                 // Редактор эталонных цен
                 .Include("~/Scripts/OFD/PriceEtalon/PriceEtalonController.js")
                 .Include("~/Scripts/OFD/PriceCurrent/PriceCurrentController.js")
-                 .Include("~/Scripts/OFD/PriceCurrent/PriceCurrentController_v2.js")
+                .Include("~/Scripts/OFD/PriceCurrent/PriceCurrentController_v2.js")
                 .Include("~/Scripts/OFD/PriceEtalon/PriceEtalonSearchDrugController.js")
                 .Include("~/Scripts/OFD/OFDController.js")
+                .Include("~/Scripts/OFD/GS_ToOFDController.js")
              );
 
             bundles.Add(new ComplexStyleBundle("~/Content/OFD/css")

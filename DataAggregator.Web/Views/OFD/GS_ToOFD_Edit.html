@@ -1,0 +1,36 @@
+﻿<div ng-controller="GS_ToOFDController" ng-init="GS_ToOFD_Init();"  ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .modify {
+            color: red;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                <div class="col-md-4 padding3">
+                    <label>Фильтр</label>
+                    <input type="text" class="form-control" ng-model="filter" ng-change="">
+                </div>
+                <div class="col-md-4 padding3">
+                    <label>PharmacyId</label>
+                    <input type="text" class="form-control" ng-model="pharmacyId" ng-change="">
+                </div>
+                <div class="col-md-4 padding3">
+                    <label>ИНН</label>
+                    <input type="text" class="form-control" ng-model="inn" ng-change="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 padding3">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-success btn-sm" ng-click="GS_ToOFD_search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-danger btn-sm" ng-click="GS_ToOFD_setBlocked();" ng-disabled="!Grid_GS_ToOFD.NeedSave && selectedGSIds.length === 0"><span class="glyphicon glyphicon-remove">Заблокировать</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid_GS_ToOFD.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+</div>

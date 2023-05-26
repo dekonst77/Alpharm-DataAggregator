@@ -843,6 +843,79 @@ namespace DataAggregator.Web.Controllers.OFD
                 return BadRequest(e);
             }
         }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult GS_ToOFD_search(string filter, string pharmacyId, string inn)
+        {
+            try
+            {
+                var _context = new GSContext(APP);
+                int result;
+
+                int[] pharmacyArr = !string.IsNullOrEmpty(pharmacyId) ? pharmacyId.Split(',').Select(x => Int32.TryParse(x, out result) ? result : -1).Distinct().ToArray() : new int[] { };
+                string[] innArr = !string.IsNullOrEmpty(inn) ? inn.Split(',') : new string[] { };
+
+                var data = _context.GS
+                    .Where(x => (filter == null || filter != null && x.Address.Contains(filter))
+                        && (!pharmacyArr.Any() || pharmacyArr.Contains(x.PharmacyId ?? 0))
+                        && (!innArr.Any() || innArr.Contains(x.EntityINN)));
+
+                ViewData["GS_ToOFD"] = data.OrderByDescending(x => x.Id).ToList();
+
+                var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = Data
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult GS_ToOFD_save(int[] array, string comment)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(comment))
+                    throw new Exception("Не заполнен комментарий");
+
+                if (array != null)
+                {
+                    var _context = new GSContext(APP);
+                    foreach (var item in array)
+                    {
+                        var UPD = _context.GS.FirstOrDefault(x => x.Id == item);
+                        if (UPD != null)
+                        {
+                            UPD.ToOFD = false;
+                            UPD.ToOFDComment = comment;
+                        }
+                    }
+                    _context.SaveChanges();
+                }
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = Data
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 
     public class JsonResult
