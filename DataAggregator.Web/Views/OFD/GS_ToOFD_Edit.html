@@ -1,9 +1,4 @@
-﻿<div ng-controller="GS_ToOFDController" ng-init="GS_ToOFD_Init();"  ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
-    <style>
-        .modify {
-            color: red;
-        }
-    </style>
+﻿<div ng-controller="GS_ToOFDController" cg-busy="{promise:dataLoading, message:message}" ng-init="GS_ToOFD_Init();" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
         <div class="panel-heading padding1">
             <div class="row">

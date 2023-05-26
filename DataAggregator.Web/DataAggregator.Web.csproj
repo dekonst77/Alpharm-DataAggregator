@@ -2216,7 +2216,7 @@
     <Content Include="Views\LPU\lpu_context_menu.html" />
     <Content Include="Views\LPU\lpu.html" />
     <Content Include="Views\Management\Projects.html" />
-    <Content Include="Views\OFD\GS_ToOFD_Comment.html" />
+    <Content Include="Views\OFD\GS_ToOFD_BlockReason.html" />
     <Content Include="Views\OFD\GS_ToOFD_Edit.html" />
     <Content Include="Views\OFD\4SC_Agreement_EditDates.html" />
     <Content Include="Views\OFD\4SC_Agreement_Import.html" />

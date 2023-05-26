@@ -2,9 +2,9 @@
 angular
     .module('DataAggregatorModule')
     .controller('GS_ToOFDController', [
-        '$scope', '$http', 'errorHandlerService', 'uiGridCustomService', '$uibModal', GS_ToOFDController]);
+        '$scope', '$http', 'errorHandlerService', 'uiGridCustomService', '$uibModal', '$q', GS_ToOFDController]);
 
-function GS_ToOFDController($scope, $http, errorHandlerService, uiGridCustomService, $uibModal) {
+function GS_ToOFDController($scope, $http, errorHandlerService, uiGridCustomService, $uibModal, $q) {
     $scope.GS_ToOFD_Init = function () {
         $scope.filter = null;
         $scope.pharmacyId = null;
@@ -32,10 +32,10 @@ function GS_ToOFDController($scope, $http, errorHandlerService, uiGridCustomServ
                 filter: {
                     condition: uiGridCustomService.condition
                 },
-                //для поля "Блокировка" выводим занчения наоборот: false (не пускаем в ОФД), Блокировка = да ИЛИ true (пускаем в ОФД), Блокировка = нет
+                //для поля "Причина блокировки" выводим занчения наоборот: false (не пускаем в ОФД), Блокировка = да ИЛИ true (пускаем в ОФД), Блокировка = нет
                 cellTemplate: '<span class="glyphicon" style="left: 50%;font-size: 20px;" ng-class="{\'glyphicon-unchecked\':COL_FIELD==true,\'glyphicon-check\':COL_FIELD==false}"></span>'
             },
-            { name: 'Комментарий', enableCellEdit: false, field: 'ToOFDComment', filter: { condition: uiGridCustomService.condition } }
+            { name: 'Причина блокировки', enableCellEdit: false, field: 'ToOFDBlockReason', filter: { condition: uiGridCustomService.condition } }
         ];
 
         $scope.Grid_GS_ToOFD.Options.onRegisterApi = function (gridApi) {
@@ -59,19 +59,19 @@ function GS_ToOFDController($scope, $http, errorHandlerService, uiGridCustomServ
     }
 
     $scope.GS_ToOFD_search = function () {
-        $scope.dataLoading =
-            $http({
-                method: 'POST',
-                url: '/OFD/GS_ToOFD_search/',
-                data: JSON.stringify({
-                    filter: $scope.filter, pharmacyId: $scope.pharmacyId, inn: $scope.inn
-                })
-            }).then(function (response) {
-                if (response.data.Success && response.data.Data.GS_ToOFD) 
-                    $scope.Grid_GS_ToOFD.Options.data = response.data.Data.GS_ToOFD;
-            }, function (response) {
-                errorHandlerService.showResponseError(response);
-            });
+
+        var data = $http({
+            method: 'POST',
+            url: '/OFD/GS_ToOFD_search/',
+            data: JSON.stringify({
+                filter: $scope.filter, pharmacyId: $scope.pharmacyId, inn: $scope.inn
+            })
+        }).then(function (response) {
+            if (response.data.Success && response.data.Data)
+                $scope.Grid_GS_ToOFD.Options.data = response.data.Data;
+        });
+
+        $scope.dataLoading = $q.all([data]);
     };
 
     $scope.GS_ToOFD_setBlocked = function () {
@@ -79,20 +79,20 @@ function GS_ToOFDController($scope, $http, errorHandlerService, uiGridCustomServ
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'Views/OFD/GS_ToOFD_Comment.html',
+                templateUrl: 'Views/OFD/GS_ToOFD_BlockReason.html',
                 size: 'lg',
-                controller: 'GS_ToOFDCommentController',
+                controller: 'GS_ToOFDBlockReasonController',
                 windowClass: 'center-modal',
                 backdrop: 'static'
             });
 
-            modalInstance.result.then(function (comment) {
+            modalInstance.result.then(function (reason) {
                 $scope.loading = $http({
                     method: 'POST',
                     url: '/OFD/GS_ToOFD_save/',
                     data: JSON.stringify({
                         array: $scope.selectedGSIds,
-                        comment: comment
+                        reason: reason
                     })
                 }).then(function (response) {
                     var data = response.data;
@@ -111,23 +111,23 @@ function GS_ToOFDController($scope, $http, errorHandlerService, uiGridCustomServ
 
 angular
     .module('DataAggregatorModule')
-    .controller('GS_ToOFDCommentController', [
-        '$scope', 'messageBoxService', '$uibModalInstance', GS_ToOFDCommentController]);
+    .controller('GS_ToOFDBlockReasonController', [
+        '$scope', 'messageBoxService', '$uibModalInstance', GS_ToOFDBlockReasonController]);
 
-function GS_ToOFDCommentController($scope, messageBoxService, $modalInstance) {
-    $scope.comment = null;
+function GS_ToOFDBlockReasonController($scope, messageBoxService, $modalInstance) {
+    $scope.reason = null;
 
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };
 
     $scope.save = function () {
-        if ($scope.comment === null || $scope.comment.trim().length === 0) {
-            messageBoxService.showError('Впишите комменатрий', 'Ошибка');
+        if ($scope.reason === null || $scope.reason.trim().length === 0) {
+            messageBoxService.showError('Не заполнена причина блокировки', 'Ошибка');
             return;
         }
         else {
-            $modalInstance.close($scope.comment);
+            $modalInstance.close($scope.reason);
         }
     };
 }

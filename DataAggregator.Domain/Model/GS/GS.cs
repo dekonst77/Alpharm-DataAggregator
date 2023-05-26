@@ -85,7 +85,10 @@ namespace DataAggregator.Domain.Model.GS
         [Display(Name = "Категория")]
         public Byte PointCategoryId { get; set; }
         public bool ToOFD { get; set; }
-        public string ToOFDComment { get; set; }
+        /// <summary>
+        /// Причина блокировки в ОФД
+        /// </summary>
+        public string ToOFDBlockReason { get; set; }
 
 
         public GS()
