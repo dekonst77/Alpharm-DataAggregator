@@ -10,9 +10,8 @@ namespace DataAggregator.Core.Models.Classifier
     public class ClassifierEditorModelJson
     {
         public long ClassifierId { get; set; }
-        public long DrugId { get; set; }//код товара
-
-        public long OwnerTradeMarkId { get; set; }//производитель-Правообладатель
+        public long DrugId { get; set; } // код товара
+        public long OwnerTradeMarkId { get; set; } // производитель-Правообладатель
 
         public long PackerId { get; set; }//упаковщик
 

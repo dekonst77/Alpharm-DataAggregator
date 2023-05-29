@@ -433,8 +433,6 @@ namespace DataAggregator.Core.Classifier
             if (model.TradeName.Id > 0)
             {
                 tradeName = _context.TradeNames.First(tn => tn.Id == model.TradeName.Id);
-
-
             }
             else if (!string.IsNullOrEmpty(model.TradeName.Value))
             {
@@ -508,7 +506,7 @@ namespace DataAggregator.Core.Classifier
             if (dosageTotal != null && dosageTotal.Id == 0)
                 return null;
 
-            //Тут мы береб все дозировки и начинаем накладывать фильтры
+            //Тут мы берем все дозировки и начинаем накладывать фильтры
             var dosageGroups = _context.DosageGroups.Where(d => d != null);
 
             if (dosageValue != null)
@@ -994,38 +992,40 @@ namespace DataAggregator.Core.Classifier
         private DrugProperty _currentDrugProperty;
         private ClassifierEditorModelJson _currentModel;
 
-        //Получить все характеристики для Drug
+        // Получить все характеристики для Drug
         public DrugProperty GetDrugProperty(ClassifierEditorModelJson model)
         {
 
-            //Если модель уже искалась, то возращаем результат
+            // Если модель уже искалась, то возвращаем результат
             if (_currentModel == model && _currentDrugProperty != null)
                 return _currentDrugProperty;
             else
                 _currentModel = model;
 
-            //Ищем Equipment
+            // Ищем Equipment
             var equipment = FindOrCreateEquipment(model);
 
-            //Ищем tradeName
+            // Ищем tradeName
             var tradeName = FindOrCreateTradeName(model);
 
             if (tradeName == null)
                 throw new ApplicationException("ТН не может быть пустым");
 
+            // Форма продукта
             var formProduct = FindOrCreateFormProduct(model);
 
             if (formProduct == null)
                 throw new ApplicationException("форма выпуска должна быть указана");
 
-            //Ищем innGroup
+            // Ищем innGroup
             var innGroup = FindOrCreateInnGroup(model);
 
-            //Начинаем искать
+            // Начинаем искать
             DosageGroup dosageGroup = FindDosageGroup(model) ?? CreateDosageGroup(model);
 
-            //Прямые признаки того что Drug будет новым
-            bool isNew = tradeName.Id == 0 || (innGroup != null && innGroup.Id == 0) || formProduct.Id == 0 || (dosageGroup != null && dosageGroup.Id == 0) || (equipment != null && equipment.Id == 0);
+            // Прямые признаки того, что Drug будет новым
+            //bool isNew = tradeName.Id == 0 || (innGroup != null && innGroup.Id == 0) || formProduct.Id == 0 || (dosageGroup != null && dosageGroup.Id == 0) || (equipment != null && equipment.Id == 0);
+            bool isNew = tradeName?.Id == 0 || (innGroup?.Id == 0) || formProduct?.Id == 0 || (dosageGroup?.Id == 0) || (equipment?.Id == 0);
 
             var drugPropery = new DrugProperty
             {
@@ -1084,15 +1084,17 @@ namespace DataAggregator.Core.Classifier
 
             DrugProperty property = GetDrugProperty(model);
 
-            Drug drug = new Drug();
-            drug.FormProduct = property.FormProduct;
-            drug.DosageGroup = property.DosageGroup;
-            drug.DrugTypeId = property.DrugTypeId;
-            drug.ConsumerPackingCount = property.ConsumerPackingCount;
-            drug.UseShortDescription = property.UseShortDescription;
-            drug.TradeName = property.TradeName;
-            drug.INNGroup = property.INNGroup;
-            drug.Equipment = property.Equipment;
+            Drug drug = new Drug
+            {
+                FormProduct = property.FormProduct,
+                DosageGroup = property.DosageGroup,
+                DrugTypeId = property.DrugTypeId,
+                ConsumerPackingCount = property.ConsumerPackingCount,
+                UseShortDescription = property.UseShortDescription,
+                TradeName = property.TradeName,
+                INNGroup = property.INNGroup,
+                Equipment = property.Equipment
+            };
 
             _context.Drugs.Add(drug);
 
