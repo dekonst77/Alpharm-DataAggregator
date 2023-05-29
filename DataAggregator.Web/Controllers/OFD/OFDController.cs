@@ -843,6 +843,76 @@ namespace DataAggregator.Web.Controllers.OFD
                 return BadRequest(e);
             }
         }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult GS_ToOFD_search(string filter, string pharmacyId, string inn)
+        {
+            try
+            {
+                int result;
+                List<Domain.Model.GS.GS> data = null;
+
+                int[] pharmacyArr = !string.IsNullOrEmpty(pharmacyId) ? pharmacyId.Split(',').Select(x => Int32.TryParse(x, out result) ? result : -1).Distinct().ToArray() : new int[] { };
+                string[] innArr = !string.IsNullOrEmpty(inn) ? inn.Split(',') : new string[] { };
+
+                using (var _context = new GSContext(APP))
+                {
+                    data = _context.GS
+                           .Where(x => (filter == null || filter != null && x.Address.Contains(filter))
+                               && (!pharmacyArr.Any() || pharmacyArr.Contains(x.PharmacyId ?? 0))
+                               && (!innArr.Any() || innArr.Contains(x.EntityINN)))
+                           .OrderByDescending(x => x.Id).ToList();
+                }
+
+                var Data = new JsonResult() { Data = data, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = Data
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "OFD_Boss")]
+        public ActionResult GS_ToOFD_save(int[] array, string reason)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(reason))
+                    throw new Exception("Не заполнена причина блокировки");
+
+                if (array != null)
+                {
+                    var _context = new GSContext(APP);
+                    var UPD = _context.GS.Where(x => array.Contains(x.Id)).ToList();
+                    UPD.ForEach(x =>
+                    {
+                        x.ToOFD = false;
+                        x.ToOFDBlockReason = reason;
+                    });
+                    _context.SaveChanges();
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = null, status = "ок", Success = true }
+            };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 
     public class JsonResult

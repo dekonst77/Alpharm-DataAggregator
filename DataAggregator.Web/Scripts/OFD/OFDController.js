@@ -793,24 +793,22 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
     }
 
     $scope.D4SC_Agreement_import = function () {
-        let rootScope = $scope;
-        $uibModal.open({
+        var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'Views/OFD/4SC_Agreement_Import.html',
             size: 'lg',
             controller: 'AgreementImportController',
             windowClass: 'center-modal',
-            backdrop: 'static',
-            resolve: {
-                rootScope: rootScope
-            }
+            backdrop: 'static'
+        });
+
+        modalInstance.result.then(function () {
+            $scope.D4SC_Agreement_search();
         });
     };
 
     $scope.D4SC_Agreement_editDates = function () {
-        let rootScope = $scope;
-
-        $uibModal.open({
+        var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'Views/OFD/4SC_Agreement_EditDates.html',
             size: 'lg',
@@ -820,9 +818,12 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             resolve: {
                 AgreementIds: function () {
                     return $scope.selectedAgreementIds;
-                },
-                rootScope: rootScope
+                }
             }
+        });
+
+        modalInstance.result.then(function () {
+            $scope.D4SC_Agreement_search();
         });
     }
 }
@@ -830,16 +831,18 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
 angular
     .module('DataAggregatorModule')
     .controller('AgreementImportController', [
-        '$scope', 'Upload', 'errorHandlerService', '$uibModalInstance', AgreementImportController]);
+        '$scope', 'Upload', 'errorHandlerService', '$uibModalInstance', 'messageBoxService', AgreementImportController]);
 
-function AgreementImportController($scope, Upload, errorHandlerService, $modalInstance) {
+function AgreementImportController($scope, Upload, errorHandlerService, $modalInstance, messageBoxService) {
     $scope.isForce = false;
-
+    $scope.isLoading = false;
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };
 
-    $scope.import = function (file) {
+    $scope.import = function (event, file) {
+        event.stopPropagation();
+        $scope.isLoading = true;
 
         if (file == null)
             return;
@@ -851,10 +854,11 @@ function AgreementImportController($scope, Upload, errorHandlerService, $modalIn
                 force: $scope.isForce
             }
         }).then(function () {
-            alert("Файл загружен");
+            $scope.isLoading = false;
+            messageBoxService.showError('Файл загружен', 'Успешно');
             $modalInstance.dismiss();
-            $scope.$resolve.rootScope.D4SC_Agreement_search();
         }, function (response) {
+            $scope.isLoading = false;
             errorHandlerService.showResponseError(response);
         });
     };
@@ -863,7 +867,7 @@ function AgreementImportController($scope, Upload, errorHandlerService, $modalIn
 angular
     .module('DataAggregatorModule')
     .controller('AgreementEditDatesController', [
-        '$scope', '$http', 'errorHandlerService', '$uibModalInstance', '$rootScope', AgreementEditDatesController]);
+        '$scope', '$http', 'errorHandlerService', '$uibModalInstance', AgreementEditDatesController]);
 
 function AgreementEditDatesController($scope, $http, errorHandlerService, $modalInstance) {
     $scope.dateBegin = new Date();
@@ -884,7 +888,6 @@ function AgreementEditDatesController($scope, $http, errorHandlerService, $modal
             })
         }).then(function () {
             $modalInstance.dismiss();
-            $scope.$resolve.rootScope.D4SC_Agreement_search();
         }, function (response) {
             errorHandlerService.showResponseError(response);
         });

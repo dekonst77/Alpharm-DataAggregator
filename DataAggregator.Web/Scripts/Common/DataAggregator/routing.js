@@ -55,6 +55,13 @@
                     authorize: true,
                     isEditor: true
                 })
+            .when('/OFD/GS_ToOFD_Edit',
+                {
+                    templateUrl: 'Views/OFD/GS_ToOFD_Edit.html',
+                    title: 'Фиксация точек',
+                    authorize: true,
+                    isEditor: true
+                })
             .when('/OFD/Files',
                 {
                     templateUrl: 'Views/OFD/Files.html',

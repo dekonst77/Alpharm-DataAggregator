@@ -1802,6 +1802,7 @@
     <Content Include="Scripts\ng-file-upload-shim.min.js" />
     <Content Include="Scripts\ng-file-upload.js" />
     <Content Include="Scripts\ng-file-upload.min.js" />
+    <Content Include="Scripts\OFD\GS_ToOFDController.js" />
     <Content Include="Scripts\OFD\OFDController.js" />
     <Content Include="Scripts\OFD\PriceCurrent\PriceCurrentController_v2.js" />
     <Content Include="Scripts\OFD\PriceCurrent\PriceCurrentController.js" />
@@ -2215,6 +2216,8 @@
     <Content Include="Views\LPU\lpu_context_menu.html" />
     <Content Include="Views\LPU\lpu.html" />
     <Content Include="Views\Management\Projects.html" />
+    <Content Include="Views\OFD\GS_ToOFD_BlockReason.html" />
+    <Content Include="Views\OFD\GS_ToOFD_Edit.html" />
     <Content Include="Views\OFD\4SC_Agreement_EditDates.html" />
     <Content Include="Views\OFD\4SC_Agreement_Import.html" />
     <Content Include="Views\OFD\4SC_Agreement_Edit.html" />
