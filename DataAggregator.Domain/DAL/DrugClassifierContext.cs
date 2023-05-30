@@ -644,7 +644,7 @@ namespace DataAggregator.Domain.DAL
         {
             using (var command = new SqlCommand())
             {
-                //чтобы при больших запросах в итоге он отваливался, а НЕ вешал всех на весь день
+                //чтобы при больших запросах в итоге он отваливался, а не вешал всех на весь день
                 command.CommandTimeout = 20 * 60;
                 //cnt.Database.Connection.ConnectionString += "APP=user:" + User.Identity.Name;//Чтобы триггер увидел, кто меняет
                 command.Connection = (SqlConnection)this.Database.Connection;

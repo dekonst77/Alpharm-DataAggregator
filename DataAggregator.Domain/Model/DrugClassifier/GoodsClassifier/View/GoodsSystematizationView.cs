@@ -25,5 +25,6 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier.View
         public bool Used { get; set; }
         public bool? ToRetail { get; set; }
         public string Comment { get; set; }
+        public string ProductInfoComment { get; set; }
     }
 }
