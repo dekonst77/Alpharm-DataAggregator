@@ -315,7 +315,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         });
     }
     // $scope.classifierPackingGrid <-
-    
+
     $scope.classifier = {
         RegistrationCertificate: new RegistrationCertificateClass(),
         InnGroupDosage: [],
@@ -343,7 +343,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         ProductionLocalization: null,
         PackerLocalization: null
     };
-  
+
     $scope.checkRx = function (type_otc) {
         if (type_otc === "Otc") {
             if ($scope.classifier.IsOtc === true) {
@@ -1113,7 +1113,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
             });
     }
 
-    //Добаивть классификатор
+    // Добавить классификатор
     function AddClassifier() {
 
         var json = JSON.stringify({ model: $scope.classifier });
@@ -1130,8 +1130,6 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
                 if (responseData.Success) {
                     var data = responseData.Data;
                     ShowResult(data.data, false, data.itemView);
-
-
                 } else {
                     messageBoxService.showError(responseData.ErrorMessage);
                 }
@@ -1140,7 +1138,30 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
             });
     }
 
-    //Показать результат добавления
+    // Удалить ЛП
+    function DeleteDrug(data) {
+
+        var json = JSON.stringify({ model: data });
+
+        $scope.classifierLoading =
+            $http({
+                method: 'POST',
+                url: '/ClassifierEditor/DeleteDrug/',
+                data: json
+            }).then(function (response) {
+
+                var responseData = response.data;
+
+                if (!responseData.Success) {
+                    messageBoxService.showError(responseData.ErrorMessage);
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    }
+
+
+    // Показать результат добавления
     function ShowResult(data, isTry, newItem) {
 
         var modalInstance =
@@ -1158,16 +1179,16 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
             });
 
         modalInstance.result.then(function () {
-            //Если это была пробная попытка, и пользователь выбрал ок, то вызываем добавление
+            // Если это была пробная попытка и пользователь выбрал ОК, то вызываем добавление
             if (isTry)
                 AddClassifier();
             else {
-                //Если это финальное добавление, то загружаем изменения
-                //Если после загрузки добавленного элемента нету добавим его вручную
+                // Если это финальное добавление, то загружаем изменения.
+                // Если после загрузки добавленного элемента нет, добавим его вручную.
                 loadClassifier(newItem);
             }
-        }, function () {
-            //Отменили выполнение
+        }, function () { // Отменили выполнение: удалим Drug
+            DeleteDrug(data);
         });
     }
 
@@ -1616,7 +1637,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         window.open('/#/Classifier/Manufacturer/Edit?id=0', '_blank');
     };
     $scope.changeTradeName = function () {
-        
+
         if ($scope.classifier.Brand !== null) {
             $scope.classifier.Brand.Value = "";
             $scope.classifier.Brand.Id = 0;
@@ -1655,8 +1676,8 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
 
         //console.log($scope.classifier.PackerLocalization)
         switch ($scope.classifier.ProductionStage.Id) {
-            case 1 : // 1 = Unknown
-            case 2 : // 2 = Все стадии производства
+            case 1: // 1 = Unknown
+            case 2: // 2 = Все стадии производства
                 if (($scope.classifier.PackerLocalization !== undefined) && ($scope.classifier.PackerLocalization !== null))
                     $scope.LocalizationListFilter = $scope.LocalizationList.filter(loc => loc.Id === $scope.classifier.PackerLocalization.Id)
                 else

@@ -120,7 +120,7 @@ namespace DataAggregator.Core.Classifier
         }
 
         /// <summary>
-        /// Проверяем что новое а что старое
+        /// Проверяем что новое, а что старое
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -129,8 +129,6 @@ namespace DataAggregator.Core.Classifier
             model.Clear();
 
             ClassifierInfoModel infoModel = new ClassifierInfoModel();
-
-            //var newWord = "Новый";
 
             var drug = _dictionary.CheckDrug(model);
             var ownerTradeMark = _dictionary.FindManufacturer(model.OwnerTradeMark);
@@ -1153,33 +1151,51 @@ namespace DataAggregator.Core.Classifier
 
                 return result;
             }
+        }
 
+        /// <summary>
+        /// Удалить ЛП
+        /// </summary>
+        /// <param name="model"></param>
+        public void DeleteDrug(ClassifierInfoModel model)
+        {
+            if (!model.IsDrugNew)
+                return;
+
+            var drug = _context.Drugs.Find(model.DrugId);
+            if (drug != null)
+            {
+                _context.Drugs.Remove(drug);
+                _context.SaveChanges();
+            }
         }
 
         /// <summary>
         /// Добавляем новый классификатор
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="tryMode"></param>
+        /// <param name="tryMode">Предварительная подготовка, если true. Запись в БД, если false.</param>
         /// <returns></returns>
         private ClassifierInfoModel Add(ClassifierEditorModelJson model, bool tryMode)
         {
             model.Clear();
-
             var drugProperty = _dictionary.GetDrugProperty(model);
 
             #region Ищем Drug
             Drug drug = null;
 
-            // Ищем если
+            // Ищем если есть
             if (!drugProperty.IsNew)
                 drug = _dictionary.FindDrug(model);
 
-            if (drug == null)
+            if (drug == null) // проставляем новый Drug, если окончательно решили добавить ЛП
             {
                 drug = _dictionary.CreateDrug(model);
+
                 _context.SaveChanges();
+
                 model.DrugId = drug.Id;
+                drugProperty.IsNew = true;
             }
             #endregion
 
@@ -1187,10 +1203,8 @@ namespace DataAggregator.Core.Classifier
             Manufacturer ownerTradeMark = _dictionary.FindManufacturer(model.OwnerTradeMark) ?? _dictionary.CreateManufacturer(model.OwnerTradeMark);
             Manufacturer packer = _dictionary.FindManufacturer(model.Packer) ?? _dictionary.CreateManufacturer(model.Packer);
 
-
-            //Я не знаю почему но в моделе остаётся код от того который был введён при выборе из листа, поэтому меняем код модели на код драга 2019,01,31
-            model.DrugId = drug.Id;
-            //Я не знаю почему но в моделе остаётся код от того который был введён при выборе из листа, поэтому меняем код модели на код драга 2019,01,31
+            //Я не знаю почему, но в моделе остаётся код от того который был введён при выборе из листа, поэтому меняем код модели на код драга 2019,01,31
+            model.DrugId = drug != null ? drug.Id : 0;
             model.OwnerTradeMarkId = ownerTradeMark.Id;
             model.PackerId = packer.Id;
             #endregion
@@ -1215,7 +1229,6 @@ namespace DataAggregator.Core.Classifier
             #endregion
 
             #region Ищем ProductionInfo
-
             var productionInfo = _dictionary.FindProductionInfo(ownerTradeMark, packer, drug);
 
             if (productionInfo == null)
@@ -1311,6 +1324,8 @@ namespace DataAggregator.Core.Classifier
             info.Used = model.Used;
             info.Comment = model.Comment;
             info.Drug = drug;
+            info.IsDrugNew = drugProperty.IsNew;
+
             info.ProductionInfo = productionInfo;
 
             if (info.DrugId == null && info.Drug.Id > 0)

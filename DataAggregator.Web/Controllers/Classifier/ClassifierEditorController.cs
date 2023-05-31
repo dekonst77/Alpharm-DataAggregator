@@ -203,7 +203,7 @@ namespace DataAggregator.Web.Controllers
                 InnGroupNew = drugProperty.INNGroupNew;
                 DrugTypeId = drugProperty.DrugTypeId;
             }
-            catch
+            catch (Exception e)
             {
                 InnGroupId = null;
                 InnGroupNew = false;
@@ -319,11 +319,25 @@ namespace DataAggregator.Web.Controllers
 
             ATCEphmraMatchList.Add(new { Id = 0L, Value = "----------------------------------", IsUse = true });
 
+            /*
             var ATCEphmraDontMatchList =
                 _context.ATCEphmra.Where(ATCEphmra => !ATCEphmraMatchIds.Select(s => s.ATCEphmraId).Contains(ATCEphmra.Id) && ATCEphmra.IsUse == true)
                     .OrderBy(ATCEphmra => ATCEphmra.Value)
                     .Select(ATCEphmra => new { Id = ATCEphmra.Id, Value = "(" + ATCEphmra.Value + ") " + ATCEphmra.Description, IsUse = ATCEphmra.IsUse })
                     .ToList();
+            */
+            var ATCEphmraDontMatchList = (from phmraItem in _context.ATCEphmra
+                                          where phmraItem.IsUse == true
+                                          join DrugItem in _context.DrugClassification on phmraItem.Id equals DrugItem.ATCEphmraId into phmraItemList
+                                          from pl in phmraItemList.DefaultIfEmpty()
+                                          where pl.ATCEphmraId == null
+                                          select new
+                                          {
+                                              Id = phmraItem.Id,
+                                              Value = "(" + phmraItem.Value + ") " + phmraItem.Description,
+                                              IsUse = phmraItem.IsUse
+                                          }).ToList();
+
 
             JsonNetResult jsonNetResult = new JsonNetResult
             {
@@ -517,6 +531,9 @@ namespace DataAggregator.Web.Controllers
 
                 if (packer == null)
                     throw new ApplicationException("packer not found");
+
+                if (packer.Country == null) 
+                    throw new ApplicationException($"Не заполнено поле <Страна> для упаковщика {packer.Corporation.Value}.");
 
                 var model = new ClassifierEditorModelJson
                 {
@@ -727,7 +744,7 @@ namespace DataAggregator.Web.Controllers
                 string xmlFilter = XmlToObjectSerializer<ClassifierFilter>.Serialize(filter);
 
                 IEnumerable<ClassifierEditorFilterView> result_list = _context.GetClassifierEditorView_Result(xmlFilter).ToList();
-                return ReturnData(result_list);                
+                return ReturnData(result_list);
             }
             catch (Exception e)
             {
@@ -769,7 +786,6 @@ namespace DataAggregator.Web.Controllers
 
                     return ReturnData(data);
                 }
-
             }
             catch (Exception e)
             {
@@ -788,11 +804,34 @@ namespace DataAggregator.Web.Controllers
                     ClassifierEditor editor = new ClassifierEditor(_context, userGuid);
                     var data = editor.AddClassifier(model, false);
 
-                    var itemView = _context.ClassifierEditorFilterView.SingleOrDefault(r => r.DrugId == data.DrugId &&
-                        r.OwnerTradeMarkId == data.OwnerTradeMarkId &&
-                        r.PackerId == data.PackerId);
-
+                    var itemView = _context.ClassifierEditorFilterView.SingleOrDefault(r => r.DrugId == data.DrugId && r.OwnerTradeMarkId == data.OwnerTradeMarkId && r.PackerId == data.PackerId);
                     var result = new { data = data, itemView = itemView };
+
+                    return ReturnData(result);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteDrug(ClassifierInfoModel model)
+        {
+            if (!model.IsDrugNew)
+                return Ok("");
+
+            try
+            {
+                lock (LockObject)
+                {
+                    var userGuid = new Guid(User.Identity.GetUserId());
+                    ClassifierEditor editor = new ClassifierEditor(_context, userGuid);
+
+                    editor.DeleteDrug(model);
+
+                    var result = new { data = model };
 
                     return ReturnData(result);
                 }

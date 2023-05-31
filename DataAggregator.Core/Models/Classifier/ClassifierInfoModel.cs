@@ -12,11 +12,14 @@ namespace DataAggregator.Core.Models.Classifier
         public bool PackerIdNew { get; set; }
 
         public long OwnerRegistrationCertificateId { get; set; }
+
         public bool OwnerRegistrationCertificateIdNew { get; set; }
         
         public List<string> KCU { get; set; }
 
         public long? DrugId { get; set; }
+        public bool IsDrugNew { get; set; } // новый товар
+
         public long OwnerTradeMarkId { get; set; }
         public long PackerId { get; set; }
 
