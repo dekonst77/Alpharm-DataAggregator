@@ -532,6 +532,9 @@ namespace DataAggregator.Web.Controllers
                 if (packer == null)
                     throw new ApplicationException("packer not found");
 
+                if (packer.Country == null) 
+                    throw new ApplicationException($"Не заполнено поле <Страна> для упаковщика {packer.Corporation.Value}.");
+
                 var model = new ClassifierEditorModelJson
                 {
                     ClassifierId = ClassifierInfo.Id,
