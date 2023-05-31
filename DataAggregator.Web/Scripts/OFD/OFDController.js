@@ -348,7 +348,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         $scope.periodEnd = new Date();
         $scope.brickId = "1";
 
-        $scope.selectedRows = [];
+        $scope.selectedIds = [];
 
         $scope.Grid_Agg = uiGridCustomService.createGridClassMod($scope, "Grid_Agg");
 
@@ -385,6 +385,9 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             $scope.gridApi_Grid_Agg = gridApi;
               //Что-то выделили
             $scope.gridApi_Grid_Agg.selection.on.rowSelectionChanged($scope, Grid_Agg_select);
+            $scope.gridApi_Grid_Agg.selection.on.rowSelectionChangedBatch($scope, function (rows) {
+                rows.forEach(x => Grid_Agg_select(x))
+            });
 
             $scope.gridApi_Grid_Agg.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
                 if (colDef.field !== '@modify') {
@@ -396,8 +399,15 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
             });
         };
 
-        function Grid_Agg_select() {
-            $scope.selectedRows = $scope.gridApi_Grid_Agg.selection.getSelectedRows();
+        function Grid_Agg_select(row) {
+            if (row.entity && row.entity.Id) {
+                let Id = row.entity.Id;
+                var index = $scope.selectedIds.indexOf(Id);
+                if (index !== -1)
+                    $scope.selectedIds.splice(index, 1);
+                else
+                    $scope.selectedIds.push(Id);
+            }
         }
 
         $scope.dataLoading = $http({
@@ -474,19 +484,18 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
     $scope.Agg_remove = function () {
         messageBoxService.showConfirm('Удалить выбранные агрегаторы?', 'Удаление').then(
             function (result) {
-                let selectedArray = $scope.selectedRows.map(agg => agg.Id);
                 $scope.dataLoading =
                     $http({
                         method: 'POST',
                         url: '/OFD/Agg_remove/',
                         data: JSON.stringify({
-                            aggToDelete: selectedArray
+                            aggToDelete: $scope.selectedIds
                         })
                     }).then(function (response) {
                         var data = response.data;
                         if (data.Success) {
                             $scope.Agg_search_AC();
-                            $scope.selectedRows = [];
+                            $scope.selectedIds = [];
                         }
                     }, function (response) {
                         errorHandlerService.showResponseError(response);
