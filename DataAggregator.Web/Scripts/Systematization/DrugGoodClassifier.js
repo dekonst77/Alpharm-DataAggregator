@@ -775,6 +775,25 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
     }
     )();
 
+    // загрузить обрабатываемые drugs
+    function LoadDrugs() {
+        getPeriodName();
+        $scope.drugLoading = $http.post('/Systematization/LoadDrugs/')
+            .then(function (response) {
+                $scope.gridOptions.data = response.data;
+
+                $timeout(function () {
+                    var visibleRows = $scope.gridApi.core.getVisibleRows();
+                    if (visibleRows.length > 0) {
+                        $scope.gridApi.selection.selectRow(visibleRows[0].entity);
+                    }
+                }, 200);
+            },
+                function () {
+                    $scope.message = 'Unexpected Error';
+                });
+    };
+
     function getPeriodName() {
         $scope.drugLoading = $http.post('/Systematization/GetPeriodName/')
             .then(function (response) {
@@ -1178,7 +1197,7 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
         };
 
         $scope.classifierLoading = $http.post('/Classifier/SetClassifierToDrugs/', JSON.stringify({ parameters: parameters }))
-            .then(function () {
+            .then(function (ReLoadDrugs) {
                 selectedAndFilteredRows.forEach(function (item) {
                     item.DrugId = element.DrugId;
                     item.GoodsId = element.GoodsId;
@@ -1209,6 +1228,12 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
                 });
 
                 processedEventHandler(selectedAndFilteredRows);
+
+                if (ReLoadDrugs.data.ReLoadDrugs) {
+                    LoadDrugs(); // перезагрузка доп. ассортименнта
+                    loadClassifierDOP($scope.classifierFilterDOP); // перезагрузка фильтра по доп. ассортименту
+                }
+
 
             }, function () {
                 $scope.message = 'Unexpected Error';

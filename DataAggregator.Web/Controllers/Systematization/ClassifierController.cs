@@ -28,7 +28,7 @@ namespace DataAggregator.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetClassifier(ClassifierFilter filter, int rettype=0)
+        public JsonResult GetClassifier(ClassifierFilter filter, int rettype = 0)
         {
             var result = _context.SystematizationView.Where(sv => sv.RegistrationCertificateIsBlocked != true);
 
@@ -96,7 +96,7 @@ namespace DataAggregator.Web.Controllers
                     result = result.Where(sv => (idList.Contains(sv.FormProductId ?? -1)));
                 }
             }
-            
+
             if (!string.IsNullOrEmpty(filter.DosageGroup))
             {
                 if (filter.DosageGroupId != null)
@@ -116,12 +116,12 @@ namespace DataAggregator.Web.Controllers
                 result = result.Where(sv => sv.Used == (filter.Used == 1));
 
             if (filter.DrugId.HasValue)
-                result = result.Where(sv => sv.DrugId == filter.DrugId);    
+                result = result.Where(sv => sv.DrugId == filter.DrugId);
 
-            if (filter.OwnerTradeMarkId>0)
+            if (filter.OwnerTradeMarkId > 0)
             {
                 var idList = _context.Manufacturer.Where(x => x.Id == filter.OwnerTradeMarkId).Select(x => x.Id).ToList();
-                result = result.Where(sv => sv.OwnerTradeMarkId== filter.OwnerTradeMarkId);
+                result = result.Where(sv => sv.OwnerTradeMarkId == filter.OwnerTradeMarkId);
             }
 
             if (!string.IsNullOrEmpty(filter.RegNumber))
@@ -140,7 +140,7 @@ namespace DataAggregator.Web.Controllers
                 {
                     DrugDescription = s.DrugDescription,
                     DrugId = s.DrugId,
-                    ClassifierId=s.ClassifierId,
+                    ClassifierId = s.ClassifierId,
                     GoodsId = null,
                     INNGroup = s.INNGroup,
                     IsOther = false,
@@ -152,8 +152,8 @@ namespace DataAggregator.Web.Controllers
                     ConsumerPackingCount = s.ConsumerPackingCount,
                     RealPackingCount = s.RealPackingCount,
                     GoodsCategoryId = null,
-                    Used=s.Used,
-                    Comment=s.Comment,
+                    Used = s.Used,
+                    Comment = s.Comment,
                     RegistrationCertificateNumber = s.RegistrationCertificateNumber,
                     Price = s.Price.ToString()
                 });
@@ -168,7 +168,7 @@ namespace DataAggregator.Web.Controllers
 
             if (ClassifierId != null)
                 result = result.Where(sv => sv.Used == (ClassifierId == (long)ClassifierId));
-            if (!string.IsNullOrEmpty(TradeName)&& TradeName== INN)
+            if (!string.IsNullOrEmpty(TradeName) && TradeName == INN)
             {
                 result = result.Where(sv => sv.TradeName.Contains(TradeName) || sv.INNGroup.Contains(INN));
             }
@@ -210,7 +210,7 @@ namespace DataAggregator.Web.Controllers
             return Json(result.ToList());
         }
         [HttpPost]
-        public JsonResult GetClassifierFromHotKey(string value, int rettype=0)
+        public JsonResult GetClassifierFromHotKey(string value, int rettype = 0)
         {
             value = value.Trim();
             var tradeNameIdList = _context.TradeNames.Where(tn => tn.Value.Contains(value)).Select(tn => tn.Id).ToList();
@@ -227,7 +227,7 @@ namespace DataAggregator.Web.Controllers
                 {
                     DrugDescription = s.DrugDescription,
                     DrugId = s.DrugId,
-                    ClassifierId=s.ClassifierId,
+                    ClassifierId = s.ClassifierId,
                     GoodsId = null,
                     INNGroup = s.INNGroup,
                     IsOther = false,
@@ -240,8 +240,8 @@ namespace DataAggregator.Web.Controllers
                     RealPackingCount = s.RealPackingCount,
                     GoodsCategoryId = null,
                     Used = s.Used,
-                    Comment=s.Comment,
-                    RegistrationCertificateNumber =s.RegistrationCertificateNumber
+                    Comment = s.Comment,
+                    RegistrationCertificateNumber = s.RegistrationCertificateNumber
 
                 });
                 return Json(ret_2.ToList());
@@ -269,7 +269,7 @@ namespace DataAggregator.Web.Controllers
 
             return Json(true);
         }
-        
+
 
         [HttpPost]
         public JsonResult SetClassifierToDrugs(ClassifierToDrugsJson parameters)
@@ -277,16 +277,14 @@ namespace DataAggregator.Web.Controllers
             var drug_PI = _context.ProductionInfo.SingleOrDefault(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
             var good_PI = _context.GoodsProductionInfo.SingleOrDefault(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
 
-            if (parameters.DrugId > 0 && drug_PI==null)
+            if (parameters.DrugId > 0 && drug_PI == null)
                 throw new ApplicationException("Не обнаружен ЛП");
 
-            if (parameters.GoodsId > 0 && good_PI==null)
+            if (parameters.GoodsId > 0 && good_PI == null)
                 throw new ApplicationException("Не обнаружен ДОП");
 
             if (drug_PI == null && good_PI == null)
                 throw new ApplicationException("Не обнаружен смысл");
-
-
 
             var userGuid = new Guid(User.Identity.GetUserId());
 
@@ -317,16 +315,13 @@ namespace DataAggregator.Web.Controllers
                     currentDrugInWork.RealPackingCount = 0;
                     currentDrugInWork.ConsumerPackingCount = 0;
 
-                    //if (goodsProductionInfo != null)
-                   // {
-                        currentDrugInWork.GoodsCategoryId = (byte)good_PI.GoodsCategoryId;
-                   // }
+                    currentDrugInWork.GoodsCategoryId = (byte)good_PI.GoodsCategoryId;
                 }
 
-                
+
                 currentDrugInWork.OwnerTradeMarkId = parameters.OwnerTradeMarkId;
                 currentDrugInWork.PackerId = parameters.PackerId;
-                
+
 
                 currentDrugInWork.ForChecking = false;
                 currentDrugInWork.ForAdding = false;
@@ -336,16 +331,35 @@ namespace DataAggregator.Web.Controllers
 
             _context.SaveChanges();
 
+            // обновим <Категорию> для доп. ассортимента по GoodsId, OwnerTradeMarkId, PackerId
+            if (good_PI != null)
+            {
+                var drugsInWorkForUpdate = _context.DrugClassifierInWork
+                    .Where(d => d.UserId == userGuid && d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId && d.GoodsCategoryId != good_PI.GoodsCategoryId)
+                    .Select(t => t.Id)
+                    .ToList();
+                var drugsInWorkForUpdateSql = String.Join(", ", drugsInWorkForUpdate.ToList());
+
+                if (!String.IsNullOrEmpty(drugsInWorkForUpdateSql))
+                {
+                    var sql = $"update [Systematization].[DrugClassifierInWork] set [GoodsCategoryId] = {good_PI.GoodsCategoryId} where Id in ({drugsInWorkForUpdateSql})";
+                    _context.Database.ExecuteSqlCommand(sql);
+
+                    return Json(new { ReLoadDrugs = true }); ;
+                }
+
+            }
+
             return Json(true);
         }
 
-      /*  private bool CheckDrugRelation(ClassifierToDrugsJson parameters)
-        {
-            return _context.ProductionInfo.Any(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
-        }
-        private bool CheckGoodsRelation(ClassifierToDrugsJson parameters)
-        {
-            return _context.GoodsProductionInfo.Any(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
-        }*/
+        /*  private bool CheckDrugRelation(ClassifierToDrugsJson parameters)
+          {
+              return _context.ProductionInfo.Any(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
+          }
+          private bool CheckGoodsRelation(ClassifierToDrugsJson parameters)
+          {
+              return _context.GoodsProductionInfo.Any(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
+          }*/
     }
 }
