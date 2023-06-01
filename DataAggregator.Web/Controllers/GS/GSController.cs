@@ -4312,7 +4312,7 @@ from [adr].[History_coding] where LPUId is null and status<>110
             {
                 using (var _context = new GSContext(APP))
                 {
-                    _context.Database.CommandTimeout = 30;
+                    _context.Database.CommandTimeout = 0;
                     _context.Database.ExecuteSqlCommand("exec [dbo].[BookOfChange_reloadQlik]");
                 }
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -4376,7 +4376,7 @@ from [adr].[History_coding] where LPUId is null and status<>110
             {
                 using (var _context = new GSContext(APP))
                 {
-                    _context.Database.CommandTimeout = 30;
+                    _context.Database.CommandTimeout = 0;
                     _context.Database.ExecuteSqlCommand("exec [dbo].[Network2Asna_reloadQlik]");
                 }
                 JsonNetResult jsonNetResult = new JsonNetResult
