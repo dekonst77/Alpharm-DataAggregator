@@ -1145,11 +1145,19 @@ namespace DataAggregator.Core.Classifier
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
-                var result = Add(model, tryMode);
+                try
+                {
+                    var result = Add(model, tryMode);
 
-                transaction.Commit();
+                    transaction.Commit();
 
-                return result;
+                    return result;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
