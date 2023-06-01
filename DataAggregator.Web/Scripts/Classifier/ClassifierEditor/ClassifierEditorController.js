@@ -1114,7 +1114,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
     }
 
     // Добавить классификатор
-    function AddClassifier() {
+    function AddClassifier(data) {
 
         var json = JSON.stringify({ model: $scope.classifier });
 
@@ -1132,9 +1132,11 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
                     ShowResult(data.data, false, data.itemView);
                 } else {
                     messageBoxService.showError(responseData.ErrorMessage);
+                    DeleteDrug(data);
                 }
-            }, function (response) {
+            }, function (response) {                
                 errorHandlerService.showResponseError(response);
+                DeleteDrug(data);
             });
     }
 
@@ -1181,7 +1183,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
         modalInstance.result.then(function () {
             // Если это была пробная попытка и пользователь выбрал ОК, то вызываем добавление
             if (isTry)
-                AddClassifier();
+                AddClassifier(data);
             else {
                 // Если это финальное добавление, то загружаем изменения.
                 // Если после загрузки добавленного элемента нет, добавим его вручную.
