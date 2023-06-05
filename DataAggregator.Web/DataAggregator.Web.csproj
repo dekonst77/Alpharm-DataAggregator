@@ -2001,6 +2001,7 @@
     <Content Include="Scripts\Retail\RetailCalculation\RetailCalculationController.js" />
     <Content Include="Scripts\Retail\RetailReport\RetailReportController.js" />
     <Content Include="Scripts\Retail\RetailTemplatesController.js" />
+    <Content Include="Scripts\Retail\RulesCommit\RulesCommitController.js" />
     <Content Include="Scripts\Retail\SearchRawDataByGoodsClassifierController.js" />
     <Content Include="Scripts\Retail\SearchRawDataByClassifierController.js" />
     <Content Include="Scripts\Retail\SearchRawDataByDrugClearController.js" />
@@ -2247,6 +2248,7 @@
     <Content Include="Views\Retail\GoodsPriceRuleEditor\Index.html" />
     <Content Include="Views\Retail\GoodsPriceRuleEditor\_PriceRuleView.html" />
     <Content Include="Views\Retail\RetailReport\Index.html" />
+    <Content Include="Views\Retail\RulesCommit\Index.html" />
     <Content Include="Views\Retail\SalesSKUbySF\SalesSKUBySF.html" />
     <Content Include="Views\Retail\SearchRawDataByGoodsClassifier\Index.html" />
     <Content Include="Views\Static\Busy.html" />
@@ -2370,6 +2372,7 @@
     <Compile Include="Controllers\Retail\Common\GoodsTradeNameController.cs" />
     <Compile Include="Controllers\Retail\RetailCalculationController.cs" />
     <Compile Include="Controllers\Retail\RetailReportController.cs" />
+    <Compile Include="Controllers\Retail\RulesCommitController.cs" />
     <Compile Include="Controllers\Retail\SalesSKUBySFController.cs" />
     <Compile Include="Controllers\Retail\SearchRawDataByGoodsClassifierController.cs" />
     <Compile Include="Controllers\Systematization\PrioritetWordsController.cs" />
