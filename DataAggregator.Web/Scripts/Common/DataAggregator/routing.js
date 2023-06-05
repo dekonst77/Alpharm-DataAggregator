@@ -908,12 +908,6 @@
                 title: 'RETAIL.RETAIL_SALESSKUBYSF.TITLE',
                 authorize: true
             })
-            //Фиксация правил
-            .when('/Retail/RulesCommit', {
-                templateUrl: 'Views/Retail/RulesCommit/Index.html',
-                title: 'RETAIL.RULES_COMMIT.TITLE',
-                authorize: true
-            })
             ;
     }
 

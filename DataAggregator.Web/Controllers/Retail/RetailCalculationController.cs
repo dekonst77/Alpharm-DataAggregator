@@ -663,57 +663,6 @@ namespace DataAggregator.Web.Controllers.Retail
 
             return false;
         }
-
-        [HttpPost]
-        public ActionResult HistoryCalculation(DateTime PeriodFrom, DateTime PeriodTo)
-        {
-            try
-            {
-                using (_context)
-                {
-                    _context.HistoryCalculation(PeriodFrom, PeriodTo);
-
-                    var jsonNetResult = new JsonNetResult
-                    {
-                        Formatting = Formatting.Indented,
-                        Data = true
-                    };
-
-                    return jsonNetResult;
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Log_search(DateTime PeriodFrom, DateTime PeriodTo)
-        {
-            try
-            {
-                object data = null;
-
-                using (_context)
-                {
-                    data = _context.CalculationLog.Where(x => (x.Step.Contains("CommitCalculatedData") || x.Step.Contains("ExportData"))
-                             && x.Year >= PeriodFrom.Year && x.Year <= PeriodTo.Year
-                            && x.Month >= PeriodFrom.Month && x.Month <= PeriodTo.Month)
-                        .OrderByDescending(x => x.Id).ToList();
-                }
-
-                return new JsonNetResult
-                {
-                    Formatting = Formatting.Indented,
-                    Data = new JsonNetResult() { Data = data }
-                };
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
     }
 
 }

@@ -91,9 +91,6 @@ namespace DataAggregator.Web
 
                 // Продажи SKU по СФ
                 .Include("~/Scripts/Retail/SalesSKUbySF/SalesSKUBySFController.js")
-
-                //Фиксация правил
-                .Include("~/Scripts/Retail/RulesCommit/RulesCommitController.js")
             );
 
             bundles.Add(new ComplexStyleBundle("~/Content/Retail/css")
