@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Transactions;
-using DataAggregator.Core.Models.Classifier;
+﻿using DataAggregator.Core.Models.Classifier;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
 
 namespace DataAggregator.Core.Classifier
 {
@@ -15,7 +15,7 @@ namespace DataAggregator.Core.Classifier
 
         private readonly Guid _user;
 
-        private readonly ClassifierDictionary _dictionary;
+        private readonly ClassifierDictionary _dictionary;        
 
         /// <summary>
         /// Добавление блистеровки
