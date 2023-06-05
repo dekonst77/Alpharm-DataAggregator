@@ -39,7 +39,7 @@
                                    placeholder="Поставщик"
                                    autocomplete="new-password">
                         </div>
-
+                      
                     </div>
                     <div class="col-md-3">
                         <br />
@@ -52,29 +52,19 @@
         </div>
 
         <div ng-if="currentTabIndex == 1">
-            <ng_form name="historyForm">
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        <date-period period="filter.PeriodFrom" ng-required="true" ap-label="Период с"></date-period>
-                    </div>
-                    <div class="col-md-2">
-                        <date-period period="filter.PeriodTo" ng-required="true" ap-label="Период по"></date-period>
-                    </div>
-                    <div class="col-md-8">
-                        <br />
-                        <button type="button" class="btn btn-info" ng-click="LoadHistory();"><span class="glyphicon glyphicon-search">&nbsp;История</span></button>
-                        <button type="button" class="btn btn-success" ng-click="CalcHistory()" ng-disabled="filter.PeriodFrom == null || filter.PeriodTo == null || isCalcHistoryRunning" data-translate="RETAIL.RETAIL_CALCULATION.CALC_HISTORY"></button>
-                    </div>
-                </div>
-            </ng_form>
+            Панель истории
         </div>
+
+    </div>        
+
+        <div ng-if="currentTabIndex == 0" class="auto-item-panel">
+            <ui-grid-control options="dataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
+        <div ng-if="currentTabIndex == 1" class="auto-item-panel">
+            <ui-grid-control options="historyGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+        </div>
+
     </div>
 
-    <div ng-if="currentTabIndex == 0" class="auto-item-panel">
-        <ui-grid-control options="dataGridOptions" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
-    </div>
 
-    <div ng-if="currentTabIndex == 1" class="auto-item-panel">
-        <ui-grid-control options="RetailCalculatioHistory_Grid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
-    </div>
-</div>

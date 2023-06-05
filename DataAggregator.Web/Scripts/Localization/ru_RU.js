@@ -417,7 +417,6 @@
                     "END_PERIOD": 'Завершить выпуск',
                     "START_ACTION": 'Запустить',
                     "STOP_ACTION": 'Остановить',
-                    "CALC_HISTORY": 'Пересчёт истории',
                     "FIELD": {
                         "ID": 'ID',
                         "USER": 'Пользователь',
@@ -427,13 +426,6 @@
                         "END_TIME": 'Время конца',
                         "COMMENT": 'Комментарий',
                         "CHECK": 'Выбрать'
-                    },
-                    "LOG_FIELD": {
-                        "ID": 'ID',
-                        "STEP": 'Шаг',
-                        "YEAR": 'Год',
-                        "MONTH": 'Месяц',
-                        "DATE": 'Время запуска'
                     }
                 },
 
@@ -443,10 +435,6 @@
 
                 "RETAIL_SALESSKUBYSF": {
                     "TITLE": 'Sell out'
-                },
-
-                "RULES_COMMIT": {
-                    "TITLE": 'Фиксация правил'
                 },
 
                 "SEARCH_RAW_DATA_BY_CLASSIFIER": {
