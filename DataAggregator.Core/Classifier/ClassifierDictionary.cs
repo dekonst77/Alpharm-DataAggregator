@@ -155,11 +155,7 @@ namespace DataAggregator.Core.Classifier
             }
 
             return null;
-
-
         }
-
-
 
         private Packing FindPacking(Packing packing)
         {
@@ -601,32 +597,15 @@ namespace DataAggregator.Core.Classifier
         {
             List<DosageGroup> dosageGroupsFound;
 
-            try
-            {
-                _context.Database.Connection.Open();
+            var Connection = _context.Database.Connection;
 
-                // Create a SQL command to execute the sproc
-                using (var cmd = _context.Database.Connection.CreateCommand())
-                {
-                    cmd.CommandText = "[Classifier].[GetDosageGroups]";
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("dosageGroupsList", dosageGroupsList));
-                    cmd.Parameters.Add(new SqlParameter("dosageInnCount", dosageInnCount));
+            if (!Connection.State.HasFlag(ConnectionState.Open))
+                Connection.Open();
 
-                    // Run the sproc
-                    var reader = cmd.ExecuteReader();
-
-                    // Read DosageGroups from the first result set
-                    dosageGroupsFound = ((IObjectContextAdapter)_context)
-                       .ObjectContext
-                       .Translate<DosageGroup>(reader, "DosageGroups", MergeOption.AppendOnly)
-                       .ToList();
-                }
-            }
-            finally
-            {
-                _context.Database.Connection.Close();
-            }
+            // Create a SQL command to execute the sproc
+            var sql_dosageGroupsList = new SqlParameter("@dosageGroupsList", dosageGroupsList);
+            var sql_dosageInnCount = new SqlParameter("@dosageInnCount", dosageInnCount);
+            dosageGroupsFound = _context.Database.SqlQuery<DosageGroup>("[Classifier].[GetDosageGroups] @dosageGroupsList, @dosageInnCount", sql_dosageGroupsList, sql_dosageInnCount).ToList();
 
             return dosageGroupsFound;
         }
@@ -1034,14 +1013,12 @@ namespace DataAggregator.Core.Classifier
             public bool INNGroupNew { get; set; }
         }
 
-
         private DrugProperty _currentDrugProperty;
         private ClassifierEditorModelJson _currentModel;
 
         // Получить все характеристики для Drug
         public DrugProperty GetDrugProperty(ClassifierEditorModelJson model)
         {
-
             // Если модель уже искалась, то возвращаем результат
             if (_currentModel == model && _currentDrugProperty != null)
                 return _currentDrugProperty;
