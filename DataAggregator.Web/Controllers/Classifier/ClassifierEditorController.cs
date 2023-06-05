@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -51,7 +53,36 @@ namespace DataAggregator.Web.Controllers
             _context.Dispose();
         }
 
+        /// <summary>
+        /// Получить список NFC, соответствующих продукту
+        /// </summary>
+        /// <param name="formProductId"> ID продукта </param>
+        /// <returns></returns>
+        private Dictionary<long, string> GetNFCMatch(long? formProductId)
+        {
+            try
+            {
+                _context.Database.Connection.Open();
 
+                // Create a SQL command to execute the sproc
+                using (var cmd = _context.Database.Connection.CreateCommand())
+                {
+                    cmd.CommandText = "[Classifier].[GetNFCMatch]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter { ParameterName = "formProductId", SqlDbType = SqlDbType.BigInt, Value = (object)formProductId ?? DBNull.Value, IsNullable = true });
+
+                    // Run the sproc
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return reader.Cast<IDataRecord>().Select(x => new KeyValuePair<long, string>(x.GetInt64(0), x.GetString(1))).ToDictionary(k => k.Key, i => i.Value);
+                    }
+                }
+            }
+            finally
+            {
+                _context.Database.Connection.Close();
+            }
+        }
 
         [HttpPost]
         public ActionResult LoadNfcList(long? formProductId, long? currentNfcId, string formProductValue)
@@ -63,16 +94,10 @@ namespace DataAggregator.Web.Controllers
                 formProductId = formProduct != null ? (long?)formProduct.Id : null;
             }
 
-            var drugIds = _context.Drugs.Where(d => d.FormProductId == formProductId).Select(d => d.Id).ToList();
+            Dictionary<long, string> nfcMatchListDict = GetNFCMatch(formProductId);
 
-            var nfcMatchIds =
-                _context.DrugClassification.Where(dc => drugIds.Contains(dc.DrugId)).Select(dc => dc.NFCId).Distinct().ToList();
-
-            var nfcMatchList =
-                _context.NFC.Where(nfc => nfcMatchIds.Contains(nfc.Id))
-                    .OrderBy(nfc => nfc.Value)
-                    .Select(nfc => new { Id = nfc.Id, DisplayValue = "(" + nfc.Value + ") " + nfc.Description })
-                    .ToList();
+            var nfcMatchIds = nfcMatchListDict.Select(nfc => nfc.Key).ToList();
+            var nfcMatchList = nfcMatchListDict.Select(nfc => new { Id = nfc.Key, DisplayValue = nfc.Value }).ToList();
 
             bool shouldClearNfc = true;
 
@@ -216,11 +241,6 @@ namespace DataAggregator.Web.Controllers
 
             if (InnGroupId != null)
             {
-
-
-
-
-
                 //Есди у МНН групп общая, то предлагать только её
                 if (_context.ClassificationGeneric.Any(g => g.INNGroupId == InnGroupId && g.GenericId == 5))
                 {
@@ -532,7 +552,7 @@ namespace DataAggregator.Web.Controllers
                 if (packer == null)
                     throw new ApplicationException("packer not found");
 
-                if (packer.Country == null) 
+                if (packer.Country == null)
                     throw new ApplicationException($"Не заполнено поле <Страна> для упаковщика {packer.Corporation.Value}.");
 
                 var model = new ClassifierEditorModelJson

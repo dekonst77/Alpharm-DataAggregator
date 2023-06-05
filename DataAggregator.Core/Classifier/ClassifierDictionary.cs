@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataAggregator.Core.Models.Classifier;
+﻿using DataAggregator.Core.Models.Classifier;
 using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
-using DataAggregator.Domain.Utils;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
 
 namespace DataAggregator.Core.Classifier
 {
@@ -558,7 +560,11 @@ namespace DataAggregator.Core.Classifier
             // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-            dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
+            // список групп дозировок            
+            var dosageGroupsList = string.Join(",", dosageGroupsFound.Select(t => t.Id).ToList());
+
+            dosageGroupsFound = GetDosageGroups(dosageGroupsList, dosageInnCount);
+            //dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
 
             if (dosageGroupsFound.Count == 1)
                 return dosageGroupsFound.First();
@@ -583,6 +589,46 @@ namespace DataAggregator.Core.Classifier
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Получить список дозировок
+        /// </summary>
+        /// <param name="dosageGroupsList">список ID групп дозировок</param>
+        /// <param name="dosageInnCount">кол-во одинаковых дозировок в группе</param>
+        /// <returns></returns>
+        private List<DosageGroup> GetDosageGroups(string dosageGroupsList, int dosageInnCount)
+        {
+            List<DosageGroup> dosageGroupsFound;
+
+            try
+            {
+                _context.Database.Connection.Open();
+
+                // Create a SQL command to execute the sproc
+                using (var cmd = _context.Database.Connection.CreateCommand())
+                {
+                    cmd.CommandText = "[Classifier].[GetDosageGroups]";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("dosageGroupsList", dosageGroupsList));
+                    cmd.Parameters.Add(new SqlParameter("dosageInnCount", dosageInnCount));
+
+                    // Run the sproc
+                    var reader = cmd.ExecuteReader();
+
+                    // Read DosageGroups from the first result set
+                    dosageGroupsFound = ((IObjectContextAdapter)_context)
+                       .ObjectContext
+                       .Translate<DosageGroup>(reader, "DosageGroups", MergeOption.AppendOnly)
+                       .ToList();
+                }
+            }
+            finally
+            {
+                _context.Database.Connection.Close();
+            }
+
+            return dosageGroupsFound;
         }
 
         private DosageGroup CreateDosageGroup(ClassifierEditorModelJson model)

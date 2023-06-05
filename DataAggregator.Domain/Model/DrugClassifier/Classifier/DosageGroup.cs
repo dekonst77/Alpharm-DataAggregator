@@ -20,12 +20,14 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
         public string TotalVolumeCount { get; set; }
         public long? TotalVolumeId { get; set; }
 
-        public virtual Dosage TotalVolume {get;set;}
-        
+        public virtual Dosage TotalVolume { get; set; }
+
         /// <summary>
         /// Описание дозировки текстом
         /// </summary>
         public string Description { get; set; }
+
+        public string Description_Eng { get; set; }
 
         /// <summary>
         /// Короткое описание дозировки текстом без МНН
