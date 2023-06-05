@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('RetailCalculationController', ['$scope', '$http', '$uibModal', '$interval', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'formatConstants', RetailCalculationController]);
+    .controller('RetailCalculationController', ['$scope', '$http', '$uibModal', '$interval', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'formatConstants', '$q', 'messageBoxService', RetailCalculationController]);
 
-function RetailCalculationController($scope, $http, $uibModal, $interval, $timeout, uiGridCustomService, errorHandlerService, formatConstants) {
+function RetailCalculationController($scope, $http, $uibModal, $interval, $timeout, uiGridCustomService, errorHandlerService, formatConstants, $q, messageBoxService) {
 
     $scope.setTabIndex = function (index) {
         $scope.currentTabIndex = index;
@@ -85,9 +85,41 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, $timeo
         },
     ];
 
+    //история
+    $scope.RetailCalculatioHistory_Grid = uiGridCustomService.createGridClassMod($scope, "RetailCalculatioHistory_Grid");
+    $scope.RetailCalculatioHistory_Grid.Options.columnDefs = [
+        {
+            displayName: 'RETAIL.RETAIL_CALCULATION.LOG_FIELD.STEP',
+            field: 'Step',
+            width: 400,
+            enableCellEdit: false,
+            filter: { condition: uiGridCustomService.condition }
+        },
+        {
+            displayName: 'RETAIL.RETAIL_CALCULATION.LOG_FIELD.YEAR',
+            field: 'Year',
+            width: 100,
+            type: 'number'
+        },
+        {
+            displayName: 'RETAIL.RETAIL_CALCULATION.LOG_FIELD.MONTH',
+            field: 'Month',
+            width: 100,
+            type: 'number'
+        },
+        {
+            displayName: 'RETAIL.RETAIL_CALCULATION.LOG_FIELD.DATE',
+            field: 'Date',
+            width: 200,
+            type: 'date',
+            cellFilter: formatConstants.FILTER_DATE_TIME
+        }
+    ];
 
     $scope.filter = {
         date: null,
+        PeriodFrom: null,
+        PeriodTo: null
     };
 
     function getLauncher() {
@@ -321,6 +353,59 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, $timeo
             $(e.target).trigger('change'); // for IE
         });
     }
+
+    
+
+    $scope.isCalcHistoryRunning = false;
+    $scope.checkFilter = function () {
+        if ($scope.filter.PeriodFrom == null || $scope.filter.PeriodTo == null) {
+            messageBoxService.showError('Не выбраны Период с и Период по', 'Ошибка');
+            return false;
+        }
+
+        return true;
+    }
+
+    $scope.LoadHistory = function () {
+        if (!$scope.checkFilter())
+            return false;
+
+        var data = $http({
+            method: 'POST',
+            url: '/RetailCalculation/Log_search/',
+            data: JSON.stringify({
+                PeriodFrom: $scope.filter.PeriodFrom, PeriodTo: $scope.filter.PeriodTo
+            })
+        }).then(function (response) {
+            if (response.data.Data)
+                $scope.RetailCalculatioHistory_Grid.Options.data = response.data.Data;
+        });
+
+        $scope.dataLoading = $q.all([data]);
+    };
+
+    $scope.CalcHistory = function () {
+        if (!$scope.checkFilter())
+            return false;
+
+        $scope.isCalcHistoryRunning = true;
+        var data = $http({
+            method: 'POST',
+            url: '/RetailCalculation/HistoryCalculation/',
+            data: JSON.stringify({
+                PeriodFrom: $scope.filter.PeriodFrom, PeriodTo: $scope.filter.PeriodTo
+            })
+        }).then(function (response) {
+            $scope.isCalcHistoryRunning = false;
+            if (response.data.Data)
+                $scope.LoadHistory();
+        }, function (response) {
+            $scope.isCalcHistoryRunning = false;
+            errorHandlerService.showResponseError(response);
+        });
+
+        $scope.loading = $q.all([data]);
+    };
 }
 
 
