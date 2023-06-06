@@ -58,7 +58,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
             { name: 'OwnerTradeMarkId', field: 'OwnerTradeMarkId', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT},
             { name: 'OwnerTradeMark', field: 'OwnerTradeMark', filter: { condition: uiGridCustomService.condition } },
             { name: 'Packer', field: 'Packer', filter: { condition: uiGridCustomService.condition } },
-            { name: 'Used', field: 'Used', type: 'boolean', enableCellEdit: userService.isInRole("SBoss")},
+            { name: 'Used', field: 'Used', type: 'boolean', enableCellEdit: userService.isInRole("ClassifierUsed")},
             { name: 'IsOther', field: 'IsOther', type: 'boolean' },
             { name: 'СТМ', field: 'IsSTM', type: 'boolean', enableCellEdit: true },
             { name: 'New', field: 'PriceNew', enableCellEdit: true, type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
