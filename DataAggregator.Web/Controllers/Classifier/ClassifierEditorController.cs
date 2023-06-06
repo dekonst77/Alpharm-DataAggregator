@@ -338,7 +338,6 @@ namespace DataAggregator.Web.Controllers
 
 
             ATCEphmraMatchList.Add(new { Id = 0L, Value = "----------------------------------", IsUse = true });
-
             /*
             var ATCEphmraDontMatchList =
                 _context.ATCEphmra.Where(ATCEphmra => !ATCEphmraMatchIds.Select(s => s.ATCEphmraId).Contains(ATCEphmra.Id) && ATCEphmra.IsUse == true)
@@ -346,18 +345,17 @@ namespace DataAggregator.Web.Controllers
                     .Select(ATCEphmra => new { Id = ATCEphmra.Id, Value = "(" + ATCEphmra.Value + ") " + ATCEphmra.Description, IsUse = ATCEphmra.IsUse })
                     .ToList();
             */
+
             var ATCEphmraDontMatchList = (from phmraItem in _context.ATCEphmra
                                           where phmraItem.IsUse == true
                                           join DrugItem in _context.DrugClassification on phmraItem.Id equals DrugItem.ATCEphmraId into phmraItemList
                                           from pl in phmraItemList.DefaultIfEmpty()
-                                          where pl.ATCEphmraId == null
                                           select new
                                           {
                                               Id = phmraItem.Id,
                                               Value = "(" + phmraItem.Value + ") " + phmraItem.Description,
                                               IsUse = phmraItem.IsUse
-                                          }).ToList();
-
+                                          }).Distinct().ToList(); 
 
             JsonNetResult jsonNetResult = new JsonNetResult
             {
