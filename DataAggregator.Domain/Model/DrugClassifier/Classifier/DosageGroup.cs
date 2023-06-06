@@ -27,8 +27,6 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
         /// </summary>
         public string Description { get; set; }
 
-        public string Description_Eng { get; set; }
-
         /// <summary>
         /// Короткое описание дозировки текстом без МНН
         /// </summary>
