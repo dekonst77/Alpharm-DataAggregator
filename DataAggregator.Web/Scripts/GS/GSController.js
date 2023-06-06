@@ -1898,6 +1898,10 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 headerTooltip: true, enableCellEdit: false, periodIndex: 0, periodName: '∑', name: '-0м ∑', width: 100, field: 'RealSellingSum', headerCellClass: 'PapayaWhip', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM,
                 cellTemplate: '<div class="ui-grid-cell-contents"> <div title="Из файла" ng-class="{\'triangle-topright\' : row.entity.RealSellingSumFromFile==1}"></div>{{COL_FIELD | number : 0}}</div>'
             },
+            {
+                headerTooltip: true, enableCellEdit: false, name: 'Дней недозагруза', width: 100, field: 'TotalUnloadDays', headerCellClass: 'PapayaWhip'
+                , type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM
+            },
             { headerTooltip: true, enableCellEdit: false, name: 'КОФ', width: 100, field: 'KOF', headerCellClass: 'PapayaWhip', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
             { headerTooltip: true, enableCellEdit: false, name: 'Исп.Послед ∑', width: 100, field: 'LastSellingSum_IsUse', headerCellClass: 'LightCyan', type: 'boolean', filter: { condition: uiGridCustomService.booleanConditionX } },
             { headerTooltip: true, enableCellEdit: false, name: 'Послед ∑', width: 100, field: 'LastSellingSum', headerCellClass: 'LightCyan', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },

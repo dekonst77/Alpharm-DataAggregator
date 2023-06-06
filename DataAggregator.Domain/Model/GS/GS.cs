@@ -730,6 +730,10 @@ namespace DataAggregator.Domain.Model.GS
         public bool? IsUse_p1 { get; set; }
         public bool? IsUse_p2 { get; set; }
         public int KOF { get; set; }
+        /// <summary>
+        /// Дней недозагруза (Фандорин)
+        /// </summary>
+        public int TotalUnloadDays { get; set; }
 
         public decimal? RealSellingSum_p4 { get; set; }
         public decimal? RealSellingSum_p5 { get; set; }
