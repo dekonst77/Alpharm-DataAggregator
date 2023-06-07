@@ -556,14 +556,16 @@ namespace DataAggregator.Core.Classifier
             // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
+            if (dosageInnCount == 0)
+                return null;
+
             // список групп дозировок            
             var dosageGroupsList = string.Join(",", dosageGroupsFound.Select(t => t.Id).ToList());
 
-            dosageGroupsFound = GetDosageGroups(dosageGroupsList, dosageInnCount);
-            //dosageGroupsFound = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
+            dosageGroupsFound = GetDosageGroups(dosageGroupsList, dosageInnCount);            
 
             if (dosageGroupsFound.Count == 1)
-                return dosageGroupsFound.First();
+                return dosageGroupsFound.First();   
 
             if (dosageGroupsFound.Count > 1)
             {
