@@ -1965,8 +1965,14 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
     $scope.SummsAlphaBit_SetLastSellingSum = function (value) {
         $scope.Grid.selectedRows().forEach(function (item) {
-            $scope.Grid.GridCellsMod(item, "RealSellingSum", item.LastSellingSum);
-            $scope.Grid.GridCellsMod(item, "LastSellingSum_IsUse", true);
+            if (value == true) {
+                $scope.Grid.GridCellsMod(item, "RealSellingSum", item.LastSellingSum);
+                $scope.Grid.GridCellsMod(item, "LastSellingSum_IsUse", true);
+            }
+            else if (value == false) {
+                $scope.Grid.GridCellsMod(item, "RealSellingSum", null);
+                $scope.Grid.GridCellsMod(item, "LastSellingSum_IsUse", false);
+            }
         });
     };
 
