@@ -556,13 +556,13 @@ namespace DataAggregator.Core.Classifier
             // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-            if (dosageInnCount == 0)
-                return null;
+            //var dosageGroupsFound_old = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
 
             // список групп дозировок            
             var dosageGroupsList = string.Join(",", dosageGroupsFound.Select(t => t.Id).ToList());
+            var dosageGroupsFound_new = GetDosageGroups(dosageGroupsList, dosageInnCount).Select(t=>t.Id).ToList();
 
-            dosageGroupsFound = GetDosageGroups(dosageGroupsList, dosageInnCount);            
+            dosageGroupsFound = dosageGroupsFound.Where(d => dosageGroupsFound_new.Contains(d.Id)).ToList();
 
             if (dosageGroupsFound.Count == 1)
                 return dosageGroupsFound.First();   
@@ -607,7 +607,7 @@ namespace DataAggregator.Core.Classifier
             // Create a SQL command to execute the sproc
             var sql_dosageGroupsList = new SqlParameter("@dosageGroupsList", dosageGroupsList);
             var sql_dosageInnCount = new SqlParameter("@dosageInnCount", dosageInnCount);
-            dosageGroupsFound = _context.Database.SqlQuery<DosageGroup>("[Classifier].[GetDosageGroups] @dosageGroupsList, @dosageInnCount", sql_dosageGroupsList, sql_dosageInnCount).ToList();
+            dosageGroupsFound = _context.Database.SqlQuery<DosageGroup>("exec [Classifier].[GetDosageGroups] @dosageGroupsList, @dosageInnCount", sql_dosageGroupsList, sql_dosageInnCount).ToList();
 
             return dosageGroupsFound;
         }

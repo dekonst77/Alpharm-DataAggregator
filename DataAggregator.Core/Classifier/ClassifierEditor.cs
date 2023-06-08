@@ -1212,7 +1212,8 @@ namespace DataAggregator.Core.Classifier
             Manufacturer packer = _dictionary.FindManufacturer(model.Packer) ?? _dictionary.CreateManufacturer(model.Packer);
 
             //Я не знаю почему, но в моделе остаётся код от того который был введён при выборе из листа, поэтому меняем код модели на код драга 2019,01,31
-            model.DrugId = drug != null ? drug.Id : 0;
+            model.DrugId = drug.Id;
+
             model.OwnerTradeMarkId = ownerTradeMark.Id;
             model.PackerId = packer.Id;
             #endregion
