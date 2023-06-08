@@ -534,19 +534,12 @@ namespace DataAggregator.Core.Classifier
 
                 var dosageId = dosage.Dosage != null ? dosage.Dosage.Id : (long?)null;
 
-#if !DEBUG
-                List<INNDosage> inndosagesList = _context.INNDosage.Where(inndosage => inndosage.Order == dosage.Order &&
-                                                                       inndosage.DosageId == dosageId &&
-                                                                       inndosage.DosageCount == dosage.DosageCount).ToList();
-
-                dosageInnGroups = inndosagesList.Select(idl => idl.DosageGroup).ToList();
-#else
                 dosageInnGroups = _context.DosageGroups
                     .Join(_context.INNDosage, lefttbl => lefttbl.Id, righttbl => righttbl.DosageGroupId, (lefttbl, righttbl) => new { lefttbl, righttbl })
                     .Where(t => t.righttbl.Order == dosage.Order && t.righttbl.DosageId == dosageId && t.righttbl.DosageCount == dosage.DosageCount)
                     .Select(t => t.lefttbl)
                     .ToList();
-#endif
+
                 dosageGroupsFound = dosageGroupsFound.Intersect(dosageInnGroups).ToList();
 
                 if (dosageGroupsFound.Count == 0)
@@ -556,16 +549,14 @@ namespace DataAggregator.Core.Classifier
             // кол-во дозировок
             var dosageInnCount = dosageList.Count(c => c.Dosage != null);
 
-            //var dosageGroupsFound_old = dosageGroupsFound.Where(d => d.INNDosages != null && d.INNDosages.Count == dosageInnCount).ToList();
-
             // список групп дозировок            
             var dosageGroupsList = string.Join(",", dosageGroupsFound.Select(t => t.Id).ToList());
-            var dosageGroupsFound_new = GetDosageGroups(dosageGroupsList, dosageInnCount).Select(t=>t.Id).ToList();
+            var dosageGroupsFound_new = GetDosageGroups(dosageGroupsList, dosageInnCount).Select(t => t.Id).ToList();
 
             dosageGroupsFound = dosageGroupsFound.Where(d => dosageGroupsFound_new.Contains(d.Id)).ToList();
 
             if (dosageGroupsFound.Count == 1)
-                return dosageGroupsFound.First();   
+                return dosageGroupsFound.First();
 
             if (dosageGroupsFound.Count > 1)
             {
@@ -1049,7 +1040,6 @@ namespace DataAggregator.Core.Classifier
             DosageGroup dosageGroup = FindDosageGroup(model) ?? CreateDosageGroup(model);
 
             // Прямые признаки того, что Drug будет новым
-            //bool isNew = tradeName.Id == 0 || (innGroup != null && innGroup.Id == 0) || formProduct.Id == 0 || (dosageGroup != null && dosageGroup.Id == 0) || (equipment != null && equipment.Id == 0);
             bool isNew = tradeName?.Id == 0 || (innGroup?.Id == 0) || formProduct?.Id == 0 || (dosageGroup?.Id == 0) || (equipment?.Id == 0);
 
             var drugPropery = new DrugProperty
