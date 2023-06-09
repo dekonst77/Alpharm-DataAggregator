@@ -425,6 +425,24 @@ namespace DataAggregator.Domain.DAL
             }
         }
 
+        public void ImportPharmacies_from_Excel(string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "ImportPharmacies_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
         public RetailContext()
         {
             Database.SetInitializer<RetailContext>(null);

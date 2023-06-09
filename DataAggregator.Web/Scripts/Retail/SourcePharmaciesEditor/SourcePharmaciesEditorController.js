@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('SourcePharmaciesEditorController', ['$scope', '$http', '$uibModal', 'uiGridCustomService', SourcePharmaciesEditorController]);
+    .controller('SourcePharmaciesEditorController', ['$scope', '$http', '$uibModal', 'uiGridCustomService', 'messageBoxService', 'Upload', 'errorHandlerService', SourcePharmaciesEditorController]);
 
-function SourcePharmaciesEditorController($scope, $http, $uibModal, uiGridCustomService) {
+function SourcePharmaciesEditorController($scope, $http, $uibModal, uiGridCustomService, messageBoxService, Upload, errorHandlerService) {
     $scope.sourcePharmaciesGrid = uiGridCustomService.createGridClass($scope, 'SourcePharmaciesEditor_SourcePharmaciesGrid');
     $scope.groupsGrid = uiGridCustomService.createGridClass($scope, 'SourcePharmaciesEditor_GroupsGrid');
 
@@ -471,6 +471,25 @@ function SourcePharmaciesEditorController($scope, $http, $uibModal, uiGridCustom
         if (row.entity) {
         }
     }
+
+    $scope.import = function (event, file) {
+        event.stopPropagation();
+
+        if (file == null)
+            return;
+
+        $scope.loading = Upload.upload({
+            url: '/SourcePharmaciesEditor/ImportPharmacies_from_Excel/',
+            data: {
+                uploads: file
+            }
+        }).then(function () {
+            messageBoxService.showError('Файл загружен', 'Успешно');
+            $scope.loadSourcePharmacies();
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    };
 
     $scope.loadSourcePharmacies();
 }

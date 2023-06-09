@@ -1,9 +1,12 @@
 ﻿using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.Retail;
 using DataAggregator.Web.Models.Retail;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.Retail
@@ -94,7 +97,7 @@ namespace DataAggregator.Web.Controllers.Retail
         {
             var groupToSave = _context.SourcePharmacyGroup.Single(g => g.Id == dialogData.Id);
             groupToSave.GroupName = dialogData.GroupName;
-            groupToSave.SourceId = dialogData.Source.Id == 0 ? null : (long?) dialogData.Source.Id;
+            groupToSave.SourceId = dialogData.Source.Id == 0 ? null : (long?)dialogData.Source.Id;
 
             var filesToAdd = filesToSave.Where(fts => groupToSave.SourcePharmacyGroupFile.All(spgf => fts.Id != spgf.Id)).ToList();
 
@@ -158,11 +161,11 @@ namespace DataAggregator.Web.Controllers.Retail
                 IEnumerable<SourcePharmacyFileJson> filesToAddJson = filesToSave.Where(fts => pharmacyToSave.SourcePharmacyFile.All(spf => fts.Id != spf.Id));
 
                 IList<SourcePharmacyFile> filesToAdd = filesToAddJson.Select(sourcePharmacyFileJson => new SourcePharmacyFile
-                    {
-                        Id = sourcePharmacyFileJson.Id,
-                        SourcePharmacyId = sourcePharmacyFileJson.SourcePharmacyId,
-                        FileName = sourcePharmacyFileJson.FileName
-                    })
+                {
+                    Id = sourcePharmacyFileJson.Id,
+                    SourcePharmacyId = sourcePharmacyFileJson.SourcePharmacyId,
+                    FileName = sourcePharmacyFileJson.FileName
+                })
                     .ToList();
 
                 List<SourcePharmacyFile> filesToRemove = pharmacyToSave.SourcePharmacyFile.Where(spf => filesToSave.All(fts => fts.Id != spf.Id)).ToList();
@@ -227,7 +230,7 @@ namespace DataAggregator.Web.Controllers.Retail
             var newGroup = new SourcePharmacyGroup
             {
                 GroupName = dialogData.GroupName,
-                SourceId = dialogData.Source.Id == 0 ? null : (long?) dialogData.Source.Id
+                SourceId = dialogData.Source.Id == 0 ? null : (long?)dialogData.Source.Id
             };
 
             if (filesToSave != null && filesToSave.Any())
@@ -363,7 +366,7 @@ namespace DataAggregator.Web.Controllers.Retail
                 Data = group
             };
         }
-        
+
         /// <summary>
         /// Возвращает аптеку со списком файлов, принадлежащих ей
         /// </summary>
@@ -374,7 +377,7 @@ namespace DataAggregator.Web.Controllers.Retail
         public ActionResult MergePharmacies(List<SourcePharmacyJson> pharmaciesToMerge, long mergeTo)
         {
             var mergeToPharmacy = _context.SourcePharmacy.Single(sp => sp.Id == mergeTo);
-            
+
             var mergeFromIds = pharmaciesToMerge.Where(ptm => ptm.Id != mergeTo).Select(ptm => ptm.Id).ToList();
             var mergeFromPharmacies = _context.SourcePharmacy.Where(sp => mergeFromIds.Contains(sp.Id)).ToList();
 
@@ -399,6 +402,36 @@ namespace DataAggregator.Web.Controllers.Retail
                 Formatting = Formatting.Indented,
                 Data = mergeToPharmacy
             };
+        }
+
+        [HttpPost]
+        public ActionResult ImportPharmacies_from_Excel(IEnumerable<HttpPostedFileBase> uploads)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    return null;
+
+                var file = uploads.First();
+                string filename = @"\\s-sql2\Upload\NewPharmacies_" + User.Identity.GetUserId() + ".xlsx";
+
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                file.SaveAs(filename);
+
+                _context.ImportPharmacies_from_Excel(filename);
+
+                return new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
