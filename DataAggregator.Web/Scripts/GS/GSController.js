@@ -1969,10 +1969,10 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 $scope.Grid.GridCellsMod(item, "RealSellingSum", item.LastSellingSum);
                 $scope.Grid.GridCellsMod(item, "LastSellingSum_IsUse", true);
             }
-            else if (value == false) {
-                $scope.Grid.GridCellsMod(item, "RealSellingSum", null);
-                $scope.Grid.GridCellsMod(item, "LastSellingSum_IsUse", false);
-            }
+            //else if (value == false) {
+            //    $scope.Grid.GridCellsMod(item, "RealSellingSum", null);
+            //    $scope.Grid.GridCellsMod(item, "LastSellingSum_IsUse", false);
+            //}
         });
     };
 
