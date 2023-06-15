@@ -697,8 +697,8 @@ namespace DataAggregator.Web.Controllers.Retail
 
                 using (_context)
                 {
-                    data = _context.CalculationLog.Where(x => (x.Step.Contains("CommitCalculatedData") || x.Step.Contains("ExportData"))
-                             && x.Year >= PeriodFrom.Year && x.Year <= PeriodTo.Year
+                    data = _context.CalculationLog.Where(x => 
+                            x.Year >= PeriodFrom.Year && x.Year <= PeriodTo.Year
                             && x.Month >= PeriodFrom.Month && x.Month <= PeriodTo.Month)
                         .OrderByDescending(x => x.Id).ToList();
                 }
