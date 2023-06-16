@@ -12,6 +12,8 @@ namespace DataAggregator.Domain.Model.Retail
         public long Id { get; set; }
 
         public string Name { get; set; }
+        public int? Priority { get; set; }
+        public bool IsPutEcomData { get; set; }
 
         [JsonIgnore]
         public virtual IList<Template> Template { get; set; }

@@ -1,14 +1,14 @@
-﻿<div cg-busy="sourceLoading" ng-controller="RetailTemplatesController" ng-cloak class="retail-template">
-
+﻿<div cg-busy="sourceLoading" ng-controller="RetailTemplatesController" ng-cloak class="auto-grid-parent base">
     <div id="source-block">
         <div class="row">
             <div class="col-md-6">
                 <div class="btnGrid">
+                    <button class="btn btn-primary" ng-click="saveSources()" ng-disabled="!RetailTemplates_SourcesGrid.NeedSave" data-translate="BUTTONS.SAVE"></button>
                     <button type="button" class="btn btn-success" ng-click="addSource()" data-translate="BUTTONS.ADD"></button>
                     <button type="button" class="btn btn-danger" ng-click="removeSource()" ng-disabled="selectedSource == null" data-translate="BUTTONS.DELETE"></button>
                 </div>
-                <div cg-busy="templatesLoading" class="uiGridControl">
-                    <ui-grid-control options="gridSourcesOptions" class="ui-grid-header-wrap-text"></ui-grid-control>
+                <div cg-busy="sourceLoading">
+                    <ui-grid-control options="RetailTemplates_SourcesGrid.Options" class="ui-grid-enable-content-selection grid-block"></ui-grid-control>
                 </div>
             </div>
             <div class="col-md-6">

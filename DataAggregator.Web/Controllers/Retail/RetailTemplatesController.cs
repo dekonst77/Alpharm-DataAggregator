@@ -47,9 +47,7 @@ namespace DataAggregator.Web.Controllers.Retail
             };
 
             return jsonNetResult;
-        }
-
-
+        } 
 
         [HttpPost]
         public ActionResult GetTemplate(long id)
@@ -75,84 +73,137 @@ namespace DataAggregator.Web.Controllers.Retail
             return jsonNetResult;
         }
 
-
         [HttpPost]
-        public ActionResult RenameSource(long id, string value)
+        public ActionResult SaveSources(ICollection<Source> array)
         {
-            var source = _context.Source.FirstOrDefault(s => s.Id == id);
+            try
+            {
+                foreach (var item in array)
+                {
+                    var source = _context.Source.FirstOrDefault(x => x.Id == item.Id);
 
-            if (source == null)
-                throw new ApplicationException("source not found");
+                    if (source.FileInfo != null && source.FileInfo.Count > 0)
+                        throw new Exception("This Source already using");
 
-            if (source.FileInfo != null && source.FileInfo.Count > 0)
-                throw new ApplicationException("This Source already using");
+                    source.Name = item.Name;
+                    source.IsPutEcomData = item.IsPutEcomData;
+                    source.Priority = item.Priority;
+                }
+                _context.SaveChanges();
 
-            source.Name = value;
-
-            _context.SaveChanges();
-
-            return Json(true);
+                return Json(true);
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
         }
 
         [HttpPost]
-        public ActionResult AddSource()
+        public ActionResult AddSource(string name)
         {
-            var source = new Source()
+            try
             {
-                Name = "Новый источник"
-            };
+                if (_context.Source.Any(x => x.Name == name))
+                    throw new Exception("Источник с таким наименованием уже существует");
 
-            _context.Source.Add(source);
+                var source = new Source()
+                {
+                    Name = name,
+                    IsPutEcomData = false
+                };
 
-            _context.SaveChanges();
+                _context.Source.Add(source);
+                _context.SaveChanges();
 
-            JsonNetResult jsonNetResult = new JsonNetResult
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = source
+                };
+
+                return jsonNetResult;
+            }
+            catch (Exception e)
             {
-                Formatting = Formatting.Indented,
-                Data = source
-            };
-
-            return jsonNetResult;
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
         }
 
         [HttpPost]
         public ActionResult RemoveSource(long id)
         {
-            var source = _context.Source.FirstOrDefault(s => s.Id == id);
-
-            if (source == null)
-                throw new ApplicationException("Source not found");
-
-            if (source.FileInfo != null && source.FileInfo.Count > 0)
-                throw new ApplicationException("This Source already using");
-
-            var templates = _context.Template.Where(t => t.SourceId == id).ToList();
-
-            for (var i = 0; i < templates.Count; i++)
+            try
             {
-                RemoveTemplate(templates[i]);
+                var source = _context.Source.FirstOrDefault(s => s.Id == id);
+
+                if (source == null)
+                    throw new Exception("Source not found");
+
+                if (source.FileInfo != null && source.FileInfo.Count > 0)
+                    throw new Exception("This Source already using");
+
+                var templates = _context.Template.Where(t => t.SourceId == id).ToList();
+
+                for (var i = 0; i < templates.Count; i++)
+                {
+                    RemoveTemplate(templates[i]);
+                }
+
+                _context.Source.Remove(source);
+                _context.SaveChanges();
+
+                return Json(true);
             }
-            
-            _context.Source.Remove(source);
-
-            _context.SaveChanges();
-
-            return Json(true);
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
         }
 
         [HttpPost]
         public ActionResult RenameTemplate(long id, string value)
         {
-            var template = _context.Template.FirstOrDefault(s => s.Id == id);
+            try
+            {
+                var template = _context.Template.FirstOrDefault(s => s.Id == id);
 
-            if (template == null)
-                throw new ApplicationException("source not found");
+                if (template == null)
+                    throw new Exception("source not found");
 
-            template.Name = value;
+                template.Name = value;
+                _context.SaveChanges();
 
-            _context.SaveChanges();
-
-            return Json(true);
+                return Json(true);
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
         }
 
         [HttpPost]
@@ -166,7 +217,6 @@ namespace DataAggregator.Web.Controllers.Retail
             };
 
             _context.Template.Add(template);
-
             _context.SaveChanges();
 
             JsonNetResult jsonNetResult = new JsonNetResult
@@ -190,28 +240,35 @@ namespace DataAggregator.Web.Controllers.Retail
             else
             {
                 var fields = _context.TemplateField.Where(f => f.TemplateId == template.Id);
-
                 _context.TemplateField.RemoveRange(fields);
-
                 _context.Template.Remove(template);
             }
-
-
         }
-
 
         [HttpPost]
         public ActionResult RemoveTemplate(long id)
         {
-            var template = _context.Template.FirstOrDefault(t => t.Id == id);
+            try
+            {
+                var template = _context.Template.FirstOrDefault(t => t.Id == id);
 
-            if (template == null)
-                throw new ApplicationException("source not found");
+                if (template == null)
+                    throw new Exception("source not found");
 
-            RemoveTemplate(template);
-            _context.SaveChanges();
-            return Json(true);
-
+                RemoveTemplate(template);
+                _context.SaveChanges();
+                return Json(true);
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
         }
 
         [HttpPost]
@@ -222,18 +279,14 @@ namespace DataAggregator.Web.Controllers.Retail
             {
                 try
                 {
-
                     var temlpate = _context.Template.FirstOrDefault(t => t.Id == templateId);
 
-                    if(temlpate == null)
-                        throw new ApplicationException("template not found");
+                    if (temlpate == null)
+                        throw new Exception("template not found");
 
                     var fields = _context.TemplateField.Where(f => f.TemplateId == templateId);
-
                     _context.TemplateField.RemoveRange(fields);
-
                     removeId(templateFieldsJson);
-
                     _context.TemplateField.AddRange(templateFieldsJson);
 
                     var maxNumberHeaderRows = 0;
@@ -249,28 +302,28 @@ namespace DataAggregator.Web.Controllers.Retail
                     }
 
                     temlpate.NumberHeaderRows = maxNumberHeaderRows;
-
                     _context.SaveChanges();
-
                     dbContextTransaction.Commit();
+
+                    return Json(true);
                 }
-                catch //(Exception e)
+                catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
+                    string msg = e.Message;
+                    while (e.InnerException != null)
+                    {
+                        e = e.InnerException;
+                        msg += e.Message;
+                    }
+                    return BadRequest(msg);
+
                 }
             }
-
-           
-            return Json(true);
-
-
-
         }
 
         private void removeId(List<TemplateField> templateFieldsJson)
         {
-           
-
             foreach (var templateField in templateFieldsJson)
             {
                 templateField.Id = 0;
@@ -282,7 +335,6 @@ namespace DataAggregator.Web.Controllers.Retail
                     removeId(templateField.Childs.ToList());
                 }
             }
-           
         }
     }
 }

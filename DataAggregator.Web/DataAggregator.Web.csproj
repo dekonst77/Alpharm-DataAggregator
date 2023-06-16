@@ -38,6 +38,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.0</LangVersion>
+    <PublishDatabases>false</PublishDatabases>
+    <LegacyPublishPropertiesPageEnabled>true</LegacyPublishPropertiesPageEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -2248,6 +2250,7 @@
     <Content Include="Views\Retail\GoodsPriceRuleEditor\Index.html" />
     <Content Include="Views\Retail\GoodsPriceRuleEditor\_PriceRuleView.html" />
     <Content Include="Views\Retail\RetailReport\Index.html" />
+    <Content Include="Views\Retail\RetailTemplates\NewSource.html" />
     <Content Include="Views\Retail\RulesCommit\Index.html" />
     <Content Include="Views\Retail\SalesSKUbySF\SalesSKUBySF.html" />
     <Content Include="Views\Retail\SearchRawDataByGoodsClassifier\Index.html" />

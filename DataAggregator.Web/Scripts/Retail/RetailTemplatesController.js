@@ -1,43 +1,56 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('RetailTemplatesController', ['$scope', '$http', 'uiGridCustomService', RetailTemplatesController]);
+    .controller('RetailTemplatesController', ['$scope', '$http', 'uiGridCustomService', '$uibModal', 'messageBoxService', 'errorHandlerService', '$translate', RetailTemplatesController]);
 
-function RetailTemplatesController($scope, $http, uiGridCustomService) {
-
+function RetailTemplatesController($scope, $http, uiGridCustomService, $uibModal, messageBoxService, errorHandlerService, $translate) {
 
     $scope.selectedSource = null;
     $scope.selectedTemplate = null;
     $scope.templateFieldName = null;
 
     //Источники
-
+    $scope.RetailTemplates_SourcesGrid = uiGridCustomService.createGridClassMod($scope, 'RetailTemplates_SourcesGrid');
     //свойства грида
-    $scope.gridSourcesOptions = uiGridCustomService.createOptions('RetailTemplates_SourcesGrid');
 
-    var gridSourcesOptions = {
-        customEnableRowSelection: true,
-        multiSelect: false,
-        enableFullRowSelection: true,
-        enableRowHeaderSelection: false,
-        appScopeProvider: $scope,
-        enableRowSelection: true,
-        showGridFooter: false,
-        noUnselect: true,
-        columnDefs: [
-            { name: 'Источник данных', field: 'Name', enableCellEdit: true }
-        ]
+    $scope.RetailTemplates_SourcesGrid.Options.enableRowSelection = true;
+    $scope.RetailTemplates_SourcesGrid.Options.enableFullRowSelection = false;
+    $scope.RetailTemplates_SourcesGrid.Options.enableRowHeaderSelection = true;
+    $scope.RetailTemplates_SourcesGrid.Options.noUnselect = false;
+
+    $scope.RetailTemplates_SourcesGrid.Options.columnDefs =
+        [
+            { name: 'Источник данных', field: 'Name', enableCellEdit: true, width: 300, filter: { condition: uiGridCustomService.condition } },
+            { name: 'Приритет', field: 'Priority', enableCellEdit: true, width: 100, type: 'number', filter: { condition: uiGridCustomService.condition } },
+            {
+                name: 'Наличие данных поставщиков в Ecom', field: 'IsPutEcomData', enableCellEdit: true, width: 20, type: 'boolean'
+            }
+        ];
+
+    $scope.RetailTemplates_SourcesGrid.SetDefaults();
+
+    $scope.RetailTemplates_SourcesGrid.Options.onRegisterApi = function (gridApi) {
+        $scope.gridApi = gridApi;
+        //Выбрали Источник
+        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+            if (row.isSelected) {
+                $scope.selectedSource = row.entity;
+                $scope.selectedTemplate = null;
+                loadTemplates();
+                loadTemplate();
+            }
+        });
+
+        gridApi.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
+            if (colDef.field !== '@modify') {
+                if (newValue !== oldValue) {
+                    rowEntity["@modify"] = true;
+                    $scope.RetailTemplates_SourcesGrid.NeedSave = true;
+                }
+            }
+        });
     };
 
-    angular.extend($scope.gridSourcesOptions, gridSourcesOptions);
-
-    $scope.gridSourcesOptions.onRegisterApi = function (gridApi) {
-     
-        gridApi.selection.on.rowSelectionChanged($scope, selectSource);
-
-        gridApi.edit.on.afterCellEdit($scope, renameSource);
-
-    };
-
+    
 
     //Шаблоны
 
@@ -62,7 +75,7 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
 
 
     $scope.gridTemplatesOptions.onRegisterApi = function (gridApi) {
-   
+
         gridApi.selection.on.rowSelectionChanged($scope, selectTemplate);
 
         gridApi.edit.on.afterCellEdit($scope, renameTemplate);
@@ -87,7 +100,7 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
         nodes[nodes.length - 1].IsEnd = true;
     }
 
-    //Сравнивалка полей по OrderNumbver
+    //Сравнивалка полей по OrderNumber
     function compareTemplateFields(field1, field2) {
 
         if (field1.OrderNumber > field2.OrderNumber)
@@ -174,24 +187,22 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
         return rightNode;
     }
 
-    
+
     //Функции загрузки данных
 
     //Загрузка источников
 
-    // загрузить обрабатываемые drugs
+    // загрузить все источники
     function loadSources() {
-        $scope.gridSourcesOptions.data = [];
+        $scope.RetailTemplates_SourcesGrid.Options.data = [];
 
         $scope.sourceLoading = $http({
             method: "POST",
             url: "/RetailTemplates/GetAllSources/"
         }).then(function (response) {
-
-            $scope.gridSourcesOptions.data = response.data;
-
-        }, function () {
-            $scope.message = "Unexpected Error";
+            $scope.RetailTemplates_SourcesGrid.Options.data = response.data;
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
         });
     }
 
@@ -210,8 +221,8 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
         }).then(function (response) {
 
             $scope.gridTemplatesOptions.data = response.data;
-        }, function () {
-            $scope.message = "Unexpected Error";
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
         });
     }
 
@@ -234,8 +245,8 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
                 sortTemplateFields(item);
             });
 
-        }, function () {
-            $scope.message = "Unexpected Error";
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
         });
     }
 
@@ -248,8 +259,8 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
             url: "/RetailTemplates/GetTemplateFieldName/"
         }).then(function (response) {
             $scope.templateFieldName = response.data;
-        }, function () {
-            $scope.message = "Unexpected Error";
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
         });
     }
 
@@ -265,14 +276,30 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
     //Добавляем источник
     $scope.addSource = function () {
 
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '/Views/Retail/RetailTemplates/NewSource.html',
+            size: 'sm',
+            controller: 'NewSourceController',
+            windowClass: 'center-modal',
+            backdrop: 'static'
+        });
 
-        $scope.sourceLoading = $http({
-            method: "POST",
-            url: "/RetailTemplates/AddSource/"
-        }).then(function (response) {
-            $scope.gridSourcesOptions.data.push(response.data);
+        modalInstance.result.then(function (name) {
+            $scope.loading = $http({
+                method: 'POST',
+                url: '/RetailTemplates/AddSource/',
+                data: JSON.stringify({
+                    name: name
+                })
+            }).then(function (response) {
+                var data = response.data;
+                if (data)
+                    $scope.RetailTemplates_SourcesGrid.Options.data.push(response.data);
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
         }, function () {
-            $scope.message = "Unexpected Error";
         });
     }
 
@@ -282,93 +309,84 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
         if ($scope.selectedSource == null)
             return;
 
-        var json = JSON.stringify({ id: $scope.selectedSource.Id });
+        messageBoxService.showConfirm('Удалить источник?', 'Удаление').then(
+            function () {
+                var json = JSON.stringify({ id: $scope.selectedSource.Id });
 
-        $scope.sourceLoading = $http({
-            method: "POST",
-            url: "/RetailTemplates/RemoveSource/",
-            data: json
-        }).then(function () {
-            var index = $scope.gridSourcesOptions.data.indexOf($scope.selectedSource);
-            $scope.gridSourcesOptions.data.splice(index, 1);
-            $scope.selectedSource = null;
-            $scope.selectedTemplate = null;
-            loadTemplates();
-            loadTemplate();
+                $scope.sourceLoading = $http({
+                    method: "POST",
+                    url: "/RetailTemplates/RemoveSource/",
+                    data: json
+                }).then(function () {
+                    var index = $scope.RetailTemplates_SourcesGrid.Options.data.indexOf($scope.selectedSource);
+                    $scope.RetailTemplates_SourcesGrid.Options.data.splice(index, 1);
+                    $scope.selectedSource = null;
+                    $scope.selectedTemplate = null;
+                    loadTemplates();
+                    loadTemplate();
 
-        }, function () {
-            $scope.message = "Unexpected Error";
-        });
-
-
-
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+            });
     }
 
-    //Редактируем источник
-    function renameSource(rowEntity, colDef, newValue, oldValue) {
-
-        var json = JSON.stringify({ id: rowEntity.Id, value: newValue });
-        $scope.sourceLoading = $http({
-            method: "POST",
-            url: "/RetailTemplates/RenameSource/",
-            data: json
-        }).then(function () {
-            return true;
-        }, function () {
-            $scope.message = "Unexpected Error";
-            rowEntity[colDef.field] = oldValue;
-            $scope.$apply();
-            return false;
-        });
-    }
-
-    //Выбрали Источник
-   function selectSource(row) {
-        if (row.isSelected) {
-            $scope.selectedSource = row.entity;
-            $scope.selectedTemplate = null;
-            loadTemplates();
-            loadTemplate();
+    //Сохраняем источник
+    $scope.saveSources = function () {
+        var array_upd = $scope.RetailTemplates_SourcesGrid.GetArrayModify();
+        if (array_upd.length > 0) {
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/RetailTemplates/SaveSources/',
+                    data: JSON.stringify({ array: array_upd })
+                }).then(function (response) {
+                    messageBoxService.showInfo("Сохранено");
+                    loadSources();
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                    $scope.RetailTemplates_SourcesGrid.ClearModify();
+                    loadSources();
+                });
         }
     }
 
-
     //Редатирование шаблонов
 
-   $scope.addTemplate = function () {
+    $scope.addTemplate = function () {
 
-       var json = JSON.stringify({ sourceId: $scope.selectedSource.Id });
+        var json = JSON.stringify({ sourceId: $scope.selectedSource.Id });
 
-       $scope.templatesLoading = $http({
-           method: "POST",
-           url: "/RetailTemplates/AddTemplate/",
-           data: json
-       }).then(function (response) {
-           $scope.gridTemplatesOptions.data.push(response.data);
-       }, function () {
-           $scope.message = "Unexpected Error";
-       });
-   }
+        $scope.templatesLoading = $http({
+            method: "POST",
+            url: "/RetailTemplates/AddTemplate/",
+            data: json
+        }).then(function (response) {
+            $scope.gridTemplatesOptions.data.push(response.data);
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    }
 
 
-   $scope.removeTemplate = function () {
+    $scope.removeTemplate = function () {
 
-       var json = JSON.stringify({ id: $scope.selectedTemplate.Id });
+        var json = JSON.stringify({ id: $scope.selectedTemplate.Id });
 
-       $scope.templatesLoading = $http({
-           method: "POST",
-           url: "/RetailTemplates/RemoveTemplate/",
-           data: json
-       }).then(function () {
-           var index = $scope.gridTemplatesOptions.data.indexOf($scope.selectedTemplate);
-           $scope.gridTemplatesOptions.data.splice(index, 1);
-           $scope.selectedTemplate = null;
-           loadTemplate();
+        $scope.templatesLoading = $http({
+            method: "POST",
+            url: "/RetailTemplates/RemoveTemplate/",
+            data: json
+        }).then(function () {
+            var index = $scope.gridTemplatesOptions.data.indexOf($scope.selectedTemplate);
+            $scope.gridTemplatesOptions.data.splice(index, 1);
+            $scope.selectedTemplate = null;
+            loadTemplate();
 
-       }, function () {
-           $scope.message = "Unexpected Error";
-       });
-       
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+
     }
 
     function renameTemplate(rowEntity, colDef, newValue, oldValue) {
@@ -380,8 +398,8 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
             data: json
         }).then(function () {
             return true;
-        }, function () {
-            $scope.message = "Unexpected Error";
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
             rowEntity[colDef.field] = oldValue;
             $scope.$apply();
             return false;
@@ -473,14 +491,14 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
             scope.$modelValue.Childs.push(getNewNode(scope.$modelValue, nextOrder));
             setFirstAndLastElement(scope.$modelValue.Childs);
         }
-            //Добавляем верзний уровень
+        //Добавляем верзний уровень
         else {
             nextOrder = getMaxOrderNumber($scope.templateData) + 1;
             $scope.templateData.push(getNewNode(null, nextOrder));
             setFirstAndLastElement($scope.templateData);
         }
-     
-       
+
+
     };
 
 
@@ -501,9 +519,8 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
     }
 
 
-    $scope.saveTemplate = function()
-    {
-       
+    $scope.saveTemplate = function () {
+
         var json = JSON.stringify({ templateFieldsJson: $scope.templateData, templateId: $scope.selectedTemplate.Id });
         $scope.templatesLoading = $http({
             method: "POST",
@@ -511,9 +528,32 @@ function RetailTemplatesController($scope, $http, uiGridCustomService) {
             data: json
         }).then(function () {
             return true;
-        }, function () {
-            $scope.message = "Unexpected Error";
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
             return false;
         });
     }
+}
+
+angular
+    .module('DataAggregatorModule')
+    .controller('NewSourceController', [
+        '$scope', 'messageBoxService', '$uibModalInstance', NewSourceController]);
+
+function NewSourceController($scope, messageBoxService, $modalInstance) {
+    $scope.name = null;
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    $scope.save = function () {
+        if ($scope.name === null || $scope.name.trim().length === 0) {
+            messageBoxService.showError('Не заполнено наименование источника', 'Ошибка');
+            return;
+        }
+        else {
+            $modalInstance.close($scope.name);
+        }
+    };
 }
