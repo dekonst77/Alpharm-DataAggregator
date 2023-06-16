@@ -10,6 +10,9 @@
                     <button class="btn btn-success btn-sm" ng-click="addData()" id="addData"><span class="glyphicon glyphicon-plus"> Добавить</span> </button>
                     <button class="btn btn-warning btn-sm" ng-click="ReportExceptionListSave();" ng-disabled="!Exception_Grid.NeedSave"><span class="glyphicon glyphicon-save"> Сохранить</span></button>
                     <button class="btn btn-info btn-sm" ng-click="CheckClassifireReport_To_Excel();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-upload"> Экспорт в Excel</span> </button>
+
+                    <!--<button class="btn btn-info btn-sm" ng-click="CheckClassifireReport_To_Email();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-upload"> Проверка классификатора (отправка по email)</span> </button>-->
+                    <button class="btn btn-info btn-sm" ng-click="CheckClassifireReportToEmailOverDBProfile();" ng-disabled="!canSearch()"><span class="glyphicon glyphicon-upload"> Проверка классификатора (отправка по email)</span> </button>
                 </div>
 
             </div>

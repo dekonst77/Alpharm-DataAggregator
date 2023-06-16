@@ -75,7 +75,7 @@ namespace DataAggregator.Domain.Model.DataReport
         public string Query { get; set; }
         public string Area { get; set; }
         public string Name { get; set; }
-        public string Roles { get; set; } 
+        public string Roles { get; set; }
         public string Filters { get; set; }
     }
 
@@ -114,6 +114,15 @@ namespace DataAggregator.Domain.Model.DataReport
 
         public int? StatusId { get; set; }
         public string Note { get; set; }
+    }
+
+    [Table("Reports", Schema = "report")]
+    public class Report
+    {
+        [Key]
+        public long Id { get; set; }
+        public long? SourceId { get; set; }
+        public string Recipients { get; set; }
     }
 
 }

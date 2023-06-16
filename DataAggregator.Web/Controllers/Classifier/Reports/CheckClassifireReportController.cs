@@ -3,9 +3,12 @@ using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckRepor
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Data;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.Classifier.Reports
@@ -34,15 +37,15 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         }
 
         [HttpPost]
-        public ActionResult CheckClassifireReport_To_Excel()
+        public FileContentResult CheckClassifireReport_To_Excel()
         {
             var cmd = _context.Database.Connection.CreateCommand();
             cmd.CommandText = "[report].[ClassifierCheckReport]";
 
+            _context.Database.Connection.Open();
+
             try
             {
-                _context.Database.Connection.Open();
-
                 var reader = cmd.ExecuteReader();
 
                 // 1 Лист - список исключений
@@ -145,7 +148,7 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
 
                 if (_context.SaveChanges() > 0)
                 {
-                    _context.Entry<RegCertificateNumberExceptions>(record).State = EntityState.Detached;
+                    _context.Entry<RegCertificateNumberExceptions>(record).State = (System.Data.Entity.EntityState)EntityState.Detached;
                     records.Add(_context.RegCertificateNumberExceptions.Find(record.Id));
                 }
             }
@@ -176,6 +179,98 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
                 Formatting = Formatting.Indented,
                 Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
             };
+            return jsonNetResult;
+        }
+
+        [HttpPost]
+        public ActionResult CheckClassifireReport_To_Email()
+        {
+            const long SourceId = 5; // Отчет проверки классификатора
+
+            // список получателей
+            string receipientList;
+            using (var _context = new DataReportContext(APP))
+            {
+                receipientList = String.Join(",", _context.Reports.Where(t => t.SourceId == SourceId).Select(t => t.Recipients).Distinct().ToArray());
+            }
+
+            MailMessage message = new MailMessage()
+            {
+                Body = "Отчет проверки классификатора во вложении xls файла.",
+                IsBodyHtml = true,
+                Subject = "Отчет проверки классификатора"
+            };
+            message.From = new MailAddress("report@alpharm.ru", "Альфарм робот №1");
+            message.To.Add(receipientList);
+
+            // Add the file attachment to this email message.
+            byte[] content = CheckClassifireReport_To_Excel().FileContents;
+            MemoryStream file = new MemoryStream(content);
+
+            Attachment data = new Attachment(file, "Отчет проверки классификатора.xls");
+
+            message.Attachments.Add(data);
+
+            //Send the message.
+            SmtpClient client = new SmtpClient()
+            {
+                UseDefaultCredentials = true,
+                Host = "mx01.alpharm.ru",
+                Port = 25,
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
+            client.Send(message);
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+            };
+
+            return jsonNetResult;
+        }
+
+        [HttpPost]
+        public ActionResult CheckClassifireReportToEmailOverDBProfile()
+        {
+            const long SourceId = 5; // Отчет проверки классификатора
+
+            // список получателей
+            string receipientList;
+            using (var _context = new DataReportContext(APP))
+            {
+                receipientList = String.Join(";", _context.Reports.Where(t => t.SourceId == SourceId).Select(t => t.Recipients).Distinct().ToArray());
+            }
+
+            byte[] content = CheckClassifireReport_To_Excel().FileContents;
+
+            using (SqlConnection Sqlcon = new SqlConnection(_context.Database.Connection.ConnectionString))
+            {
+                Sqlcon.Open();
+
+                SqlCommand cmd = new SqlCommand
+                {
+                    Connection = Sqlcon,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "[report].[SendClassifierCheckReport]"
+                };
+
+                cmd.Parameters.Add(new SqlParameter("@receipientList", SqlDbType.VarChar));
+                cmd.Parameters["@receipientList"].Value = receipientList;
+
+                cmd.Parameters.Add(new SqlParameter("@fileContent", SqlDbType.VarBinary));
+                cmd.Parameters["@fileContent"].Value = content;
+
+                cmd.ExecuteNonQuery();
+            }
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+            };
+
             return jsonNetResult;
         }
 

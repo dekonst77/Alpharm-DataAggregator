@@ -28,6 +28,8 @@ namespace DataAggregator.Domain.DAL
         public DbSet<Rep_Type> Rep_Type { get; set; }
         public DbSet<Rep_Param> Rep_Param { get; set; }
 
+        public DbSet<Report> Reports { get; set; }
+
         public DbSet<ReportsLog> ReportsLog { get; set; }
         public DbSet<ReportsLogView> ReportsLogView { get; set; }
 

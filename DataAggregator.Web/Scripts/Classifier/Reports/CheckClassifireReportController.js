@@ -47,55 +47,6 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         ];
 
         $scope.Exception_Grid.SetDefaults();
-
-        // редактируемые поля: Comment
-        function editRowDataSource(rowEntity, colDef, newValue, oldValue) {
-            /*
-            const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
-            const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
-            const day = 15;
-            const period = new Date(Date.UTC(year, month - 1, day));
-
-            console.log('editRowDataSource() -> year = ' + year);
-            console.log('editRowDataSource() -> month = ' + month);
-            console.log('editRowDataSource() -> period = ' + period);
-
-            // проверка на изменение
-            if (newValue === oldValue || newValue === undefined)
-                return;
-
-            $scope.dataLoading = $http({
-                method: "POST",
-                url: "/SalesSKUbySF/Edit/",
-                data: { record: rowEntity, fieldname: colDef.field }
-            }).then(function (response) {
-
-                var data = response.data.Data;
-                if (data.Success) {
-                    let record = data.Data.SalesSKUBySFRecord[0];
-                    rowEntity[colDef.field] = record[colDef.field];
-
-                    //console.log(colDef);
-                    //console.log(record);
-
-                    if ((colDef.field === "Correction_factor") || (colDef.field === "CalculatedData_PackagesNumber"))
-                        rowEntity["CalculatedData_PackagesNumber_Correction"] = record["CalculatedData_PackagesNumber_Correction"];
-
-                    //console.log(record[colDef.field]);
-                } else {
-                    console.error(data.ErrorMessage);
-                    messageBoxService.showError(data.ErrorMessage);
-                }
-
-                return true;
-            }, function (response) {
-                rowEntity[colDef.field] = oldValue;
-                errorHandlerService.showResponseError(response);
-                return false;
-            });
-            */
-            return;
-        }
         //******** Grid ******** <-
 
         $scope.CheckClassifireReport_Search();
@@ -167,9 +118,6 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
 
             if (response.status === 200) {
                 $scope.Exception_Grid.Options.data = response.data;
-
-                //localStorage.setItem("currperiod", $scope.currentperiod);
-                //localStorage.setItem("selregions", JSON.stringify($scope.selectByGroupModel));
             }
             else {
                 console.error(response);
@@ -233,6 +181,7 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             }, 100);
     };
 
+    // сохранение изменений в списке исключений
     $scope.ReportExceptionListSave = function (action) {
         $scope.dataLoading =
             $http({
@@ -285,6 +234,36 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             function () {
 
             });
+    }
+
+    // отправка через SmtpClient client
+    $scope.CheckClassifireReport_To_Email = function () {
+        $scope.message = 'Пожалуйста, ожидайте... Загрузка отчётов.';
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/CheckClassifireReport/CheckClassifireReport_To_Email/'
+        }).then(function (response) {
+
+        }, function (response) {
+            console.error('errorHandlerService.showResponseError = ' + response);
+            errorHandlerService.showResponseError(response);
+        });
+    }
+
+    // отправка через хран. проц-ру
+    $scope.CheckClassifireReportToEmailOverDBProfile = function () {
+        $scope.message = 'Пожалуйста, ожидайте... Загрузка отчётов.';
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/CheckClassifireReport/CheckClassifireReportToEmailOverDBProfile/'
+        }).then(function (response) {
+
+        }, function (response) {
+            console.error('errorHandlerService.showResponseError = ' + response);
+            errorHandlerService.showResponseError(response);
+        });
     }
 
 }
