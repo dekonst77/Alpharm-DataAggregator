@@ -35,6 +35,9 @@ namespace DataAggregator.Domain.Model.Retail.SalesSKUbySF
         public string INNGroup { get; set; }
         public DateTime PeriodCurr { get; set; }
         public Nullable<decimal> Correction_factor { get; set; }
+        //#10496
+        public bool Used { get; set; }
+        public Nullable<int> CountPrimaryPacking { get; set; }
 
         // расчётные данные
         public Nullable<decimal> CalculatedData_PackagesNumber_Correction { get; set; }
@@ -53,10 +56,12 @@ namespace DataAggregator.Domain.Model.Retail.SalesSKUbySF
         public Nullable<decimal> OFDData_PackagesNumber_1 { get; set; }
         public Nullable<decimal> OFDData_PackagesNumber_2 { get; set; }
         public Nullable<decimal> OFDData_PackagesNumber_3 { get; set; }
+        public Nullable<decimal> OFDData_PackagesNumber_next { get; set; } //#10496
         public Nullable<int> OFDData_PharmaciesNumber { get; set; }
         public Nullable<int> OFDData_PharmaciesNumber_1 { get; set; }
         public Nullable<int> OFDData_PharmaciesNumber_2 { get; set; }
         public Nullable<int> OFDData_PharmaciesNumber_3 { get; set; }
+        public Nullable<int> OFDData_PharmaciesNumber_next { get; set; }  //#10496
         public Nullable<decimal> OFDData_PriceAVG { get; set; }
         public Nullable<decimal> OFDData_PriceAVG_1 { get; set; }
         // исходные данные

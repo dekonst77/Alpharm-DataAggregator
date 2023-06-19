@@ -876,7 +876,7 @@ namespace DataAggregator.Domain.DAL
                 new SqlParameter { ParameterName = "@isExcel", SqlDbType = SqlDbType.Bit, Value = isExcel }
                 );
         }
-        public IEnumerable<ViewSalesSKUByFederationSubject_SP_Result> ViewSalesSKUByFedSubGroupModel_SP(int year, short month, List<RegionGroupModel> regions, bool isExcel = false)
+        public IEnumerable<ViewSalesSKUByFederationSubject_SP_Result> ViewSalesSKUByFedSubGroupModel_SP(int year, short month, List<RegionGroupModel> regions, bool isExcel = false, string searchText = null)
         {
             var options = new JsonSerializerOptions
             {
@@ -884,11 +884,12 @@ namespace DataAggregator.Domain.DAL
                 WriteIndented = true
             };
             string regions_json = JsonSerializer.Serialize<List<RegionGroupModel>>(regions, options);
-            return Database.SqlQuery<ViewSalesSKUByFederationSubject_SP_Result>("[SalesSKU].[LoadSalesSKUByFedSubGroupModel_SP] @year, @month, @regions, @isExcel",
+            return Database.SqlQuery<ViewSalesSKUByFederationSubject_SP_Result>("[SalesSKU].[LoadSalesSKUByFedSubGroupModel_SP] @year, @month, @regions, @isExcel, @searchText",
                 new SqlParameter { ParameterName = "@year", SqlDbType = SqlDbType.Int, Value = year },
                 new SqlParameter { ParameterName = "@month", SqlDbType = SqlDbType.TinyInt, Value = month },
                 new SqlParameter { ParameterName = "@regions", SqlDbType = SqlDbType.VarChar, Value = regions_json },
-                new SqlParameter { ParameterName = "@isExcel", SqlDbType = SqlDbType.Bit, Value = isExcel }
+                new SqlParameter { ParameterName = "@isExcel", SqlDbType = SqlDbType.Bit, Value = isExcel },
+                new SqlParameter { ParameterName = "@searchText", SqlDbType = SqlDbType.VarChar, Value = (object)searchText ?? DBNull.Value }
                 );
         }
 
@@ -992,7 +993,7 @@ namespace DataAggregator.Domain.DAL
                 }
             }
         }
-        public DataTable Get_SalesSKUbyFedSubGroupModel_ListTable(int year, short month, List<RegionGroupModel> regions)
+        public DataTable Get_SalesSKUbyFedSubGroupModel_ListTable(int year, short month, List<RegionGroupModel> regions, string searchText = null)
         {
             var options = new JsonSerializerOptions
             {
@@ -1012,6 +1013,7 @@ namespace DataAggregator.Domain.DAL
                     command.Parameters.Add("@year", SqlDbType.Int).Value = year;
                     command.Parameters.Add("@month", SqlDbType.TinyInt).Value = month;
                     command.Parameters.Add("@regions", SqlDbType.VarChar).Value = regions_json;
+                    command.Parameters.Add("@searchText", SqlDbType.VarChar).Value = searchText;
                     command.Parameters.Add("@isExcel", SqlDbType.Int).Value = true;
 
                     command.CommandText = "[SalesSKU].[LoadSalesSKUByFedSubGroupModel_SP]";

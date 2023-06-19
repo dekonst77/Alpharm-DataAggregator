@@ -84,13 +84,13 @@ namespace DataAggregator.Web.Controllers.Retail
         }
 
         [HttpPost]
-        public JsonResult ViewSalesByGroupModel(int year, short month, string region_model)
+        public JsonResult ViewSalesByGroupModel(int year, short month, string region_model, string searchText = null)
         {
             try
             {
                 List<RegionGroupModel> regions = JsonSerializer.Deserialize<List<RegionGroupModel>>(region_model);
 
-                var result = _context.ViewSalesSKUByFedSubGroupModel_SP(year, month, regions).ToList();
+                var result = _context.ViewSalesSKUByFedSubGroupModel_SP(year, month, regions, false, searchText).ToList();
                 return new CustomJsonResult { Data = result, MaxJsonLength = int.MaxValue };
             }
             catch (Exception ex)
@@ -246,21 +246,21 @@ namespace DataAggregator.Web.Controllers.Retail
         }
 
         [HttpPost]
-        public ActionResult SalesSKUbySF_To_Excel(int year, short month, string region_model)
+        public ActionResult SalesSKUbySF_To_Excel(int year, short month, string region_model, string searchText = null)
         {
             try
             {
                 List<RegionGroupModel> regions = JsonSerializer.Deserialize<List<RegionGroupModel>>(region_model);
 
-                DataTable result = _context.Get_SalesSKUbyFedSubGroupModel_ListTable(year, month, regions);
+                DataTable result = _context.Get_SalesSKUbyFedSubGroupModel_ListTable(year, month, regions, searchText);
 
                 Excel.Excel excel = new Excel.Excel();
                 excel.Create();
 
                 excel.InsertDataTable("Продажи SKU по СФ", 1, 1, result, true, true, null);
 
-                excel.Style_ColumnBackColor("Продажи SKU по СФ", 12, System.Drawing.Color.Green); // Коэф. Кор.
-                excel.Style_ColumnBackColor("Продажи SKU по СФ", 13, System.Drawing.Color.Green); // уп. тек. Старт
+                excel.Style_ColumnBackColor("Продажи SKU по СФ", 17, System.Drawing.Color.Green); // Коэф. Кор.
+                excel.Style_ColumnBackColor("Продажи SKU по СФ", 18, System.Drawing.Color.Green); // уп. тек. Старт
                 excel.Style_ColumnBackColor("Продажи SKU по СФ", 47, System.Drawing.Color.Green); // Комментарий
 
                 byte[] bb = excel.SaveAsByte();

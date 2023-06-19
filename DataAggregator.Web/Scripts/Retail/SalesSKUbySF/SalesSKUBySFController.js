@@ -88,6 +88,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
 
     $scope.periods = [];
     $scope.districts = [];
+    $scope.searchText = null;
 
     $scope.inactive = false;
 
@@ -146,6 +147,9 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
 
             { headerTooltip: true, name: 'СТМ', enableCellEdit: false, width: 80, field: 'IsSTM', type: 'boolean' },
             { headerTooltip: true, name: 'ПКУ', enableCellEdit: false, width: 80, field: 'IsPKU', type: 'boolean' },
+            //#10496
+            { headerTooltip: true, name: 'Коэффециент деления', enableCellEdit: false, width: 80, field: 'CountPrimaryPacking', type: 'number' },
+            { headerTooltip: true, name: 'Заблокированные', enableCellEdit: false, width: 80, field: 'Used', type: 'boolean' },
 
             { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Текущий период', field: 'PeriodCurr', visible: true, nullable: false, headerCellClass: 'Yellow', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
             {
@@ -173,6 +177,11 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
             // ОФД данные
             // по упаковкам
             {
+                headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ОФД уп. буд.', field: 'OFDData_PackagesNumber_next', type: 'number', visible: true, nullable: true, headerCellClass: 'ofddata',
+                filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint,
+                aggregationType: uiGridConstants.aggregationTypes.sum, footerCellFilter: 'number:2'
+            },
+            {
                 headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ОФД уп. тек.', field: 'OFDData_PackagesNumber', type: 'number', visible: true, nullable: true, headerCellClass: 'ofddata',
                 filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint,
                 aggregationType: uiGridConstants.aggregationTypes.sum, footerCellFilter: 'number:2'
@@ -194,6 +203,10 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
             },
 
             // по аптекам
+            {
+                headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ОФД буд.', field: 'OFDData_PharmaciesNumber_next', type: 'number', visible: true, nullable: true, headerCellClass: 'ofddata',
+                filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            },
             {
                 headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ОФД тек.', field: 'OFDData_PharmaciesNumber', type: 'number', visible: true, nullable: true, headerCellClass: 'ofddata',
                 filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
@@ -551,7 +564,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
         console.debug('$scope.Search -> region_model = ' + JSON.stringify($scope.selectByGroupModel));
         console.debug($scope.selectByGroupModel);
 
-        var json_str = JSON.stringify({ year: year, month: month, region_model: JSON.stringify($scope.selectByGroupModel) });
+        var json_str = JSON.stringify({ year: year, month: month, region_model: JSON.stringify($scope.selectByGroupModel), searchText: $scope.searchText });
         console.log('$scope.Search -> json_str = ' + json_str);
 
         $scope.message = 'Пожалуйста, ожидайте... Загрузка данных.';
@@ -716,7 +729,7 @@ function SalesSKUBySFController($scope, $http, $q, $cacheFactory, $filter, $time
         const year = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[1];
         const month = /(\d{4})-(\d{2})/.exec($scope.currentperiod)[2];
 
-        var json_str = JSON.stringify({ year: year, month: month, region_model: JSON.stringify($scope.selectByGroupModel) });
+        var json_str = JSON.stringify({ year: year, month: month, region_model: JSON.stringify($scope.selectByGroupModel), searchText: $scope.searchText });
         console.log('$scope.Search -> json_str = ' + json_str);
 
         $scope.dataLoading = $http({
