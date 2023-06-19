@@ -803,6 +803,13 @@
                 authorize: true
             })
 
+            // Черный список аптек
+            .when('/Retail/PharmacyWithoutAverage', {
+                templateUrl: 'Views/Retail/PharmacyWithoutAverage/Index.html',
+                title: 'RETAIL.PHARMACY_WITHOUT_AVERAGE_LIST_TITLE',
+                authorize: true
+            })
+
             // Редактор цен
             .when('/Retail/PriceLimitsEditor', {
                 templateUrl: 'Views/Retail/PriceLimitsEditor/Index.html',

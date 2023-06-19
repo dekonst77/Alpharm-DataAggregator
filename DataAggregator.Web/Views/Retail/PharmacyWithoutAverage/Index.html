@@ -1,0 +1,41 @@
+﻿<div ng-controller="PharmacyWithoutAverageController" cg-busy="loading" ng-cloak class="auto-grid-parent base">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <date-period period="filter.date" ng-required="true"></date-period>
+                </div>
+                <div class="col-md-3">
+                    <label>
+                        <input name="isGenerated" type="checkbox" class="" ng-model="filter.isGenerated" ng-change="">&nbsp;Экстраполировать
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success btn-sm" ng-disabled="filter.date == null" ng-click="getList();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                    <div class="btn btn-info btn-sm" ngf-select="UploadFromExcel($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <span class="glyphicon glyphicon-import" data-translate="BUTTONS.IMPORT">Не экстраполировать</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" style="padding-top:100px">
+        <div class="row" style="width:100%">
+            <div class="col-md-6">
+                <h4>Закупки</h4>
+            </div>
+            <div class="col-md-6">
+                <h4>Продажи</h4>
+            </div>
+        </div>
+        <div class="row" style="width:100%">
+            <div class="col-md-6">
+                <ui-grid-control options="inListGrid.Options" class="ui-grid-enable-content-selection grid-block"></ui-grid-control>
+            </div>
+            <div class="col-md-6">
+                <ui-grid-control options="outListGrid.Options" class="ui-grid-enable-content-selection grid-block"></ui-grid-control>
+            </div>
+        </div>
+    </div>
+</div>

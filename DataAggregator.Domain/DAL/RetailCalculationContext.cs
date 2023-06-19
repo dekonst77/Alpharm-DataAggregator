@@ -25,6 +25,9 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<Log> CalculationLog { get; set; }
 
+        public DbSet<TargetPharmacyWithoutAverageIn> TargetPharmacyWithoutAverageIn { get; set; }
+        public DbSet<TargetPharmacyWithoutAverageOut> TargetPharmacyWithoutAverageOut { get; set; }
+
         #endregion
 
         public RetailCalculationContext()
@@ -83,6 +86,27 @@ namespace DataAggregator.Domain.DAL
                 command.ExecuteNonQuery();
             }
             return true;
+        }
+
+        public void ImportTargetPharmacyWithoutAverage_from_Excel(int month, int year, string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@month", SqlDbType.Int).Value = month;
+                command.Parameters.Add("@year", SqlDbType.Int).Value = year;
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "ImportTargetPharmacyWithoutAverage_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

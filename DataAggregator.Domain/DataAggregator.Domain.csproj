@@ -204,6 +204,7 @@
     <Compile Include="Model\RetailCalculation\Process\Launcher.cs" />
     <Compile Include="Model\RetailCalculation\Process\Info.cs" />
     <Compile Include="Model\Retail\SalesSKUbySF\ViewSalesSKUByFederationSubject_SP_Result.cs" />
+    <Compile Include="Model\RetailCalculation\TargetPharmacyWithoutAverage.cs" />
     <Compile Include="Model\Retail\View\FullClassifierWithPrice.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\View\NFCLineView.cs" />
     <Compile Include="Model\DrugClassifier\GoodsSystematization\GoodsCategory.cs" />
