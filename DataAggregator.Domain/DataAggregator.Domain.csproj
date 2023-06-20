@@ -190,6 +190,7 @@
     <Compile Include="Model\OFD\PriceEtalon.cs" />
     <Compile Include="Model\OFD\PriceEtalonView.cs" />
     <Compile Include="Model\RetailCalculation\Log.cs" />
+    <Compile Include="Model\Retail\SourceBrandBlackList.cs" />
     <Compile Include="Model\RetailCalculation\User.cs" />
     <Compile Include="Model\Retail\CalcInfo.cs" />
     <Compile Include="Model\Retail\CTM\CTMView.cs" />

@@ -810,6 +810,13 @@
                 authorize: true
             })
 
+            // Черный список брендов
+            .when('/Retail/SourceBrandBlackList', {
+                templateUrl: 'Views/Retail/SourceBrandBlackList/Index.html',
+                title: 'RETAIL.SOURCE_BRAND_BLACK_LIST_TITLE',
+                authorize: true
+            })
+
             // Редактор цен
             .when('/Retail/PriceLimitsEditor', {
                 templateUrl: 'Views/Retail/PriceLimitsEditor/Index.html',

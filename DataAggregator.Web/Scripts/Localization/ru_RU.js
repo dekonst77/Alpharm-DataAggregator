@@ -349,6 +349,7 @@
                 "SOURCE_PHARMACIES_EDITOR_TITLE": 'Справочник аптек',
                 "PHARMACY_BRAND_BLACK_LIST_TITLE": 'Черный список аптека-бренд',
                 "PHARMACY_WITHOUT_AVERAGE_LIST_TITLE": 'Черный список аптек',
+                "SOURCE_BRAND_BLACK_LIST_TITLE": 'Черный список брендов',
                 "PRICE_LIMITS_EDITOR_TITLE": 'Редактор цен',
                 "COUNT_CHECK_TITLE": 'Редактор количеств',
                 "PRICE_RULE_EDITOR_TITLE": 'Корректировка цен на итоговых данных',

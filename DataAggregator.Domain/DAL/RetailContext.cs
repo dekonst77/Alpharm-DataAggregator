@@ -127,6 +127,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<CTMView> CTMView { get; set; }
 
+        public DbSet<SourceBrandBlackList> SourceBrandBlackList { get; set; }
+
         #region dadata
 
         public DbSet<Result> Result { get; set; }
@@ -809,6 +811,33 @@ namespace DataAggregator.Domain.DAL
             }.Cast<object>().ToArray();
 
             return Database.SqlQuery<long>("[history].[CheckRelatedRule] @id, @year, @month,@yearEnd, @monthEnd, @classifierId, @distributionClassifierId, @regionCode", parameters).ToList();
+        }
+
+        /// <summary>
+        /// Импорт черного списка брендов - [RetailData].[dbo].[SourceBrandBlackList]
+        /// </summary>
+        /// <param name="month">месяц</param>
+        /// <param name="year">год</param>
+        /// <param name="filename">файл</param>
+        public void ImportSourceBrandBlackList_from_Excel(int month, int year, string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@month", SqlDbType.Int).Value = month;
+                command.Parameters.Add("@year", SqlDbType.Int).Value = year;
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "ImportSourceBrandBlackList_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
         }
 
         #region CTM
