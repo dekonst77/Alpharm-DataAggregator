@@ -7,6 +7,7 @@ using DataAggregator.Domain.Model.EtalonPrice;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Web;
 
 namespace DataAggregator.Web.Controllers.OFD
 {
@@ -193,5 +194,38 @@ namespace DataAggregator.Web.Controllers.OFD
         {
             return View();
         }
+
+
+        public ActionResult UploadFromExcel(int month, int year, HttpPostedFileBase file)
+        {
+            try
+            {
+                using (_context)
+                {
+                    var userId = new Guid(User.Identity.GetUserId());
+
+                    string filename = $@"\\s-sql2\Upload\PriceCurrent_{userId}.xlsx";
+
+                    if (System.IO.File.Exists(filename))
+                        System.IO.File.Delete(filename);
+
+                    file.SaveAs(filename);
+
+                    _context.ImportPriceCurrent_from_Excel(month, year, userId, filename);
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonNetResult() { Data = null }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

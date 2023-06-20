@@ -18,7 +18,7 @@
                         Посчитать
                     </button>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-6">
                     <label> Статус работы: {{form.Status}} </label>
                 </div>
                 <div class="col-md-2">
@@ -28,6 +28,11 @@
                     <button style="width: 100%" class="btn btn-primary" type="button" ng-click="currentPriceCopyToEtalonPrice()" ng-disabled="form.IsRun">
                         Перенести цены
                     </button>
+                </div>
+                <div class="col-md-1">
+                    <div class="btn btn-info btn-sm" ngf-select="UploadFromExcel($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <span class="glyphicon glyphicon-import" data-translate="BUTTONS.IMPORT"></span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('PriceCurrentController', ['$scope', '$http', 'hotkeys', 'uiGridCustomService', 'formatConstants', PriceCurrentController]);
+    .controller('PriceCurrentController', ['$scope', '$http', 'hotkeys', 'uiGridCustomService', 'formatConstants', 'messageBoxService', 'errorHandlerService', PriceCurrentController]);
 
-function PriceCurrentController($scope, $http, hotkeys, uiGridCustomService, formatConstants) {
+function PriceCurrentController($scope, $http, hotkeys, uiGridCustomService, formatConstants, messageBoxService, errorHandlerService) {
 
 
     hotkeys.bindTo($scope).add({
@@ -577,5 +577,32 @@ function PriceCurrentController($scope, $http, hotkeys, uiGridCustomService, for
     }
 
     $scope.update();
+
+    //#12305
+    $scope.UploadFromExcel = function (files) {
+        if (files && files.length) {
+            var formData = new FormData();
+            files.forEach(function (item) {
+                formData.append('file', item);
+            });
+            formData.append('month', $scope.form.date.getMonth() + 1);
+            formData.append('year', $scope.form.date.getFullYear());
+
+            $scope.loading = $http({
+                method: 'POST',
+                url: '/PriceCurrent/UploadFromExcel/',
+                data: formData,
+                headers: {
+                    'Content-Type': undefined
+                },
+                transformRequest: angular.identity
+            }).then(function () {
+                messageBoxService.showInfo("Сохранено");
+                $scope.getList();
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+        }
+    };
 
 }

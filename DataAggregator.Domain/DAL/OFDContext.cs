@@ -190,5 +190,34 @@ namespace DataAggregator.Domain.DAL
                 command.ExecuteNonQuery();
             }
         }
+
+        /// <summary>
+        /// Импорт эталонных цен
+        /// </summary>
+        /// <param name="month">месяц</param>
+        /// <param name="year">год</param>
+        /// <param name="UserId">UserId</param>
+        /// <param name="filename">файл</param>
+        public void ImportPriceCurrent_from_Excel(int month, int year, Guid UserId, string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@month", SqlDbType.Int).Value = month;
+                command.Parameters.Add("@year", SqlDbType.Int).Value = year;
+                command.Parameters.Add("@UserId", SqlDbType.UniqueIdentifier).Value = UserId;
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "[EtalonPrice].[ImportPriceCurrent_from_Excel]";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
