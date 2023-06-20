@@ -32,7 +32,8 @@ function CertificateController($scope, $window, $route, $http, $uibModal, common
             { name: 'ЖНВЛП', enableCellEdit: false, field: 'ved', type: 'boolean' },
             { name: 'обновлён', enableCellEdit: false, field: 'last_update', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
             { name: 'обнаружен', enableCellEdit: false, field: 'last_control', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
-            { name: 'Статус', enableCellEdit: false, field: 'status', filter: { condition: uiGridCustomService.condition } }
+            { name: 'Статус', enableCellEdit: false, field: 'status', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Рецептурный отпуск', enableCellEdit: false, field: 'prescription', filter: { condition: uiGridCustomService.condition } }
         ];
         $scope.Grid_Certificates.SetDefaults();
         $scope.dataLoading = $http({

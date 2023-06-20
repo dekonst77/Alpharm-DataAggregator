@@ -28,7 +28,6 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 
-
 namespace DataAggregator.Domain.DAL
 {
     public class DrugClassifierContext : DbContext
@@ -870,5 +869,18 @@ namespace DataAggregator.Domain.DAL
             }
 
         }
+
+        /// <summary>
+        /// Загрузка сертификатов ГРЛС
+        /// </summary>
+        /// <param name="searchText">фильтр</param>
+        /// <returns></returns>
+        public IEnumerable<Model.GRLS.GetCertificates_SP_Result> GetCertificates_SP(string searchText = null)
+        {
+            return Database.SqlQuery<Model.GRLS.GetCertificates_SP_Result>("[grls].[GetCertificates_SP] @searchText",
+                new SqlParameter { ParameterName = "@searchText", SqlDbType = SqlDbType.VarChar, Value = (object)searchText ?? DBNull.Value }
+                );
+        }
+
     }
 }

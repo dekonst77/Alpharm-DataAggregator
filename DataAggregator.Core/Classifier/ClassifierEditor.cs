@@ -3,7 +3,6 @@ using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 

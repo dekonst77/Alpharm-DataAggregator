@@ -1,16 +1,14 @@
-﻿using DataAggregator.Domain.DAL;
-using DataAggregator.Web.Models.GovernmentPurchases.MassFixesData;
+﻿using DataAggregator.Core.Classifier;
+using DataAggregator.Domain.DAL;
+using DataAggregator.Domain.Model.DrugClassifier.Certificate;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
+using DataAggregator.Domain.Model.GRLS;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using System.Data.SqlClient;
-using DataAggregator.Core.Classifier;
-using DataAggregator.Domain.Model.DrugClassifier.Classifier;
-using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
 
 namespace DataAggregator.Web.Controllers.Classifier
 {
@@ -42,16 +40,23 @@ namespace DataAggregator.Web.Controllers.Classifier
                 return BadRequest(msg);
             }
         }
-        [HttpPost]
+
+        /// <summary>
+        /// Скачивание реестра ГРЛС
+        /// </summary>
+        /// <param name="searchText">фильтр</param>
+        /// <returns></returns>
+        [HttpPost]        
         public ActionResult Certificates_search(string searchText)
         {
             try
             {
-                var _context = new DrugClassifierContext(APP);
-                var Certificates = _context.Cert_Certificate.Where(w=>1==1);
-                if (!string.IsNullOrEmpty(searchText))
-                    Certificates = Certificates.Where(w => w.Number.Contains(searchText) || w.TN.Contains(searchText) || w.INN.Contains(searchText) || w.Owner_Name.Contains(searchText));
-                ViewData["Certificates"] = Certificates.ToList();
+                using (var _context = new DrugClassifierContext(APP))
+                {
+                    IEnumerable<GetCertificates_SP_Result> result = _context.GetCertificates_SP(searchText).ToList();
+                    ViewData["Certificates"] = result;
+                }
+
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
 
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -100,13 +105,13 @@ namespace DataAggregator.Web.Controllers.Classifier
             {
                 var _context = new DrugClassifierContext(APP);
 
-                var Cert_Certificate  = _context.Cert_Certificate.Where(w => w.Number_ID== Id).ToList();
+                var Cert_Certificate = _context.Cert_Certificate.Where(w => w.Number_ID == Id).ToList();
                 var Cert_Certificate1 = Cert_Certificate.Single();
-                ViewData["FV"] = _context.Cert_FV.Where(w=>w.CertificateId== Cert_Certificate1.Id).ToList();
+                ViewData["FV"] = _context.Cert_FV.Where(w => w.CertificateId == Cert_Certificate1.Id).ToList();
                 ViewData["ManufactureWay"] = _context.Cert_ManufactureWay.Where(w => w.CertificateId == Cert_Certificate1.Id).ToList();
                 ViewData["SubstRaw"] = _context.Cert_SubstRaw.Where(w => w.CertificateId == Cert_Certificate1.Id).ToList();
 
-    ViewData["Certificate"] = Cert_Certificate;
+                ViewData["Certificate"] = Cert_Certificate;
 
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
                 JsonNetResult jsonNetResult = new JsonNetResult
@@ -188,7 +193,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                             var ChemicalSPR = _context.ChemicalSPR.Where(w => w.Value == item.Value).FirstOrDefault();
                             if (ChemicalSPR == null)
                             {//нет такого в справочнике нужно завести
-                                ChemicalSPR=_context.ChemicalSPR.Add(new Domain.Model.DrugClassifier.Certificate.ChemicalSPR() { Value = item.Value, Description = item.Description });
+                                ChemicalSPR = _context.ChemicalSPR.Add(new Domain.Model.DrugClassifier.Certificate.ChemicalSPR() { Value = item.Value, Description = item.Description });
                             }
                             if (item.ChemicalSPRId == ChemicalSPR.Id)
                             {
@@ -207,12 +212,12 @@ namespace DataAggregator.Web.Controllers.Classifier
                         }
                         if (item.Id == 0)//новые
                         {
-                            var ADD = new DataAggregator.Domain.Model.DrugClassifier.Certificate.Chemicals() {NumberINN_NewId=item.NumberINN_NewId,ChemicalSPRId= item.ChemicalSPRId };
+                            var ADD = new DataAggregator.Domain.Model.DrugClassifier.Certificate.Chemicals() { NumberINN_NewId = item.NumberINN_NewId, ChemicalSPRId = item.ChemicalSPRId };
                             _context.Chemicals.Add(ADD);
                         }
                         if (item.Id < 0)//удаление
                         {
-                            var del = _context.Chemicals.Where(w => w.Id == -1*item.Id).Single();
+                            var del = _context.Chemicals.Where(w => w.Id == -1 * item.Id).Single();
                             _context.Chemicals.Remove(del);
                         }
                     }
@@ -267,9 +272,9 @@ namespace DataAggregator.Web.Controllers.Classifier
                 var _context = new DrugClassifierContext(APP);
                 var ManufactureWayView = _context.Cert_ManufactureWayView.Where(w => w.CertType == "grls Лекарственные препараты");
                 if (IsEmpty)
-                    ManufactureWayView = ManufactureWayView.Where(w => w.ManufacturerClearId==null || (w.PackerId==null && w.Status==0));
+                    ManufactureWayView = ManufactureWayView.Where(w => w.ManufacturerClearId == null || (w.PackerId == null && w.Status == 0));
                 if (IsOnlyEX)
-                    ManufactureWayView = ManufactureWayView.Where(w => w.CertStatus=="Д" || w.CertStatus=="ЕЭК");
+                    ManufactureWayView = ManufactureWayView.Where(w => w.CertStatus == "Д" || w.CertStatus == "ЕЭК");
                 ViewData["MnfWay"] = ManufactureWayView.ToList();
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
 
@@ -294,7 +299,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 var _context = new DrugClassifierContext(APP);
                 if (array_MnfWay != null)
                     foreach (var item in array_MnfWay)
-                    {                        
+                    {
                         var UPD = _context.Cert_ManufactureWay.Where(w => w.Id == item.Id).Single();
 
                         if (item.ManufacturerClearValue != null)
@@ -336,7 +341,7 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
         [HttpPost]
-        public ActionResult Classifier_search(string TypeSet,string RuNumber)
+        public ActionResult Classifier_search(string TypeSet, string RuNumber)
         {
             try
             {
@@ -392,12 +397,12 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
         [HttpPost]
-        public ActionResult ESKLP_search(bool IsEmpty, bool IsOnlyEX,string Text)
+        public ActionResult ESKLP_search(bool IsEmpty, bool IsOnlyEX, string Text)
         {
             try
             {
                 var _context = new DrugClassifierContext(APP);
-                var ESKLPView = _context.ESKLPView.Where(w => 1==1);
+                var ESKLPView = _context.ESKLPView.Where(w => 1 == 1);
                 if (IsEmpty)
                     ESKLPView = ESKLPView.Where(w => w.ClassifierPackingId == null || w.ClassifierId == null);
                 if (IsOnlyEX)
@@ -481,13 +486,13 @@ namespace DataAggregator.Web.Controllers.Classifier
                 {
                     //добавление
                     CP.CountInPrimaryPacking = Convert.ToInt32(ESKLP.FirstAmount);
-                    CP.CountPrimaryPacking = Convert.ToInt32(ESKLP.SecondAmount);                    
+                    CP.CountPrimaryPacking = Convert.ToInt32(ESKLP.SecondAmount);
                 }
                 CP.Id = ClassifierPackingId;
                 CP.ClassifierId = ClassifierId;
                 CP.PrimaryPackingId = null;
-                CP.PrimaryPacking= new Packing() { Id = null, Value = ESKLP.FirstFV };
-                
+                CP.PrimaryPacking = new Packing() { Id = null, Value = ESKLP.FirstFV };
+
                 CP.ConsumerPackingId = null;
                 CP.ConsumerPacking = new Packing() { Id = null, Value = ESKLP.SecondFV };
 
@@ -517,7 +522,7 @@ namespace DataAggregator.Web.Controllers.Classifier
             {
                 var _context = new DrugClassifierContext(APP);
                 var CPs = _context.ClassifierPacking.Where(w => w.ClassifierId == ClassifierId);
-                if(CPs.Count()<=1)
+                if (CPs.Count() <= 1)
                     throw new ApplicationException("Ошибка: нельзя удалять все упаковочки");
                 var CP = _context.ClassifierPacking.Where(w => w.Id == ClassifierPackingId).Single();
                 _context.ClassifierPacking.Remove(CP);
