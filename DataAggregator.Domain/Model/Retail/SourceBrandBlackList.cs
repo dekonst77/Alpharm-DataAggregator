@@ -7,16 +7,10 @@ namespace DataAggregator.Domain.Model.Retail
     public class SourceBrandBlackList
     {
         [Key]
-        [Column(Order = 1)]
+        public int Id { get; set; }
         public int Year { get; set; }
-        [Key]
-        [Column(Order = 2)]
         public int Month { get; set; }
-        [Key]
-        [Column(Order = 3)]
         public long SourceId { get; set; }
-        [Key]
-        [Column(Order = 4)]
         public long BrandId { get; set; }
     }
 }

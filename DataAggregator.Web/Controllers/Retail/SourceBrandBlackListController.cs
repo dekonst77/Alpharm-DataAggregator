@@ -1,9 +1,7 @@
 ﻿using DataAggregator.Domain.DAL;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
-using OfficeOpenXml;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
