@@ -45,7 +45,7 @@ function GoodsClassifierEditorController($scope, $route, $http, $uibModal, $time
             { name: 'PackerId', field: 'PackerId', filter: { condition: uiGridCustomService.condition } },
             { name: 'Упаковщик', field: 'Packer', filter: { condition: uiGridCustomService.condition } },
             { name: 'Категория', field: 'GoodsCategoryName', filter: { condition: uiGridCustomService.condition } },
-            { name: 'Comment', field: 'ProductInfoComment', filter: { condition: uiGridCustomService.condition } }
+            { name: 'Comment', field: 'Comment', filter: { condition: uiGridCustomService.condition } }
         ];
 
     $scope.classifierGrid.Options.multiSelect = false;
