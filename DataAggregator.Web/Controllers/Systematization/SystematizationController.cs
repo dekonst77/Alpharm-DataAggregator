@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Web.Mvc;
 using WebGrease.Css.Extensions;

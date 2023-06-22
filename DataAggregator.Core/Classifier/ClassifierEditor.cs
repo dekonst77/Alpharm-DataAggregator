@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WebGrease.Css.Extensions;
 
 namespace DataAggregator.Core.Classifier
 {
@@ -1072,12 +1073,14 @@ namespace DataAggregator.Core.Classifier
 
                 _context.SaveChanges();
 
-
                 //Обновляем блок [DrugClassification]
                 model.PackerId = packer.Id;
                 model.OwnerTradeMarkId = ownerTradeMark.Id;
                 Update_DrugClassification(model, changeProductionInfo.RegistrationCertificate?.Id ?? 0);
                 Update_ClassificationGeneric(drugProperty, model);
+
+                //Обновим таблицу Systematization.DrugClassifierInWork
+                _context.DrugClassifierInWork.Where(dcw => (dcw.UserId == _user) && (dcw.DrugId == model.DrugId)).ForEach(dcw => dcw.RealPackingCount = drugProperty.ConsumerPackingCount);
 
                 _context.SaveChanges();
 
