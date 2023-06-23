@@ -82,10 +82,9 @@ namespace DataAggregator.Web.Controllers.Retail
                 {
                     var source = _context.Source.FirstOrDefault(x => x.Id == item.Id);
 
-                    if (source.FileInfo != null && source.FileInfo.Count > 0)
-                        throw new Exception("This Source already using");
+                    if (source == null)
+                        throw new Exception("Source not found");
 
-                    source.Name = item.Name;
                     source.IsPutEcomData = item.IsPutEcomData;
                     source.Priority = item.Priority;
                 }
@@ -151,9 +150,6 @@ namespace DataAggregator.Web.Controllers.Retail
 
                 if (source == null)
                     throw new Exception("Source not found");
-
-                if (source.FileInfo != null && source.FileInfo.Count > 0)
-                    throw new Exception("This Source already using");
 
                 var templates = _context.Template.Where(t => t.SourceId == id).ToList();
 
