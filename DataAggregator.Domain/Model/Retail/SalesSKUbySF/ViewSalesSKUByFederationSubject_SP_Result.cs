@@ -74,6 +74,10 @@ namespace DataAggregator.Domain.Model.Retail.SalesSKUbySF
         public Nullable<int> InitialData_PharmaciesNumber_3 { get; set; }
         public Nullable<decimal> InitialData_PriceAVG { get; set; }
         public Nullable<decimal> InitialData_PriceAVG_1 { get; set; }
+        /// <summary>
+        /// Расчет (Sell In)
+        /// </summary>
+        public Nullable<decimal> InitialDataSellIn_Calculated { get; set; }
 
         // исходные данные (Sell In)
         public Nullable<decimal> InitialDataSellIn_PackagesNumber { get; set; }
@@ -90,9 +94,19 @@ namespace DataAggregator.Domain.Model.Retail.SalesSKUbySF
 
         // Исходники e-com
         public Nullable<int> EcomData_PackagesNumber { get; set; }
+        /// <summary>
+        /// цена из проекта есом
+        /// </summary>
+        public Nullable<decimal> EcomData_AvgPrice { get; set; }
 
         // Дистр. отчётность
         public Nullable<decimal> DistrReporting_PackagesNumber { get; set; }
+
+        //Индекс дистрибуции
+        public Nullable<decimal> DistributionIndex { get; set; }
+        public Nullable<decimal> DistributionIndex_1 { get; set; }
+        public Nullable<decimal> DistributionIndex_2 { get; set; }
+        public Nullable<decimal> DistributionIndex_3 { get; set; }
 
         public Nullable<decimal> TotalSumm { get; set; }
         public Nullable<decimal> TotalSumm_1 { get; set; }

@@ -165,6 +165,34 @@ namespace DataAggregator.Web.Controllers.Retail
             }
         }
 
+        /// <summary>
+        /// Пресчёт инндекса дистрибуции
+        /// </summary>
+        /// <param name="year">год</param>
+        /// <param name="month">месяц</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult RecalcDIData(int year, short month)
+        {
+            try
+            {
+                _context.RecalcDIData_SP(year, month);
+
+                var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = Data }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
         [HttpPost]
         public ActionResult RecalcCalculatedData(int year, short month)
         {

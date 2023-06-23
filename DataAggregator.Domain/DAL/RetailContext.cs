@@ -955,6 +955,17 @@ namespace DataAggregator.Domain.DAL
             Database.ExecuteSqlCommand("exec [SalesSKU].[RecalcOFDData_SP] @year, @month", parameters);
         }
 
+        public void RecalcDIData_SP(int year, short month)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@year", SqlDbType = SqlDbType.Int, Value = year} ,
+                new SqlParameter() { ParameterName = "@month", SqlDbType = SqlDbType.TinyInt, Value = month}
+            }.Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [SalesSKU].[RecalcDIData_SP] @year, @month", parameters);
+        }
+
         public void RecalcCalculatedData_SP(int year, short month)
         {
             var parameters = new List<SqlParameter>
