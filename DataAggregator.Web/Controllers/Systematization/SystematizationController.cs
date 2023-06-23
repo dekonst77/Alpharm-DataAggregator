@@ -343,6 +343,8 @@ namespace DataAggregator.Web.Controllers.Systematization
         {
             var userGuid = new Guid(User.Identity.GetUserId());
 
+            List<DrugInWorkView> drugs;
+
             using (var context = new DrugClassifierContext(APP))
             {
                 List<DrugClassifierInWork> drugsInWork = context.DrugClassifierInWork.Where(dcw => dcw.UserId == userGuid).ToList();
@@ -350,8 +352,9 @@ namespace DataAggregator.Web.Controllers.Systematization
                 foreach (long id in drugClassifierInWork)
                 {
                     DrugClassifierInWork currentDrugInWork = drugsInWork.FirstOrDefault(dcw => dcw.Id == id);
+                    DrugClassifier drug = context.DrugClassifier.Find(id);
 
-                    if (currentDrugInWork == null)
+                    if ((currentDrugInWork == null) || (drug == null))
                         throw new ApplicationException("drug not found");
 
                     currentDrugInWork.IsOther = value;
@@ -361,6 +364,7 @@ namespace DataAggregator.Web.Controllers.Systematization
                         currentDrugInWork.GoodsCategoryId = GoodsCategoryId;
                         currentDrugInWork.ForAdding = false;
                         currentDrugInWork.ForChecking = false;
+                        drug.LastChangedUserId = userGuid;
                     }
                     else
                     {
@@ -373,9 +377,13 @@ namespace DataAggregator.Web.Controllers.Systematization
                     currentDrugInWork.HasChanges = true;
                 }
                 context.SaveChanges();
+
+                drugs = context.DrugInWorkView
+                   .Where(d => drugClassifierInWork.Contains(d.Id))
+                   .ToList();
             }
 
-            return Json(true);
+            return Json(drugs);
         }
 
 
