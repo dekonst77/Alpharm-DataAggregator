@@ -944,20 +944,28 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
         var json = JSON.stringify({ drugClassifierInWork: selectedDrugIds, value: value, GoodsCategoryId: GoodsCategoryId });
 
         $scope.drugLoading = $http.post('/Systematization/ForIsOther/', json)
-            .then(function () {
+            .then(function (response) {
+                var drugs = response.data;
+
                 selectedAndFilteredRows.forEach(function (item) {
                     item.IsOther = value;
+
                     if (value) {
                         item.GoodsCategoryId = GoodsCategoryId;
                         item.GoodsCategoryName = GoodsCategoryName;
                         item.ForChecking = false;
                         item.ForAdding = false;
-
                     }
                     else {
                         item.GoodsCategoryId = null;
                         item.GoodsCategoryName = null;
                     }
+
+                    let drug = drugs.find(element => element.Id == item.Id);
+                    if (drug) {
+                        item.UserName = drug.UserName;
+                    }
+
                     ClearDrugId(item);
                     item.HasChanges = true;
                 });
