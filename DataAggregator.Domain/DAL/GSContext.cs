@@ -96,6 +96,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<spr_NetworkName> spr_NetworkName { get; set; }
         public DbSet<spr_NetworkName_Period> spr_NetworkName_Period { get; set; }
+        public DbSet<spr_NetworkNameComments> spr_NetworkNameComments { get; set; }
+        public DbSet<spr_NetworkNameCommentsView> spr_NetworkNameCommentsView { get; set; }
         public DbSet<GS_Period_Network_Anket> GS_Period_Network_Anket { get; set; }
 
         public DbSet<BookOfChange_FormingTransaction> BookOfChangeFormingTransaction { get; set; }
@@ -325,6 +327,25 @@ namespace DataAggregator.Domain.DAL
                 command.Parameters.Add("@period_key", SqlDbType.Int).Value = period_key;
 
                 command.CommandText = "dbo.Network2Asna_from_Excel";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void NetworkBrands_from_Excel(string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "dbo.NetworkBrands_from_Excel";
 
                 Database.Connection.Open();
 

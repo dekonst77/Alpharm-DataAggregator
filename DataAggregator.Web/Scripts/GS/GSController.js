@@ -4589,7 +4589,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
     ////////////////////////////// OperationMode для Окончание
 
     ////////////////////////////// NetworkBrand для Старт
-    $scope.NetworkBrand_Init = function () {
+    $scope.NetworkBrand_Init = async function () {
         hotkeys.bindTo($scope).add({
             combo: 'shift+w',
             description: 'Одобрено',
@@ -4610,11 +4610,22 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
         });
         $scope.Grid_NetworkBrand = uiGridCustomService.createGridClassMod($scope, "Grid_NetworkBrand");
         $scope.Grid_NetworkBrand.Options.columnDefs = [
-            { name: 'Id', visible: false, field: 'Id', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Id бренда', visible: false, field: 'Id', filter: { condition: uiGridCustomService.condition } },
+            { name: 'Id сети', visible: true, field: 'NetworkId', filter: { condition: uiGridCustomService.condition } },
             {
-                headerTooltip: true, enableCellEdit: false, width: 100, name: 'Имя Сети', field: 'NetworkName', headerCellClass: 'Green', filter: { condition: uiGridCustomService.condition },
+                headerTooltip: true, 
+                enableCellEdit: false,
+                width: 100,
+                name: 'Имя Сети',
+                field: 'NetworkName',
+                enableSorting: true,
+                sort: { direction: uiGridConstants.ASC },
+                sortDirectionCycle: ['asc', 'desc'],
+                headerCellClass: 'Green',
+                filter: { condition: uiGridCustomService.condition },
                 cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/GS/GS?NetworkName={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>'
             },
+           
             { headerTooltip: true, enableCellEdit: false, name: '∑ Сети', width: 100, field: 'MonthlyTurnover', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_SUM },
             { headerTooltip: true, enableCellEdit: false, name: 'Кол-во брендов', width: 100, field: 'PharmacyBrand_Count', headerCellClass: 'NavajoWhite', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
             {
@@ -4623,20 +4634,239 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             },
             { name: 'Одобрено', width: 100, field: 'Used', enableCellEdit: true, type: 'boolean' },
             { name: 'Комментарий', width: 100, cellTooltip: true, enableCellEdit: true, field: 'Comment', filter: { condition: uiGridCustomService.condition } },
+            /*
             { name: 'Ассоциации', width: 100, cellTooltip: true, enableCellEdit: true, field: 'Associations', filter: { condition: uiGridCustomService.condition } },
             { name: 'Франшиза', width: 100, cellTooltip: true, enableCellEdit: true, field: 'Franchise', filter: { condition: uiGridCustomService.condition } }
+            */
+            {
+                name: 'Фармперспектива',
+                width: 150,
+                minWidth: 150,
+                field: 'FarmPerspektiva',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'АСНА',
+                width: 150,
+                minWidth: 150,
+                field: 'Asna',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Проаптека',
+                width: 150,
+                minWidth: 150,
+                field: 'ProApteka',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'МФО',
+                width: 150,
+                minWidth: 150,
+                field: 'MFO',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Созвездие',
+                width: 150,
+                minWidth: 150,
+                field: 'Sozvezdie',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Весна',
+                width: 150,
+                minWidth: 150,
+                field: 'Vesna',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Аптека.ру',
+                width: 150,
+                minWidth: 150,
+                field: 'AptekaRU',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Здравсити',
+                width: 150,
+                minWidth: 150,
+                field: 'Zdravcity',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Ютека',
+                width: 150,
+                minWidth: 150,
+                field: 'Uteka',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
+            {
+                name: 'Еаптека',
+                width: 150,
+                minWidth: 150,
+                field: 'EApteka',
+                enableCellEdit: true,
+                type: 'boolean',
+                editComment: false,
+                comment: '',
+                prevComment: '',
+                headerCellTemplate: '_headerCellTemplate.html'
+            },
         ];
         $scope.Grid_NetworkBrand.SetDefaults();
 
-        $scope.dataLoading = $http({
+        $scope.Grid_NetworkBrand.Options.enableAutoFitColumns = true;
+
+        await $scope.NetworkBrand_InitData();
+       
+    };
+
+    $scope.NetworkBrand_InitData = function () {
+        var networkBrands = $http({
             method: 'POST',
             url: '/GS/NetworkBrand_Init/',
             data: JSON.stringify({})
         }).then(function (response) {
             $scope.NetworkBrand_Search();
-            return 1;
         });
+
+        var networkBrandsComments = $http({
+            method: 'GET',
+            url: '/GS/NetworkNameCommentsView/',
+            data: JSON.stringify({})
+        }).then(function (response) {
+            //выбираем все столбцы из грида, которые имею столбец comment
+            var fields = $scope.Grid_NetworkBrand.Options.columnDefs.filter(function (field) { return field.comment !== undefined })
+            //цикл по этим столбцам
+            fields.forEach(function (field) {
+                var blankComment = 'комментарий'
+                var comment = response.data.Data.filter(function (net) { return net.NetworkName == field.field; });
+                field.comment = comment !== undefined && comment.length > 0 ? comment[0].Comment ?? blankComment : blankComment;
+            })
+
+
+            //$scope.Grid_NetworkBrand.getColumn('Vesna').width = 200;
+            //$scope.Grid_NetworkBrand.grid.refresh();
+        });
+
+        $scope.dataLoading = $q.all([networkBrands, networkBrandsComments])
+    }
+
+    $scope.editCol = function (col) {
+        col.colDef.editComment = true;
+        col.colDef.prevComment = col.colDef.comment;
     };
+
+    $scope.cancelCol = function (col) {
+        col.colDef.editComment = false;
+        col.colDef.comment = col.colDef.prevComment;
+    };
+
+    $scope.updateCol = function (col) {
+        if (col.colDef.prevComment == col.colDef.comment) {
+            col.colDef.editComment = false;
+            return;
+        }
+
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/NetworkNameCommentsSave/',
+                data: JSON.stringify({
+                    NetworkName: col.colDef.field,
+                    Comment: col.colDef.comment
+                })
+            }).then(function (response) {
+                col.colDef.editComment = false;
+                var blankComment = 'комментарий'
+                col.colDef.comment = col.colDef.comment !== '' ? col.colDef.comment : blankComment;
+            }, function (response) {
+                col.colDef.editComment = false;
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+    $scope.NetworkBrands_from_Excel = function (file) {
+
+        if (file == null)
+            return;
+
+        cfpLoadingBar.start();
+
+        var upload = Upload.upload({
+            url: '/GS/NetworkBrands_from_Excel/',
+            data: {
+                uploads: file
+            }
+        }).then(function (resp) {
+            console.log('Success ' + resp.config.data.uploads.name + 'uploaded. Response: ' + resp.data);
+            cfpLoadingBar.complete();
+            $scope.message = "Загрузка"
+        }, function (resp) {
+            errorHandlerService.showResponseError(resp);
+            cfpLoadingBar.complete();
+            $scope.message = "Загрузка"
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            cfpLoadingBar.set(progressPercentage / 100);
+            $scope.message = "Загрузка файла " + progressPercentage + "%"
+            if (progressPercentage >= 100) {
+                $scope.message = "Обработка файла"
+            }
+        })
+
+        $scope.dataLoading = $q.all([upload])
+            .then(async function () {
+                await $scope.NetworkBrand_InitData();
+            });
+    };
+
     $scope.NetworkBrand_Search_AC = function () {
         $scope.dataLoading =
             $http({

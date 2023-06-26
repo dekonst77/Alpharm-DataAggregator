@@ -4022,6 +4022,18 @@ from [adr].[History_coding] where LPUId is null and status<>110
                         var UPD = _context.NetworkBrand.Where(w => w.Id == item.Id).Single();
                         UPD.Comment = item.Comment;
                         UPD.Used = item.Used;
+
+                        UPD.FarmPerspektiva = item.FarmPerspektiva;
+                        UPD.Asna = item.Asna;
+                        UPD.ProApteka = item.ProApteka;
+                        UPD.MFO = item.MFO;
+                        UPD.Sozvezdie  = item.Sozvezdie;
+                        UPD.Vesna = item.Vesna;
+                        UPD.AptekaRU = item.AptekaRU;
+                        UPD.Zdravcity = item.Zdravcity;
+                        UPD.Uteka = item.Uteka;
+                        UPD.EApteka = item.EApteka;
+
                         if (UPD.PharmacyBrand != item.PharmacyBrand)
                         {
                             _context.SaveChanges();
@@ -4041,6 +4053,94 @@ from [adr].[History_coding] where LPUId is null and status<>110
             catch (Exception e)
             {
                 return BadRequest(e);
+            }
+        }
+
+        [Authorize(Roles = "GS_View")]
+        [HttpGet]
+        public ActionResult NetworkNameCommentsView()
+        {
+            try
+            {
+                using (var _context = new GSContext(APP))
+                {
+                    var results = _context.spr_NetworkNameCommentsView.ToList();
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResult() { Data = results, count = 0, status = "ок", Success = true }
+                    };
+                    return jsonNetResult;
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [Authorize(Roles = "GS_View")]
+        [HttpPost]
+        public ActionResult NetworkNameCommentsSave(spr_NetworkNameComments item)
+        {
+            try
+            {
+                using (var _context = new GSContext(APP))
+                {
+                    _context.spr_NetworkNameComments.Add(new spr_NetworkNameComments() {
+                       NetworkName = item.NetworkName,
+                       Comment = item.Comment,
+                       DtAdd = DateTime.Now
+                    });
+                    _context.SaveChanges();
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+                    };
+                    return jsonNetResult;
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult NetworkBrands_from_Excel(IEnumerable<System.Web.HttpPostedFileBase> uploads)
+        {
+            try
+            {
+                if (uploads == null || !uploads.Any())
+                    return null;
+
+                using (var _context = new GSContext(APP))
+                {
+
+                    var file = uploads.First();
+                    string filename = @"\\s-sql2\Upload\Бренды сетей_" + User.Identity.GetUserId() + ".xlsx";
+
+                    if (System.IO.File.Exists(filename))
+                        System.IO.File.Delete(filename);
+
+                    file.SaveAs(filename);
+
+                    _context.NetworkBrands_from_Excel(filename);
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
