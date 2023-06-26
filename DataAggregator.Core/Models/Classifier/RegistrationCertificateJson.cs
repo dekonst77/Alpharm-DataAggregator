@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 using DataAggregator.Domain.Utils;
 using Newtonsoft.Json;
@@ -75,6 +76,8 @@ namespace DataAggregator.Core.Models.Classifier
                 }
 
                 this.IsBlocked = reg.IsBlocked;
+
+                this.StorageLife = reg.RegistrationCertificateClassification.FirstOrDefault().StorageLife;
             }
         }
 

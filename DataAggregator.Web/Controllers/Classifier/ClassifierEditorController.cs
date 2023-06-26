@@ -355,7 +355,7 @@ namespace DataAggregator.Web.Controllers
                                               Id = phmraItem.Id,
                                               Value = "(" + phmraItem.Value + ") " + phmraItem.Description,
                                               IsUse = phmraItem.IsUse
-                                          }).Distinct().ToList(); 
+                                          }).Distinct().ToList();
 
             JsonNetResult jsonNetResult = new JsonNetResult
             {
@@ -474,6 +474,13 @@ namespace DataAggregator.Web.Controllers
         public ActionResult SearchRegistrationCertificate(RegistrationCertificateFilter filter)
         {
             var results = _context.RegistrationCertificates.Where(r => r.Number.Contains(filter.Number)).ToList();
+/*
+            var query =
+                from RC in _context.RegistrationCertificates
+                join RCC in _context.RegistrationCertificateClassification on RC.Id equals RCC.RegistrationCertificateId
+                where RC.Number.Contains(filter.Number)
+                select new { RC, RCC };
+*/
 
             JsonNetResult jsonNetResult = new JsonNetResult
             {
