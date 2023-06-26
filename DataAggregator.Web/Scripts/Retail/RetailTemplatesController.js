@@ -19,7 +19,8 @@ function RetailTemplatesController($scope, $http, uiGridCustomService, $uibModal
 
     $scope.RetailTemplates_SourcesGrid.Options.columnDefs =
         [
-            { name: 'Источник данных', field: 'Name', enableCellEdit: true, width: 300, filter: { condition: uiGridCustomService.condition } },
+            { name: 'Id', field: 'Id', enableCellEdit: false, width: 300, filter: { condition: uiGridCustomService.condition } },
+            { name: 'Источник данных', field: 'Name', enableCellEdit: false, width: 300, filter: { condition: uiGridCustomService.condition } },
             { name: 'Приритет', field: 'Priority', enableCellEdit: true, width: 100, type: 'number', filter: { condition: uiGridCustomService.condition } },
             {
                 name: 'Наличие данных поставщиков в Ecom', field: 'IsPutEcomData', enableCellEdit: true, width: 20, type: 'boolean'
@@ -50,7 +51,7 @@ function RetailTemplatesController($scope, $http, uiGridCustomService, $uibModal
         });
     };
 
-    
+
 
     //Шаблоны
 

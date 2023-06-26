@@ -1153,6 +1153,17 @@ namespace DataAggregator.Domain.Model.GS
         public string PharmacyBrand { get; set; }
         public string Comment { get; set; }
         public bool Used { get; set; }
+
+        public bool? FarmPerspektiva { get; set; }
+        public bool? Asna { get; set; }
+        public bool? ProApteka { get; set; }
+        public bool? MFO { get; set; }
+        public bool? Sozvezdie { get; set; }
+        public bool? Vesna { get; set; }
+        public bool? AptekaRU { get; set; }
+        public bool? Zdravcity { get; set; }
+        public bool? Uteka { get; set; }
+        public bool? EApteka { get; set; }
     }
     [Table("NetworkBrandView", Schema = "dbo")]
     public class NetworkBrandView
@@ -1167,8 +1178,22 @@ namespace DataAggregator.Domain.Model.GS
         public double? MonthlyTurnover { get; set; }
 
         public int PharmacyBrand_Count { get; set; }
-        public string Associations { get; set; }
-        public string Franchise { get; set; }
+
+        public int NetworkId { get; set; }
+        //public string Associations { get; set; }
+        //public string Franchise { get; set; }
+
+        public bool? FarmPerspektiva { get; set; }
+        public bool? Asna { get; set; }
+        public bool? ProApteka { get; set; }
+        public bool? MFO { get; set; }
+        public bool? Sozvezdie { get; set; }
+        public bool? Vesna { get; set; }
+        public bool? AptekaRU { get; set; }
+        public bool? Zdravcity { get; set; }
+        public bool? Uteka { get; set; }
+        public bool? EApteka { get; set; }
+
     }
     [Table("spr_NetworkName_Period", Schema = "dbo")]
     public class spr_NetworkName_Period
@@ -1214,7 +1239,7 @@ namespace DataAggregator.Domain.Model.GS
         public string OtherInformation { get; set; }
         public string STM_Brands { get; set; }
         public string EntityInn { get; set; }
-
+        public bool? isAlphaBitSums_marketing { get; set; }
 
     }
 
@@ -1262,6 +1287,26 @@ namespace DataAggregator.Domain.Model.GS
 
         //public object spr_NetworkName_Periods { get; set; }
         public int treeLevel { get; set; }
+    }
+
+    [Table("spr_NetworkNameComments", Schema = "dbo")]
+    public class spr_NetworkNameComments
+    {
+        [Key]
+        public int Id { get; set; }
+        public string NetworkName { get; set; }
+        public string Comment { get; set; }
+        public DateTime? DtAdd { get; set; }
+    }
+
+    [Table("spr_NetworkNameCommentsView", Schema = "dbo")]
+    public class spr_NetworkNameCommentsView
+    {
+        [Key]
+        public int Id { get; set; }
+        public string NetworkName { get; set; }
+        public string Comment { get; set; }
+        public DateTime? DtAdd { get; set; }
     }
 
 
