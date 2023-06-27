@@ -4777,11 +4777,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             var deferred = $q.defer();
             return $scope.NetworkBrand_Search()
                 .then(function () {
-                    console.log('deferred.resolve')
                     deferred.resolve();
                 },
-                    function () {
-                    console.log('deferred.reject')
+                function (err) {
                     deferred.reject();
                 });
         });
