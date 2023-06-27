@@ -4012,35 +4012,37 @@ from [adr].[History_coding] where LPUId is null and status<>110
             {
                 using (var _context = new GSContext(APP))
                 {
-
-                    foreach (var item in array)
+                    if (array != null)
                     {
-                        if (item.Comment == null) item.Comment = "";
-                        if (item.PharmacyBrand == null) item.PharmacyBrand = "";
-                        if (item.NetworkName == null) item.NetworkName = "";
-
-                        var UPD = _context.NetworkBrand.Where(w => w.Id == item.Id).Single();
-                        UPD.Comment = item.Comment;
-                        UPD.Used = item.Used;
-
-                        UPD.FarmPerspektiva = item.FarmPerspektiva;
-                        UPD.Asna = item.Asna;
-                        UPD.ProApteka = item.ProApteka;
-                        UPD.MFO = item.MFO;
-                        UPD.Sozvezdie  = item.Sozvezdie;
-                        UPD.Vesna = item.Vesna;
-                        UPD.AptekaRU = item.AptekaRU;
-                        UPD.Zdravcity = item.Zdravcity;
-                        UPD.Uteka = item.Uteka;
-                        UPD.EApteka = item.EApteka;
-
-                        if (UPD.PharmacyBrand != item.PharmacyBrand)
+                        foreach (var item in array)
                         {
-                            _context.SaveChanges();
-                            _context.NetworkBrand_UpdateBrand(UPD.NetworkName, UPD.PharmacyBrand, item.PharmacyBrand);
+                            if (item.Comment == null) item.Comment = "";
+                            if (item.PharmacyBrand == null) item.PharmacyBrand = "";
+                            if (item.NetworkName == null) item.NetworkName = "";
+
+                            var UPD = _context.NetworkBrand.Where(w => w.Id == item.Id).Single();
+                            UPD.Comment = item.Comment;
+                            UPD.Used = item.Used;
+
+                            UPD.FarmPerspektiva = item.FarmPerspektiva;
+                            UPD.Asna = item.Asna;
+                            UPD.ProApteka = item.ProApteka;
+                            UPD.MFO = item.MFO;
+                            UPD.Sozvezdie = item.Sozvezdie;
+                            UPD.Vesna = item.Vesna;
+                            UPD.AptekaRU = item.AptekaRU;
+                            UPD.Zdravcity = item.Zdravcity;
+                            UPD.Uteka = item.Uteka;
+                            UPD.EApteka = item.EApteka;
+
+                            if (UPD.PharmacyBrand != item.PharmacyBrand)
+                            {
+                                _context.SaveChanges();
+                                _context.NetworkBrand_UpdateBrand(UPD.NetworkName, UPD.PharmacyBrand, item.PharmacyBrand);
+                            }
                         }
+                        _context.SaveChanges();
                     }
-                    _context.SaveChanges();
                 }
 
                 JsonNetResult jsonNetResult = new JsonNetResult

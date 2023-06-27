@@ -57,13 +57,13 @@
         </div>
         <div style="margin-left:10px;text-align:center;">
             <span ng-click="grid.appScope.editCol(col)" 
-                  ng-if="col.colDef.editComment === false" 
+                  ng-show="col.colDef.editComment === false" 
                   class="text-info" 
                   style="border-bottom: 1px dotted #777;font-weight:normal;">{{col.colDef.comment}}
             </span>
 
-            <div ng-if="col.colDef.editComment === true">
-                <input type="text" ng-model="col.colDef.comment" style="width:55%" />
+            <div ng-show="col.colDef.editComment === true">
+                <input type="text" ng-model="col.colDef.comment" class="focus_{{col.colDef.field}}" style="width:55%" ng-keyup="$event.keyCode == 13 && grid.appScope.updateCol(col)" />
                 <button type="submit" class="btn btn-xs btn-primary" ng-click="grid.appScope.updateCol(col)"><span class="glyphicon glyphicon-ok"></span></button>
                 <button type="button" class="btn btn-xs btn-default" ng-click="grid.appScope.cancelCol(col)"><span class="glyphicon glyphicon-remove"></span></button>
             </div>

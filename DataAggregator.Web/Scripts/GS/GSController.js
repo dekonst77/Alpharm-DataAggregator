@@ -4589,7 +4589,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
     ////////////////////////////// OperationMode для Окончание
 
     ////////////////////////////// NetworkBrand для Старт
-    $scope.NetworkBrand_Init = async function () {
+    $scope.NetworkBrand_Init = function () {
         hotkeys.bindTo($scope).add({
             combo: 'shift+w',
             description: 'Одобрено',
@@ -4763,17 +4763,27 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
         $scope.Grid_NetworkBrand.Options.enableAutoFitColumns = true;
 
-        await $scope.NetworkBrand_InitData();
+        $scope.NetworkBrand_InitData();
        
     };
 
     $scope.NetworkBrand_InitData = function () {
+
         var networkBrands = $http({
             method: 'POST',
             url: '/GS/NetworkBrand_Init/',
             data: JSON.stringify({})
         }).then(function (response) {
-            $scope.NetworkBrand_Search();
+            var deferred = $q.defer();
+            return $scope.NetworkBrand_Search()
+                .then(function () {
+                    console.log('deferred.resolve')
+                    deferred.resolve();
+                },
+                    function () {
+                    console.log('deferred.reject')
+                    deferred.reject();
+                });
         });
 
         var networkBrandsComments = $http({
@@ -4801,6 +4811,10 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
     $scope.editCol = function (col) {
         col.colDef.editComment = true;
         col.colDef.prevComment = col.colDef.comment;
+        var el = document.querySelector('.focus_' + col.field);
+        setTimeout(function () {
+            el.focus()
+        }, 100);
     };
 
     $scope.cancelCol = function (col) {
@@ -4862,8 +4876,8 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
         })
 
         $scope.dataLoading = $q.all([upload])
-            .then(async function () {
-                await $scope.NetworkBrand_InitData();
+            .then(function () {
+                $scope.NetworkBrand_InitData();
             });
     };
 
