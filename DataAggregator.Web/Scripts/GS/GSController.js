@@ -4795,10 +4795,9 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             fields.forEach(function (field) {
                 var blankComment = 'комментарий'
                 var comment = response.data.Data.filter(function (net) { return net.NetworkName == field.field; });
-                field.comment = comment !== undefined && comment.length > 0 ? comment[0].Comment ?? blankComment : blankComment;
+                //field.comment = comment !== undefined && comment.length > 0 ? comment[0].Comment ?? blankComment : blankComment;
+                field.comment = comment != undefined && comment.length > 0 ? (comment[0].Comment != null ? comment[0].Comment : blankComment) : blankComment;
             })
-
-
             //$scope.Grid_NetworkBrand.getColumn('Vesna').width = 200;
             //$scope.Grid_NetworkBrand.grid.refresh();
         });
