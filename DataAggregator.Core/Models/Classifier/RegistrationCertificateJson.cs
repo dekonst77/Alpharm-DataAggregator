@@ -77,7 +77,7 @@ namespace DataAggregator.Core.Models.Classifier
 
                 this.IsBlocked = reg.IsBlocked;
 
-                this.StorageLife = reg.RegistrationCertificateClassification.FirstOrDefault().StorageLife;
+                this.StorageLife = reg.RegistrationCertificateClassification.FirstOrDefault()?.StorageLife;
             }
         }
 
