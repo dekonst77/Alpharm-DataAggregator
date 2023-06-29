@@ -388,23 +388,34 @@ function RetailCalculationController($scope, $http, $uibModal, $interval, $timeo
         if (!$scope.checkFilter())
             return false;
 
-        $scope.isCalcHistoryRunning = true;
-        var data = $http({
-            method: 'POST',
-            url: '/RetailCalculation/HistoryCalculation/',
-            data: JSON.stringify({
-                PeriodFrom: $scope.filter.PeriodFrom, PeriodTo: $scope.filter.PeriodTo
-            })
-        }).then(function (response) {
-            $scope.isCalcHistoryRunning = false;
-            if (response.data.Data)
-                $scope.LoadHistory();
-        }, function (response) {
-            $scope.isCalcHistoryRunning = false;
-            errorHandlerService.showResponseError(response);
-        });
+        messageBoxService.showConfirm('Вы уверены, что хотите сделать пересчёт истории?', 'Подтверждение')
+            .then(
+                function (result) {
+                    $scope.isCalcHistoryRunning = true;
+                    var data = $http({
+                        method: 'POST',
+                        url: '/RetailCalculation/HistoryCalculation/',
+                        data: JSON.stringify({
+                            PeriodFrom: $scope.filter.PeriodFrom, PeriodTo: $scope.filter.PeriodTo
+                        })
+                    }).then(function (response) {
+                        $scope.isCalcHistoryRunning = false;
+                        if (response.data.Data)
+                            $scope.LoadHistory();
+                    }, function (response) {
+                        $scope.isCalcHistoryRunning = false;
+                        errorHandlerService.showResponseError(response);
+                    });
 
-        $scope.loading = $q.all([data]);
+                    $scope.loading = $q.all([data]);
+                },
+                function (result) {
+                    if (result === 'no') {
+                      
+                    }
+                });
+
+       
     };
 }
 
