@@ -695,11 +695,14 @@ namespace DataAggregator.Web.Controllers.Retail
             {
                 object data = null;
 
+                int YearMonthFrom = PeriodFrom.Year * 100 + PeriodFrom.Month;
+                int YearMonthTo = PeriodTo.Year * 100 + PeriodTo.Month;
+
                 using (_context)
                 {
-                    data = _context.CalculationLog.Where(x => 
-                            x.Year >= PeriodFrom.Year && x.Year <= PeriodTo.Year
-                            && x.Month >= PeriodFrom.Month && x.Month <= PeriodTo.Month)
+                    data = _context.CalculationLog.Where(x =>
+                                (x.Year * 100 + x.Month) >= YearMonthFrom
+                                && (x.Year * 100 + x.Month) <= YearMonthTo)
                         .OrderByDescending(x => x.Id).ToList();
                 }
 
