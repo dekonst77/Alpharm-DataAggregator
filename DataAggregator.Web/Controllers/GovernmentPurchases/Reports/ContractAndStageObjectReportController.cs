@@ -18,7 +18,7 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases.Reports
             {
                 using (var context = new GovernmentPurchasesContext(APP))
                 {
-                    string sql = string.Format(@"EXEC report.ContractAndStageObject_tmp @Number = '{0}', @ReestNumber = '{1}'", PurchaseNumber, ReestrNumber);
+                    string sql = string.Format(@"EXEC report.ContractAndStageObject_Report @Number = '{0}', @ReestNumber = '{1}'", PurchaseNumber, ReestrNumber);
 
                     object result = null;
                     result = context.Database.SqlQuery<DataAggregator.Domain.Model.GovernmentPurchases.ContractAndStageObjectReport>(sql).ToList();
