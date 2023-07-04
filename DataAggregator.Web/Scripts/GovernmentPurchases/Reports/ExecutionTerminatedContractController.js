@@ -41,7 +41,20 @@ function ExecutionTerminatedContractReportController(messageBoxService, $scope, 
         $scope.reportGrid.Options.enableSorting = true,
         $scope.reportGrid.Options.columnDefs =
         [
-
+            { name: 'Id закупки', field: 'PurchaseId', filter: { condition: uiGridCustomService.numberCondition }, type: 'number' },
+            { name: 'Номер закупки', field: 'Number', filter: { condition: uiGridCustomService.conditionSpace } },
+            { name: 'Номер контракта', field: 'ContractNumber', filter: { condition: uiGridCustomService.conditionSpace } },
+            { name: 'Номер реестра', field: 'ReestrNumber', filter: { condition: uiGridCustomService.conditionSpace } },
+            {
+                name: 'Ссылка на контракт', enableCellEdit: false, field: 'Url', filter: { condition: uiGridCustomService.condition },
+                cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="{{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>'
+            },
+            { name: 'Сумма контракта', field: 'Sum', enableHiding: false, filter: { condition: uiGridCustomService.numberCondition }, type: 'number', cellFilter: formatConstants.FILTER_PRICE },
+            { name: 'Дата начала подачи заявок', field: 'DateBegin', type: 'date', cellFilter: formatConstants.FILTER_DATE, filter: { condition: uiGridCustomService.condition } },
+            {
+                name: 'Примечание', field: 'Comment', filter: { condition: uiGridCustomService.condition },
+                cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
+            }
         ];
 
     //Фильтр
