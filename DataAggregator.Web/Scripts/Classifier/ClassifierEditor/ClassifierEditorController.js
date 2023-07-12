@@ -1134,7 +1134,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
                     messageBoxService.showError(responseData.ErrorMessage);
                     DeleteDrug(data);
                 }
-            }, function (response) {                
+            }, function (response) {
                 errorHandlerService.showResponseError(response);
                 DeleteDrug(data);
             });
@@ -1154,7 +1154,7 @@ function ClassifierEditorController($scope, $route, $http, $uibModal, $timeout, 
 
                 var responseData = response.data;
 
-                if (!responseData.Success) {
+                if ((!responseData.Success) && (responseData.ErrorMessage > '')) {
                     messageBoxService.showError(responseData.ErrorMessage);
                 }
             }, function (response) {
