@@ -1,0 +1,73 @@
+﻿<div ng-controller="GTINController" ng-init="GTIN_Init();" cg-busy="{promise:dataLoading, message:message}" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <style>
+        .cssEdit {
+            background-color: yellow;
+        }
+    </style>
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="row">
+            <div class="col-md-2 padding3">
+                <div>
+                    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs" style="border-bottom:0px;">
+                        <li class="active"><a data-target="#CheckGTIN" data-toggle="tab"><strong>GTINs</strong></a></li>
+                        <li><a data-target="#ReportGTIN" data-toggle="tab"><strong>Отчеты</strong></a></li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="col-md-7">
+                <div class="btn-group" role="group" aria-label="Basic example" ng-if="IsActive('#CheckGTIN')==true" style="margin-top: 5px; margin-right: 5px;">
+                    <button class="btn btn-success btn-sm" ng-click="GTINs_search();" ng-disabled=""><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                    <button class="btn btn-warning btn-sm" ng-click="GTINs_save();" ng-disabled="!GTIN_Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="btn-group  pull-right" style="margin-top: 5px; margin-right: 5px;">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-disabled="fileInfoForm.$invalid">
+                            <span><img src="/Content/Icons/Excel.png" style="width:17px;height:17px" /> Импорт из Excel</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li>
+                                <a href=""
+                                   ngf-select="Import_GTIN_NEW_from_Excel($file)"
+                                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                                    <span>Загрузить на классификацию</span>
+                                </a>
+
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="" ng-click="">Скачать шаблон Excel</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-1">
+            </div>
+            </div>
+        </div>
+
+
+    <div id="my-tab-content" class="auto-item-panel tab-content" style="border-left: 1px #dddddd solid; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; padding: 5px; ">
+        <div class="auto-item-panel tab-pane active" id="CheckGTIN">
+
+            <div id="grid-block" cg-busy="drugLoading" data-context-menu="ContextMenu.html" class="auto-item-panel">
+
+                <ui-grid-control options="GTIN_Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="ReportGTIN">
+            <h1>В разработке</h1>
+
+        </div>
+    </div>
+
+
+
+
+</div>

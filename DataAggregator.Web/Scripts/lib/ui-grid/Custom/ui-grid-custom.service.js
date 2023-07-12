@@ -196,6 +196,20 @@
                             }
                             //item.cellTemplate = item.editableCellTemplate;
                             break;
+                        case "bit":
+                            item.filter = (item.filter === undefined) ? { condition: uiGridCustomService.booleanConditionX } : item.filter;
+                            if (item.cellTemplate === null || item.cellTemplate === undefined)
+                                item.cellTemplate = '<div class="ui-grid-cell-contents"><span  class="glyphicon" ng-class="COL_FIELD===true ? \'ui-grid-true glyphicon-check\' : COL_FIELD===false ? \'ui-grid-false glyphicon-unchecked\' : \'ui-grid-null glyphicon-question-sign\'"></span></div>';
+                            if (item.enableCellEdit === true) {
+                                item.editableCellTemplate = '<div><form name="inputForm"><label  class="ui-grid-center"><input type="checkbox" style="margin:0px;" ng-class="" ui-grid-editor ng-model="MODEL_COL_FIELD"></label></form></div>';
+                                //item.editableCellTemplate = '<div><form name="inputForm" ui-grid-editor ng-model="MODEL_COL_FIELD">' +
+                                //    '<div class="glyphicon glyphicon-question-sign" ng-click="MODEL_COL_FIELD=null;"></div>' +
+                                //    '<div class="glyphicon glyphicon-unchecked"></div>' +
+                                //    '<div class="glyphicon glyphicon-check"></div>' +
+                                //    '</form></div>';
+                            }
+                            //item.cellTemplate = item.editableCellTemplate;
+                            break;
                         case "number":
                             item.filter = (item.filter === undefined) ? { condition: uiGridCustomService.numberCondition } : item.filter;
                             break;

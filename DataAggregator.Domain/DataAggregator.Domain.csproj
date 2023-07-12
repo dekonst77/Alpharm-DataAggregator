@@ -148,6 +148,7 @@
     <Compile Include="Model\DrugClassifier\GoodsClassifier\GoodsProductionInfoParameter.cs" />
     <Compile Include="Model\DrugClassifier\GoodsClassifier\ParameterGroup.cs" />
     <Compile Include="Model\DrugClassifier\GoodsClassifier\Parameter.cs" />
+    <Compile Include="Model\DrugClassifier\GTIN\GTIN.cs" />
     <Compile Include="Model\DrugClassifier\Rasp.cs" />
     <Compile Include="Model\DrugClassifier\Stat\DateStat.cs" />
     <Compile Include="Model\EtalonPrice\PriceCurrent_v2.cs" />

@@ -2785,24 +2785,28 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             else {
                 if (row.DistrId > 0 || row.LPUId > 0 || (row.GSId > 0 && row.PharmacyId > 0))
                     Status = 30;
+
                 $scope.Grid.selectedRows().forEach(function (item) {
-                    $scope.Grid.GridCellsMod(item, "GSId", row.GSId);
-                    $scope.Grid.GridCellsMod(item, "LPUId", row.LPUId);
-                    $scope.Grid.GridCellsMod(item, "DistrId", row.DistrId);
-                    $scope.Grid.GridCellsMod(item, "PharmacyId", row.PharmacyId);
-                    $scope.Grid.GridCellsMod(item, "EntityINN", row.EntityINN);
-                    $scope.Grid.GridCellsMod(item, "EntityName", row.EntityName);
-                    $scope.Grid.GridCellsMod(item, "NetworkName", row.NetworkName);
-                    $scope.Grid.GridCellsMod(item, "Address_region", row.Address_region);
-                    $scope.Grid.GridCellsMod(item, "Address_city", row.Address_city);
-                    $scope.Grid.GridCellsMod(item, "Address_street", row.Address_street);
-                    $scope.Grid.GridCellsMod(item, "PharmacyBrand", row.PharmacyBrand);
-                    //$scope.Grid.GridCellsMod(item, "Comments",row.);
-                    //$scope.Grid.GridCellsMod(item, "Spark",row.);
-                    //$scope.Grid.GridCellsMod(item, "Spark2",row.);
-                    //$scope.Grid.GridCellsMod(item, "Channel",row.);
-                    $scope.Grid.GridCellsMod(item, "BricksId", row.BricksId);
-                    $scope.Grid.GridCellsMod(item, "Status", Status);
+                    if (row.GSId > 0 && row.GSId != null) $scope.Grid.GridCellsMod(item, "GSId", row.GSId);
+                    console.log(item.LPUId);
+                    if (row.LPUId > 0 && row.LPUId != null )  $scope.Grid.GridCellsMod(item, "LPUId", row.LPUId);
+                    if (row.DistrId > 0 && row.DistrId != null) $scope.Grid.GridCellsMod(item, "DistrId", row.DistrId);
+                    if ((row.PharmacyId > 0 && row.PharmacyId != null) || (row.GSId > 0 && row.GSId != null)) $scope.Grid.GridCellsMod(item, "PharmacyId", row.PharmacyId);
+
+                        $scope.Grid.GridCellsMod(item, "EntityINN", row.EntityINN);
+                        $scope.Grid.GridCellsMod(item, "EntityName", row.EntityName);
+                        $scope.Grid.GridCellsMod(item, "NetworkName", row.NetworkName);
+                        $scope.Grid.GridCellsMod(item, "Address_region", row.Address_region);
+                        $scope.Grid.GridCellsMod(item, "Address_city", row.Address_city);
+                        $scope.Grid.GridCellsMod(item, "Address_street", row.Address_street);
+                        $scope.Grid.GridCellsMod(item, "PharmacyBrand", row.PharmacyBrand);
+                        //$scope.Grid.GridCellsMod(item, "Comments",row.);
+                        //$scope.Grid.GridCellsMod(item, "Spark",row.);
+                        //$scope.Grid.GridCellsMod(item, "Spark2",row.);
+                        //$scope.Grid.GridCellsMod(item, "Channel",row.);
+                        $scope.Grid.GridCellsMod(item, "BricksId", row.BricksId);
+                        $scope.Grid.GridCellsMod(item, "Status", Status);
+                   
                 });
 
             }

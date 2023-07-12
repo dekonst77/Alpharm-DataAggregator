@@ -512,6 +512,14 @@
                     authorize: true,
                     isEditor: false
                 })
+            // Редактор GTIN классификатора
+            .when('/Classifier/GTIN',
+                {
+                    templateUrl: 'Views/Classifier/GTIN/GTIN.html',
+                    title: 'CLASSIFIER.CLASSIFIER_EDITOR.TITLE',
+                    authorize: true
+                   
+                })
 
             // Редактор классификатора - изменение
             .when('/Classifier/ClassifierEditor/Edit',
