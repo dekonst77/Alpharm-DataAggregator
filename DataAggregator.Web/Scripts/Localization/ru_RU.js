@@ -331,6 +331,9 @@
                 "REPORT_EXECUTION_TERMINATED_CONTRACT": {
                     "TITLE": 'Исполнение прекращено'
                 },
+                "REPORT_EXECUTION_CONTRACT": {
+                    "TITLE": 'Исполнение контрактов'
+                },
                 "STATISTICS_PURCHASES_AND_CONTRACTS": {
                     "TITLE": 'Статистика по закупкам/контрактам'
                 },

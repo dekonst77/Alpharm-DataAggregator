@@ -54,7 +54,7 @@ function ExecutionTerminatedContractReportController(messageBoxService, $scope, 
             {
                 name: 'Примечание', field: 'Comment', filter: { condition: uiGridCustomService.condition },
                 cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
-            },
+            }
         ];
 
     //Фильтр

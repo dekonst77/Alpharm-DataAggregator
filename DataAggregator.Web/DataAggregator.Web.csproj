@@ -785,6 +785,7 @@
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsChangeOrganizationTypeController.js" />
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsChangeRegionController.js" />
     <Content Include="Scripts\GovernmentPurchases\OrganizationsEditor\OrganizationsMergeController.js" />
+    <Content Include="Scripts\GovernmentPurchases\Reports\ContractAndStageObjectReportController.js" />
     <Content Include="Scripts\GovernmentPurchases\Reports\ExecutionTerminatedContractController.js" />
     <Content Include="Scripts\GovernmentPurchases\Reports\Reports.js" />
     <Content Include="Scripts\GS\BookOfChangeController.js" />
@@ -2301,6 +2302,7 @@
     <Content Include="Views\Error\InternalServerError.cshtml" />
     <Content Include="Views\DistrRep\CheckReload.html" />
     <Content Include="Views\GS\Point_context_menu.html" />
+    <Content Include="Views\GovernmentPurchases\Reports\ContractAndStageObjectReport\Index.html" />
     <Content Include="Views\Classifier\GTIN\GTIN.html" />
     <None Include="Web.DebugOnProductDB.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -2360,6 +2362,7 @@
     <Compile Include="Controllers\GovernmentPurchases\HandMadePositionController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\KBKController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\OrganizationRawController.cs" />
+    <Compile Include="Controllers\GovernmentPurchases\Reports\ContractAndStageObjectReportController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\Reports\ExecutionTerminatedContractReportController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\Reports\ReportsController.cs" />
     <Compile Include="Controllers\GS\GSController.cs" />
@@ -2718,6 +2721,7 @@
   <ItemGroup>
     <Folder Include="Service References\App_Data\" />
     <Folder Include="Views\CheckClassifireReport\" />
+    <Folder Include="Views\ContractAndStageObject\" />
     <Folder Include="Views\DOPMonitoringDatabase\" />
     <Folder Include="Views\ExecutionTerminatedContract\" />
     <Folder Include="Views\GTIN\" />

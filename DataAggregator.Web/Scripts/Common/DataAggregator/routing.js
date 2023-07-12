@@ -1109,6 +1109,13 @@
                     title: 'GOVERNMENT_PURCHASES.REPORT_EXECUTION_TERMINATED_CONTRACT.TITLE',
                     authorize: true
                 })
+            // Исполнение контрактов
+            .when('/GovernmentPurchases/ContractAndStageObjectReport',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Reports/ContractAndStageObjectReport/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.REPORT_EXECUTION_CONTRACT.TITLE',
+                    authorize: true
+                })
 
             // Статистика по закупкам/контрактам
             .when('/GovernmentPurchases/PurchasesAndContractsStatistics',
