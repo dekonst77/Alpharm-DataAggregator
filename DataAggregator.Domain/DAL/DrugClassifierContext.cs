@@ -478,6 +478,14 @@ namespace DataAggregator.Domain.DAL
 
         #endregion
 
+        #region GTIN
+        public DbSet<DataAggregator.Domain.Model.DrugClassifier.GTIN.GTINs> GTINs { get; set; }
+
+
+
+
+        #endregion
+
         #region Certificate
         public DbSet<DataAggregator.Domain.Model.DrugClassifier.Certificate.Certificate> Cert_Certificate { get; set; }
         public DbSet<DataAggregator.Domain.Model.DrugClassifier.Certificate.FV> Cert_FV { get; set; }

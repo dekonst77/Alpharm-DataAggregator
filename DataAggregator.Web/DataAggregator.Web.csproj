@@ -750,6 +750,7 @@
     <Content Include="Scripts\Classifier\GoodsClassifierReport\GoodsClassifierReport.js" />
     <Content Include="Scripts\Classifier\GoodsParametersEditor\GoodsParametersEditorController.js" />
     <Content Include="Scripts\Classifier\GoodsParametersEditor\AddParameterViewController.js" />
+    <Content Include="Scripts\Classifier\GTINController.js" />
     <Content Include="Scripts\Classifier\Manufacturer\ManufacturerController.js" />
     <Content Include="Scripts\Classifier\RaspredelenieController.js" />
     <Content Include="Scripts\Classifier\Reports\CheckClassifireReportController.js" />
@@ -2300,6 +2301,7 @@
     <Content Include="Views\Error\InternalServerError.cshtml" />
     <Content Include="Views\DistrRep\CheckReload.html" />
     <Content Include="Views\GS\Point_context_menu.html" />
+    <Content Include="Views\Classifier\GTIN\GTIN.html" />
     <None Include="Web.DebugOnProductDB.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2332,6 +2334,7 @@
     <Compile Include="Controllers\Classifier\BlisterBlockController.cs" />
     <Compile Include="Controllers\Classifier\DataChangeExcelController.cs" />
     <Compile Include="Controllers\Classifier\DOPMonitoringDatabaseController.cs" />
+    <Compile Include="Controllers\Classifier\GTINController.cs" />
     <Compile Include="Controllers\Classifier\MaskController.cs" />
     <Compile Include="Controllers\Classifier\Reports\CheckClassifireReportController.cs" />
     <Compile Include="Controllers\Classifier\Reports\GoodsClassifierReportController.cs" />
@@ -2717,6 +2720,7 @@
     <Folder Include="Views\CheckClassifireReport\" />
     <Folder Include="Views\DOPMonitoringDatabase\" />
     <Folder Include="Views\ExecutionTerminatedContract\" />
+    <Folder Include="Views\GTIN\" />
     <Folder Include="Views\LPUDictionaries\" />
     <Folder Include="Views\Mask\" />
     <Folder Include="Views\SourceBrandBlackList\" />

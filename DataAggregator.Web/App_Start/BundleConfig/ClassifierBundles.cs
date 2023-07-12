@@ -39,6 +39,7 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/Classifier/SPRController.js")
                 .Include("~/Scripts/Classifier/CheckedController.js")
                 .Include("~/Scripts/Classifier/CertificateController.js")
+                .Include("~/Scripts/Classifier/GTINController.js")
                 .Include("~/Scripts/Classifier/RaspredelenieController.js")
                 .Include("~/Scripts/Classifier/SQA/SQAController.js")
                 // .Include("~/Scripts/Classifier/ClassifierEditor/AskChangeController.js")
