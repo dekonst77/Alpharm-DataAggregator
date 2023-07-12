@@ -15,7 +15,7 @@ namespace DataAggregator.Core.Classifier
 
         private readonly Guid _user;
 
-        private readonly ClassifierDictionary _dictionary;        
+        private readonly ClassifierDictionary _dictionary;
 
         /// <summary>
         /// Добавление блистеровки
@@ -647,8 +647,6 @@ namespace DataAggregator.Core.Classifier
                     if (changeProductionInfo.RegistrationCertificate == null)
                     {
                         changeProductionInfo.RegistrationCertificateId = fromProductionInfo.RegistrationCertificateId;
-
-
                     }
                 }
 
@@ -708,8 +706,6 @@ namespace DataAggregator.Core.Classifier
         /// </summary>
         public ClassifierInfoModel ReCreateClassifier(ClassifierEditorModelJson model)
         {
-
-
             using (var transaction = _context.Database.BeginTransaction())
             {
 
@@ -757,16 +753,11 @@ namespace DataAggregator.Core.Classifier
                 changeProductionInfo.Packer = packer;
                 changeProductionInfo.ProductionStageId = model.ProductionStage?.Id;
 
-
-
-
                 #region Изменения РУ
-
 
                 RegistrationCertificate certificate = null;
 
                 //Изменяем регистрационные удостоверения
-
                 if ((drug.DrugTypeId != 1 && drug.DrugTypeId != 4) || (changeProductionInfo.OwnerTradeMark.Value == "Unknown" && changeProductionInfo.Packer.Value == "Unknown") || changeProductionInfo.WithoutRegistrationCertificate)
                 {
                     //то все РУ удаляются
@@ -795,8 +786,6 @@ namespace DataAggregator.Core.Classifier
 
                 AddRealPacking(model.RealPackingList, drug);
 
-
-
                 //Удаляем из существующего классификатора
                 _context.SaveChanges();
 
@@ -816,9 +805,6 @@ namespace DataAggregator.Core.Classifier
                     _dictionary.CreateClassifierPacking(CI, CP);
                 }
                 _context.SaveChanges();
-
-
-
 
                 //Если МНН групп новая проверим её на существование
                 if (drugProperty.INNGroupNew)
@@ -1275,16 +1261,18 @@ namespace DataAggregator.Core.Classifier
 
                 _context.SaveChanges();
 
-                #region Собираем ClassifierPacking
-
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
-                foreach (var CP in model.ClassifierPackings)
-                {
-                    CP.Id = 0;
-                    _dictionary.CreateClassifierPacking(CI, CP);
-                }
-                _context.SaveChanges();
 
+                #region Собираем ClassifierPacking
+                if (drugProperty.IsNew)
+                {
+                    foreach (var CP in model.ClassifierPackings)
+                    {
+                        CP.Id = 0;
+                        _dictionary.CreateClassifierPacking(CI, CP);
+                    }
+                    _context.SaveChanges();
+                }
                 #endregion
 
                 var dc = _context.DrugClassification.Single(c => c.DrugId == productionInfo.DrugId && c.OwnerTradeMarkId == productionInfo.OwnerTradeMarkId);
@@ -1347,8 +1335,7 @@ namespace DataAggregator.Core.Classifier
             if (certificate != null)
             {
 
-                info.OwnerRegistrationCertificateIdNew = certificate.OwnerRegistrationCertificate != null &&
-                                                          certificate.OwnerRegistrationCertificate.Id == 0;
+                info.OwnerRegistrationCertificateIdNew = certificate.OwnerRegistrationCertificate != null && certificate.OwnerRegistrationCertificate.Id == 0;
 
                 info.OwnerRegistrationCertificateId = certificate.OwnerRegistrationCertificate != null
                     ? certificate.OwnerRegistrationCertificate.Id
