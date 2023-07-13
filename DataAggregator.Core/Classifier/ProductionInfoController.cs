@@ -53,10 +53,6 @@ namespace DataAggregator.Core.Classifier
                                                             p.RegistrationCertificateId == productionInfo.RegistrationCertificateId)
                                       .ToList()
                                       .ForEach(f => f.ProductionStageId = toProductionStageId);
-
-
-               
-
             }
             else
             {
@@ -64,10 +60,7 @@ namespace DataAggregator.Core.Classifier
                 productionInfo.ProductionStageId = toProductionStageId;
             }
 
-
-
             context.SaveChanges();
-
         }
 
         //Действия 
