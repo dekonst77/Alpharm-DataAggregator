@@ -1,0 +1,25 @@
+﻿<div style="z-index: 1;width: 350px;" class="context-menu-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Действия<span class="badge"></span></h3>
+        </div>
+        <div class="panel-body">
+            <div class="row padding1"  ng-show="GTIN_Grid.selectedItem!=null">
+                <div class="col-md-3 padding1">
+                    <label>Активно</label>
+                </div>
+                <div class="col-md-9 padding1">
+                    <div class="input-group ">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success" ng-click="SetIsActive(true);">Да</button>
+                            <button type="button" class="btn btn-danger" ng-click="SetIsActive(false);">Нет</button>
+                            <button type="button" class="btn btn-info" ng-click="SetIsActive(null);">Пусто</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
