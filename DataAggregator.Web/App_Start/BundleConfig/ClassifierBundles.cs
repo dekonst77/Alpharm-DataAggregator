@@ -105,6 +105,7 @@ namespace DataAggregator.Web
                  // Модуль для добавления ДОП ассортимента в БД мониторинг, разработка #11668
                  .Include("~/Scripts/Classifier/AddingDOPMonitoringDatabase/AddingDOPMonitoringDatabase.js")
                  .Include("~/Scripts/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOffByCategoryController.js")
+                 .Include("~/Scripts/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOnByCategoryController.js")
                 );
 
             bundles.Add(new ComplexStyleBundle("~/Content/Classifier/css")

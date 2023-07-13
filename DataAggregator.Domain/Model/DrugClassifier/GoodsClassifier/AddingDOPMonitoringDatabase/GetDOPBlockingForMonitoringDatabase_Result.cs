@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier.AddingDOPMonitoringDatabase
 {
@@ -32,6 +28,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier.AddingDOPMo
         public Nullable<bool> Status { get; set; }
         public string StatusDesc { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<int> BlockTypeId { get; set; }
         public string BlockTypeName { get; set; }
         public string BlockTypeDescription { get; set; }

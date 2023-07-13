@@ -1,9 +1,9 @@
 ﻿using DataAggregator.Domain.DAL;
 using Newtonsoft.Json;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
 
 namespace DataAggregator.Web.Controllers.Classifier
 {
@@ -161,11 +161,11 @@ namespace DataAggregator.Web.Controllers.Classifier
         /// </summary>
         /// <param name="ClassifierIdList"></param>
         /// <returns></returns>
-        public ActionResult SetPlugOnByClassifierList(long[] ClassifierIdList)
+        public ActionResult SetPlugOnByClassifierList(long[] ClassifierIdList, DateTime PouringExpirationDate)
         {
             try
             {
-                _context.SetPlugOnByClassifierList_SP(ClassifierIdList);
+                _context.SetPlugOnByClassifierList_SP(ClassifierIdList, PouringExpirationDate);
 
                 var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
 
