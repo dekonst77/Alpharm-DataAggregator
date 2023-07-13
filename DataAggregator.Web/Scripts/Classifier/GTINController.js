@@ -1,7 +1,7 @@
 ﻿angular
     .module('DataAggregatorModule')
     .controller('GTINController', [
-        '$scope', '$route', '$http', '$uibModal', '$interval', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', '$q', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'userService',  'Upload', 'cfpLoadingBar', 'messageBoxService', GTINController])
+        '$scope', '$route', '$http', '$uibModal', '$interval', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', '$q', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'userService', 'Upload', 'cfpLoadingBar', 'messageBoxService' , GTINController])
     .filter('griddropdownSSS', function () {
         return function (input, context) {
 
@@ -29,6 +29,8 @@ function GTINController($scope, $route, $http, $uibModal, $interval, commonServi
     $scope.Source = [];
     $scope.SourceLabel = [];
     $scope.DrugTypeLabel = [];
+    $scope.selectedCount = 0;
+    $scope.IsRowSelection = false;
     $scope.GTIN_Init = function () {
        
         $scope.dataLoading =
@@ -127,6 +129,8 @@ function GTINController($scope, $route, $http, $uibModal, $interval, commonServi
 
 
     };
+   
+
     $scope.IsActive = function (idss) {
         var ref_this = $(idss).hasClass('active');
         return ref_this;
@@ -193,6 +197,15 @@ function GTINController($scope, $route, $http, $uibModal, $interval, commonServi
             }, function (response) {
                 errorHandlerService.showResponseError(response);
             });
+    };
+    $scope.SetIsActive = function (val) {
+        var selectedRows = $scope.GTIN_Grid.selectedRows();      
+        if (selectedRows != null) {
+       
+            selectedRows.forEach(function (item) {             
+                $scope.GTIN_Grid.GridCellsMod(item, "IsActive", val);              
+            });
+        };
     };
 
     $scope.Import_GTIN_NEW_from_Excel = function (file) {
