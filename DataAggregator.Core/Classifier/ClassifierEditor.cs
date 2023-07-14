@@ -1259,20 +1259,17 @@ namespace DataAggregator.Core.Classifier
 
                 ProductionInfoController.ChangeProductionInfo(null, productionInfo, _user, _context);
 
-                _context.SaveChanges();
-
-                var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
+                _context.SaveChanges();                
 
                 #region Собираем ClassifierPacking
-                if (drugProperty.IsNew)
+
+                var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
+                foreach (var CP in model.ClassifierPackings)
                 {
-                    foreach (var CP in model.ClassifierPackings)
-                    {
-                        CP.Id = 0;
-                        _dictionary.CreateClassifierPacking(CI, CP);
-                    }
-                    _context.SaveChanges();
+                    _dictionary.CreateClassifierPacking(CI, CP);
                 }
+                _context.SaveChanges();
+
                 #endregion
 
                 var dc = _context.DrugClassification.Single(c => c.DrugId == productionInfo.DrugId && c.OwnerTradeMarkId == productionInfo.OwnerTradeMarkId);
