@@ -29,9 +29,9 @@ function DialogSetPlugOnByCategoryController($scope, $modalInstance, PlugInfo) {
     $scope.setDay = function (dateString) {
         $scope.dt = Date.parse(dateString);
     };
-    
+
     $scope.PlugInfo = PlugInfo;
-    $scope.dt = PlugInfo.EndDate ?? new Date(2099, 11, 31);
+    $scope.dt = (PlugInfo.EndDate == null) ? new Date(2099, 11, 31) : PlugInfo.EndDate;
 
     console.log($scope.PlugInfo);
     console.log($scope.dt);
