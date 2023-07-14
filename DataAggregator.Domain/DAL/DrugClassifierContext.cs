@@ -314,15 +314,21 @@ namespace DataAggregator.Domain.DAL
             Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategory] @GoodsCategoryId, @PouringStartDate", parameters);
         }
 
-
-        public void SetPlugOnByClassifierList_SP(long[] ClassifierIdList)
+        /// <summary>
+        /// Поставить заглушку СКЮ с указанием даты - последний день, когда СКЮ еще не заблокировано.
+        /// Или [Дата + 1 день] - дата начала действия блокировки
+        /// </summary>
+        /// <param name="ClassifierIdList"></param>
+        /// <param name="PouringExpirationDate"></param>
+        public void SetPlugOnByClassifierList_SP(long[] ClassifierIdList, DateTime PouringExpirationDate)
         {
             var parameters = new List<SqlParameter>
             {
-                new SqlParameter() { ParameterName = "@ClassifierIdList", SqlDbType = SqlDbType.VarChar, Value = String.Join(",", ClassifierIdList)}
+                new SqlParameter() { ParameterName = "@ClassifierIdList", SqlDbType = SqlDbType.VarChar, Value = String.Join(",", ClassifierIdList)},
+                new SqlParameter() { ParameterName = "@PouringEndDate", SqlDbType = SqlDbType.Date, Value = PouringExpirationDate}
             }.Cast<object>().ToArray();
 
-            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOnByClassifierList] @ClassifierIdList", parameters);
+            Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOnByClassifierList] @ClassifierIdList, @PouringEndDate", parameters);
         }
 
         /// <summary>
@@ -343,6 +349,11 @@ namespace DataAggregator.Domain.DAL
             Database.ExecuteSqlCommand("exec [GoodsClassifier].[SetPlugOffByCategoryAndProperty] @GoodsCategoryId, @ParameterID, @PouringStartDate", parameters);
         }
 
+        /// <summary>
+        /// Снять заглушку c СКЮ
+        /// </summary>
+        /// <param name="ClassifierIdList">список СКЮ</param>
+        /// <param name="PouringStartDate">дата начала появления СКЮ в мониторинге</param>
         public void SetPlugOffByClassifierList_SP(long[] ClassifierIdList, DateTime PouringStartDate)
         {
             var parameters = new List<SqlParameter>

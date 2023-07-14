@@ -1,12 +1,12 @@
 ﻿
 <div class="modal-header col-md-12">
-    <h3 class="modal-title">Снять заглушку</h3>
+    <h3 class="modal-title">Поставить заглушку</h3>
 </div>
 
 <!--Календарь-->
 
 <div class="row col-md-12">
-    <i>Укажите дату начала появления СКЮ в мониторинге</i>
+    <i>Укажите дату окончания появления СКЮ в мониторинге</i>
 
     <pre>Выбранный день: <em>{{dt | date:'fullDate' }}</em></pre>
 
@@ -14,6 +14,7 @@
 
     <button type="button" class="btn btn-sm btn-info" ng-click="today()">Today</button>
     <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="setDay('2099-12-31')">2099-12-31</button>
 </div>
 
 

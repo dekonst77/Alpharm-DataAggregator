@@ -140,7 +140,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
     $scope.gridParameterLevel1.Options.noUnselect = true;
     $scope.gridParameterLevel1.Options.columnDefs = [
         { name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false, visible: false },
-        { name: 'ParentId', field: 'ParentId', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false, visible: false },        
+        { name: 'ParentId', field: 'ParentId', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false, visible: false },
         { name: 'Подуровень 1', field: 'Value', filter: { condition: uiGridCustomService.condition }, enableCellEdit: false }
     ];
 
@@ -286,7 +286,10 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             { headerTooltip: true, name: 'ClassifierId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierId', type: 'number', visible: true, nullable: false, filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
             { headerTooltip: true, name: 'Status', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Status', type: 'boolean', visible: true, nullable: false },
             { headerTooltip: true, name: 'StatusDesc', displayName: 'Выливать в БД мониторинг', enableCellEdit: false, width: 300, cellTooltip: true, field: 'StatusDesc', visible: false },
-            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала', enableCellEdit: false, width: 150, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: true },
+
+            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала появления СКЮ в мониторинге', enableCellEdit: false, width: 150, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: true },
+            { headerTooltip: true, name: 'ExpirationDate', displayName: 'Дата окончания появления СКЮ в мониторинге', enableCellEdit: false, width: 150, cellTooltip: true, field: 'EndDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: true },
+
             { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: true, nullable: true },
             { headerTooltip: true, name: 'BlockTypeName', displayName: 'Тип блокировки', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeName', visible: true },
             { headerTooltip: true, name: 'BlockTypeDescription', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeDescription', visible: false }
@@ -330,7 +333,8 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             { headerTooltip: true, name: 'StatusDesc', displayName: 'Выливать в БД мониторинг', enableCellEdit: false, width: 300, cellTooltip: true, field: 'StatusDesc', visible: true },
             { headerTooltip: true, name: 'BlockTypeId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'BlockTypeId', type: 'number', visible: false, nullable: false },
             { headerTooltip: true, name: 'BlockTypeName', displayName: 'Тип блокировки', enableCellEdit: false, width: 300, cellTooltip: true, field: 'BlockTypeName', visible: true },
-            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала', enableCellEdit: false, width: 150, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false }
+            { headerTooltip: true, name: 'StartDate', displayName: 'Дата начала появления СКЮ в мониторинге', enableCellEdit: false, width: 150, cellTooltip: true, field: 'StartDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: false },
+            { headerTooltip: true, name: 'ExpirationDate', displayName: 'Дата окончания появления СКЮ в мониторинге', enableCellEdit: false, width: 150, cellTooltip: true, field: 'EndDate', type: 'date', cellFilter: formatConstants.FILTER_DATE, visible: true, nullable: true }
         ];
 
         $scope.GridDBlocking.SetDefaults();
@@ -476,7 +480,11 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             });
     }
 
+    // ------------------------>
     // Поставить заглушку на СКЮ
+
+    $scope.PouringExpirationDate = null; // дата окончания выливки
+
     $scope.SetPlugOnByClassifier = function () {
 
         if ($scope.selectedRows.length == 0)
@@ -490,23 +498,65 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             return obj.ClassifierId;
         }));
 
+        const minEndDate = $scope.selectedRows.reduce(function (accum, item) {
+
+            if ((item.EndDate !== null) & (accum == null))
+                return item.EndDate;
+
+            return item.EndDate < accum ? item.EndDate : accum;
+        }, null)
+
         console.log(ClassifierArray);
 
-        $scope.dataLoading =
-            $http({
-                method: 'POST',
-                url: '/DOPMonitoringDatabase/SetPlugOnByClassifierList/',
-                data: JSON.stringify({ ClassifierIdList: ClassifierArray })
-            }).then(function (response) {
-                var data = response.data;
-                if (data.Data.Success) {
-                    $scope.RefreshTables();
-                }
-            }, function (response) {
-                errorHandlerService.showResponseError(response);
-            });
+        $scope.dt = new Date(2099, 11, 31);
 
+        var modalDialogInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOnByCategory.html',
+            controller: 'DialogSetPlugOnByCategoryController',
+            size: 'md',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                PlugInfo: function () {
+                    return { GoodsCategory: null, Parameter: null, ClassifierId: ClassifierArray, EndDate: minEndDate };
+                }
+            }
+        });
+
+        modalDialogInstance.result.then(function (DialogData) {
+
+            if (!DialogData)
+                return;
+
+            console.log(DialogData);
+            $scope.PouringExpirationDate = new Date(DialogData).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            console.log($scope.PouringExpirationDate);
+
+            SetPlugOnByClassifier(ClassifierArray, $scope.PouringExpirationDate);
+        }, function (DialogData) {
+
+        });
+
+        // PouringExpirationDate - дата окончания появления СКЮ в мониторинге
+        SetPlugOnByClassifier = function (ClassifierArray, PouringExpirationDate) {
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/DOPMonitoringDatabase/SetPlugOnByClassifierList/',
+                    data: JSON.stringify({ ClassifierIdList: ClassifierArray, PouringExpirationDate: PouringExpirationDate })
+                }).then(function (response) {
+                    var data = response.data;
+                    if (data.Data.Success) {
+                        $scope.RefreshTables();
+                    }
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+        }
     }
+    // -------------------------
+    // Поставить заглушку на СКЮ
 
     $scope.PouringStartDate = null; // дата начала выливки
 
@@ -614,7 +664,6 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
 
     // ===============================
     // снять заглушку со списка СКЮ ->
-
     $scope.DialogSetPlugOffByClassifier = function () {
 
         if ($scope.selectedRows.length == 0)
@@ -636,7 +685,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
             backdrop: 'static',
             resolve: {
                 PlugInfo: function () {
-                    return { GoodsCategory: $scope.goodsCategory, Parameter: null, ClassifierId: null };
+                    return { GoodsCategory: null, Parameter: null, ClassifierId: ClassifierArray };
                 }
             }
         });
@@ -655,6 +704,7 @@ function AddingDOPMonitoringDatabaseController($scope, $http, $q, $uibModal, $ca
 
         });
 
+        // PouringStartDate - дата начала появления СКЮ в мониторинге
         SetPlugOffByClassifier = function (ClassifierArray, PouringStartDate) {
             $scope.dataLoading =
                 $http({
