@@ -95,7 +95,7 @@ function GTINController($scope, $route, $http, $uibModal, $interval, commonServi
             {  enableCellEdit: false, name: 'GoodsId', field: 'GoodsId', type: 'number', filter: { condition: uiGridCustomService.numberCondition }},
             {  enableCellEdit: false, name: 'TradeName', field: 'TradeName', filter: { condition: uiGridCustomService.condition } },
             {  enableCellEdit: false, name: 'DrugDescription', field: 'DrugDescription', filter: { condition: uiGridCustomService.condition } },
-            {  enableCellEdit: false, name: 'Manufacturer', field: 'Manufacturer', filter: { condition: uiGridCustomService.condition } },
+         //   {  enableCellEdit: false, name: 'Manufacturer', field: 'Manufacturer', filter: { condition: uiGridCustomService.condition } },
             {  enableCellEdit: false, name: 'OwnerTradeMarkId', field: 'OwnerTradeMarkId', type: 'number', filter: { condition: uiGridCustomService.numberCondition } },
             {  enableCellEdit: false, name: 'OwnerTradeMark', field: 'OwnerTradeMark', width: 300, filter: { condition: uiGridCustomService.condition } },
             {  enableCellEdit: false, name: 'PackerId', field: 'PackerId', filter: { condition: uiGridCustomService.condition } },

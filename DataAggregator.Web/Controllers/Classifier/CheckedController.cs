@@ -13,7 +13,7 @@ using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 
 namespace DataAggregator.Web.Controllers.Classifier
 {
-    [Authorize(Roles = "SBoss")]
+    [Authorize(Roles = "SBoss,RManager")]
     public class CheckedController : BaseController
     {
         public ActionResult Checked_Init()
