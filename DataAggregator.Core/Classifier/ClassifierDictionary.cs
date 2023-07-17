@@ -97,7 +97,10 @@ namespace DataAggregator.Core.Classifier
 
             if (CP_Upd.Id == 0)
             {
-                _context.ClassifierPacking.Add(CP_Upd);
+                var IsExist = _context.ClassifierPacking.Any(w => (w.ClassifierId == CI.Id) & (w.CountInPrimaryPacking == CP.CountInPrimaryPacking));
+
+                if (!IsExist)
+                    _context.ClassifierPacking.Add(CP_Upd);
             }
 
             return CP;
