@@ -123,7 +123,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                             UPD.ToOFD = item.ToOFD;
                             UPD.ToRetail = item.ToRetail;
                             UPD.IsSTM = item.IsSTM;
-                            if (UPD.ProductionInfo!=null && UPD.ProductionInfo.Used != item.Used && User.IsInRole("ClassifierUsed"))
+                            if (UPD.ProductionInfo!=null && UPD.ProductionInfo.Used != item.Used && (User.IsInRole("ClassifierUsed") || User.IsInRole("RManager")))
                             {
                                 UPD.ProductionInfo.Used = item.Used;
                                 if (item.Used == false && !string.IsNullOrEmpty(item.ci_comment))
@@ -139,7 +139,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                                 }
 
                             }
-                            if (UPD.GoodsProductionInfo != null && UPD.GoodsProductionInfo.Used != item.Used && User.IsInRole("SBoss"))
+                            if (UPD.GoodsProductionInfo != null && UPD.GoodsProductionInfo.Used != item.Used && (User.IsInRole("SBoss") || User.IsInRole("RManager")))
                             {
                                 UPD.GoodsProductionInfo.Used = item.Used;
                             }

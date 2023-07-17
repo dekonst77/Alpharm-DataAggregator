@@ -53,7 +53,8 @@ namespace DataAggregator.Web.Controllers.Classifier
             {
                 using (var _context = new DrugClassifierContext(APP))
                 {
-                    IEnumerable<GTINs_View> result = _context.Database.SqlQuery<GTINs_View>("[gtin].[GetGTINs_SP]"
+                    IEnumerable<GTINs_View> result = _context.Database.SqlQuery<GTINs_View>("[gtin].[GetGTINs_SP] @Id=@Id,@SourceId=@SourceId,@GTIN=@GTIN,@ClassifierId=@ClassifierId,@DrugId=@DrugId,@GoodsId=@GoodsId,@TradeName=@TradeName,@DrugDescription=@DrugDescription," +
+                        "@OwnerTradeMarkId=@OwnerTradeMarkId,@OwnerTradeMark=@OwnerTradeMark,@PackerId=@PackerId,@Packer=@Packer,@DrugType=@DrugType,@Used=@Used,@GTIN2ClassifierId=@GTIN2ClassifierId,@ClassifierId2GTIN=@ClassifierId2GTIN,@AllValid=@AllValid"
                 , new SqlParameter { ParameterName = "@Id", SqlDbType = SqlDbType.VarChar, Value = (object)filter.Id ?? DBNull.Value }
                 , new SqlParameter { ParameterName = "@SourceId", SqlDbType = SqlDbType.BigInt, Value = (object)filter.SourceId ?? DBNull.Value }
                  , new SqlParameter { ParameterName = "@GTIN", SqlDbType = SqlDbType.VarChar, Value = (object)filter.GTIN ?? DBNull.Value }
@@ -68,7 +69,13 @@ namespace DataAggregator.Web.Controllers.Classifier
                  , new SqlParameter { ParameterName = "@Packer", SqlDbType = SqlDbType.VarChar, Value = (object)filter.Packer ?? DBNull.Value }
                  , new SqlParameter { ParameterName = "@DrugType", SqlDbType = SqlDbType.VarChar, Value = (object)filter.DrugType ?? DBNull.Value }
                   , new SqlParameter { ParameterName = "@Used", SqlDbType = SqlDbType.Bit, Value = (object)filter.Used ?? DBNull.Value }
+                      , new SqlParameter { ParameterName = "@GTIN2ClassifierId", SqlDbType = SqlDbType.Bit, Value = (object)filter.GTIN2ClassifierId ?? DBNull.Value }
+                          , new SqlParameter { ParameterName = "@ClassifierId2GTIN", SqlDbType = SqlDbType.Bit, Value = (object)filter.ClassifierId2GTIN ?? DBNull.Value }
+                              , new SqlParameter { ParameterName = "@AllValid", SqlDbType = SqlDbType.Bit, Value = (object)filter.AllValid ?? DBNull.Value }
                );
+
+
+                   
                     ViewData["GTINs_View"] = result.ToList();
                 }
 

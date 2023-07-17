@@ -19,7 +19,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.GTIN
         public long? SourceId { get; set; }
         public long? GTIN            { get; set; }
         public long? ClassifierId    { get; set; }
-        public int? IsValid          { get; set; }
+        public bool? IsValid          { get; set; }
         public bool? IsActive         { get; set; }
         public bool? IsCheck          { get; set; }
         public DateTime? DtAdd       { get; set; }
@@ -35,7 +35,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.GTIN
         public string Source { get; set; }
         public long? GTIN { get; set; }
         public long? ClassifierId { get; set; }
-        public Int16? IsValid { get; set; }
+        public bool? IsValid { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsCheck { get; set; }
         public DateTime? DtAdd { get; set; }
@@ -66,7 +66,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.GTIN
         public string Source { get; set; }
         public string GTIN { get; set; }
         public string ClassifierId { get; set; }
-        public Int16? IsValid { get; set; }
+        public bool? IsValid { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsCheck { get; set; }
         public Int16? Status { get; set; }
@@ -85,7 +85,9 @@ namespace DataAggregator.Domain.Model.DrugClassifier.GTIN
         public string UserName { get; set; }
         public string OperatorComment { get; set; }
         public string Search { get; set; }
-
+        public bool? GTIN2ClassifierId { get; set; }
+        public bool? ClassifierId2GTIN { get; set; }
+        public bool? AllValid  { get; set; }
 
     }
 

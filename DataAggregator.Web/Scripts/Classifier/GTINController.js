@@ -31,6 +31,9 @@ function GTINController($scope, $route, $http, $uibModal, $interval, commonServi
     $scope.DrugTypeLabel = [];
     $scope.selectedCount = 0;
     $scope.IsRowSelection = false;
+    $scope.filter = {
+        GTIN2ClassifierId: false, ClassifierId2GTIN: false, AllValid: false
+    }
     $scope.GTIN_Init = function () {
        
         $scope.dataLoading =
@@ -141,7 +144,7 @@ function GTINController($scope, $route, $http, $uibModal, $interval, commonServi
             $http({
                 method: 'POST',
                 url: '/GTIN//GTINs_search/',
-                data: JSON.stringify({ searchText: null })
+                data: JSON.stringify({ searchText: null, GTIN2ClassifierId: $scope.filter.GTIN2ClassifierId, ClassifierId2GTIN: $scope.filter.ClassifierId2GTIN, AllValid: $scope.filter.AllValid})
             }).then(function (response) {
                 if (response.data.Success) {
                     $scope.GTIN_Grid.Options.data = response.data.Data.GTINs_View;

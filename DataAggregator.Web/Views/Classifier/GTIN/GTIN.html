@@ -17,11 +17,24 @@
             </div>
 
 
-            <div class="col-md-7">
+            <div class="col-md-3">
                 <div class="btn-group" role="group" aria-label="Basic example" ng-if="IsActive('#CheckGTIN')==true" style="margin-top: 5px; margin-right: 5px;">
                     <button class="btn btn-success btn-sm" ng-click="GTINs_search();" ng-disabled=""><span class="glyphicon glyphicon-search">Выбрать</span></button>
                     <button class="btn btn-warning btn-sm" ng-click="GTINs_save();" ng-disabled="!GTIN_Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
                 </div>
+            </div>
+            <div class="col-md-4  padding3">
+             
+                <label ng-if="IsActive('#CheckGTIN')==true" style="margin-top: 5px; margin-right: 5px;">
+                    <input name="filtercommon" type="checkbox" class="" ng-model="filter.GTIN2ClassifierId" ng-change="">GTIN - два и более ClassifierId
+                </label>
+                    <label ng-if="IsActive('#CheckGTIN')==true" style="margin-top: 5px; margin-right: 5px;">
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.ClassifierId2GTIN" ng-change="">ClassifierId - два и более GTIN
+                    </label>
+                    <label ng-if="IsActive('#CheckGTIN')==true" style="margin-top: 5px; margin-right: 5px;">
+                        <input name="filtercommon" type="checkbox" class="" ng-model="filter.AllValid" ng-change="">Показать Невалидные
+                    </label>                 
+             
             </div>
             <div class="col-md-2">
                 <div class="btn-group  pull-right" style="margin-top: 5px; margin-right: 5px;">
@@ -48,7 +61,7 @@
             </div>
             <div class="col-md-1">
             </div>
-            </div>
+        </div>
         </div>
 
 
