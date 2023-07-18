@@ -31,7 +31,7 @@ function DialogSetPlugOnByCategoryController($scope, $modalInstance, PlugInfo) {
     };
 
     $scope.PlugInfo = PlugInfo;
-    $scope.dt = (PlugInfo.EndDate == null) ? new Date(2099, 11, 31) : PlugInfo.EndDate;
+    $scope.dt = (PlugInfo.EndDate == null) ? new Date() : PlugInfo.EndDate;
 
     console.log($scope.PlugInfo);
     console.log($scope.dt);
