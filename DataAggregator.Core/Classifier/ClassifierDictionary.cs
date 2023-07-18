@@ -74,6 +74,12 @@ namespace DataAggregator.Core.Classifier
             return innGroup;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CI">редактируемый классифер или отличающийся от редактируемого</param>
+        /// <param name="CP"> упаковки от старого классифера, если 0, то классифер отличается от редактируемого</param>
+        /// <returns></returns>
         public ClassifierPacking CreateClassifierPacking(ClassifierInfo CI, ClassifierPacking CP)
         {
 
