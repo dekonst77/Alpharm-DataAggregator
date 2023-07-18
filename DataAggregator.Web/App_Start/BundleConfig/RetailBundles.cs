@@ -98,6 +98,7 @@ namespace DataAggregator.Web
 
                 //Фиксация правил
                 .Include("~/Scripts/Retail/RulesCommit/RulesCommitController.js")
+                .Include("~/Scripts/Classifier/CheckedController.js")
             );
 
             bundles.Add(new ComplexStyleBundle("~/Content/Retail/css")
