@@ -1259,13 +1259,19 @@ namespace DataAggregator.Core.Classifier
 
                 ProductionInfoController.ChangeProductionInfo(null, productionInfo, _user, _context);
 
-                _context.SaveChanges();                
+                _context.SaveChanges();
 
                 #region Собираем ClassifierPacking
 
                 var CI = _context.ClassifierInfo.Where(w => w.ProductionInfoId == productionInfo.Id).Single();
+
+                bool IsOtherClassifier = CI.Id != model.ClassifierId; // если при добавлении используется другой классифер, отличный от редактируемого
+
                 foreach (var CP in model.ClassifierPackings)
                 {
+                    if (IsOtherClassifier)
+                        CP.Id = 0;
+
                     _dictionary.CreateClassifierPacking(CI, CP);
                 }
                 _context.SaveChanges();

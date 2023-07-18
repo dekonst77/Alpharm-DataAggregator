@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System;
+using DataAggregator.Web.Models.GovernmentPurchases.CalculatedDataEditor;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace DataAggregator.Web.Controllers.GovernmentPurchases.Reports
 {
@@ -18,10 +21,12 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases.Reports
             {
                 using (var context = new GovernmentPurchasesContext(APP))
                 {
-                    string sql = string.Format(@"EXEC report.ContractAndStageObject_Report @Number = '{0}', @ReestNumber = '{1}'", PurchaseNumber, ReestrNumber);
-
                     object result = null;
-                    result = context.Database.SqlQuery<DataAggregator.Domain.Model.GovernmentPurchases.ContractAndStageObjectReport>(sql).ToList();
+                    result = context.Database.SqlQuery<DataAggregator.Domain.Model.GovernmentPurchases.ContractAndStageObjectReport>(
+                    @"EXEC report.ContractAndStageObject_Report @Number = @Number, @ReestNumber = @ReestNumber"
+                        , new SqlParameter { ParameterName = "@Number", SqlDbType = SqlDbType.VarChar, Value = PurchaseNumber }
+                        , new SqlParameter { ParameterName = "@ReestNumber", SqlDbType = SqlDbType.VarChar, Value = ReestrNumber }
+                        ).ToList();
                     JsonNetResult jsonNetResult = new JsonNetResult
                     {
                         Formatting = Formatting.Indented,
