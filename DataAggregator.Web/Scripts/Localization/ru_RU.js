@@ -55,7 +55,8 @@
             "OFD": {
                 "PRICE_ETALON": {
                     "TITLE": 'Эталонные цены',
-                    "TITLE_v2": 'Эталонные цены v2'
+                    "TITLE_v2": 'Эталонные цены v2',
+                    "TITLE_new": 'Эталонные цены new'
                 },
                 "PRICE_HISTORY": {
                     "TITLE": 'Эталонные цены - периоды'
@@ -405,7 +406,8 @@
                     "TITLE": 'Поиск в исходных данных по тексту',
                     "ORIGINAL_DRUG_NAME": 'Исходное написание препарата',
                     "ORIGINAL_MANUFACTURER_NAME": 'Исходное написание производителя',
-                    "DRUG_CLEAR_IDS": 'Коды строк'
+                    "DRUG_CLEAR_IDS": 'Коды строк',
+                    "PHARMACY_NAMES": 'Наименования аптек'
                 },
 
                 "RELEASE": {
