@@ -67,5 +67,10 @@ namespace DataAggregator.Domain.Model.Retail
         /// Сумма закупок в уп
         /// </summary>
         public decimal? PurchaseCount { get; set; }
+
+        /// <summary>
+        /// Наименования аптек
+        /// </summary>
+        public string PharmacyNames { get; set; }
     }
 }
