@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('CheckClassifireReportController', ['$scope', '$http', '$q', '$cacheFactory', '$filter', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', 'hotkeys', CheckClassifireReportController]);
+    .controller('CheckClassifireReportController', ['$scope', '$http', '$q', '$cacheFactory', '$filter', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', 'hotkeys', '$uibModal', CheckClassifireReportController]);
 
-function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filter, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants, hotkeys) {
+function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filter, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants, hotkeys, $uibModal) {
     $scope.Title = "Отчет проверки классификатора";
     $scope.user = userService.getUser();
     $scope.canSearch = function () { return true; }
@@ -15,12 +15,20 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             combo: 'shift+d',
             description: 'Удалить исключение',
             callback: function (event) {
-                $scope.deleteFiles(event);
+                $scope.deleteRecords(event);
+            }
+        });
+
+        hotkeys.bindTo($scope).add({
+            combo: 'shift+e',
+            description: 'Редактировать исключение',
+            callback: function (event) {
+                $scope.editData(event);
             }
         });
 
         //******** Grid ******** ->
-        $scope.Exception_Grid = uiGridCustomService.createGridClassMod($scope, 'Exception_Grid');
+        $scope.Exception_Grid = uiGridCustomService.createGridClassMod($scope, 'Exception_Grid', null, "ExceptionGrid_dblClick");
         $scope.Exception_Grid.Options.showGridFooter = true;
         $scope.Exception_Grid.Options.showColumnFooter = false;
         $scope.Exception_Grid.Options.multiSelect = false;
@@ -31,12 +39,14 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         $scope.Exception_Grid.Options.columnDefs = [
             { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Id', type: 'number', visible: false, nullable: false },
 
-            {
-                enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber', field: 'RegistrationCertificateId', nullable: false, filter: { condition: uiGridCustomService.conditionList },
-                editableCellTemplate: 'ui-grid/dropdownEditor', cellFilter: 'griddropdownSSA:this', editType: 'dropdown',
-                editDropdownOptionsArray: $scope.RegistrationCertificateNumberList,
-                editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value'
-            },
+            //{
+            //    enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber', field: 'RegistrationCertificateId', nullable: false, filter: { condition: uiGridCustomService.conditionList },
+            //    editableCellTemplate: 'ui-grid/dropdownEditor', cellFilter: 'griddropdownSSA:this', editType: 'dropdown',
+            //    editDropdownOptionsArray: $scope.RegistrationCertificateNumberList,
+            //    editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value'
+            //},
+            { enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber ID', field: 'RegistrationCertificateId', nullable: false, filter: { condition: uiGridCustomService.conditionList }, cellFilter: 'griddropdownSSA:this', },
+            { enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber', field: 'RegistrationCertificateNumber', nullable: false, filter: { condition: uiGridCustomService.conditionList }, cellFilter: 'griddropdownSSA:this', },
 
             {
                 enableCellEdit: true, width: 300, displayName: 'Отчет, в котором он исключен', name: 'ClassifierReportId', field: 'ClassifierReportId', nullable: false, filter: { condition: uiGridCustomService.conditionList },
@@ -51,6 +61,11 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
 
         $scope.CheckClassifireReport_Search();
     }
+
+    $scope.ExceptionGrid_dblClick = function (field, rowEntity) {
+        if ((field === 'RegistrationCertificateId')|| (field === 'RegistrationCertificateNumber'))
+            $scope.editData();
+    };
 
     $scope.CheckClassifireReport_Search = function () {
 
@@ -84,7 +99,6 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
                 $scope.CheckClassifireReportView();
             }
         );
-
     }
 
     $scope.CheckClassifireReport_To_Excel = function () {
@@ -128,6 +142,8 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             console.error('errorHandlerService.showResponseError = ' + response);
             errorHandlerService.showResponseError(response);
         });
+
+        return $scope.dataLoading;
     }
 
     // загрузка сертификатов
@@ -160,7 +176,47 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         });
     }
 
+    $scope.ReportFilter = new Object;
+
+    // добавление записи
     $scope.addData = function () {
+
+        var modalClassifieInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/Reports/CheckReport/_CheckReportDialog.html',
+            controller: 'CheckReportDialogController',
+            size: 'lg',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                ReportFilter: function () {
+                    return {
+                        Action: 'add',
+                        CurrentReport: {
+                            Id: -1,
+                            RegistrationCertificateNumber: null, // РУ
+                            CheckClassifireReport: null // Отчёт
+                        },
+                        ReportFilterList: $scope.CheckClassifireReportList
+                    };
+                }
+            }
+        });
+
+        modalClassifieInstance.result.then(
+            function (ReportFilter) {
+                $scope.ReportFilter = ReportFilter;
+
+                if (($scope.ReportFilter.RegistrationCertificateNumber == null) || ($scope.ReportFilter.CheckClassifireReport == null))
+                    throw 'Ошибка при вводе данных'
+
+                $scope.ReportExceptionListSave();
+            },
+            function () {
+            }
+        );
+
+        /*
         var total = $scope.Exception_Grid.Options.data.push({
             "Id": "-1",
             "RegistrationCertificateId": "Выберите сертификат",
@@ -172,6 +228,53 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         });
 
         $scope.scrollTo(total - 1, 0);
+        */
+    };
+
+    // редактирование записи
+    $scope.editData = function () {
+        //Выберем все выделенные строки, которые видны.
+        var selectedRows = $scope.Exception_Grid.gridApi.selection.getSelectedGridRows();
+
+        if (selectedRows.length == 0)
+            return;
+
+        let currentRecord = selectedRows[0].entity;
+
+        var modalClassifieInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/Reports/CheckReport/_CheckReportDialog.html',
+            controller: 'CheckReportDialogController',
+            size: 'lg',
+            windowClass: 'center-modal',
+            backdrop: 'static',
+            resolve: {
+                ReportFilter: function () {
+                    return {
+                        Action: 'edit',
+                        CurrentReport: {
+                            Id: currentRecord.Id,
+                            RegistrationCertificateNumber: { Id: currentRecord.RegistrationCertificateId, Value: currentRecord.RegistrationCertificateNumber }, // РУ
+                            CheckClassifireReport: { Id: currentRecord.ClassifierReportId, Value: currentRecord.ReportCode } // Отчёт
+                        },
+                        ReportFilterList: $scope.CheckClassifireReportList
+                    };
+                }
+            }
+        });
+
+        modalClassifieInstance.result.then(
+            function (ReportFilter) {
+                $scope.ReportFilter = ReportFilter;
+
+                if (($scope.ReportFilter.RegistrationCertificateNumber == null) || ($scope.ReportFilter.CheckClassifireReport == null))
+                    throw 'Ошибка при вводе данных'
+
+                $scope.ReportExceptionListSave();
+            },
+            function () {
+            }
+        );
     };
 
     $scope.scrollTo = function (rowIndex, colIndex) {
@@ -183,18 +286,39 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
 
     // сохранение изменений в списке исключений
     $scope.ReportExceptionListSave = function (action) {
+
+        var NewRecord = $scope.Exception_Grid.GetArrayModify();
+        if (NewRecord.length === 0) {
+            let item = {
+                Id: $scope.ReportFilter.Id,
+                RegistrationCertificateId: $scope.ReportFilter.RegistrationCertificateNumber.Id,
+                ClassifierReportId: $scope.ReportFilter.CheckClassifireReport.Id
+            }
+            NewRecord.push(item);
+        }
+
         $scope.dataLoading =
             $http({
                 method: 'POST',
                 url: '/CheckClassifireReport/ReportExceptionListSave/',
                 data: JSON.stringify({
-                    ExceptionList: $scope.Exception_Grid.GetArrayModify()
+                    ExceptionList: NewRecord
                 })
             }).then(function (response) {
                 var data = response.data;
                 if (data.Success) {
                     $scope.Exception_Grid.ClearModify();
-                    $scope.CheckClassifireReportView();
+
+                    $scope.CheckClassifireReportView().then(function () {
+                        let lastElem = data.Data.ReportExceptionRecords[data.Data.ReportExceptionRecords.length - 1]; // последний сохранённый элемент
+                        let lastIndex = $scope.Exception_Grid.Options.data.findLastIndex(element => element.Id == lastElem.Id);
+
+                        $scope.scrollTo(lastIndex, 0);
+                        $timeout(function () {
+                            $scope.Exception_Grid.gridApi.selection.selectRow($scope.Exception_Grid.Options.data[lastIndex]);
+                        });
+                    });
+
                     messageBoxService.showError('Сохранение успешно.<br/>');
                 }
             }, function (response) {
@@ -203,9 +327,9 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
     };
 
     //Отправить записи на удаление
-    $scope.deleteFiles = function () {
+    $scope.deleteRecords = function () {
 
-        //Выеберем все выделенные строки, которые видны.
+        //Выберем все выделенные строки, которые видны.
         var selectedRows = $scope.Exception_Grid.gridApi.selection.getSelectedGridRows();
 
         if (selectedRows.length == 0)
@@ -266,4 +390,7 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         });
     }
 
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
 }

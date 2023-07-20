@@ -1,4 +1,5 @@
 ﻿using DataAggregator.Domain.DAL;
+using DataAggregator.Domain.Model.Common;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckReport;
 using Newtonsoft.Json;
 using System;
@@ -28,14 +29,21 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Загрузка списка исключений в html таблицу
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult CheckClassifireReportView()
         {
-
             var result = _context.ClassifierCheckReport_SP("ExceptionList").ToList();
             return Json(result);
         }
 
+        /// <summary>
+        /// импорт в Excel
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public FileContentResult CheckClassifireReport_To_Excel()
         {
@@ -182,6 +190,10 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             return jsonNetResult;
         }
 
+        /// <summary>
+        /// отправка email сообщений через SmtpClient
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CheckClassifireReport_To_Email()
         {
@@ -231,6 +243,10 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             return jsonNetResult;
         }
 
+        /// <summary>
+        /// отправка email сообщений через хранимую процедуру
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CheckClassifireReportToEmailOverDBProfile()
         {
@@ -272,6 +288,24 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
             };
 
             return jsonNetResult;
+        }
+
+        /// <summary>
+        /// Поиск сертификата
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="specifiedCount"></param>
+        /// <returns></returns>
+        public JsonNetResult SearchRegistrationNumber(string value, int? specifiedCount)
+        {
+            int count = specifiedCount ?? 10;
+
+            using (var context = new DrugClassifierContext(APP))
+            {
+                List<DictionaryItem> values = context.RegistrationCertificates.Where(d => d.Number.Contains(value)).Take(count).Select(c => new DictionaryItem() { Id = c.Id, Value = c.Number }).ToList();
+
+                return new JsonNetResult(values);
+            }
         }
 
     }
