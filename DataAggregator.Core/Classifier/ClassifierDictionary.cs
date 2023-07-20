@@ -106,6 +106,7 @@ namespace DataAggregator.Core.Classifier
                 var IsExist = _context.ClassifierPacking.Any(w => 
                     (w.ClassifierId == CI.Id) & 
                     (w.CountInPrimaryPacking == CP.CountInPrimaryPacking) & // кол-во в первичной упаковке
+                    (w.CountPrimaryPacking == CP.CountPrimaryPacking) & // кол-во первичных упаковок
                     (w.PrimaryPacking.Value == CP.PrimaryPacking.Value) & // Первичная упаковка
                     (w.ConsumerPacking.Value == CP.ConsumerPacking.Value) // Потребительская упаковка
                 );
