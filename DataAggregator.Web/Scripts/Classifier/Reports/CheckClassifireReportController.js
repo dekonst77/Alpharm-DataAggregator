@@ -1,6 +1,26 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('CheckClassifireReportController', ['$scope', '$http', '$q', '$cacheFactory', '$filter', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', 'hotkeys', '$uibModal', CheckClassifireReportController]);
+    .controller('CheckClassifireReportController', ['$scope', '$http', '$q', '$cacheFactory', '$filter', '$timeout', 'userService', 'uiGridCustomService', 'errorHandlerService', 'messageBoxService', 'uiGridConstants', 'formatConstants', 'hotkeys', '$uibModal', CheckClassifireReportController])
+    .filter('mapReport', mapReport);
+
+function mapReport() {
+    var ReportrHash = {
+        1: 'ATCEphmraDescription',
+        2: 'FormProduct',
+        3: 'FTG',
+        4: 'TN+Brand',
+        5: 'ATCWhoDescription'
+    };
+
+    return function (input) {
+        if (!input) {
+            return 'Не определено';
+        } else {
+            
+            return ReportrHash[input];
+        }
+    };
+}
 
 function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filter, $timeout, userService, uiGridCustomService, errorHandlerService, messageBoxService, uiGridConstants, formatConstants, hotkeys, $uibModal) {
     $scope.Title = "Отчет проверки классификатора";
@@ -8,6 +28,8 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
     $scope.canSearch = function () { return true; }
     $scope.RegistrationCertificateNumberList = []; // список РУ
     $scope.CheckClassifireReportList = []; // список отчётов
+
+    $scope.CheckClassifireReportFilterList = [];
 
     $scope.CheckClassifireReport_Init = function () {
 
@@ -39,20 +61,26 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
         $scope.Exception_Grid.Options.columnDefs = [
             { headerTooltip: true, name: 'Id', enableCellEdit: false, width: 100, cellTooltip: true, field: 'Id', type: 'number', visible: false, nullable: false },
 
+            { enableCellEdit: false, width: 300, name: 'RegistrationCertificateNumber ID', field: 'RegistrationCertificateId', nullable: false, filter: { condition: uiGridCustomService.numberCondition } },
+            { enableCellEdit: false, width: 300, name: 'RegistrationCertificateNumber', field: 'RegistrationCertificateNumber', nullable: false, filter: { condition: uiGridCustomService.condition } },
+
             //{
-            //    enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber', field: 'RegistrationCertificateId', nullable: false, filter: { condition: uiGridCustomService.conditionList },
+            //    enableCellEdit: true, width: 300, displayName: 'Отчет, в котором он исключен', name: 'ClassifierReportId', field: 'ClassifierReportId', nullable: false, filter: { condition: uiGridCustomService.condition },
             //    editableCellTemplate: 'ui-grid/dropdownEditor', cellFilter: 'griddropdownSSA:this', editType: 'dropdown',
-            //    editDropdownOptionsArray: $scope.RegistrationCertificateNumberList,
+            //    editDropdownOptionsArray: $scope.CheckClassifireReportList,
             //    editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value'
             //},
-            { enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber ID', field: 'RegistrationCertificateId', nullable: false, filter: { condition: uiGridCustomService.conditionList }, cellFilter: 'griddropdownSSA:this', },
-            { enableCellEdit: true, width: 300, name: 'RegistrationCertificateNumber', field: 'RegistrationCertificateNumber', nullable: false, filter: { condition: uiGridCustomService.conditionList }, cellFilter: 'griddropdownSSA:this', },
 
             {
-                enableCellEdit: true, width: 300, displayName: 'Отчет, в котором он исключен', name: 'ClassifierReportId', field: 'ClassifierReportId', nullable: false, filter: { condition: uiGridCustomService.conditionList },
+                enableCellEdit: true, width: 300, displayName: 'Отчет, в котором он исключен', name: 'ClassifierReportId', field: 'ClassifierReportId', nullable: false,
+                filter: {
+                    type: uiGridConstants.filter.SELECT,
+                    selectOptions: $scope.CheckClassifireReportFilterList
+                },
                 editableCellTemplate: 'ui-grid/dropdownEditor', cellFilter: 'griddropdownSSA:this', editType: 'dropdown',
                 editDropdownOptionsArray: $scope.CheckClassifireReportList,
-                editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value'
+                editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value',
+                cellFilter: 'mapReport'
             }
         ];
 
@@ -63,9 +91,11 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
     }
 
     $scope.ExceptionGrid_dblClick = function (field, rowEntity) {
-        if ((field === 'RegistrationCertificateId')|| (field === 'RegistrationCertificateNumber'))
+        if ((field === 'RegistrationCertificateId') || (field === 'RegistrationCertificateNumber'))
             $scope.editData();
     };
+
+
 
     $scope.CheckClassifireReport_Search = function () {
 
@@ -172,6 +202,15 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
             if (response.data.Data.CheckClassifireReportList !== undefined) {
                 $scope.CheckClassifireReportList.splice(0, $scope.CheckClassifireReportList.length);
                 Array.prototype.push.apply($scope.CheckClassifireReportList, response.data.Data.CheckClassifireReportList);
+
+                $scope.CheckClassifireReportFilterList = $scope.CheckClassifireReportList.map(item => {
+                    return {
+                        value: item.Id,
+                        label: item.Value
+                    }
+                });
+
+                $scope.Exception_Grid.Options.columnDefs.find(item => item.field === 'ClassifierReportId').filter.selectOptions = $scope.CheckClassifireReportFilterList;
             }
         });
     }
