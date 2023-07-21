@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,15 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckR
     [Table("RegCertificateNumberExceptions", Schema = "report")]
     public class RegCertificateNumberExceptions
     {
+        [Key]
         public int Id { get; set; }
-        public Nullable<long> RegistrationCertificateId { get; set; }
-        public Nullable<byte> ClassifierReportId { get; set; }
+
+        [ForeignKey("RegistrationCertificate")]
+        public long RegistrationCertificateId { get; set; }
+        public virtual RegistrationCertificate RegistrationCertificate { get; set; }
+
+        [ForeignKey("ClassifierReport")]
+        public byte ClassifierReportId { get; set; }
 
         public virtual ClassifierReport ClassifierReport { get; set; }
     }

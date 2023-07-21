@@ -128,12 +128,55 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         }
 
         /// <summary>
+        /// Проверка на уникальность
+        /// </summary>
+        /// <param name="ExceptionList"></param>
+        /// <param name="Error"></param>
+        /// <returns></returns>
+        private bool Validate(List<RegCertificateNumberExceptions> ExceptionList, out string Error)
+        {
+            bool Result = true;
+            Error = String.Empty;
+
+            foreach (var item in ExceptionList)
+            {
+                item.ClassifierReport = _context.ClassifierReport.Find(item.ClassifierReportId);
+                item.RegistrationCertificate = _context.RegistrationCertificates.Find(item.RegistrationCertificateId);
+
+                bool IsExist;
+
+                if (item.Id == -1)
+                {
+                    IsExist = _context.RegCertificateNumberExceptions.Any(el => el.RegistrationCertificateId == item.RegistrationCertificateId & el.ClassifierReportId == item.ClassifierReportId);
+                }
+                else
+                {
+                    IsExist = _context.RegCertificateNumberExceptions.Any(el => el.RegistrationCertificateId == item.RegistrationCertificateId & el.ClassifierReportId == item.ClassifierReportId & el.Id != item.Id);
+                }
+
+                if (IsExist)
+                {
+                    Error = $"Исключение для РУ [{item.RegistrationCertificate.Number}] для отчёта [{item.ClassifierReport.ReportCode}] уже существует!";
+                    Result = false;
+                    break;
+                }
+            }
+
+            return Result;
+        }
+
+        /// <summary>
         /// сохранение списка исключений
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         public ActionResult ReportExceptionListSave(List<RegCertificateNumberExceptions> ExceptionList)
         {
+            if (!Validate(ExceptionList, out string errorMessage))
+            {
+                return BadRequest(errorMessage);
+            }
+
             List<RegCertificateNumberExceptions> records = new List<RegCertificateNumberExceptions>();
 
             foreach (var item in ExceptionList)
