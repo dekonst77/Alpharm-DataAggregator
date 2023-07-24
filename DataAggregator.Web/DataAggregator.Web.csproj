@@ -1998,6 +1998,7 @@
     <Content Include="Scripts\Retail\CountRuleEditor\SearchDrugController.js" />
     <Content Include="Content\Retail\MarkupDefaultEditor.css" />
     <Content Include="Scripts\Retail\MarkupDefaultEditorController.js" />
+    <Content Include="Scripts\Retail\PharmacyOFDBlackList\PharmacyOFDBlackListController.js" />
     <Content Include="Scripts\Retail\PharmacyWithoutAverage\PharmacyWithoutAverageController.js" />
     <Content Include="Scripts\Retail\PriceRuleEditor\PriceRuleEditorController.js" />
     <Content Include="Scripts\Retail\FileInfo\FileInfoController.js" />
@@ -2251,6 +2252,7 @@
     <Content Include="Views\Retail\CTM\CTM.html" />
     <Content Include="Views\Retail\CTM\CTM_context_menu.html" />
     <Content Include="Views\Retail\Ecom\Coefficients.html" />
+    <Content Include="Views\Retail\PharmacyOFDBlackList\Index.html" />
     <Content Include="Views\Retail\RetailCalculation\Index.html" />
     <Content Include="Views\Retail\GoodsCountRuleFullVolumeEditor\Index.html" />
     <Content Include="Views\Retail\GoodsCountRuleFullVolumeEditor\_SearchGoodsView.html" />
@@ -2391,6 +2393,7 @@
     <Compile Include="Controllers\Retail\Common\GoodsExternalViewController.cs" />
     <Compile Include="Controllers\Retail\Common\GoodsBrandController.cs" />
     <Compile Include="Controllers\Retail\Common\GoodsTradeNameController.cs" />
+    <Compile Include="Controllers\Retail\PharmacyOFDBlackListController.cs" />
     <Compile Include="Controllers\Retail\PharmacyWithoutAverageController.cs" />
     <Compile Include="Controllers\Retail\RetailCalculationController.cs" />
     <Compile Include="Controllers\Retail\RetailReportController.cs" />
@@ -2736,6 +2739,7 @@
     <Folder Include="Views\GTIN\" />
     <Folder Include="Views\LPUDictionaries\" />
     <Folder Include="Views\Mask\" />
+    <Folder Include="Views\PharmacyOFDBlackList\" />
     <Folder Include="Views\SourceBrandBlackList\" />
   </ItemGroup>
   <ItemGroup>

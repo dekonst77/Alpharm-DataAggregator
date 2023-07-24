@@ -820,7 +820,7 @@
                 authorize: true
             })
 
-            // Черный список аптек
+            // Аптеки, не идущие в расчёт по среднему ассортименту
             .when('/Retail/PharmacyWithoutAverage', {
                 templateUrl: 'Views/Retail/PharmacyWithoutAverage/Index.html',
                 title: 'RETAIL.PHARMACY_WITHOUT_AVERAGE_LIST_TITLE',
@@ -831,6 +831,13 @@
             .when('/Retail/SourceBrandBlackList', {
                 templateUrl: 'Views/Retail/SourceBrandBlackList/Index.html',
                 title: 'RETAIL.SOURCE_BRAND_BLACK_LIST_TITLE',
+                authorize: true
+            })
+
+            // Черный список аптек для ОФД
+            .when('/Retail/PharmacyOFDBlackList', {
+                templateUrl: 'Views/Retail/PharmacyOFDBlackList/Index.html',
+                title: 'RETAIL.PHARMACY_OFD_BLACK_LIST_TITLE',
                 authorize: true
             })
 

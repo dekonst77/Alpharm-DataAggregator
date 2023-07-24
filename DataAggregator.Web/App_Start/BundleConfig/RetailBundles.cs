@@ -36,6 +36,8 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/Retail/PharmacyWithoutAverage/PharmacyWithoutAverageController.js")
                 //Черный список брендов
                 .Include("~/Scripts/Retail/SourceBrandBlackList/SourceBrandBlackListController.js")
+                //Черный список аптек для ОФД
+                .Include("~/Scripts/Retail/PharmacyOFDBlackList/PharmacyOFDBlackListController.js")
 
                 // Редактор цен
                 .Include("~/Scripts/Retail/PriceLimitsEditorController.js")

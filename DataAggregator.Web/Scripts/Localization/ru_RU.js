@@ -353,6 +353,7 @@
                 "SOURCE_PHARMACIES_EDITOR_TITLE": 'Справочник аптек',
                 "PHARMACY_BRAND_BLACK_LIST_TITLE": 'Черный список аптека-бренд',
                 "PHARMACY_WITHOUT_AVERAGE_LIST_TITLE": 'Аптеки, не идущие в расчёт по среднему ассортименту',
+                "PHARMACY_OFD_BLACK_LIST_TITLE": 'Черный список для ОФД',
                 "SOURCE_BRAND_BLACK_LIST_TITLE": 'Черный список брендов',
                 "PRICE_LIMITS_EDITOR_TITLE": 'Редактор цен',
                 "COUNT_CHECK_TITLE": 'Редактор количеств',

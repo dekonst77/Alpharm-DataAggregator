@@ -194,6 +194,7 @@
     <Compile Include="Model\OFD\PriceEtalon.cs" />
     <Compile Include="Model\OFD\PriceEtalonView.cs" />
     <Compile Include="Model\RetailCalculation\Log.cs" />
+    <Compile Include="Model\Retail\TargetPharmacyOFDBlackList.cs" />
     <Compile Include="Model\Retail\SourceBrandBlackList.cs" />
     <Compile Include="Model\RetailCalculation\User.cs" />
     <Compile Include="Model\Retail\CalcInfo.cs" />
