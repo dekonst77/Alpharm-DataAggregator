@@ -1,0 +1,46 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title" ng-if="Add">Добавить исключение</h3>
+    <h3 class="modal-title" ng-if="!Add">Редактировать исключение</h3>
+</div>
+
+<div class="modal-body classifier-editor">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Номер сертификата</label>
+                <input autofocus type="text" ng-model="ReportFilter.RegistrationCertificateNumber" ng-change="changeCheck('tradeName')" uib-typeahead="data as data.Value for data in searchRegistrationNumber($viewValue)" class="form-control" typeahead-on-select="setId($item, 'RegistrationCertificateNumber')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>
+            <!--<div class="col-md-6">
+                <label>Отчёт, в котором он исключён</label>
+                <input type="text" ng-model="Report" ng-change="changeCheck('ownerTradeMark')" uib-typeahead="data.Value for data in searchDictionary($viewValue,'ownerTradeMark')" class="form-control" typeahead-on-select="setId($item,'ownerTradeMarkId')" typeahead-select-on-exact="true" ng-enter="pressTypeaHeadEnter()" typeahead-no-results="noResults">
+            </div>-->
+
+            <div class="col-md-6">
+                <label for="Report">Отчёт, в котором он исключён</label>
+                <select id="Report"
+                        name="Report"
+                        ng-class="{'has-error': CheckClassifireReport.$invalid}"
+                        required
+                        class="form-control"
+                        ng-options="item as item.Value for item in ReportFilterList track by item.Id"
+                        ng-model="ReportFilter.CheckClassifireReport">
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="float-left">
+        <button class="btn btn-default" type="button" ng-click="clear()" data-translate="BUTTONS.CLEAR"></button>
+    </div>
+    <div>
+        <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="!CanOK()" data-translate="BUTTONS.ADD" ng-if="Add"></button>
+        <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="!CanOK()" data-translate="BUTTONS.SAVE" ng-if="!Add"></button>
+
+        <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+    </div>
+</div>

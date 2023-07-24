@@ -755,6 +755,7 @@
     <Content Include="Scripts\Classifier\Manufacturer\ManufacturerController.js" />
     <Content Include="Scripts\Classifier\RaspredelenieController.js" />
     <Content Include="Scripts\Classifier\Reports\CheckClassifireReportController.js" />
+    <Content Include="Scripts\Classifier\Reports\CheckReportDialogController.js" />
     <Content Include="Scripts\Classifier\SPRController.js" />
     <Content Include="Scripts\Classifier\SQA\SQAController.js" />
     <Content Include="Scripts\Classifier\MaskController.js" />
@@ -2164,6 +2165,7 @@
     <Content Include="Views\Classifier\Manufacturer\Index.html" />
     <Content Include="Views\Classifier\Raspredelenie.html" />
     <Content Include="Views\Classifier\Reports\CheckReport\CheckReport.html" />
+    <Content Include="Views\Classifier\Reports\CheckReport\_CheckReportDialog.html" />
     <Content Include="Views\Classifier\SPR.html" />
     <Content Include="Views\Classifier\SPR_context_menu.html" />
     <Content Include="Views\Classifier\SQA\Index.html" />
