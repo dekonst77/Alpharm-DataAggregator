@@ -190,6 +190,7 @@
     <Compile Include="Model\LPU\LPUView.cs" />
     <Compile Include="Model\OFD\Classifier_ExternalView.cs" />
     <Compile Include="Model\OFD\db_object.cs" />
+    <Compile Include="Model\OFD\EtalonPriceViewData_SP_Result.cs" />
     <Compile Include="Model\OFD\PriceEtalon.cs" />
     <Compile Include="Model\OFD\PriceEtalonView.cs" />
     <Compile Include="Model\RetailCalculation\Log.cs" />

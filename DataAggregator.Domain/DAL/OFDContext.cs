@@ -7,6 +7,7 @@ using DataAggregator.Domain.Model.EtalonPrice;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DataAggregator.Domain.DAL
 {
@@ -218,6 +219,36 @@ namespace DataAggregator.Domain.DAL
 
                 command.ExecuteNonQuery();
             }
+        }
+
+        /// <summary>
+        /// Вывод эталонных цен для блока эталонных цен new 
+        /// </summary>
+        /// <param name="month">месяц</param>
+        /// <param name="year">год</param>
+        public IEnumerable<EtalonPriceViewData_SP_Result> ViewData_SP(int year, int month, decimal? devPercent = null, string searchText = null)
+        {
+            return Database.SqlQuery<EtalonPriceViewData_SP_Result>("[EtalonPrice].[ViewData_SP] @PeriodShort, @DevPercent, @SearchText",
+               new SqlParameter { ParameterName = "@PeriodShort", SqlDbType = SqlDbType.Int, Value = year * 100 + month },
+               new SqlParameter { ParameterName = "@DevPercent", SqlDbType = SqlDbType.Decimal, Value = (object)devPercent ?? DBNull.Value },
+               new SqlParameter { ParameterName = "@SearchText", SqlDbType = SqlDbType.VarChar, Value = (object)searchText ?? DBNull.Value }
+               );
+        }
+
+        /// <summary>
+        /// Перезагрузка всех источников и SKU для блока эталонных цен new 
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        public void ReloadAllData_SP(int year, int month)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@PeriodShort", SqlDbType = SqlDbType.Int, Value = year * 100 + month } 
+            }
+            .Cast<object>().ToArray();
+
+            Database.ExecuteSqlCommand("exec [EtalonPrice].[ReloadAllData_SP] @PeriodShort", parameters);
         }
     }
 }

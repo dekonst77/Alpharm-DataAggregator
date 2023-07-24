@@ -116,6 +116,15 @@
                     authorize: true,
                     isEditor: true
                 })
+
+            // Эталонные цены new
+            .when('/OFD/EtalonPrice',
+                {
+                    templateUrl: 'Views/OFD/EtalonPrice/Index.html',
+                    title: 'OFD.PRICE_ETALON.TITLE_new',
+                    authorize: true
+                })
+
             // окно ОФД
             .when('/OFD/PriceEtalon',
                 {
