@@ -77,7 +77,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // отклонение эталонной цены прошлого месяца
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: '% откл.',
-            field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.condition }, cellTemplate: avgCellTemplateHint
         },
         // расчетная цена SellOut (или установленная через контектное меню цена из другого столбца)
         {
@@ -301,24 +301,28 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     }
 
     $scope.transferPrice = function (row, col) {
-        messageBoxService.showConfirm('Подставить значение в Расчетная цена sell out?', 'Перенос цены')
-            .then(function () {
-                var entity = row.entity;
-                entity.TransferPrice = row.entity[col.field];
-                var model = [];
-                model.push({ "Id": entity.Id, "TransferPrice": entity.TransferPrice });
+        var entity = row.entity;
+        var TransferPrice = row.entity[col.field];
 
-                $scope.dataLoading =
-                    $http({
-                        method: 'POST',
-                        url: '/EtalonPrice/TransferPrice/',
-                        data: JSON.stringify({ array: model })
-                    }).then(function () {
-                        entity.PriceCalc = entity.TransferPrice;
-                        messageBoxService.showInfo("Сохранено");
-                    }, function (response) {
-                        errorHandlerService.showResponseError(response);
-                    });
-            });
+        if (TransferPrice && parseFloat(TransferPrice) > 0) {
+            messageBoxService.showConfirm('Подставить значение ' + TransferPrice + ' в Расчетная цена sell out?', 'Перенос цены')
+                .then(function () {
+                    entity.TransferPrice = TransferPrice;
+                    var model = [];
+                    model.push({ "Id": entity.Id, "TransferPrice": entity.TransferPrice });
+
+                    $scope.dataLoading =
+                        $http({
+                            method: 'POST',
+                            url: '/EtalonPrice/TransferPrice/',
+                            data: JSON.stringify({ array: model })
+                        }).then(function () {
+                            entity.PriceCalc = entity.TransferPrice;
+                            messageBoxService.showInfo("Сохранено");
+                        }, function (response) {
+                            errorHandlerService.showResponseError(response);
+                        });
+                });
+        }
     };
 }
