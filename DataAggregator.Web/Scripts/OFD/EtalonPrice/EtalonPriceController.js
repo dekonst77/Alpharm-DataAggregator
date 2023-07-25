@@ -1,13 +1,13 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('EtalonPriceController', ['$scope', '$http', 'uiGridCustomService', 'messageBoxService', 'errorHandlerService', EtalonPriceController]);
+    .controller('EtalonPriceController', ['$scope', '$http', 'uiGridCustomService', 'messageBoxService', 'errorHandlerService', 'formatConstants', EtalonPriceController]);
 
-function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxService, errorHandlerService) {
+function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxService, errorHandlerService, formatConstants) {
 
     /*фильтр*/
     var today = new Date();
     var previousMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-    $scope.devPercents = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+    $scope.devPercents = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
     $scope.filter = {
         date: previousMonthDate,
         devPercent: 0.8,
@@ -208,6 +208,14 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // ОФД <<<<<
+        {
+            cellTooltip: true, enableCellEdit: false, width: 150, visible: true, nullable: true, name: 'Дата изменения', field: 'DateModified',
+            filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE
+        },
+        {
+            cellTooltip: true, enableCellEdit: false, width: 150, visible: true, nullable: true, name: 'Исполнитель',
+            field: 'UserName', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint
+        },
     ];
 
     $scope.Grid.SetDefaults();
@@ -242,15 +250,15 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         messageBoxService.showConfirm('Вы уверены, что хотите пересчитать данные? Операция может занять длительное время.', 'Пересчитать')
             .then(
                 function () {
-                    $http({
+                    $scope.loading = $http({
                         method: 'POST',
                         url: '/EtalonPrice/ReloadAllData',
                         data: JSON.stringify({
                             year: $scope.filter.date.getFullYear(), month: $scope.filter.date.getMonth() + 1
                         })
                     }).then(function () {
-                        $scope.getList(response);
-                    }, function () {
+                        $scope.getList();
+                    }, function (response) {
                         errorHandlerService.showResponseError(response);
                     });
                 })
@@ -268,7 +276,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 return { "Id": obj.Id, "CommentStatusId": obj.CommentStatusId }
             });
 
-            $scope.dataLoading =
+            $scope.loading =
                 $http({
                     method: 'POST',
                     url: '/EtalonPrice/SaveCommentStatuses/',
@@ -311,7 +319,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                     var model = [];
                     model.push({ "Id": entity.Id, "TransferPrice": entity.TransferPrice });
 
-                    $scope.dataLoading =
+                    $scope.loading =
                         $http({
                             method: 'POST',
                             url: '/EtalonPrice/TransferPrice/',

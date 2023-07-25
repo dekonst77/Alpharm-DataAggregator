@@ -1,6 +1,7 @@
 ﻿using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.OFD;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,11 @@ namespace DataAggregator.Web.Controllers.OFD
             try
             {
                 var result = _context.ViewData_SP(year, month, devPercent, searchText).ToList();
-                return new JsonNetResult { Data = result };
+                return new JsonNetResult 
+                {
+                    Formatting = Formatting.Indented,
+                    Data = result 
+                };
             }
             catch (Exception ex)
             {

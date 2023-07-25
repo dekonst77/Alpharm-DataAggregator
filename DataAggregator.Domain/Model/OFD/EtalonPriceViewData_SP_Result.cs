@@ -63,5 +63,7 @@ namespace DataAggregator.Domain.Model.OFD
         public Nullable<decimal> PriceCalc { get; set; }
         public Nullable<decimal> PricePrev { get; set; }
         public Nullable<decimal> DeviationPercent { get; set; }
+        public DateTime? DateModified { get; set; }
+        public string UserName { get; set; }
     }
 }
