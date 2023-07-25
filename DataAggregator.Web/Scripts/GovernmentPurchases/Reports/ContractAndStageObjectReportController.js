@@ -52,7 +52,7 @@ function ContractAndStageObjectReportController(messageBoxService, $scope, $http
             { name: 'Сумма исполнения', field: 'SumIsp', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Id об', field: 'ObjectId', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true },
             { name: 'Имя об', field: 'Name', filter: { condition: uiGridCustomService.conditionSpace } },
-            { name: 'Единица об', field: 'Unit', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
+            { name: 'Единица об', field: 'Unit', filter: { condition: uiGridCustomService.conditionSpace } },
             { name: 'Кол-во об', field: 'Amount', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Цена об', field: 'Price', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
             { name: 'Сумма об', field: 'Sum', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
