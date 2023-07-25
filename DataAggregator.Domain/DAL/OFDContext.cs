@@ -38,6 +38,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<PriceCurrentView_v2> PriceCurrentView_v2 { get; set; }
         public DbSet<PriceCurrent_v2> PriceCurrent_v2 { get; set; }
+        public DbSet<CommentStatuses> CommentStatuses { get; set; }
+        public DbSet<MainData> MainData { get; set; }
 
         public OFDContext(string APP)
         {

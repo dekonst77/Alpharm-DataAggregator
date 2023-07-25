@@ -44,6 +44,7 @@
                 </div>
                 <div class="col-md-6">
                     <button class="btn btn-success btn-sm" ng-disabled="filter.date == null" ng-click="getList();"><span class="glyphicon glyphicon-search"> Выбрать</span></button>
+                    <button type="button" class="btn btn-info btn-sm" ng-click="saveStatuses();" ng-disabled="!Grid.NeedSave"> <span class="glyphicon glyphicon-save"> Сохранить</span> </button>
                     <button type="button" class="btn btn-danger btn-sm" ng-click="reCalc();"> <span class="glyphicon glyphicon-flash"> Загрузить</span> </button>
                     <button type="button" class="btn btn-info btn-sm" ng-click="transfer();"> <span class="glyphicon glyphicon-paste"> Перенести цены</span> </button>
                 </div>
@@ -51,7 +52,7 @@
         </div>
     </div>
 
-    <div id="grid-block" class="auto-item-panel">
+    <div id="grid-block" class="auto-item-panel" data-context-menu="Views/OFD/EtalonPrice/Actions_context_menu.html">
         <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
     </div>
 </div>

@@ -13,20 +13,20 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         devPercent: 0.8,
         searchText: null
     };
+    $scope.commentStatuses = [];
 
     /*Grid*/
     $scope.Grid = uiGridCustomService.createGridClassMod($scope, 'EtalonPrice_Grid');
     $scope.Grid.Options.showGridFooter = true;
     $scope.Grid.Options.multiSelect = true;
+    $scope.Grid.Options.modifierKeysToMultiSelect = true;
     $scope.Grid.Options.enableSelectAll = true;
     $scope.Grid.Options.enableFiltering = true;
-
-    //$scope.Grid.Options.paginationPageSizes = [10000, 25000, 50000, 75000];
-    //$scope.Grid.Options.paginationPageSize = 25000;
 
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
     let numbercellTemplateHint = '<div class="ui-grid-cell-contents number" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>'
     let avgCellTemplateHint = '<div class="ui-grid-cell-contents">{{COL_FIELD | number:2}}</div>'
+    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-dblclick="grid.appScope.transferPrice(row,col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>'
 
     $scope.Grid.Options.columnDefs = [
         {
@@ -55,7 +55,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'ЖНВЛП',
-            field: 'PriceVED', type: 'number', filter: { condition: uiGridCustomService.condition }, cellTemplate: avgCellTemplateHint
+            field: 'PriceVED', type: 'number', filter: { condition: uiGridCustomService.condition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 80, visible: true, nullable: true, name: 'Заблокированные',
@@ -79,20 +79,20 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: '% откл.',
             field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
-        // расчетная цена SellOut
+        // расчетная цена SellOut (или установленная через контектное меню цена из другого столбца)
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Расч. цена SellOut',
-            field: 'SellOut_PriceCalc', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'PriceCalc', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // Цена SellIn
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Цена SellIn',
-            field: 'SellIn_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'SellIn_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // средняя цена - Контракты
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Контракты',
-            field: 'Contract_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'Contract_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // Комментарий
         {
@@ -117,100 +117,111 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // Исходные данные
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена исх.', field: 'Initial_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // по источникам
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Ригла', field: 'Rigla_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Group 36,6', field: 'Group366_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Максавит', field: 'Maksavit_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Нео-Фарм', field: 'Neopharm_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Алоэ БСС', field: 'Aloe_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Вита', field: 'Vita_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Фармаимпекс', field: 'Farmaimpeks_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // Исходные данные <<<<<
         // Парсинг
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена по сайтам', field: 'Downloaded_PriceAVG', type: 'number', headerCellClass: 'downloadeddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         //Downloaded_PriceAVG
         // по сайтам
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Aptekaru', field: 'Aptekaru_PriceAVG',
             type: 'number', headerCellClass: 'downloadeddata', headerCellTemplate: '<div class="ui-grid-header-cell-label"><a href="https://apteka.ru/" target="blank">apteka.ru</a></div>',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Zdravcity', field: 'Zdravcity_PriceAVG',
             type: 'number', headerCellClass: 'downloadeddata', headerCellTemplate: '<div class="ui-grid-header-cell-label"><a href="https://zdravcity.ru/" target="blank">zdravcity.ru</a></div>',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Uteka', field: 'Uteka_PriceAVG',
             type: 'number', headerCellClass: 'downloadeddata', headerCellTemplate: '<div class="ui-grid-header-cell-label"><a href="https://uteka.ru/" target="blank">uteka.ru</a></div>',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Eapteka', field: 'Eapteka_PriceAVG',
             type: 'number', headerCellClass: 'downloadeddata', headerCellTemplate: '<div class="ui-grid-header-cell-label"><a href="https://www.eapteka.ru/" target="blank">eapteka.ru</a></div>',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // Парсинг <<<<<
         // ОФД
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена ОФД', field: 'OFD_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // по платформам
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Первый ОФД', field: 'OFD1_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Платформа ОФД', field: 'Platformaofd_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Ярус', field: 'OFDYa_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Такском', field: 'Taxcom_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'СКБ Контур', field: 'Kontur_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'ИнитПро', field: 'Initpro_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numbercellTemplateHint
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // ОФД <<<<<
     ];
 
     $scope.Grid.SetDefaults();
+
+    $scope.Init = function () {
+        $http({
+            method: 'GET',
+            url: '/EtalonPrice/GetCommentStatuses/'
+        }).then(function (response) {
+            $scope.commentStatuses = response.data;
+        });
+    }
+
+    $scope.Init();
 
     $scope.getList = function () {
         $scope.loading = $http({
@@ -249,4 +260,65 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.transfer = function () {
         messageBoxService.showError("Ещё не рализовано");
     }
+
+    $scope.saveStatuses = function () {
+        var array_upd = $scope.Grid.GetArrayModify();
+        if (array_upd.length > 0) {
+            var model = array_upd.map(function (obj) {
+                return { "Id": obj.Id, "CommentStatusId": obj.CommentStatusId }
+            });
+
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/EtalonPrice/SaveCommentStatuses/',
+                    data: JSON.stringify({ array: model })
+                }).then(function () {
+                    $scope.getList();
+                    messageBoxService.showInfo("Сохранено");
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                    $scope.Grid.ClearModify();
+                });
+        }
+    }
+
+    /*-------------------------------------------------------------------------actions-------------------------------------------------------------------------*/
+
+    $scope.setComment = function (value, caption) {
+        if (value && $scope.Grid.selectedRows())
+            $scope.Grid.selectedRows().forEach(function (item) {
+                $scope.Grid.GridCellsMod(item, "CommentStatusId", value);
+                $scope.Grid.GridCellsMod(item, "CommentStatus", caption);
+            });
+    }
+
+    $scope.clearComment = function () {
+        if ($scope.Grid.selectedRows())
+            $scope.Grid.selectedRows().forEach(function (item) {
+                $scope.Grid.GridCellsMod(item, "CommentStatusId", null);
+            });
+    }
+
+    $scope.transferPrice = function (row, col) {
+        messageBoxService.showConfirm('Подставить значение в Расчетная цена sell out?', 'Перенос цены')
+            .then(function () {
+                var entity = row.entity;
+                entity.TransferPrice = row.entity[col.field];
+                var model = [];
+                model.push({ "Id": entity.Id, "TransferPrice": entity.TransferPrice });
+
+                $scope.dataLoading =
+                    $http({
+                        method: 'POST',
+                        url: '/EtalonPrice/TransferPrice/',
+                        data: JSON.stringify({ array: model })
+                    }).then(function () {
+                        entity.PriceCalc = entity.TransferPrice;
+                        messageBoxService.showInfo("Сохранено");
+                    }, function (response) {
+                        errorHandlerService.showResponseError(response);
+                    });
+            });
+    };
 }

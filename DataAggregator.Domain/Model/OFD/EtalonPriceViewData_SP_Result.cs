@@ -60,6 +60,7 @@ namespace DataAggregator.Domain.Model.OFD
         public Nullable<decimal> Downloaded_PriceAVG { get; set; }
         //расчетная цена sell out
         public Nullable<decimal> SellOut_PriceCalc { get; set; }
+        public Nullable<decimal> PriceCalc { get; set; }
         public Nullable<decimal> PricePrev { get; set; }
         public Nullable<decimal> DeviationPercent { get; set; }
     }
