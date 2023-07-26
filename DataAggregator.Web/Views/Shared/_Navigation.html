@@ -489,6 +489,16 @@
                         </li>
                     </ul>
                 </li>
+
+                <!--Уведомления-->
+                <li class="dropdown" ng-if="isAuthenticated()">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Уведомления"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-href="/#/Notification/Groups" data-translate="Группы рассылок"></a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

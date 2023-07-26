@@ -157,6 +157,12 @@
                     templateUrl: 'Views/Common/query.html',
                     title: 'Редактор отчетов',
                     authorize: true
+                })
+            .when('/Notification/Groups',
+                {
+                    templateUrl: 'Views/Common/Notification/Index.html',
+                    title: 'MAIN.NOTIFICATION.TITLE',
+                    authorize: true
                 });
 
 

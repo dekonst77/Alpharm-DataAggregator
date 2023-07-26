@@ -60,6 +60,7 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/Common/DataAggregator/DataAggregatorModule.js")
                 .Include("~/Scripts/Common/DataAggregator/routing.js")
                 .Include("~/Scripts/Common/DataAggregator/DataAggregatorController.js")
+                .Include("~/Scripts/Common/DataAggregator/NotificationController.js")
                 .Include("~/Scripts/Account/LoginController.js")
                 .Include("~/Scripts/Localization/ru_RU.js")
                 .IncludeDirectory("~/Scripts/Common/Constants", "*.js")

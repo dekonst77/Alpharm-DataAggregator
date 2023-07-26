@@ -88,6 +88,9 @@
                 },
                 "DEPARTMENT_DICTIONARY": {
                     "TITLE": 'Справочник подразделений'
+                },
+                "NOTIFICATION": {
+                    "TITLE": 'Уведомления'
                 }
             },
 

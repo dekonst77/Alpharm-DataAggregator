@@ -1,0 +1,18 @@
+﻿<div class="modal-header">
+    <p class="modal-title">Выберите пользователя</p>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <multiselect class="input-xlarge multiselect" ng-model="users" options="item.Id as item.FullName for item in $resolve.allUsers" check-all-label="Выбрать всё" uncheck-all-label="Снять всё"
+                             header="Выбрать пользователя" selected-header="Выбранные значения" multiple="true" enable-filter="true">
+                </multiselect>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" type="button" ng-click="save()" data-translate="BUTTONS.SAVE"></button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
+</div>

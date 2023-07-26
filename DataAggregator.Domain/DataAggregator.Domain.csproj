@@ -114,6 +114,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Model\Common\DictionaryDescriptionItem.cs" />
     <Compile Include="Model\ControlALG\ControlALG.cs" />
+    <Compile Include="Model\DataAggregator\NotificationData.cs" />
     <Compile Include="Model\DataAggregator\Projects.cs" />
     <Compile Include="Model\DataReport\DataReport.cs" />
     <Compile Include="Model\DataReport\DataReportCommon.cs" />

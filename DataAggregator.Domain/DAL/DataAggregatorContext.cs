@@ -31,5 +31,7 @@ namespace DataAggregator.Domain.DAL
         public DbSet<Steps> Steps { get; set; }
 
         public DbSet<UserViewAll> UserViewAll { get; set; }
+        public DbSet<NotificationGroups> NotificationGroups { get; set; }
+        public DbSet<NotificationGroupUsers> NotificationGroupUsers { get; set; }
     }
 }

@@ -33,6 +33,10 @@ namespace DataAggregator.Web
             bundles.Add(new ComplexScriptBundle("~/bundles/Projects")
                 .Include("~/Scripts/Management/ProjectController.js"));
 
+            //Уведомления
+            bundles.Add(new ComplexScriptBundle("~/bundles/Notification")
+                .Include("~/Scripts/Notification/NotificationController.js"));
+
             BundleTable.EnableOptimizations = true;
         }
 
