@@ -203,12 +203,11 @@ function CheckClassifireReportController($scope, $http, $q, $cacheFactory, $filt
                 $scope.CheckClassifireReportList.splice(0, $scope.CheckClassifireReportList.length);
                 Array.prototype.push.apply($scope.CheckClassifireReportList, response.data.Data.CheckClassifireReportList);
 
-                $scope.CheckClassifireReportFilterList = $scope.CheckClassifireReportList.map(item => {
-                    return {
-                        value: item.Id,
-                        label: item.Value
-                    }
-                });
+                Array.prototype.push.apply($scope.CheckClassifireReportFilterList, $scope.CheckClassifireReportList.map(function (obj) {
+                    var rObj = { 'value': obj.Id, 'label': obj.Value };
+                    return rObj;
+                }));
+             
 
                 $scope.Exception_Grid.Options.columnDefs.find(item => item.field === 'ClassifierReportId').filter.selectOptions = $scope.CheckClassifireReportFilterList;
             }

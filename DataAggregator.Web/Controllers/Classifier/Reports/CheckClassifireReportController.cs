@@ -133,7 +133,7 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         /// <param name="ExceptionList"></param>
         /// <param name="Error"></param>
         /// <returns></returns>
-        private bool Validate(List<RegCertificateNumberExceptions> ExceptionList, out string Error)
+        public bool Validate(List<RegCertificateNumberExceptions> ExceptionList, out string Error)
         {
             bool Result = true;
             Error = String.Empty;
@@ -172,10 +172,10 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         [HttpPost]
         public ActionResult ReportExceptionListSave(List<RegCertificateNumberExceptions> ExceptionList)
         {
-            if (!Validate(ExceptionList, out string errorMessage))
-            {
-                return BadRequest(errorMessage);
-            }
+           // if (!Validate(ExceptionList, out string errorMessage))
+           // {
+            //    return BadRequest(errorMessage);
+            //}
 
             List<RegCertificateNumberExceptions> records = new List<RegCertificateNumberExceptions>();
 
