@@ -1572,6 +1572,7 @@
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
     <Content Include="Content\select.min.css.map" />
+    <Content Include="Content\AddToClassif.xlsx" />
     <None Include="Properties\PublishProfiles\DataAggregatorWeb_Local.pubxml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
