@@ -116,6 +116,15 @@
                     authorize: true,
                     isEditor: true
                 })
+
+            // Эталонные цены new
+            .when('/OFD/EtalonPrice',
+                {
+                    templateUrl: 'Views/OFD/EtalonPrice/Index.html',
+                    title: 'OFD.PRICE_ETALON.TITLE_new',
+                    authorize: true
+                })
+
             // окно ОФД
             .when('/OFD/PriceEtalon',
                 {
@@ -147,6 +156,12 @@
                 {
                     templateUrl: 'Views/Common/query.html',
                     title: 'Редактор отчетов',
+                    authorize: true
+                })
+            .when('/Notification/Groups',
+                {
+                    templateUrl: 'Views/Common/Notification/Index.html',
+                    title: 'MAIN.NOTIFICATION.TITLE',
                     authorize: true
                 });
 
@@ -818,7 +833,7 @@
                 authorize: true
             })
 
-            // Черный список аптек
+            // Аптеки, не идущие в расчёт по среднему ассортименту
             .when('/Retail/PharmacyWithoutAverage', {
                 templateUrl: 'Views/Retail/PharmacyWithoutAverage/Index.html',
                 title: 'RETAIL.PHARMACY_WITHOUT_AVERAGE_LIST_TITLE',
@@ -829,6 +844,13 @@
             .when('/Retail/SourceBrandBlackList', {
                 templateUrl: 'Views/Retail/SourceBrandBlackList/Index.html',
                 title: 'RETAIL.SOURCE_BRAND_BLACK_LIST_TITLE',
+                authorize: true
+            })
+
+            // Черный список аптек для ОФД
+            .when('/Retail/PharmacyOFDBlackList', {
+                templateUrl: 'Views/Retail/PharmacyOFDBlackList/Index.html',
+                title: 'RETAIL.PHARMACY_OFD_BLACK_LIST_TITLE',
                 authorize: true
             })
 

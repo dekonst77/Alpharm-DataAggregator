@@ -114,6 +114,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Model\Common\DictionaryDescriptionItem.cs" />
     <Compile Include="Model\ControlALG\ControlALG.cs" />
+    <Compile Include="Model\DataAggregator\NotificationData.cs" />
     <Compile Include="Model\DataAggregator\Projects.cs" />
     <Compile Include="Model\DataReport\DataReport.cs" />
     <Compile Include="Model\DataReport\DataReportCommon.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Model\DrugClassifier\GTIN\GTIN.cs" />
     <Compile Include="Model\DrugClassifier\Rasp.cs" />
     <Compile Include="Model\DrugClassifier\Stat\DateStat.cs" />
+    <Compile Include="Model\EtalonPrice\DataModels.cs" />
     <Compile Include="Model\EtalonPrice\PriceCurrent_v2.cs" />
     <Compile Include="Model\Ecom\Ecom.cs" />
     <Compile Include="Model\EtalonPrice\PriceCurrent.cs" />
@@ -191,9 +193,11 @@
     <Compile Include="Model\LPU\LPUView.cs" />
     <Compile Include="Model\OFD\Classifier_ExternalView.cs" />
     <Compile Include="Model\OFD\db_object.cs" />
+    <Compile Include="Model\OFD\EtalonPriceViewData_SP_Result.cs" />
     <Compile Include="Model\OFD\PriceEtalon.cs" />
     <Compile Include="Model\OFD\PriceEtalonView.cs" />
     <Compile Include="Model\RetailCalculation\Log.cs" />
+    <Compile Include="Model\Retail\TargetPharmacyOFDBlackList.cs" />
     <Compile Include="Model\Retail\SourceBrandBlackList.cs" />
     <Compile Include="Model\RetailCalculation\User.cs" />
     <Compile Include="Model\Retail\CalcInfo.cs" />

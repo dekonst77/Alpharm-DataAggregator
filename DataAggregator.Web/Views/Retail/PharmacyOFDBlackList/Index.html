@@ -1,0 +1,21 @@
+﻿<div ng-controller="PharmacyOFDBlackListController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+        <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-3">
+                        <date-period period="filter.date" ng-required="true"></date-period>
+                    </div>
+                    <div class="col-md-9">
+                        <button class="btn btn-success btn-sm" ng-disabled="filter.date == null" ng-click="getList();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <div class="btn btn-info btn-sm" ngf-select="UploadFromExcel($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                            <span class="glyphicon glyphicon-import" data-translate="BUTTONS.IMPORT"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="grid-block" class="auto-item-panel">
+            <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+        </div>
+    </div>

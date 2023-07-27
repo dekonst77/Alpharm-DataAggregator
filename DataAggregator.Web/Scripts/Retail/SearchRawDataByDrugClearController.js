@@ -26,6 +26,7 @@ function SearchRawDataByDrugClearController($scope, $http, uiGridCustomService, 
         { displayName: 'COMMON_GRID.SOURCE_NAME', field: 'SourceName', visible: false },
         { displayName: 'COMMON_GRID.FILE_INFO_ID', field: 'FileInfoId', width: 100, type: 'number', visible: false },
         { displayName: 'COMMON_GRID.FILE_PATH', field: 'Path' },
+        { displayName: 'RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.PHARMACY_NAMES', field: 'PharmacyNames' },
         { displayName: 'RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.ORIGINAL_DRUG_NAME', field: 'Drug' },
         { displayName: 'RETAIL.SEARCH_RAW_DATA_BY_DRUG_CLEAR.ORIGINAL_MANUFACTURER_NAME', field: 'Manufacturer' },
 

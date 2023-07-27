@@ -1,0 +1,32 @@
+﻿<div ng-controller="NotificationController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2">
+                    <h4>Группы рассылок</h4>
+                </div>
+                <div class="col-md-4"> </div>
+                <div class="col-md-2">
+                    <h4>Участники групп</h4>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-info btn-sm" ng-click="addGroupUsers();" 
+                            ng-disabled="selectedGroupId == null"> <span class="glyphicon glyphicon-plus"> Добавить</span> </button>
+                    <button type="button" class="btn btn-danger btn-sm" ng-click="removeGroupUsers();" 
+                            ng-disabled="selectedGroupId == null || selectedUsers.length === 0"> <span class="glyphicon glyphicon-minus"> Удалить</span> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <div class="row">
+            <div class="col-md-6">
+                <ui-grid-control options="groupListGrid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+            </div>
+            <div class="col-md-6">
+                <ui-grid-control options="userListGrid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
+            </div>
+        </div>
+    </div>
+</div>
