@@ -39,54 +39,24 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
             { headerTooltip: true, name: 'Otc', enableCellEdit: true, field: 'Otc', type: 'boolean', nullable: false },
             { headerTooltip: true, name: 'RURx', displayName: 'RURx', enableCellEdit: false, field: 'RURx', type: 'boolean', nullable: false },
             { headerTooltip: true, name: 'IsChecked', enableCellEdit: true, field: 'IsChecked', type: 'boolean' }
-
-
-            //{
-            //    enableCellEdit: true, width: 300, displayName: 'Отчет, в котором он исключен', name: 'ClassifierReportId', field: 'ClassifierReportId', nullable: false, filter: { condition: uiGridCustomService.condition },
-            //    editableCellTemplate: 'ui-grid/dropdownEditor', cellFilter: 'griddropdownSSA:this', editType: 'dropdown',
-            //    editDropdownOptionsArray: $scope.CheckClassifireReportList,
-            //    editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value'
-            //},
-
-            //{
-            //    enableCellEdit: true, width: 300, displayName: 'Отчет, в котором он исключен', name: 'ClassifierReportId', field: 'ClassifierReportId', nullable: false,
-            //    //filter: {
-            //    //    type: uiGridConstants.filter.SELECT,
-            //    //    selectOptions: $scope.CheckClassifireReportFilterList
-            //    //},
-            //    editableCellTemplate: 'ui-grid/dropdownEditor', cellFilter: 'griddropdownSSA:this', editType: 'dropdown',
-            //    editDropdownOptionsArray: $scope.CheckClassifireReportList,
-            //    editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Value',
-            //    cellFilter: 'mapReport'
-            //}
         ];
 
         $scope.RxOtcGrid.SetDefaults();
 
-        $scope.RxOtcGrid.Options.onRegisterApi = function (gridApi) {
-            gridApi.edit.on.afterCellEdit($scope, editRowDataSource);
-        };
-
-        function editRowDataSource(rowEntity, colDef, newValue, oldValue) {
-
-            //if (colDef.field !== '@modify') {
-            //    if (newValue !== oldValue) {
-            //        var deepClone = JSON.parse(JSON.stringify(rowEntity));
-            //        deepClone[colDef.field] = oldValue;
-
-            //        rowEntity["@modify"] = true;
-            //        $scope.Grid_BlisterBlock.NeedSave = true;
-            //    }
-            //}
+        $scope.RxOtcGrid.afterCellEdit = function editRowDataSource(rowEntity, colDef, newValue, oldValue) {
 
             // проверка на изменение
             if (newValue === oldValue || newValue === undefined)
                 return;
 
-            if (colDef.field === 'Rx') {               
+            if (colDef.field === 'Rx') {
                 rowEntity.Otc = !newValue;
             }
-        }
+
+            if (colDef.field === 'Otc') {
+                rowEntity.Rx = !newValue;
+            }
+        };
         //******** Grid ******** <-
 
         $scope.ClassifierRxOtc_Search();
@@ -104,10 +74,6 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
 
             if (response.status === 200) {
                 $scope.RxOtcGrid.Options.data = response.data.Data.RxOtc;
-
-
-                //localStorage.setItem("currperiod", $scope.currentperiod);
-                //localStorage.setItem("selregions", JSON.stringify($scope.selectByGroupModel));
             }
             else {
                 console.error(response);
@@ -119,4 +85,40 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
             errorHandlerService.showResponseError(response);
         });
     }
+
+    $scope.ClassifierRxOtc_Save = function () {
+        var array_upd = $scope.RxOtcGrid.GetArrayModify();
+
+        console.log(array_upd);
+
+        if (array_upd.length > 0) {
+            $scope.dataLoading =
+                $http({
+                    method: 'POST',
+                    url: '/ClassifierRxOtc/Save/',
+                    data: JSON.stringify({ array: array_upd })
+                }).then(function (response) {
+
+                    if (response.status === 200) {
+                        console.log('успешно записаны данные в БД');
+
+                        $scope.RxOtcGrid.ClearModify();
+
+                        var data = response.data.Data.Data.ClassifierRxOtcRecord;
+                        //console.log(data);
+
+                        // корректируем оригинал
+                        data.forEach(el => {
+                            var index = origdata.findIndex(item => item.Classifierid === el.Classifierid);
+                            origdata.splice(index, 1, el);
+                        });
+
+                        //alert("Сохранено");
+                        messageBoxService.showInfo("Сохранено записей: " + data.length);
+                    }
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+        }
+    };
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierRxOtc
 {
@@ -15,7 +11,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierRxOtc
         public Nullable<long> RegistrationCertificateId { get; set; }
         public string RegistrationCertificateNumber { get; set; }
         public long DrugId { get; set; }
-        public Nullable<long> ClassifierInfoId { get; set; }
+        public long ClassifierInfoId { get; set; }
         public string TN_FP_D_F_INN { get; set; }
         public bool Rx { get; set; }
         public bool Otc { get; set; }

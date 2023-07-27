@@ -182,6 +182,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<Localization> Localization { get; set; }
 
+        public DbSet<ClassifierRxOtc> ClassifierRxOtc { get; set; }
+
         public virtual IList<GetLocalizationByManufacturerTable_Result> GetLocalizationByManufacturerTable(Nullable<long> iD)
         {
             SqlParameter param = new SqlParameter("@Id", iD);
@@ -223,7 +225,6 @@ namespace DataAggregator.Domain.DAL
                 new SqlParameter { ParameterName = "@Excluded", SqlDbType = SqlDbType.Bit, Value = Excluded }
                 );
         }
-
         #endregion
 
         #region FederalBenefit
