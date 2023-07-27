@@ -755,6 +755,7 @@
     <Content Include="Scripts\Classifier\Manufacturer\ManufacturerController.js" />
     <Content Include="Scripts\Classifier\RaspredelenieController.js" />
     <Content Include="Scripts\Classifier\Reports\CheckClassifireReportController.js" />
+    <Content Include="Scripts\Classifier\Reports\CheckReportDialogController.js" />
     <Content Include="Scripts\Classifier\SPRController.js" />
     <Content Include="Scripts\Classifier\SQA\SQAController.js" />
     <Content Include="Scripts\Classifier\MaskController.js" />
@@ -1808,6 +1809,8 @@
     <Content Include="Scripts\ng-file-upload-shim.min.js" />
     <Content Include="Scripts\ng-file-upload.js" />
     <Content Include="Scripts\ng-file-upload.min.js" />
+    <Content Include="Scripts\Common\DataAggregator\NotificationController.js" />
+    <Content Include="Scripts\OFD\EtalonPrice\EtalonPriceController.js" />
     <Content Include="Scripts\OFD\GS_ToOFDController.js" />
     <Content Include="Scripts\OFD\OFDController.js" />
     <Content Include="Scripts\OFD\PriceCurrent\PriceCurrentController_v2.js" />
@@ -1997,6 +2000,7 @@
     <Content Include="Scripts\Retail\CountRuleEditor\SearchDrugController.js" />
     <Content Include="Content\Retail\MarkupDefaultEditor.css" />
     <Content Include="Scripts\Retail\MarkupDefaultEditorController.js" />
+    <Content Include="Scripts\Retail\PharmacyOFDBlackList\PharmacyOFDBlackListController.js" />
     <Content Include="Scripts\Retail\PharmacyWithoutAverage\PharmacyWithoutAverageController.js" />
     <Content Include="Scripts\Retail\PriceRuleEditor\PriceRuleEditorController.js" />
     <Content Include="Scripts\Retail\FileInfo\FileInfoController.js" />
@@ -2164,12 +2168,14 @@
     <Content Include="Views\Classifier\Manufacturer\Index.html" />
     <Content Include="Views\Classifier\Raspredelenie.html" />
     <Content Include="Views\Classifier\Reports\CheckReport\CheckReport.html" />
+    <Content Include="Views\Classifier\Reports\CheckReport\_CheckReportDialog.html" />
     <Content Include="Views\Classifier\SPR.html" />
     <Content Include="Views\Classifier\SPR_context_menu.html" />
     <Content Include="Views\Classifier\SQA\Index.html" />
     <Content Include="Views\Clients\Companies.html" />
     <Content Include="Views\Clients\Reports.html" />
     <Content Include="Views\Clients\Workers.html" />
+    <Content Include="Views\Common\Notification\NewGroupUser.html" />
     <Content Include="Views\Common\query.html" />
     <Content Include="Views\Common\Table.html" />
     <Content Include="Views\DistrRep\CheckReloadFileContextMenu.html" />
@@ -2226,6 +2232,9 @@
     <Content Include="Views\LPU\lpu_context_menu.html" />
     <Content Include="Views\LPU\lpu.html" />
     <Content Include="Views\Management\Projects.html" />
+    <Content Include="Views\Common\Notification\Index.html" />
+    <Content Include="Views\OFD\EtalonPrice\Actions_context_menu.html" />
+    <Content Include="Views\OFD\EtalonPrice\Index.html" />
     <Content Include="Views\OFD\GS_ToOFD_BlockReason.html" />
     <Content Include="Views\OFD\GS_ToOFD_Edit.html" />
     <Content Include="Views\OFD\4SC_Agreement_EditDates.html" />
@@ -2248,6 +2257,7 @@
     <Content Include="Views\Retail\CTM\CTM.html" />
     <Content Include="Views\Retail\CTM\CTM_context_menu.html" />
     <Content Include="Views\Retail\Ecom\Coefficients.html" />
+    <Content Include="Views\Retail\PharmacyOFDBlackList\Index.html" />
     <Content Include="Views\Retail\RetailCalculation\Index.html" />
     <Content Include="Views\Retail\GoodsCountRuleFullVolumeEditor\Index.html" />
     <Content Include="Views\Retail\GoodsCountRuleFullVolumeEditor\_SearchGoodsView.html" />
@@ -2375,6 +2385,8 @@
     <Compile Include="Controllers\LPU\LPULicensesController.cs" />
     <Compile Include="Controllers\LPU\LPUPointController.cs" />
     <Compile Include="Controllers\Management\ProjectController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\OFD\EtalonPriceController.cs" />
     <Compile Include="Controllers\OFD\OFDController.cs" />
     <Compile Include="Controllers\OFD\PriceCurrentController_v2.cs" />
     <Compile Include="Controllers\OFD\PriceCurrentController.cs" />
@@ -2387,6 +2399,7 @@
     <Compile Include="Controllers\Retail\Common\GoodsExternalViewController.cs" />
     <Compile Include="Controllers\Retail\Common\GoodsBrandController.cs" />
     <Compile Include="Controllers\Retail\Common\GoodsTradeNameController.cs" />
+    <Compile Include="Controllers\Retail\PharmacyOFDBlackListController.cs" />
     <Compile Include="Controllers\Retail\PharmacyWithoutAverageController.cs" />
     <Compile Include="Controllers\Retail\RetailCalculationController.cs" />
     <Compile Include="Controllers\Retail\RetailReportController.cs" />
@@ -2727,6 +2740,7 @@
     <Folder Include="Views\CheckClassifireReport\" />
     <Folder Include="Views\ContractAndStageObject\" />
     <Folder Include="Views\DOPMonitoringDatabase\" />
+    <Folder Include="Views\EtalonPrice\" />
     <Folder Include="Views\ExecutionTerminatedContract\" />
     <Folder Include="Views\GTIN\" />
     <Folder Include="Views\LPUDictionaries\" />

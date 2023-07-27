@@ -55,7 +55,8 @@
             "OFD": {
                 "PRICE_ETALON": {
                     "TITLE": 'Эталонные цены',
-                    "TITLE_v2": 'Эталонные цены v2'
+                    "TITLE_v2": 'Эталонные цены v2',
+                    "TITLE_new": 'Эталонные цены new'
                 },
                 "PRICE_HISTORY": {
                     "TITLE": 'Эталонные цены - периоды'
@@ -87,6 +88,9 @@
                 },
                 "DEPARTMENT_DICTIONARY": {
                     "TITLE": 'Справочник подразделений'
+                },
+                "NOTIFICATION": {
+                    "TITLE": 'Уведомления'
                 }
             },
 
@@ -352,6 +356,7 @@
                 "SOURCE_PHARMACIES_EDITOR_TITLE": 'Справочник аптек',
                 "PHARMACY_BRAND_BLACK_LIST_TITLE": 'Черный список аптека-бренд',
                 "PHARMACY_WITHOUT_AVERAGE_LIST_TITLE": 'Аптеки, не идущие в расчёт по среднему ассортименту',
+                "PHARMACY_OFD_BLACK_LIST_TITLE": 'Черный список для ОФД',
                 "SOURCE_BRAND_BLACK_LIST_TITLE": 'Черный список брендов',
                 "PRICE_LIMITS_EDITOR_TITLE": 'Редактор цен',
                 "COUNT_CHECK_TITLE": 'Редактор количеств',
@@ -405,7 +410,8 @@
                     "TITLE": 'Поиск в исходных данных по тексту',
                     "ORIGINAL_DRUG_NAME": 'Исходное написание препарата',
                     "ORIGINAL_MANUFACTURER_NAME": 'Исходное написание производителя',
-                    "DRUG_CLEAR_IDS": 'Коды строк'
+                    "DRUG_CLEAR_IDS": 'Коды строк',
+                    "PHARMACY_NAMES": 'Наименования аптек'
                 },
 
                 "RELEASE": {

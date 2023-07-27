@@ -91,6 +91,7 @@ namespace DataAggregator.Domain.DAL
         public DbSet<TargetPharmacyBrandBlackListView> TargetPharmacyBrandBlackListView { get; set; }
 
         public DbSet<TargetPharmacyBrandBlackList> TargetPharmacyBrandBlackList { get; set; }
+        public DbSet<TargetPharmacyOFDBlackList> TargetPharmacyOFDBlackList { get; set; }
 
         public DbSet<PriceRule> PriceRule { get; set; }
 

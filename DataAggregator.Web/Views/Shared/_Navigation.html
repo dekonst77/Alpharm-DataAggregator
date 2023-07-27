@@ -264,6 +264,7 @@
                         <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/PharmacyBrandBlackList" data-translate="RETAIL.PHARMACY_BRAND_BLACK_LIST_TITLE"></a></li>
                         <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/PharmacyWithoutAverage" data-translate="RETAIL.PHARMACY_WITHOUT_AVERAGE_LIST_TITLE"></a></li>
                         <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/SourceBrandBlackList" data-translate="RETAIL.SOURCE_BRAND_BLACK_LIST_TITLE"></a></li>
+                        <li in-roles="RBoss,RManager"><a ng-href="/#/Retail/PharmacyOFDBlackList" data-translate="RETAIL.PHARMACY_OFD_BLACK_LIST_TITLE"></a></li>
 
                         <!--разделитель-->
                         <li in-roles="RBoss,RManager" class="divider"></li>
@@ -448,6 +449,8 @@
                         <li in-roles="OFD_View"><a ng-href="/#/OFD/PriceCurrent_v2" data-translate="OFD.PRICE_ETALON.TITLE_v2" style="display:inline"></a></li>
                         <li in-roles="OFD_View"><a ng-href="/#/OFD/PriceEtalon" data-translate="OFD.PRICE_HISTORY.TITLE" style="display:inline"></a></li>
 
+                        <li in-roles="OFD_View"><a ng-href="/#/OFD/EtalonPrice" class="padding_menu_item"> <span class="glyphicon glyphicon-star" style="padding-right:10px;"></span>Эталонные цены new</a></li>
+
                         <li in-roles="OFD_Boss" class="divider"></li>
 
                         <li in-roles="OFD_Boss"><a ng-href="/#/OFD/Aggregated_All_Edit" class="padding_menu_item"> <span class="glyphicon glyphicon-envelope" style="padding-right:10px;"></span>Редактор Агрегатов</a></li>
@@ -483,6 +486,16 @@
                         <li ng-repeat="item_rep in DAM_Distr_report">
                             <a ng-href="/#/Global?name=WebReport&id={{item_rep.Id}}" class="{{item_rep.Area}}" data-translate="{{item_rep.Name}}">
                             </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--Уведомления-->
+                <li class="dropdown" ng-if="isAuthenticated()">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Уведомления"></span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-href="/#/Notification/Groups" data-translate="Группы рассылок"></a>
                         </li>
                     </ul>
                 </li>

@@ -19,6 +19,7 @@ namespace DataAggregator.Web.App_Start.BundleConfig
                 .Include("~/Scripts/OFD/PriceEtalon/PriceEtalonSearchDrugController.js")
                 .Include("~/Scripts/OFD/OFDController.js")
                 .Include("~/Scripts/OFD/GS_ToOFDController.js")
+                .Include("~/Scripts/OFD/EtalonPrice/EtalonPriceController.js")
              );
 
             bundles.Add(new ComplexStyleBundle("~/Content/OFD/css")
