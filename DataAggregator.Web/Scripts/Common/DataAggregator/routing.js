@@ -776,6 +776,13 @@
                 templateUrl: 'Views/Classifier/AddingDOPMonitoringDatabase/AddingDOPMonitoringDatabase.html',
                 title: 'CLASSIFIER.AddingDOPtotheMonitoringDatabase.TITLE',
                 authorize: true
+            })
+
+            // Модуль для простановки RX OTC
+            .when('/Classifier/ClassifierRxOtc', {
+                templateUrl: 'Views/Classifier/ClassifierRxOtc/ClassifierRxOtc.html', 
+                title: 'CLASSIFIER.ClassifierRxOtc.TITLE',
+                authorize: true
             });
     }
 

@@ -2,6 +2,7 @@
 using DataAggregator.Domain.Model.DrugClassifier.Changes;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierCheckReport;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierRxOtc;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.FederalBenefit;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.Function;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.View;
@@ -209,6 +210,18 @@ namespace DataAggregator.Domain.DAL
         public IEnumerable<ClassifierCheckReportExceptionListResult> ClassifierCheckReport_SP(string reportName)
         {
             return Database.SqlQuery<ClassifierCheckReportExceptionListResult>("[report].[ClassifierCheckReport] {0}", reportName);
+        }
+
+        /// <summary>
+        /// модуль для простановки RX, OTC
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<LoadClassifierRxOtc_SP_Result> LoadClassifierRxOtc_SP_Result(bool Used, bool Excluded)
+        {
+            return Database.SqlQuery<LoadClassifierRxOtc_SP_Result>("[Classifier].[LoadClassifierRxOtc_SP] @Used, @Excluded",
+                new SqlParameter { ParameterName = "@Used", SqlDbType = SqlDbType.Bit, Value = Used },
+                new SqlParameter { ParameterName = "@Excluded", SqlDbType = SqlDbType.Bit, Value = Excluded }
+                );
         }
 
         #endregion

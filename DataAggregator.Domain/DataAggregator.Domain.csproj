@@ -126,6 +126,7 @@
     <Compile Include="Model\DrugClassifier\Classifier\ClassifierCheckReport\ClassifierCheckReport_ExceptionListResult.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ClassifierCheckReport\RegCertificateNumberExceptions.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ClassifierReport.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\ClassifierRxOtc\LoadClassifierRxOtc_SP_Result.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\Corporation.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\Country.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\Equipment.cs" />

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace DataAggregator.Domain.Model.DrugClassifier.GoodsClassifier.AddingDOPMonitoringDatabase
 {
     /// <summary>
-    /// результат проц-ры[GoodsClassifier].[GetDOPBlockingForMonitoringDatabase]
+    /// результат проц-ры [GoodsClassifier].[GetDOPBlockingForMonitoringDatabase]
     /// </summary>
     public class GetDOPBlockingForMonitoringDatabase_Result
     {

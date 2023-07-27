@@ -280,8 +280,10 @@
                     "TITLE": 'Проверка классификатора'
                 },
                 "AddingDOPtotheMonitoringDatabase": {
-
                     "TITLE": 'Добавление ДОП в БД мониторинг'
+                },
+                "ClassifierRxOtc": {
+                    "TITLE": 'Модуль для простановки RX OTC'
                 }
             },
 

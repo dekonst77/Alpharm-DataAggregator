@@ -739,6 +739,7 @@
     <Content Include="Scripts\Classifier\ClassifierEditor\ClassifierEditorHistoryController.js" />
     <Content Include="Scripts\Classifier\ClassifierRelease\ClassifierReleaseController.js" />
     <Content Include="Scripts\Classifier\ClassifierRelease\ClassifierJobInfoController.js" />
+    <Content Include="Scripts\Classifier\ClassifierRxOtс\ClassifierRxOtcController.js" />
     <Content Include="Scripts\Classifier\DataChangeExcelController.js" />
     <Content Include="Scripts\Classifier\DDDController.js" />
     <Content Include="Scripts\Classifier\Generic\ClassificationGenericController.js" />
@@ -2145,6 +2146,7 @@
     <Content Include="Views\Classifier\Certificate\ESKLP.html" />
     <Content Include="Views\Classifier\Certificate\MnfWay.html" />
     <Content Include="Views\Classifier\Certificate\Subtance.html" />
+    <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc.html" />
     <Content Include="Views\Classifier\GoodsClassifierReport\GoodsClassifierReport.html" />
     <Content Include="Views\Classifier\Mask.html" />
     <Content Include="Views\Classifier\Checkeds.html" />
@@ -2339,6 +2341,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Classifier\BlisterBlockController.cs" />
+    <Compile Include="Controllers\Classifier\ClassifierRxOtcController.cs" />
     <Compile Include="Controllers\Classifier\DataChangeExcelController.cs" />
     <Compile Include="Controllers\Classifier\DOPMonitoringDatabaseController.cs" />
     <Compile Include="Controllers\Classifier\GTINController.cs" />
