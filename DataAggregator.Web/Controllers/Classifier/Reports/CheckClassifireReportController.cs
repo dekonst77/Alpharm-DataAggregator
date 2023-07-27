@@ -133,7 +133,7 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         /// <param name="ExceptionList"></param>
         /// <param name="Error"></param>
         /// <returns></returns>
-        private bool Validate(List<RegCertificateNumberExceptions> ExceptionList, out string Error)
+        public bool Validate(List<RegCertificateNumberExceptions> ExceptionList, out string Error)
         {
             bool Result = true;
             Error = String.Empty;

@@ -112,9 +112,9 @@ namespace DataAggregator.Web.Controllers.Classifier
                         System.IO.File.Delete(filename);
 
                     file.SaveAs(filename);
-
-
-                    var result = _context.Database.ExecuteSqlCommand("[gtin].[UploadGTINNewFromExcel] @filename ,@UserId, @filenameSource"
+                    var con = _context.Database;
+                    con.CommandTimeout = 500;
+                    var result = con.ExecuteSqlCommand("[gtin].[UploadGTINNewFromExcel] @filename ,@UserId, @filenameSource"
                             , new SqlParameter { ParameterName = "@filename", SqlDbType = SqlDbType.NVarChar, Value = (object)filename ?? DBNull.Value }
                             , new SqlParameter { ParameterName = "@UserId", SqlDbType = SqlDbType.NVarChar, Value = (object)User.Identity.GetUserId() ?? DBNull.Value }
                              , new SqlParameter { ParameterName = "@filenameSource", SqlDbType = SqlDbType.NVarChar, Value = (object)file.FileName.ToString() ?? DBNull.Value }
