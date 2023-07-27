@@ -172,10 +172,10 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         [HttpPost]
         public ActionResult ReportExceptionListSave(List<RegCertificateNumberExceptions> ExceptionList)
         {
-           // if (!Validate(ExceptionList, out string errorMessage))
-           // {
-            //    return BadRequest(errorMessage);
-            //}
+            if (!Validate(ExceptionList, out string errorMessage))
+            {
+                return BadRequest(errorMessage);
+            }
 
             List<RegCertificateNumberExceptions> records = new List<RegCertificateNumberExceptions>();
 
