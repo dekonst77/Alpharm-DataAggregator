@@ -2236,6 +2236,7 @@
     <Content Include="Views\Management\Projects.html" />
     <Content Include="Views\Common\Notification\Index.html" />
     <Content Include="Views\OFD\EtalonPrice\Actions_context_menu.html" />
+    <Content Include="Views\OFD\EtalonPrice\CommentStatusManual_Dlg.html" />
     <Content Include="Views\OFD\EtalonPrice\Index.html" />
     <Content Include="Views\OFD\GS_ToOFD_BlockReason.html" />
     <Content Include="Views\OFD\GS_ToOFD_Edit.html" />

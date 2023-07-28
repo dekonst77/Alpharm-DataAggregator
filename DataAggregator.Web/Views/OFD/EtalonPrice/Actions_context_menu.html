@@ -8,10 +8,24 @@
                 <label>Комментарии</label>
             </div>
             <div class="col-md-9 padding1">
-                <div class="input-group ">
+                <div class="input-group">
                     <div class="btn-group">
                         <button type="button" class="btn btn-danger" ng-click="clearComment();">Очистить</button>
                         <button type="button" ng-repeat="s in commentStatuses" class="btn btn-default" ng-click="setComment(s.Id, s.Name);">{{s.Name}}</button>
+                        <button type="button" class="btn btn-success" ng-click="manualCommentDlg();">Ручной</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row padding1" ng-show="selectedPrices.length > 0">
+            <div class="col-md-3 padding1">
+                <label>Действия</label>
+            </div>
+            <div class="col-md-9 padding1">
+                <div class="input-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" ng-click="transferSelectedPrices();">Вставить</button>
+                        <button type="button" class="btn btn-danger" ng-click="clearSelectedPrices();">Снять выделение</button>
                     </div>
                 </div>
             </div>
