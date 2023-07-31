@@ -59,6 +59,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
             { headerTooltip: true, name: 'SKU', displayName: 'SKU', enableCellEdit: false, width: 100, cellTooltip: true, field: 'DrugId', visible: true, nullable: false },
             { headerTooltip: true, name: 'classId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'ClassifierInfoId', visible: true, nullable: false, filter: { condition: uiGridCustomService.condition } },
 
+            { headerTooltip: true, name: 'INNGroupId', displayName: 'INNGroupId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'INNGroupId', type: 'number', visible: false, nullable: false },
             { headerTooltip: true, name: 'МНН', enableCellEdit: false, width: 300, field: 'INN', visible: true, nullable: false, filter: { condition: uiGridCustomService.condition } },
             { headerTooltip: true, name: 'ТН + ФВ + Д + Ф + МНН', enableCellEdit: false, width: 600, field: 'TN_FP_D_F_INN', visible: true, nullable: false, filter: { condition: uiGridCustomService.condition } },
             { headerTooltip: true, name: 'DrugTypeValue', displayName: 'Тип продукта', enableCellEdit: false, width: 100, field: 'DrugTypeValue', visible: true, nullable: false, filter: { condition: uiGridCustomService.condition } },
@@ -221,7 +222,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         }, function (response) {
             errorHandlerService.showResponseError(response);
         });
-        
+
     };
 
     // Множественная простановка всем Проверено
@@ -256,4 +257,39 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         });
 
     };
+
+
+    $scope.SetException = function () {
+
+        if (selectedRows === null) {
+            return;
+        }
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/ClassifierRxOtc/SetException',
+            data: JSON.stringify({ array: selectedRows })
+        }).then(function (response) {
+
+            if (response.status === 200) {
+                $scope.RxOtcGrid.ClearModify();
+
+                var data = response.data.Data.Data.ClassifierRxOtcRecord;
+
+                // корректируем оригинал
+                data.forEach(el => {
+                    var index = $scope.RxOtcGrid.Options.data.findIndex(item => item.ClassifierInfoId === el.Classifierid);
+                    $scope.RxOtcGrid.Options.data[index].IsException = el.IsException;
+                });
+
+                messageBoxService.showInfo("Сохранено записей: " + data.length);
+            }
+
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+
+    };
+
+
 }

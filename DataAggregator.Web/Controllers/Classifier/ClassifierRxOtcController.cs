@@ -193,7 +193,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 {
                     record = new ClassifierRxOtc()
                     {
-                        Classifierid = item.ClassifierInfoId,                        
+                        Classifierid = item.ClassifierInfoId,
                         IsChecked = true
                     };
                     _context.ClassifierRxOtc.Add(record);
@@ -201,6 +201,48 @@ namespace DataAggregator.Web.Controllers.Classifier
                 else
                 {
                     record.IsChecked = true;
+                }
+
+                if (_context.SaveChanges() > 0)
+                {
+                    _context.Entry<ClassifierRxOtc>(record).State = EntityState.Detached;
+                    records.Add(_context.ClassifierRxOtc.Find(item.ClassifierInfoId));
+                }
+            });
+
+            ViewData["ClassifierRxOtcRecord"] = records;
+
+            var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = Data }
+            };
+            return jsonNetResult;
+        }
+
+        [HttpPost]
+        public ActionResult SetException(ICollection<LoadClassifierRxOtc_SP_Result> array)
+        {
+            List<ClassifierRxOtc> records = new List<ClassifierRxOtc>();
+
+            array.ForEach(item =>
+            {
+                ClassifierRxOtc record = _context.ClassifierRxOtc.Find(item.ClassifierInfoId);
+
+                if (record == null)
+                {
+                    record = new ClassifierRxOtc()
+                    {
+                        Classifierid = item.ClassifierInfoId,
+                        IsException = true
+                    };
+                    _context.ClassifierRxOtc.Add(record);
+                }
+                else
+                {
+                    record.IsException = true;
                 }
 
                 if (_context.SaveChanges() > 0)

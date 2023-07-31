@@ -12,6 +12,7 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierRxOtc
         public string RegistrationCertificateNumber { get; set; }
         public long DrugId { get; set; }
         public long ClassifierInfoId { get; set; }
+        public Nullable<long> INNGroupId { get; set; }        
         public string INN { get; set; }
         public string TN_FP_D_F_INN { get; set; }
         public string DrugTypeValue { get; set; }
