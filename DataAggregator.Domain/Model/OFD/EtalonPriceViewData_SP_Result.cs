@@ -60,10 +60,17 @@ namespace DataAggregator.Domain.Model.OFD
         public Nullable<decimal> Downloaded_PriceAVG { get; set; }
         //расчетная цена sell out
         public Nullable<decimal> SellOut_PriceCalc { get; set; }
+        //цена, подставленная из любого столбца с ценами
         public Nullable<decimal> PriceCalc { get; set; }
+        //ЭЦ прошлого периода
         public Nullable<decimal> PricePrev { get; set; }
+        //модуль % отклонения
         public Nullable<decimal> DeviationPercent { get; set; }
+        //разница (окр. до целого числа)
+        public Nullable<int> PriceDiff { get; set; }
         public DateTime? DateModified { get; set; }
         public string UserName { get; set; }
+        //выделение
+        public string ClassStyle { get; set; }
     }
 }

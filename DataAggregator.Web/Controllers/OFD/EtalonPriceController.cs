@@ -38,11 +38,11 @@ namespace DataAggregator.Web.Controllers.OFD
         }
 
         [HttpPost]
-        public ActionResult GetList(int year, int month, decimal? devPercent = null, string searchText = null)
+        public ActionResult GetList(int year, int month, decimal? devPercent = null, string searchText = null, int? priceDiffDirection = null)
         {
             try
             {
-                var result = _context.ViewData_SP(year, month, devPercent, searchText).ToList();
+                var result = _context.ViewData_SP(year, month, devPercent, searchText, priceDiffDirection).ToList();
                 return new JsonNetResult 
                 {
                     Formatting = Formatting.Indented,
@@ -90,7 +90,14 @@ namespace DataAggregator.Web.Controllers.OFD
                         {
                             var mainDataItem = _context.MainData.FirstOrDefault(x => x.Id == item.Id);
                             if (mainDataItem != null)
+                            {
+                                if (!string.IsNullOrEmpty(item.CommentStatusManual))
+                                    mainDataItem.CommentStatusManual = item.CommentStatusManual;
                                 mainDataItem.CommentStatusId = item.CommentStatusId;
+                                mainDataItem.DateModified = DateTime.Now;
+                                mainDataItem.UserId = new Guid(User.Identity.GetUserId());
+                            }
+                                
                         }
 
                         _context.SaveChanges();
@@ -113,6 +120,8 @@ namespace DataAggregator.Web.Controllers.OFD
             try
             {
                 if (array != null && array.Any())
+                {
+                    var ids = array.Select(x => x.Id).ToArray();
                     using (_context)
                     {
 
@@ -129,6 +138,15 @@ namespace DataAggregator.Web.Controllers.OFD
 
                         _context.SaveChanges();
                     }
+
+                    using (var _ctx = new OFDContext(APP))
+                    {
+                        return new JsonNetResult
+                        {
+                            Data = new JsonResult() { Data = _ctx.MainData.Where(x => ids.Contains(x.Id)).ToArray() }
+                        };
+                    }
+                }
 
                 return new JsonNetResult
                 {

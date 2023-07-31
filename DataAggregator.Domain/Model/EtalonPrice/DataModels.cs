@@ -18,8 +18,11 @@ namespace DataAggregator.Domain.Model.EtalonPrice
         [Key]
         public long Id { get; set; }
         public int? CommentStatusId { get; set; }
+        public string CommentStatusManual { get; set; }
         public decimal? TransferPrice { get; set; }
         public DateTime? DateModified { get; set; }
         public Guid? UserId { get; set; }
+        public decimal? DeviationPercent { get; set; }
+        public int? PriceDiff { get; set; }
     }
 }

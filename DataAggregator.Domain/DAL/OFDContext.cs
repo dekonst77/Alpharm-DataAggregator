@@ -228,12 +228,16 @@ namespace DataAggregator.Domain.DAL
         /// </summary>
         /// <param name="month">месяц</param>
         /// <param name="year">год</param>
-        public IEnumerable<EtalonPriceViewData_SP_Result> ViewData_SP(int year, int month, decimal? devPercent = null, string searchText = null)
+        /// <param name="devPercent">% откл расчётной цены от любых цен</param>
+        /// <param name="searchText">строка для поиска</param>
+        /// <param name="priceDiffDirection">направление разницы расчётной цены и ЭЦ-1</param>
+        public IEnumerable<EtalonPriceViewData_SP_Result> ViewData_SP(int year, int month, decimal? devPercent = null, string searchText = null, int? priceDiffDirection = null)
         {
-            return Database.SqlQuery<EtalonPriceViewData_SP_Result>("[EtalonPrice].[ViewData_SP] @PeriodShort, @DevPercent, @SearchText",
+            return Database.SqlQuery<EtalonPriceViewData_SP_Result>("[EtalonPrice].[ViewData_SP] @PeriodShort, @DevPercent, @SearchText, @PriceDiffDirection",
                new SqlParameter { ParameterName = "@PeriodShort", SqlDbType = SqlDbType.Int, Value = year * 100 + month },
                new SqlParameter { ParameterName = "@DevPercent", SqlDbType = SqlDbType.Decimal, Value = (object)devPercent ?? DBNull.Value },
-               new SqlParameter { ParameterName = "@SearchText", SqlDbType = SqlDbType.VarChar, Value = (object)searchText ?? DBNull.Value }
+               new SqlParameter { ParameterName = "@SearchText", SqlDbType = SqlDbType.VarChar, Value = (object)searchText ?? DBNull.Value },
+               new SqlParameter { ParameterName = "@PriceDiffDirection", SqlDbType = SqlDbType.Int, Value = (object)priceDiffDirection ?? DBNull.Value }
                );
         }
 
