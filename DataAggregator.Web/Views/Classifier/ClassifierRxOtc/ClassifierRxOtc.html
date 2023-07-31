@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="col-md-1">
-                        Все <input type="checkbox" ng-true-value="false" ng-model="filter.Used" />
+                        Все <input type="checkbox" ng-true-value="false" ng-false-value="true" ng-model="filter.Used" />
                     </div>
 
                     <div class="col-md-2">
@@ -35,35 +35,7 @@
         </div>
     </div>
 
-    <!--<div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
-        <div class="panel-heading">
-
-            <div class="row">
-
-                <div class="col-md-6 col-lg-4 padding3">
-
-                    <div class="col-md-3 col-lg-3 padding3">
-                        <select name="period" ng-class="{'has-error': Supplier.$invalid}" required class="form-control" ng-options="item as item for item in periods track by item" ng-model="currentperiod"> </select>
-                    </div>
-
-                    <div class="col-md-4 col-lg-4 padding3">
-                        <div ng-dropdown-multiselect="" options="" selected-model="selectByGroupModel" extra-settings="selectByGroupSettings" translation-texts="translation" events="selectByEvents"></div>
-                    </div>
-
-                    <div class="col-md-5 col-lg-5 padding3">
-                        <input name="filtercommon" type="text" class="form-control" ng-model="searchText" placeholder="Поиск">
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>-->
-
-
-    <div id="grid-block" class="auto-item-panel">
+    <div id="grid-block" class="auto-item-panel" data-context-menu="Views/Classifier/ClassifierRxOtc/ClassifierRxOtc_context_menu.html">
         <ui-grid-control options="RxOtcGrid.Options" class="ui-grid-enable-content-selection grid-block grid-block_md"></ui-grid-control>
     </div>
 

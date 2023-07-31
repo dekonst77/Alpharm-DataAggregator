@@ -25,7 +25,7 @@ namespace DataAggregator.Web.Controllers.Classifier
         {
             try
             {
-                IEnumerable<LoadClassifierRxOtc_SP_Result> result = _context.LoadClassifierRxOtc_SP_Result(Used, Excluded).Take(100).ToList();
+                IEnumerable<LoadClassifierRxOtc_SP_Result> result = _context.LoadClassifierRxOtc_SP_Result(Used, Excluded).ToList();
                 ViewData["RxOtc"] = result;
 
                 var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
@@ -43,6 +43,11 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        /// <summary>
+        /// Сохранение записей
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Save(ICollection<LoadClassifierRxOtc_SP_Result> array)
         {
@@ -58,7 +63,8 @@ namespace DataAggregator.Web.Controllers.Classifier
                     {
                         Classifierid = item.ClassifierInfoId,
                         IsRx = item.Rx,
-                        IsChecked = item.IsChecked
+                        IsChecked = item.IsChecked,
+                        IsException = item.IsException
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
@@ -66,6 +72,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 {
                     record.IsRx = item.Rx;
                     record.IsChecked = item.IsChecked;
+                    record.IsException = item.IsException;
                 }
 
                 if (_context.SaveChanges() > 0)
@@ -85,7 +92,134 @@ namespace DataAggregator.Web.Controllers.Classifier
                 Data = new JsonResult() { Data = Data }
             };
             return jsonNetResult;
+        }
 
+        [HttpPost]
+        public ActionResult SetRx(ICollection<LoadClassifierRxOtc_SP_Result> array)
+        {
+            List<ClassifierRxOtc> records = new List<ClassifierRxOtc>();
+
+            array.ForEach(item =>
+            {
+                ClassifierRxOtc record = _context.ClassifierRxOtc.Find(item.ClassifierInfoId);
+
+                if (record == null)
+                {
+                    record = new ClassifierRxOtc()
+                    {
+                        Classifierid = item.ClassifierInfoId,
+                        IsRx = true,
+                        IsChecked = false
+                    };
+                    _context.ClassifierRxOtc.Add(record);
+                }
+                else
+                {
+                    record.IsRx = true;
+                }
+
+                if (_context.SaveChanges() > 0)
+                {
+                    _context.Entry<ClassifierRxOtc>(record).State = EntityState.Detached;
+                    records.Add(_context.ClassifierRxOtc.Find(item.ClassifierInfoId));
+                }
+            });
+
+            ViewData["ClassifierRxOtcRecord"] = records;
+
+            var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = Data }
+            };
+            return jsonNetResult;
+        }
+
+        [HttpPost]
+        public ActionResult SetOtc(ICollection<LoadClassifierRxOtc_SP_Result> array)
+        {
+            List<ClassifierRxOtc> records = new List<ClassifierRxOtc>();
+
+            array.ForEach(item =>
+            {
+                ClassifierRxOtc record = _context.ClassifierRxOtc.Find(item.ClassifierInfoId);
+
+                if (record == null)
+                {
+                    record = new ClassifierRxOtc()
+                    {
+                        Classifierid = item.ClassifierInfoId,
+                        IsRx = false,
+                        IsChecked = false
+                    };
+                    _context.ClassifierRxOtc.Add(record);
+                }
+                else
+                {
+                    record.IsRx = false;
+                }
+
+                if (_context.SaveChanges() > 0)
+                {
+                    _context.Entry<ClassifierRxOtc>(record).State = EntityState.Detached;
+                    records.Add(_context.ClassifierRxOtc.Find(item.ClassifierInfoId));
+                }
+            });
+
+            ViewData["ClassifierRxOtcRecord"] = records;
+
+            var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = Data }
+            };
+            return jsonNetResult;
+        }
+
+        [HttpPost]
+        public ActionResult SetChecked(ICollection<LoadClassifierRxOtc_SP_Result> array)
+        {
+            List<ClassifierRxOtc> records = new List<ClassifierRxOtc>();
+
+            array.ForEach(item =>
+            {
+                ClassifierRxOtc record = _context.ClassifierRxOtc.Find(item.ClassifierInfoId);
+
+                if (record == null)
+                {
+                    record = new ClassifierRxOtc()
+                    {
+                        Classifierid = item.ClassifierInfoId,                        
+                        IsChecked = true
+                    };
+                    _context.ClassifierRxOtc.Add(record);
+                }
+                else
+                {
+                    record.IsChecked = true;
+                }
+
+                if (_context.SaveChanges() > 0)
+                {
+                    _context.Entry<ClassifierRxOtc>(record).State = EntityState.Detached;
+                    records.Add(_context.ClassifierRxOtc.Find(item.ClassifierInfoId));
+                }
+            });
+
+            ViewData["ClassifierRxOtcRecord"] = records;
+
+            var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = Data }
+            };
+            return jsonNetResult;
         }
 
     }
