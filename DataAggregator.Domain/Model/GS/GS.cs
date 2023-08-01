@@ -549,7 +549,16 @@ namespace DataAggregator.Domain.Model.GS
         public bool IsUseLPU { get; set; }
         public string WWW { get; set; }
     }
-    [Table("licenses_to_Use", Schema = "dbo")]
+    [Table("OrganizationStatusView", Schema = "dbo")]
+    public class OrganizationStatusView
+    {
+        [Key]
+        public string Id { get; set; }
+        public string Name { get; set; }
+
+    }
+
+        [Table("licenses_to_Use", Schema = "dbo")]
     public class licenses_to_Use
     {
         [Key]
