@@ -2515,7 +2515,9 @@ from [adr].[History_coding] where CheckStat=1
 union
 select 6,cast('noLPU' as nvarchar(50)) as code,cast('Нет ЛПУ' as nvarchar(50)) +' - '+ltrim(str(count(*))) as Status
 from [adr].[History_coding] where LPUId is null and status<>110
-
+union
+select 7,cast('badLPU' as nvarchar(50)) as code,cast('Плохие LPUId' as nvarchar(50)) +' - '+ltrim(str(count(*))) as Status
+from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo].[LPUId])
 ").ToList();
 
 

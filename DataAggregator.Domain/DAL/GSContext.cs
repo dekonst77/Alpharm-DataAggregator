@@ -17,8 +17,10 @@ namespace DataAggregator.Domain.DAL
         #region LPU
 
         public DbSet<LPUView> LPUView { get; set; }
+        public DbSet<OrganizationStatusView> OrganizationStatusView { get; set; }
 
-        public DbSet<LPU> LPU { get; set; }
+
+    public DbSet<LPU> LPU { get; set; }
 
         public DbSet<LPUPointView> LPUPointView { get; set; }
 
