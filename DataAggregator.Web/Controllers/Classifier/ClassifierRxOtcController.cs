@@ -64,7 +64,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                         Classifierid = item.ClassifierInfoId,
                         IsRx = item.Rx,
                         IsChecked = item.IsChecked,
-                        IsException = item.IsException
+                        IsException = item.IsException.Value
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
@@ -72,7 +72,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 {
                     record.IsRx = item.Rx;
                     record.IsChecked = item.IsChecked;
-                    record.IsException = item.IsException;
+                    record.IsException = item.IsException.Value;
                 }
 
                 if (_context.SaveChanges() > 0)
