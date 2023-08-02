@@ -10,6 +10,9 @@ namespace DataAggregator.Web.Models.LPU
         public string Name { get; set; }
         public string Address { get; set; }
         public string BrickId { get; set; }
+        public string Address_region { get; set; }
+        public string Address_city { get; set; }
+        public string Status { get; set; }
 
         public int? LPUId { get; set; }
 

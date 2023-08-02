@@ -41,7 +41,8 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
     $scope.selectedType = null;
     /////Department
     //Dep_Grid
-  
+    $scope.LPUStatusLabel = [];
+    $scope.LPUStatuss = [];
     $scope.Grid = uiGridCustomService.createGridClassMod($scope, 'LPU_Grid');
     $scope.Grid.Options.showGridFooter = true;
     $scope.Grid.Options.multiSelect = true;
@@ -50,6 +51,26 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
     $scope.DepartmentSource = [];
     $scope.DepartmentSourceLabel = [];
 
+    $scope.LPUStatus = function () {
+        $http({
+            method: "POST",
+            url: "/LPU/Get_LPU_Status/",
+
+        }).then(function (response) {
+
+            Array.prototype.push.apply($scope.LPUStatuss, response.data.Data);
+            Array.prototype.push.apply($scope.LPUStatusLabel, $scope.LPUStatuss.map(function (obj) {
+                var rObj = { 'value': obj.Id, 'label': obj.Name };
+                return rObj;
+            }));
+
+
+
+        }, function () {
+            $scope.message = "Unexpected Error";
+        });
+    };
+    $scope.LPUStatus();
 
     $scope.LPUType = [];
    // $scope.LPUTypeFilter = [{ 'Id': -1, 'Name': 'Показать Все' }];
@@ -225,14 +246,20 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
 
 
     $scope.Search = function () {
+   
+       
         var SearchFilter = [];
          SearchFilter = $scope.filter;
         if ($scope.filter.TypeIdModel != null)
-            SearchFilter["TypeId"] = $scope.filter.TypeIdModel.Id;
+            SearchFilter["TypeId"] = $scope.filter.TypeIdModel.Id;        
         else SearchFilter["TypeId"] = null;
         if ($scope.filter.KindIdModel != null)
             SearchFilter["KindId"] = $scope.filter.KindIdModel.Id;
         else SearchFilter["KindId"] = null;
+
+        if ($scope.filter.StatusModel != null)
+            SearchFilter["Status"] = $scope.filter.StatusModel.Id;
+        else SearchFilter["Status"] = null;
         var json = JSON.stringify(SearchFilter);
 
         $scope.classifierLoading =

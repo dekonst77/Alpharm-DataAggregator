@@ -84,51 +84,76 @@
                     </div>
                 </div>
                 <div class="col-md-2 padding3">
-                  
-                        <div class="row">
-                            <div class="col-md-2" style="vertical-align:central;">
-                                Тип
-                            </div>
-                            <div class="col-md-10 padding3" style="vertical-align:central;">
-                                <select name="TypeId"
-                                        ng-init="filter.TypeId = options[0].value"
-                                        class="form-control"
-                                        ng-options="item as item.Name for item in LPUType track by item.Id"                                      
-                                        ng-model="filter.TypeIdModel">
-                                    <option value="">-- Показать Все --</option>
 
-                                </select>
+                    <div class="row">
+                        <div class="col-md-2" style="vertical-align:central;">
+                            Тип
+                        </div>
+                        <div class="col-md-10 padding3" style="vertical-align:central;">
+                            <select name="TypeId"
+                                    ng-init="filter.TypeId = options[0].value"
+                                    class="form-control"
+                                    ng-options="item as item.Name for item in LPUType track by item.Id"
+                                    ng-model="filter.TypeIdModel">
+                                <option value="">-- Показать Все --</option>
 
-                            </div>
-                            </div>
-                        <div class="row">
-                            <div class="col-md-2" style="vertical-align:central;">
-                                Вид
-                            </div>
-                            <div class="col-md-10 padding3" style="vertical-align:central;">
-                                <select name="KindId"
-                                        class="form-control"
-                                        ng-init="filter.KindId = options[0].value"
-                                        ng-options="item as item.Name for item in LPUKind track by item.Id"                                       
-                                        ng-model="filter.KindIdModel">
-                                    <option value="">-- Показать Все --</option>
-                                </select>
-                            </div>
-                        </div>                       
-                   
-                    </div>
-                    <div class="col-md-5 padding3">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button class="btn btn-success btn-sm" ng-click="Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
-                            <button class="btn btn-warning btn-sm" ng-click="Save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
-                            <button class="btn btn-info btn-sm" ng-click="ToExcel();" ng-disabled="Grid.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить</span></button>
-                            <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ngf-select="FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
-                            <button class="btn btn-success btn-sm" type="button" ng-click="getTypeList()" data-toggle="modal" data-target="#TypeModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Тип подразделения</button>
-                            <button class="btn btn-success btn-sm" type="button" ng-click="getKindList()" data-toggle="modal" data-target="#KindModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Вид подразделения</button>
+                            </select>
 
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2" style="vertical-align:central;">
+                            Вид
+                        </div>
+                        <div class="col-md-10 padding3" style="vertical-align:central;">
+                            <select name="KindId"
+                                    class="form-control"
+                                    ng-init="filter.KindId = options[0].value"
+                                    ng-options="item as item.Name for item in LPUKind track by item.Id"
+                                    ng-model="filter.KindIdModel">
+                                <option value="">-- Показать Все --</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
+                <div class="col-md-2 padding3">
+
+                    <div class="row">                      
+                        <div class="col-md-12 padding3" style="vertical-align:central;">
+                            <select name="TypeId"
+                                    ng-init="filter.Status = options[0].value"
+                                    class="form-control"
+                                    ng-options="item as item.Name for item in LPUStatuss track by item.Id"
+                                    ng-model="filter.StatusModel">
+                                <option value="">-- Показать Все Статусы --</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.Address_region" ng-change="" placeholder="СФ">
+                        </div>
+                        <div class="col-md-6 padding3">
+                            <input name="filtercommon" type="text" class="form-control" ng-model="filter.Address_city" ng-change="" placeholder="НП">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <button class="btn btn-warning btn-sm" ng-click="Save();" ng-disabled="!Grid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <button class="btn btn-info btn-sm" ng-click="ToExcel();" ng-disabled="Grid.NeedSave"><span class="glyphicon glyphicon-download-alt">Выгрузить</span></button>
+                        <div class="btn btn-info btn-sm" ng-disabled="Grid.NeedSave" ngf-select="FromExcel($files)" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"><span class="glyphicon glyphicon-upload">Загрузить</span></div>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="getTypeList()" data-toggle="modal" data-target="#TypeModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Тип подразделения</button>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="getKindList()" data-toggle="modal" data-target="#KindModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Вид подразделения</button>
+
+                    </div>
+                </div>
+            </div>
 
             </div>
     </div>
@@ -402,12 +427,12 @@
 
                         <div id="grid-block" class="auto-item-panel">
                             <!--data-context-menu="Views/LPU/lpu_context_menu.html"-->
-                            <div class="size_row" resizable r-directions="['bottom']" r-flex="true">
-                                <div id="grid-lpupoint-block" data-context-menu="Views/LPU/lpu_context_menu.html" class="auto-item-panel" style="width:100%">
-                                    <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
-                                </div>
-
+                            <!--  <div class="size_row" resizable r-directions="['bottom']" r-flex="true">-->
+                            <div id="grid-lpupoint-block" data-context-menu="Views/LPU/lpu_context_menu.html" class="auto-item-panel" style="width:100%">
+                                <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
                             </div>
+
+                            <!-- </div>-->
                         </div>
 
 
@@ -419,4 +444,4 @@
 
 
 
-                    </div>
+    </div>

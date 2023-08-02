@@ -26,6 +26,22 @@ namespace DataAggregator.Web.Controllers.LPU
             _context.Dispose();
         }
 
+        [Authorize(Roles = "LPU_view")]
+        public ActionResult Get_LPU_Status()
+        {
+            try
+            {
+                var Status = _context.OrganizationStatusView.OrderBy(t=> t.Name).ToList();
+                //   var Dep = _context.LPU_Departments.Where(d => d.LPUId_Id == Id).ToList();
+
+                return ReturnData(Status);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); ;
+            }
+        }
+
 
         [HttpPost]
         [Authorize(Roles = "LPU_view")]
@@ -119,6 +135,20 @@ namespace DataAggregator.Web.Controllers.LPU
                 {
                     lpuenum = lpuenum.Where(l => l.EntityINN.Contains(filter.Name) || l.EntityName.Contains(filter.Name));
                 }
+
+                if (!string.IsNullOrEmpty(filter.Status))
+                {
+                    lpuenum = lpuenum.Where(l => l.Status.Contains(filter.Status));
+                }
+                if (!string.IsNullOrEmpty(filter.Address_region))
+                {
+                    lpuenum = lpuenum.Where(l => l.Address_region.Contains(filter.Address_region));
+                }
+                if (!string.IsNullOrEmpty(filter.Address_city))
+                {
+                    lpuenum = lpuenum.Where(l => l.Address_city.Contains(filter.Address_city));
+                }
+
 
                 if (filter.PointId.HasValue)
                 {
