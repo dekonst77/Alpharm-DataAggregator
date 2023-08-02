@@ -14,7 +14,7 @@ namespace DataAggregator.Domain.Model.ControlALG
     public class ControlALG
     {
         public enum JobStartAction : int { info = 0, start = 1 };
-        static public string Start_Job(DbContext _context,string Name, JobStartAction action)
+        static public string Start_Job(DbContext _context,string Name, JobStartAction action, Guid? UserId = null)
         {
             //@job_name nvarchar(255)='',@action int=1,@status
             //[ControlALG].dbo.Start_Job
@@ -40,10 +40,15 @@ namespace DataAggregator.Domain.Model.ControlALG
                 Size=4,
                 Value=(int)action
             },
+                new SqlParameter{
+                ParameterName = "userId",
+                SqlDbType = SqlDbType.UniqueIdentifier,
+                Value=UserId
+            },
                 outparam
             }.Cast<object>().ToArray();
 
-            _context.Database.ExecuteSqlCommand("[ControlALG].dbo.[Start_Job] @job_name, @action, @status output", parameters);
+            _context.Database.ExecuteSqlCommand("[ControlALG].dbo.[Start_Job] @job_name, @action, @status output, @userId", parameters);
 
             return (string)outparam.Value;
         }

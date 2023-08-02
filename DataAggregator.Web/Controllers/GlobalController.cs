@@ -975,6 +975,7 @@ where PERIOD_KEY>=201901 and (koor_широта is null or koor_широта = 0
 
                 ViewBag.Status = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(context, Name,
                     Run == true ? Domain.Model.ControlALG.ControlALG.JobStartAction.start : Domain.Model.ControlALG.ControlALG.JobStartAction.info
+                    , new Guid(User.Identity.GetUserId())
                     ).Replace("\r\n", @"<br />");
 
 
