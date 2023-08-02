@@ -2151,6 +2151,7 @@
     <Content Include="Views\Classifier\Certificate\MnfWay.html" />
     <Content Include="Views\Classifier\Certificate\Subtance.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc.html" />
+    <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc_context_menu.html" />
     <Content Include="Views\Classifier\GoodsClassifierReport\GoodsClassifierReport.html" />
     <Content Include="Views\Classifier\Mask.html" />
     <Content Include="Views\Classifier\Checkeds.html" />
