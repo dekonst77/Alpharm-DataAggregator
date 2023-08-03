@@ -27,31 +27,31 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.Grid.Options.enableFiltering = true;
 
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>';
-    let sumSellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
-    let avgCellTemplateHint = '<div class="ui-grid-cell-contents">{{COL_FIELD | number:2}}</div>';
+    let sumCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
+    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-click="grid.appScope.togglePriceSelection($event, row, col)" ng-dblclick="grid.appScope.transferPrice(row,col)">{{COL_FIELD | number:2}}</div>';
     let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-click="grid.appScope.togglePriceSelection($event, row, col)" ng-dblclick="grid.appScope.transferPrice(row,col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
     let diffCellTemplateHint = '<div class="ui-grid-cell-contents" ng-class="{\'red\' : row.entity.PriceDiff < 0, \'green\' : row.entity.PriceDiff >= 0}">{{COL_FIELD}}</div>';
 
     $scope.Grid.Options.columnDefs = [
         {
             cellTooltip: true, enableCellEdit: false, width: 80, visible: true, nullable: false, name: 'ClassifierId',
-            field: 'ClassifierId', type: 'number', filter: { condition: uiGridCustomService.condition }
+            field: 'ClassifierId', type: 'number', filter: { condition: uiGridCustomService.condition }, pinnedLeft: true
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Торговое наименование',
-            field: 'TradeName', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint
+            field: 'TradeName', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint, pinnedLeft: true
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'МНН',
-            field: 'INNGroup', filter: { condition: uiGridCustomService.condition }
+            field: 'INNGroup', filter: { condition: uiGridCustomService.condition }, pinnedLeft: true
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Описание препарата',
-            field: 'DrugDescription', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint
+            field: 'DrugDescription', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint, pinnedLeft: true
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Правообладатель',
-            field: 'OwnerTradeMark', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint
+            field: 'OwnerTradeMark', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint, pinnedLeft: true
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 50, visible: true, nullable: true, name: 'Тип',
@@ -77,12 +77,12 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // расчетная цена SellOut (или установленная через контектное меню цена из другого столбца)
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Расч. цена SellOut',
-            field: 'PriceCalc', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'PriceCalc', type: 'number', headerCellClass: 'avgpricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // отклонение эталонной цены прошлого месяца
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: '[% откл.]',
-            field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.condition }, cellTemplate: avgCellTemplateHint
+            field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.condition }, cellTemplate: avgCellTemplateHint,
         },
         // разница расчётной цены и эталонной цены прошлого месяца
         {
@@ -97,16 +97,16 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // Цена SellIn
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Цена SellIn',
-            field: 'SellIn_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
+            field: 'SellIn_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // средняя цена - Контракты
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Контракты',
-            field: 'Contract_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
+            field: 'Contract_PriceAVG', type: 'number', headerCellClass: 'avgpricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // Комментарий
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Комментарий',
+            cellTooltip: true, enableCellEdit: true, width: 100, visible: true, nullable: true, name: 'Комментарий',
             field: 'CommentStatus', filter: { condition: uiGridCustomService.condition }
         },
         // Комментарий - 1
@@ -117,17 +117,17 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         //суммы по СКЮ: Исходники и ОФД
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Исходники, руб.',
-            field: 'Initial_Sum', type: 'number', headerCellClass: 'sellin', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: sumSellTemplateHint
+            field: 'Initial_Sum', type: 'number', headerCellClass: 'sellin', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: sumCellTemplateHint
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'ОФД, руб',
-            field: 'OFD_Sum', type: 'number', headerCellClass: 'sellin', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: sumSellTemplateHint
+            field: 'OFD_Sum', type: 'number', headerCellClass: 'sellin', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: sumCellTemplateHint
         },
 
         // Исходные данные
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена исх.', field: 'Initial_PriceAVG', type: 'number', headerCellClass: 'initialdata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена исх.', field: 'Initial_PriceAVG', type: 'number', headerCellClass: 'avgpricedata',
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // по источникам
         {
@@ -161,10 +161,9 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // Исходные данные <<<<<
         // Парсинг
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена по сайтам', field: 'Downloaded_PriceAVG', type: 'number', headerCellClass: 'downloadeddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена по сайтам', field: 'Downloaded_PriceAVG', type: 'number', headerCellClass: 'avgpricedata',
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
-        //Downloaded_PriceAVG
         // по сайтам
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Aptekaru', field: 'Aptekaru_PriceAVG',
@@ -189,8 +188,8 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // Парсинг <<<<<
         // ОФД
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена ОФД', field: 'OFD_PriceAVG', type: 'number', headerCellClass: 'ofddata',
-            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена ОФД', field: 'OFD_PriceAVG', type: 'number', headerCellClass: 'avgpricedata',
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // по платформам
         {
@@ -226,14 +225,14 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             cellTooltip: true, enableCellEdit: false, width: 150, visible: true, nullable: true, name: 'Исполнитель',
             field: 'UserName', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint
         },
-    ];
+    ];    
 
     const priceSelectedClass = 'price_selected';
 
     $scope.togglePriceSelection = function ($event, row, col) {
         var item = { Id: row.entity.Id, PriceField: col.field, TransferPrice: row.entity[col.field] };
         var elm = angular.element($event.target);
-       
+
         const index = $scope.selectedPrices.findIndex(i => i.Id === item.Id);
         if (index === -1)
             $scope.selectedPrices.push(item);
@@ -245,7 +244,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 $scope.selectedPrices[index].TransferPrice = item.TransferPrice;
 
                 let elements = elm.parents('div[role="row"]:nth(0)').find('.' + priceSelectedClass);
-                elements.each(function (index,element) {
+                elements.each(function (index, element) {
                     element.classList.remove(priceSelectedClass);
                 });
             }
@@ -254,11 +253,22 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             elm.removeClass(priceSelectedClass);
         else
             elm.addClass(priceSelectedClass);
-
-        console.log($scope.selectedPrices);
     }
 
     $scope.Grid.SetDefaults();
+
+    $scope.Grid.afterCellEdit = function (rowEntity, colDef, newValue, oldValue) {
+        if (newValue === oldValue || newValue === undefined)
+            return;
+
+        if (colDef.field == "CommentStatus" && rowEntity.CommentStatusId != null)
+            return;
+        else {
+            rowEntity.CommentStatusId = null;
+            rowEntity.CommentStatus = newValue;
+            rowEntity.CommentStatusManual = newValue;
+        }
+    };
 
     $scope.Init = function () {
         $http({
@@ -324,6 +334,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                     url: '/EtalonPrice/SaveCommentStatuses/',
                     data: JSON.stringify({ array: model })
                 }).then(function () {
+                    $scope.Grid.ClearModify();
                     $scope.getList();
                     messageBoxService.showInfo("Сохранено");
                 }, function (response) {
@@ -338,7 +349,8 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.setComment = function (value, caption) {
         if (value && $scope.Grid.selectedRows())
             $scope.Grid.selectedRows().forEach(function (item) {
-                $scope.Grid.GridCellsMod(item, "CommentStatusId", value);
+                item.CommentStatusId = value;
+                item.CommentStatus = caption;
                 $scope.Grid.GridCellsMod(item, "CommentStatus", caption);
             });
     }
@@ -349,26 +361,6 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 $scope.Grid.GridCellsMod(item, "CommentStatusId", null);
                 $scope.Grid.GridCellsMod(item, "CommentStatus", null);
             });
-    }
-
-    $scope.manualCommentDlg = function () {
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: '/Views/OFD/EtalonPrice/CommentStatusManual_Dlg.html',
-            size: 'sm',
-            controller: 'CommentStatusManualController',
-            windowClass: 'center-modal',
-            backdrop: 'static'
-        });
-
-        modalInstance.result.then(function (manualComment) {
-            if (manualComment && $scope.Grid.selectedRows())
-                $scope.Grid.selectedRows().forEach(function (item) {
-                    $scope.Grid.GridCellsMod(item, "CommentStatusId", null);
-                    $scope.Grid.GridCellsMod(item, "CommentStatus", manualComment);
-                    $scope.Grid.GridCellsMod(item, "CommentStatusManual", manualComment);
-                });
-        });
     }
 
     $scope.transferPrice = function (row, col) {
@@ -440,26 +432,4 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             element.classList.remove(priceSelectedClass);
         });
     }
-}
-
-angular
-    .module('DataAggregatorModule')
-    .controller('CommentStatusManualController', [
-        '$scope', 'messageBoxService', '$uibModalInstance', CommentStatusManualController]);
-
-function CommentStatusManualController($scope, messageBoxService, $modalInstance) {
-    $scope.manualComment = null;
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss();
-    };
-
-    $scope.save = function () {
-        if (!$scope.manualComment) {
-            messageBoxService.showError('Комментарий пустой', 'Ошибка');
-            return;
-        }
-        else
-            $modalInstance.close($scope.manualComment);
-    };
 }
