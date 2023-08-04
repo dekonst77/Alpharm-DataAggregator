@@ -4,12 +4,20 @@
             background-color: #a5a2c9;
         }
 
+        .avg_initialdata {
+            background-color: #7c7a99;
+        }
+
         .contractdata {
             background-color: rgba(255, 242, 204, 1.0);
         }
 
         .ofddata {
             background-color: #e7a9b5;
+        }
+
+        .avg_ofddata {
+            background-color: #b3838c;
         }
 
         .sellin {
@@ -20,12 +28,16 @@
             background-color: #d2ddb0;
         }
 
-        .sumdata {
-            background-color: #169;
+        .avg_downloadeddata {
+            background-color: #99a180;
         }
 
-        .avgpricedata {
-            background-color: yellow;
+        .avg_sellout_pricedata {
+            background-color: #f7de96;
+        }
+
+        .sumdata {
+            background-color: #169;
         }
 
         .number {
@@ -72,7 +84,7 @@
                 <div class="col-md-4">
                     <button class="btn btn-success btn-sm" ng-disabled="filter.date == null || Grid.NeedSave" ng-click="getList();"><span class="glyphicon glyphicon-search"> Выбрать</span></button>
                     <button type="button" class="btn btn-info btn-sm" ng-click="saveStatuses();" ng-disabled="!Grid.NeedSave"> <span class="glyphicon glyphicon-save"> Сохранить</span> </button>
-                    <!--<button type="button" class="btn btn-danger btn-sm" ng-click="reCalc();"> <span class="glyphicon glyphicon-flash"> Загрузить</span> </button>-->
+                    <button type="button" class="btn btn-danger btn-sm" ng-click="reCalc();"> <span class="glyphicon glyphicon-flash"> Загрузить</span> </button>
                     <button type="button" style="float:right" class="btn btn-primary btn-sm" ng-click="transfer();"> <span class="glyphicon glyphicon-paste"> Перенести цены</span> </button>
                 </div>
             </div>
