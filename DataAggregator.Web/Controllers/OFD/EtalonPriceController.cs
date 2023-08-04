@@ -43,10 +43,10 @@ namespace DataAggregator.Web.Controllers.OFD
             try
             {
                 var result = _context.ViewData_SP(year, month, devPercent, searchText, priceDiffDirection).ToList();
-                return new JsonNetResult 
+                return new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
-                    Data = result 
+                    Data = result
                 };
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace DataAggregator.Web.Controllers.OFD
         {
             try
             {
-                _context.Database.CommandTimeout = 5 * 60;
+                _context.Database.CommandTimeout = 10 * 60;
                 _context.ReloadAllData_SP(year, month);
 
                 var Data = new JsonResultData() { Data = null, status = "ок", Success = true };
@@ -97,7 +97,7 @@ namespace DataAggregator.Web.Controllers.OFD
                                 mainDataItem.DateModified = DateTime.Now;
                                 mainDataItem.UserId = new Guid(User.Identity.GetUserId());
                             }
-                                
+
                         }
 
                         _context.SaveChanges();

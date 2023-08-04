@@ -43,7 +43,7 @@ namespace DataAggregator.Domain.Model.ControlALG
                 new SqlParameter{
                 ParameterName = "userId",
                 SqlDbType = SqlDbType.UniqueIdentifier,
-                Value=UserId
+                Value = (object)UserId ?? DBNull.Value
             },
                 outparam
             }.Cast<object>().ToArray();

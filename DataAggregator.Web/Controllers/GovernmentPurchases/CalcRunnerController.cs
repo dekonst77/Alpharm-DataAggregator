@@ -1,4 +1,5 @@
 ﻿using DataAggregator.Domain.DAL;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
         public ActionResult CreateExternal()
         {
 
-            string ret = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_Start_Full", Domain.Model.ControlALG.ControlALG.JobStartAction.start);
+            string ret = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_Start_Full", Domain.Model.ControlALG.ControlALG.JobStartAction.start, new Guid(User.Identity.GetUserId()));
             return new JsonNetResult
             {
                 Formatting = Formatting.Indented,
@@ -45,7 +46,7 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
         [Authorize(Roles = "GCreateExternalShipment,Admin")]
         public ActionResult CreateExternalShipment()
         {
-            string ret = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_CreateExternalShipmentDatabase", Domain.Model.ControlALG.ControlALG.JobStartAction.start);
+            string ret = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_CreateExternalShipmentDatabase", Domain.Model.ControlALG.ControlALG.JobStartAction.start, new Guid(User.Identity.GetUserId()));
             return new JsonNetResult
             {
                 Formatting = Formatting.Indented,
@@ -124,7 +125,7 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
                 CreateExternalShipmentDatabase_startNight_value = "выключён";
 
             string GovernmentPurchases_Start_Full = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_Start_Full", Domain.Model.ControlALG.ControlALG.JobStartAction.info);
-            string GovernmentPurchases_CreateExternalShipmentDatabase = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_CreateExternalShipmentDatabase", Domain.Model.ControlALG.ControlALG.JobStartAction.info);
+            string GovernmentPurchases_CreateExternalShipmentDatabase = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_CreateExternalShipmentDatabase", Domain.Model.ControlALG.ControlALG.JobStartAction.info, new Guid(User.Identity.GetUserId()));
 
             return new JsonNetResult
             {
@@ -248,7 +249,7 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
         [HttpGet]
         public ActionResult Action()
         {
-            ViewBag.GovernmentPurchases_ToProvizor_status = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_ToProvizor", Domain.Model.ControlALG.ControlALG.JobStartAction.info).Replace("\r\n", @"<br />");
+            ViewBag.GovernmentPurchases_ToProvizor_status = DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, "GovernmentPurchases_ToProvizor", Domain.Model.ControlALG.ControlALG.JobStartAction.info, new Guid(User.Identity.GetUserId())).Replace("\r\n", @"<br />");
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,
@@ -265,7 +266,7 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
                 switch (name)
                 {
                     case "GovernmentPurchases_ToProvizor":
-                        DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, name, Domain.Model.ControlALG.ControlALG.JobStartAction.start);
+                        DataAggregator.Domain.Model.ControlALG.ControlALG.Start_Job(_context, name, Domain.Model.ControlALG.ControlALG.JobStartAction.start, new Guid(User.Identity.GetUserId()));
                         break;
                 }
                 JsonNetResult jsonNetResult = new JsonNetResult

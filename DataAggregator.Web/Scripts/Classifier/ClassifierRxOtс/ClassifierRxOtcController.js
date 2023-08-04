@@ -9,7 +9,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
     $scope.user = userService.getUser();
     $scope.canSearch = function () { return true; }
     $scope.filter = {
-        Used: true, // в использовании
+        Used: false, // в использовании
         Excluded: false // исключённые
     }
 
@@ -53,7 +53,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         $scope.RxOtcGrid.Options.enableRowHeaderSelection = true;
 
         $scope.RxOtcGrid.Options.columnDefs = [
-            { headerTooltip: true, name: 'Used', field: 'Used', type: 'boolean', cellTemplate: '_icon.html', width: 60, visible: false, nullable: false },
+            { headerTooltip: true, name: 'Used', field: 'Used', type: 'boolean', cellTemplate: '_icon.html', width: 60, visible: true, nullable: false },
 
             { headerTooltip: true, name: 'RegistrationCertificateId', enableCellEdit: false, width: 100, cellTooltip: true, field: 'RegistrationCertificateId', type: 'number', visible: false, nullable: false },
             { headerTooltip: true, name: 'РУ', enableCellEdit: false, width: 300, field: 'RegistrationCertificateNumber', visible: true, nullable: false, filter: { condition: uiGridCustomService.condition } },

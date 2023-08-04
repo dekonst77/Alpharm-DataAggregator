@@ -109,13 +109,14 @@ namespace DataAggregator.Web.Controllers.Classifier
                     {
                         Classifierid = item.ClassifierInfoId,
                         IsRx = true,
-                        IsChecked = false
+                        IsException = true
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
                 else
                 {
                     record.IsRx = true;
+                    record.IsException = true;
                 }
 
                 if (_context.SaveChanges() > 0)
@@ -152,13 +153,14 @@ namespace DataAggregator.Web.Controllers.Classifier
                     {
                         Classifierid = item.ClassifierInfoId,
                         IsRx = false,
-                        IsChecked = false
+                        IsException = true
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
                 else
                 {
                     record.IsRx = false;
+                    record.IsException = true;
                 }
 
                 if (_context.SaveChanges() > 0)
