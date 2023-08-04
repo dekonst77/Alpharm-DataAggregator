@@ -7,11 +7,11 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     /*фильтр*/
     var today = new Date();
     var previousMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-    $scope.devPercents = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+    $scope.devPercents = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
     $scope.priceDiffDirections = [{ name: 'Все', value: 0 }, { name: 'Увеличение', value: 1 }, { name: 'Уменьшение', value: -1 }];
     $scope.filter = {
         date: previousMonthDate,
-        devPercent: 0.1,
+        devPercent: 10,
         searchText: null,
         priceDiffDirection: 0
     };
@@ -82,7 +82,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // отклонение эталонной цены прошлого месяца
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: '[% откл.]',
-            field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.condition }, cellTemplate: avgCellTemplateHint,
+            field: 'DeviationPercent', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint,
         },
         // разница расчётной цены и эталонной цены прошлого месяца
         {
@@ -92,7 +92,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         //ЖНВЛП
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'ЖНВЛП',
-            field: 'PriceVED', type: 'number', filter: { condition: uiGridCustomService.condition }, cellTemplate: priceCellTemplateHint
+            field: 'PriceVED', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
         // Цена SellIn
         {
