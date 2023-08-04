@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('EtalonPriceController', ['$scope', '$http', 'uiGridCustomService', 'messageBoxService', 'errorHandlerService', 'formatConstants', '$uibModal', EtalonPriceController]);
+    .controller('EtalonPriceController', ['$scope', '$http', 'uiGridCustomService', 'messageBoxService', 'errorHandlerService', 'formatConstants', 'uiGridPinningService', EtalonPriceController]);
 
-function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxService, errorHandlerService, formatConstants, $uibModal) {
+function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxService, errorHandlerService, formatConstants, uiGridPinningService) {
 
     /*фильтр*/
     var today = new Date();
@@ -77,7 +77,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // расчетная цена SellOut (или установленная через контектное меню цена из другого столбца)
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Расч. цена SellOut',
-            field: 'PriceCalc', type: 'number', headerCellClass: 'avgpricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'PriceCalc', type: 'number', headerCellClass: 'avg_sellout_pricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // отклонение эталонной цены прошлого месяца
         {
@@ -102,7 +102,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // средняя цена - Контракты
         {
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Контракты',
-            field: 'Contract_PriceAVG', type: 'number', headerCellClass: 'avgpricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            field: 'Contract_PriceAVG', type: 'number', headerCellClass: 'contractdata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // Комментарий
         {
@@ -126,7 +126,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
 
         // Исходные данные
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена исх.', field: 'Initial_PriceAVG', type: 'number', headerCellClass: 'avgpricedata',
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена исх.', field: 'Initial_PriceAVG', type: 'number', headerCellClass: 'avg_initialdata',
             filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // по источникам
@@ -161,7 +161,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // Исходные данные <<<<<
         // Парсинг
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена по сайтам', field: 'Downloaded_PriceAVG', type: 'number', headerCellClass: 'avgpricedata',
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена по сайтам', field: 'Downloaded_PriceAVG', type: 'number', headerCellClass: 'avg_downloadeddata',
             filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // по сайтам
@@ -188,7 +188,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         // Парсинг <<<<<
         // ОФД
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена ОФД', field: 'OFD_PriceAVG', type: 'number', headerCellClass: 'avgpricedata',
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'AVG цена ОФД', field: 'OFD_PriceAVG', type: 'number', headerCellClass: 'avg_ofddata',
             filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
         },
         // по платформам
@@ -225,7 +225,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             cellTooltip: true, enableCellEdit: false, width: 150, visible: true, nullable: true, name: 'Исполнитель',
             field: 'UserName', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint
         },
-    ];    
+    ];
 
     const priceSelectedClass = 'price_selected';
 
