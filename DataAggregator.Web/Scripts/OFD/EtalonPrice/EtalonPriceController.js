@@ -158,6 +158,10 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Фармаимпекс', field: 'Farmaimpeks_PriceAVG', type: 'number', headerCellClass: 'initialdata',
             filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
         },
+        {
+            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Прочие АС', field: 'Others_PriceAVG', type: 'number', headerCellClass: 'initialdata',
+            filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: priceCellTemplateHint
+        },
         // Исходные данные <<<<<
         // Парсинг
         {
@@ -343,6 +347,32 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 });
         }
     }
+
+    $scope.uploadFromExcel = function (files) {
+        if (files && files.length) {
+            var formData = new FormData();
+            files.forEach(function (item) {
+                formData.append('file', item);
+            });
+            formData.append('month', $scope.filter.date.getMonth() + 1);
+            formData.append('year', $scope.filter.date.getFullYear());
+
+            $scope.loading = $http({
+                method: 'POST',
+                url: '/EtalonPrice/UploadFromExcel/',
+                data: formData,
+                headers: {
+                    'Content-Type': undefined
+                },
+                transformRequest: angular.identity
+            }).then(function () {
+                messageBoxService.showInfo("Сохранено");
+                $scope.getList();
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+        }
+    };
 
     /*-------------------------------------------------------------------------actions-------------------------------------------------------------------------*/
 

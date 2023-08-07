@@ -256,5 +256,32 @@ namespace DataAggregator.Domain.DAL
 
             Database.ExecuteSqlCommand("exec [EtalonPrice].[ReloadAllData_SP] @PeriodShort", parameters);
         }
+
+        /// <summary>
+        /// Импорт эталонных цен new
+        /// </summary>
+        /// <param name="PeriodShort">период</param>
+        /// <param name="UserId">UserId</param>
+        /// <param name="filename">файл</param>
+        public void EtaloPrice_Import_from_Excel(int PeriodShort, Guid UserId, string filename)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 0;
+
+                command.Connection = (SqlConnection)Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("@PeriodShort", SqlDbType.Int).Value = PeriodShort;
+                command.Parameters.Add("@UserId", SqlDbType.UniqueIdentifier).Value = UserId;
+                command.Parameters.Add("@filename", SqlDbType.NVarChar).Value = filename;
+
+                command.CommandText = "[EtalonPrice].[Import_from_Excel]";
+
+                Database.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

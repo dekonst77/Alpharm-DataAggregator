@@ -33,6 +33,7 @@ namespace DataAggregator.Domain.Model.OFD
         public Nullable<decimal> Aloe_PriceAVG { get; set; }
         public Nullable<decimal> Vita_PriceAVG { get; set; }
         public Nullable<decimal> Farmaimpeks_PriceAVG { get; set; }
+        public Nullable<decimal> Others_PriceAVG { get; set; }
         //парсинг
         public Nullable<decimal> Aptekaru_PriceAVG { get; set; }
         public Nullable<decimal> Zdravcity_PriceAVG { get; set; }
