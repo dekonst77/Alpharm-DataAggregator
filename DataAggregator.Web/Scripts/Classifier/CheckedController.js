@@ -75,7 +75,8 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
 
             { name: 'ToRetail', enableCellEdit: true, field: 'ToRetail', type: 'boolean' },
             { name: 'ToOFD', displayName: 'To OFD', enableCellEdit: true, field: 'ToOFD', type: 'boolean' },
-            { name: 'дробить по МНН', enableCellEdit: true, field: 'ToSplitMnn', type: 'boolean' },
+            { name: 'дробить по МНН', enableCellEdit: true, field: 'ToSplitMnn', width: 160, type: 'boolean' },
+            { name: 'ToSplitMnn_Signed', displayName: 'Проверено дробить по МНН', width: 240, enableCellEdit: true, field: 'ToSplitMnn_Signed', type: 'boolean' },
 
             { name: 'на блокирование', enableCellEdit: true, field: 'ToBlockUsed', type: 'boolean' },
 
@@ -83,6 +84,8 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
 
             { name: 'TradeName', field: 'TradeName', filter: { condition: uiGridCustomService.condition } },
             { name: 'DrugDescription', field: 'DrugDescription', filter: { condition: uiGridCustomService.condition } },
+
+            { name: 'INNGroupId', field: 'INNGroupId', visible: false, type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
             { name: 'INNGroup', displayName: 'INNGroup', field: 'INNGroup', filter: { condition: uiGridCustomService.condition } },
 
             { name: 'DrugId', field: 'DrugId', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },

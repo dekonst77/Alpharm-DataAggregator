@@ -117,6 +117,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                             UPD.ToOFD = item.ToOFD;
                             UPD.ToRetail = item.ToRetail;
                             UPD.IsSTM = item.IsSTM;
+                            UPD.ToSplitMnn_Signed = item.ToSplitMnn_Signed;
                             if (UPD.ProductionInfo != null && UPD.ProductionInfo.Used != item.Used && (User.IsInRole("ClassifierUsed")))
                             {
                                 UPD.ProductionInfo.Used = item.Used;
