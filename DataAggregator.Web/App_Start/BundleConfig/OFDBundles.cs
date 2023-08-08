@@ -20,6 +20,8 @@ namespace DataAggregator.Web.App_Start.BundleConfig
                 .Include("~/Scripts/OFD/OFDController.js")
                 .Include("~/Scripts/OFD/GS_ToOFDController.js")
                 .Include("~/Scripts/OFD/EtalonPrice/EtalonPriceController.js")
+                //Ежедневный выпуск ОФД
+                .Include("~/Scripts/OFD/DailyRelease/*.js")
              );
 
             bundles.Add(new ComplexStyleBundle("~/Content/OFD/css")

@@ -61,6 +61,10 @@
                 "PRICE_HISTORY": {
                     "TITLE": 'Эталонные цены - периоды'
                 },
+                "DAILY_RELEASE": {
+                    "MAIN": 'Ежедневный выпуск ОФД',
+                    "PERIODS": 'Периоды дней'
+                },
             },
 
             "PURCHASE_FOUND":

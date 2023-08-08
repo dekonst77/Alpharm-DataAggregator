@@ -28,8 +28,8 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
 
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>';
     let sumCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
-    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-click="grid.appScope.togglePriceSelection($event, row, col)" ng-dblclick="grid.appScope.transferPrice(row,col)">{{COL_FIELD | number:2}}</div>';
-    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-click="grid.appScope.togglePriceSelection($event, row, col)" ng-dblclick="grid.appScope.transferPrice(row,col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
+    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
+    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-click="grid.appScope.togglePriceSelection($event, row, col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
     let diffCellTemplateHint = '<div class="ui-grid-cell-contents" ng-class="{\'red\' : row.entity.PriceDiff < 0, \'green\' : row.entity.PriceDiff >= 0}">{{COL_FIELD}}</div>';
 
     $scope.Grid.Options.columnDefs = [
@@ -234,29 +234,31 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     const priceSelectedClass = 'price_selected';
 
     $scope.togglePriceSelection = function ($event, row, col) {
-        var item = { Id: row.entity.Id, PriceField: col.field, TransferPrice: row.entity[col.field] };
+        var item = { ClassifierId: row.entity.ClassifierId, PriceField: col.field, TransferPrice: row.entity[col.field] };
         var elm = angular.element($event.target);
 
-        const index = $scope.selectedPrices.findIndex(i => i.Id === item.Id);
-        if (index === -1)
-            $scope.selectedPrices.push(item);
-        else {
-            if ($scope.selectedPrices[index].PriceField === item.PriceField)
-                $scope.selectedPrices.splice(index, 1);
+        if (parseFloat(item.TransferPrice) > 0) {
+            const index = $scope.selectedPrices.findIndex(i => i.ClassifierId === item.ClassifierId);
+            if (index === -1)
+                $scope.selectedPrices.push(item);
             else {
-                $scope.selectedPrices[index].PriceField = item.PriceField;
-                $scope.selectedPrices[index].TransferPrice = item.TransferPrice;
+                if ($scope.selectedPrices[index].PriceField === item.PriceField)
+                    $scope.selectedPrices.splice(index, 1);
+                else {
+                    $scope.selectedPrices[index].PriceField = item.PriceField;
+                    $scope.selectedPrices[index].TransferPrice = item.TransferPrice;
 
-                let elements = elm.parents('div[role="row"]:nth(0)').find('.' + priceSelectedClass);
-                elements.each(function (index, element) {
-                    element.classList.remove(priceSelectedClass);
-                });
+                    let elements = elm.parents('div[role="row"]:nth(0)').find('.' + priceSelectedClass);
+                    elements.each(function (index, element) {
+                        element.classList.remove(priceSelectedClass);
+                    });
+                }
             }
+            if (elm.hasClass(priceSelectedClass))
+                elm.removeClass(priceSelectedClass);
+            else
+                elm.addClass(priceSelectedClass);
         }
-        if (elm.hasClass(priceSelectedClass))
-            elm.removeClass(priceSelectedClass);
-        else
-            elm.addClass(priceSelectedClass);
     }
 
     $scope.Grid.SetDefaults();
@@ -393,32 +395,6 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             });
     }
 
-    $scope.transferPrice = function (row, col) {
-        var entity = row.entity;
-        var TransferPrice = row.entity[col.field];
-
-        if (TransferPrice && parseFloat(TransferPrice) > 0) {
-            messageBoxService.showConfirm('Подставить значение ' + TransferPrice + ' в Расчетная цена sell out?', 'Перенос цены')
-                .then(function () {
-                    entity.TransferPrice = TransferPrice;
-                    var model = [];
-                    model.push({ "Id": entity.Id, "TransferPrice": entity.TransferPrice });
-
-                    $scope.loading =
-                        $http({
-                            method: 'POST',
-                            url: '/EtalonPrice/TransferPrice/',
-                            data: JSON.stringify({ array: model })
-                        }).then(function () {
-                            $scope.getList();
-                            messageBoxService.showInfo("Сохранено");
-                        }, function (response) {
-                            errorHandlerService.showResponseError(response);
-                        });
-                });
-        }
-    };
-
     $scope.transferSelectedPrices = function () {
         if ($scope.selectedPrices.length > 0) {
             messageBoxService.showConfirm('Вставить выделенные (' + $scope.selectedPrices.length + ' шт.) цены?', 'Перенос цен')
@@ -427,14 +403,16 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                         $http({
                             method: 'POST',
                             url: '/EtalonPrice/TransferPrice/',
-                            data: JSON.stringify({ array: $scope.selectedPrices })
+                            data: JSON.stringify({
+                                array: $scope.selectedPrices,
+                                year: $scope.filter.date.getFullYear(),
+                                month: $scope.filter.date.getMonth() + 1
+                            })
                         }).then(function (response) {
                             if (response.data.Data) {
                                 $scope.mergeGrid(response.data.Data);
                                 $scope.clearSelectedPrices();
                             }
-                            else
-                                $scope.getList();
                             messageBoxService.showInfo("Сохранено");
                         }, function (response) {
                             errorHandlerService.showResponseError(response);
@@ -445,12 +423,14 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
 
     $scope.mergeGrid = function (data) {
         $scope.Grid.Options.data.forEach(item => {
-            let index = data.findIndex(i => i.Id === item.Id);
+            let index = data.findIndex(i => i.ClassifierId === item.ClassifierId);
             if (index >= 0) {
                 let target = data[index];
                 item.PriceCalc = target.TransferPrice;
                 item.PriceDiff = target.PriceDiff;
                 item.DeviationPercent = target.DeviationPercent;
+                item.DateModified = target.DateModified;
+                item.UserName = target.UserName;
             }
         })
     }

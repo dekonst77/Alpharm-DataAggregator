@@ -1,0 +1,43 @@
+﻿<div ng-controller="MainController" cg-busy="loading" ng-cloak class="auto-grid-parent" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2 padding3">
+                    <label>ОФД</label>
+                    <select name="supplierId" class="form-control" ng-options="item as item.value for item in SupplierList track by item.Id" ng-model="supplierId"></select>
+                </div>
+                <div class="col-md-2">
+                    <datetime ng-model="periodStart" ap-label="Период с" format="dd.MM.yyyy"></datetime>
+                </div>
+                <div class="col-md-2">
+                    <datetime ng-model="periodEnd" ap-label="Период по" format="dd.MM.yyyy"></datetime>
+                </div>
+            </div>
+        </div>
+
+        <uib-tabset active="active" style="margin-top:10px;">
+            <uib-tab heading="Периоды дней" select="setTabIndex(0)"></uib-tab>
+            <uib-tab heading="СФ-День" select="setTabIndex(1)"></uib-tab>
+            <uib-tab heading="Бренд-День" select="setTabIndex(2)"></uib-tab>
+        </uib-tabset>
+
+        <div ng-if="currentTabIndex == 0" class="auto-item-panel">
+            <h3>Периоды дней</h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <job job-Title="ЕжеДневная БД - Расчёт/Выгрузка на клиента" job-Server="s-sql4" job-Name="OFD_AGG_daily"></job>
+                </div>
+            </div>
+        </div>
+        <div ng-if="currentTabIndex == 1" class="auto-item-panel">
+            <h3>СФ-День</h3>
+        </div>
+
+        <div ng-if="currentTabIndex == 2" class="auto-item-panel">
+            <h3>Бренд-День</h3>
+        </div>
+
+    </div>
+</div>

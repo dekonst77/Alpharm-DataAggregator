@@ -125,6 +125,14 @@
                     authorize: true
                 })
 
+            // Ежедневный выпуск ОФД
+            .when('/OFD/DailyRelease',
+                {
+                    templateUrl: 'Views/OFD/DailyRelease/Main.html',
+                    title: 'OFD.DAILY_RELEASE.MAIN',
+                    authorize: true
+                })
+
             // окно ОФД
             .when('/OFD/PriceEtalon',
                 {

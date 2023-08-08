@@ -1,4 +1,5 @@
 ﻿using DataAggregator.Domain.DAL;
+using DataAggregator.Domain.Model.DataAggregator;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -34,6 +35,35 @@ namespace DataAggregator.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        public ActionResult AddGroup(string name)
+        {
+            try
+            {
+                if (_context.NotificationGroups.Any(x => x.Name == name))
+                    throw new Exception("Группа с таким наименованием уже существует");
+
+                var group = new NotificationGroups()
+                {
+                    Name = name
+                };
+
+                _context.NotificationGroups.Add(group);
+                _context.SaveChanges();
+
+                return new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = group
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
 
         [HttpPost]
         public ActionResult RenameGroup(int id, string name)
