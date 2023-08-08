@@ -5,7 +5,12 @@
                 <div class="col-md-2">
                     <h4>Группы рассылок</h4>
                 </div>
-                <div class="col-md-4"> </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-info btn-sm" ng-click="addGroup();"
+                            ng-disabled="selectedGroupId != null">
+                        <span class="glyphicon glyphicon-plus"> Добавить группу</span>
+                    </button>
+                </div>
                 <div class="col-md-2">
                     <h4>Участники групп</h4>
                 </div>

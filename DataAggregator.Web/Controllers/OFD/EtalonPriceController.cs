@@ -1,10 +1,13 @@
 ﻿using DataAggregator.Domain.DAL;
-using DataAggregator.Domain.Model.OFD;
+using DataAggregator.Domain.Model.EtalonPrice;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.OFD
@@ -12,6 +15,7 @@ namespace DataAggregator.Web.Controllers.OFD
     public class EtalonPriceController : BaseController
     {
         private readonly OFDContext _context;
+        private readonly Guid RobotUserId = new Guid("1fec04b1-9cff-4ae5-8f0a-d49ff5e1aa98");
 
         public EtalonPriceController()
         {
@@ -95,7 +99,8 @@ namespace DataAggregator.Web.Controllers.OFD
                                     mainDataItem.CommentStatusManual = item.CommentStatusManual;
                                 mainDataItem.CommentStatusId = item.CommentStatusId;
                                 mainDataItem.DateModified = DateTime.Now;
-                                mainDataItem.UserId = new Guid(User.Identity.GetUserId());
+                                if (mainDataItem.UserId != RobotUserId)
+                                    mainDataItem.UserId = new Guid(User.Identity.GetUserId());
                             }
 
                         }
@@ -115,35 +120,59 @@ namespace DataAggregator.Web.Controllers.OFD
         }
 
         [HttpPost]
-        public ActionResult TransferPrice(IEnumerable<Domain.Model.EtalonPrice.MainData> array)
+        public ActionResult TransferPrice(int year, int month, IEnumerable<Domain.Model.EtalonPrice.MainData> array) 
         {
             try
             {
                 if (array != null && array.Any())
                 {
-                    var ids = array.Select(x => x.Id).ToArray();
-                    using (_context)
-                    {
+                    var userId = new Guid(User.Identity.GetUserId());
 
+                    string filename = $@"\\s-sql2\Upload\PriceTransfer_{userId}.xlsx";
+
+                    ExcelPackage.LicenseContext = LicenseContext.Commercial;
+                    using (var xlsx = new ExcelPackage())
+                    {
+                        xlsx.Workbook.Worksheets.Add("Worksheet1");
+                        xlsx.Workbook.Worksheets[0].Cells[1, 1].Value = "ClassifierId";
+                        xlsx.Workbook.Worksheets[0].Cells[1, 2].Value = "Price";
+
+                        int row = 2;
                         foreach (var item in array)
                         {
-                            var mainDataItem = _context.MainData.FirstOrDefault(x => x.Id == item.Id);
-                            if (mainDataItem != null)
-                            {
-                                mainDataItem.TransferPrice = item.TransferPrice;
-                                mainDataItem.DateModified = DateTime.Now;
-                                mainDataItem.UserId = new Guid(User.Identity.GetUserId());
-                            }
+                            xlsx.Workbook.Worksheets[0].Cells[row, 1].Value = item.ClassifierId.ToString();
+                            xlsx.Workbook.Worksheets[0].Cells[row, 2].Value = item.TransferPrice.ToString().Replace(".", ",");
+                            row ++;
                         }
 
-                        _context.SaveChanges();
+                        FileInfo excelFile = new FileInfo(filename);
+                        xlsx.SaveAs(excelFile);
+                        _context.EtaloPrice_Import_from_Excel(year * 100 + month, userId, filename);
                     }
 
+                    var classifiers = array.Select(x => x.ClassifierId).ToArray();
                     using (var _ctx = new OFDContext(APP))
                     {
+                        var data = from d in _ctx.MainData.Where(x => classifiers.Contains(x.ClassifierId)) 
+                                   join u in _ctx.LinkedUserData
+                                       on d.UserId equals new Guid(u.Id)
+                                           select new 
+                                           {
+                                               ClassifierId = d.ClassifierId,
+                                               TransferPrice = d.TransferPrice,
+                                               DeviationPercent = d.DeviationPercent,
+                                               PriceDiff = d.PriceDiff,
+                                               DateModified = d.DateModified,
+                                               UserName = u.Name
+                                           };
+
                         return new JsonNetResult
                         {
-                            Data = new JsonResult() { Data = _ctx.MainData.Where(x => ids.Contains(x.Id)).ToArray() }
+                            Data = new JsonResult() 
+                            { 
+
+                                Data = data.ToArray() 
+                            }
                         };
                     }
                 }
@@ -156,6 +185,37 @@ namespace DataAggregator.Web.Controllers.OFD
             catch (Exception e)
             {
                 return BadRequest(e);
+            }
+        }
+
+        public ActionResult UploadFromExcel(int year, int month, HttpPostedFileBase file)
+        {
+            try
+            {
+                using (_context)
+                {
+                    var userId = new Guid(User.Identity.GetUserId());
+
+                    string filename = $@"\\s-sql2\Upload\EtalonPriceUpload_{userId}.xlsx";
+
+                    if (System.IO.File.Exists(filename))
+                        System.IO.File.Delete(filename);
+
+                    file.SaveAs(filename);
+
+                    _context.EtaloPrice_Import_from_Excel(year * 100 + month, userId, filename);
+                }
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonNetResult() { Data = null }
+                };
+                return jsonNetResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

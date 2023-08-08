@@ -59,6 +59,34 @@ function NotificationController($scope, $http, uiGridCustomService, $uibModal, m
             $scope.selectedGroupId = null;
     }
 
+    $scope.addGroup = function () {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '/Views/Common/Notification/NewGroup.html',
+            size: 'sm',
+            controller: 'NewGroupController',
+            windowClass: 'center-modal',
+            backdrop: 'static'
+        });
+
+        modalInstance.result.then(function (name) {
+            $scope.loading = $http({
+                method: 'POST',
+                url: '/Notification/AddGroup/',
+                data: JSON.stringify({
+                    name: name
+                })
+            }).then(function (response) {
+                var data = response.data;
+                if (data)
+                    $scope.groupListGrid.Options.data.push(response.data);
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+        }, function () {
+        });
+    }
+
     /*пользователи*/
     $scope.userListGrid = uiGridCustomService.createGridClassMod($scope, 'Notification_userListGrid');
     $scope.userListGrid.Options.enableRowSelection = true;
@@ -169,6 +197,29 @@ function NotificationController($scope, $http, uiGridCustomService, $uibModal, m
             errorHandlerService.showResponseError(response);
         });
     }
+}
+
+angular
+    .module('DataAggregatorModule')
+    .controller('NewGroupController', [
+        '$scope', 'messageBoxService', '$uibModalInstance', NewGroupController]);
+
+function NewGroupController($scope, messageBoxService, $modalInstance) {
+    $scope.name = null;
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    $scope.save = function () {
+        if ($scope.name === null || $scope.name.trim().length === 0) {
+            messageBoxService.showError('Не заполнено наименование', 'Ошибка');
+            return;
+        }
+        else {
+            $modalInstance.close($scope.name);
+        }
+    };
 }
 
 angular
