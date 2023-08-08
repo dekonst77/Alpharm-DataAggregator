@@ -561,7 +561,7 @@
                 })
             .when('/Classifier/Checkeds',
                 {
-                    templateUrl: 'Views/Classifier/Checkeds.html',
+                    templateUrl: 'Views/Classifier/Checkeds/Checkeds.html',
                     title: 'Бессмертные',
                     authorize: true,
                     isEditor: true

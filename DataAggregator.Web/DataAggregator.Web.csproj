@@ -2150,11 +2150,12 @@
     <Content Include="Views\Classifier\Certificate\ESKLP.html" />
     <Content Include="Views\Classifier\Certificate\MnfWay.html" />
     <Content Include="Views\Classifier\Certificate\Subtance.html" />
+    <Content Include="Views\Classifier\Checkeds\CheckedsBusyTemplate.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc_context_menu.html" />
     <Content Include="Views\Classifier\GoodsClassifierReport\GoodsClassifierReport.html" />
     <Content Include="Views\Classifier\Mask.html" />
-    <Content Include="Views\Classifier\Checkeds.html" />
+    <Content Include="Views\Classifier\Checkeds\Checkeds.html" />
     <Content Include="Views\Classifier\ClassifierEditor\Blocked.html" />
     <Content Include="Views\Classifier\ClassifierEditor\_ClassifierEditorHistory.html" />
     <Content Include="Views\Classifier\ClassifierRelease\Index.html" />
