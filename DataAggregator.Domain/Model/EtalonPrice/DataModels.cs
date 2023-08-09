@@ -26,6 +26,7 @@ namespace DataAggregator.Domain.Model.EtalonPrice
         public string UserName { get; set; }
         public decimal? DeviationPercent { get; set; }
         public int? PriceDiff { get; set; }
+        public bool ForChecking { get; set; }
     }
 
     [Table("LinkedUserData", Schema = "EtalonPrice")]
