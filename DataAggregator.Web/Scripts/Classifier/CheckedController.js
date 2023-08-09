@@ -1,10 +1,37 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('CheckedController', [
-        '$scope', '$window', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'userService', CheckedController]);
+    .controller('CheckedController', ['$scope', '$window', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'uiGridCustomService', 'errorHandlerService', 'uiGridConstants', 'formatConstants', 'userService', '$interval', '$uibModal', CheckedController])
 
-function CheckedController($scope, $window, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, userService) {
+function CheckedController($scope, $window, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, uiGridCustomService, errorHandlerService, uiGridConstants, formatConstants, userService, $interval, $uibModal) {
+    $scope.message = {};
     $scope.user = userService.getUser();
+
+    $scope.currentTabIndex = 0;
+
+    $scope.setTabIndex = function (index) {
+        $scope.currentTabIndex = index;
+    };
+
+    $scope.showModal = function () {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/Checkeds/CheckedsExceptionList.html',
+            controller: 'CheckedController',
+            windowClass: 'center-modal',
+            backdrop: 'static'
+        });
+
+        modalInstance.result.then(function (newValue) {
+            $scope.loading = $http.post("/GoodsParametersEditor/AddParameterGroup/", { newValue: newValue, goodsCategoryId: $scope.goodsCategory.Id })
+                .then(function (response) {
+                    var selectedItemId = response.data.Data.Id;
+                    $scope.getParameterGroups(selectedItemId);
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+        }, function () {
+        });
+    }
 
     $scope.Checked_Init = function () {
 
@@ -32,6 +59,10 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         $scope.filter = {
             IsBrick: false, isOther: false, ToBlock: false
         }
+
+        //--------------------
+        // таблица Бессмертные
+        //--------------------
         $scope.Grid_Checked = uiGridCustomService.createGridClassMod($scope, "Grid_Checked");
 
         let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
@@ -39,12 +70,13 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         $scope.Grid_Checked.Options.columnDefs = [
             { name: 'ClassifierId', field: 'Id', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/Classifier/ClassifierEditor/Edit?ClassifierId={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
             { name: 'CertificateNumber', field: 'RegistrationCertificateNumber', filter: { condition: uiGridCustomService.condition } },
-            { name: 'OFD_Sum', field: 'OFD_Sum_LastMonth',type:'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
-            { name: 'Audit_Sum', field: 'Audit_Sum_LastMonth', type:'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
+            { name: 'OFD_Sum', displayName: 'OFD Sum', field: 'OFD_Sum_LastMonth', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
+            { name: 'Audit_Sum', field: 'Audit_Sum_LastMonth', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_PRICE },
 
             { name: 'ToRetail', enableCellEdit: true, field: 'ToRetail', type: 'boolean' },
-            { name: 'ToOFD', enableCellEdit: true, field: 'ToOFD', type: 'boolean' },
-            { name: 'дробить по МНН', enableCellEdit: true, field: 'ToSplitMnn', type: 'boolean' },
+            { name: 'ToOFD', displayName: 'To OFD', enableCellEdit: true, field: 'ToOFD', type: 'boolean' },
+            { name: 'дробить по МНН', enableCellEdit: true, field: 'ToSplitMnn', width: 160, type: 'boolean' },
+            { name: 'ToSplitMnn_Signed', displayName: 'Проверено дробить по МНН', width: 240, enableCellEdit: true, field: 'ToSplitMnn_Signed', type: 'boolean' },
 
             { name: 'на блокирование', enableCellEdit: true, field: 'ToBlockUsed', type: 'boolean' },
 
@@ -52,13 +84,15 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
 
             { name: 'TradeName', field: 'TradeName', filter: { condition: uiGridCustomService.condition } },
             { name: 'DrugDescription', field: 'DrugDescription', filter: { condition: uiGridCustomService.condition } },
-            { name: 'INNGroup', field: 'INNGroup', filter: { condition: uiGridCustomService.condition } },
+
+            { name: 'INNGroupId', field: 'INNGroupId', visible: false, type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
+            { name: 'INNGroup', displayName: 'INNGroup', field: 'INNGroup', filter: { condition: uiGridCustomService.condition } },
 
             { name: 'DrugId', field: 'DrugId', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
-            { name: 'OwnerTradeMarkId', field: 'OwnerTradeMarkId', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT},
+            { name: 'OwnerTradeMarkId', field: 'OwnerTradeMarkId', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
             { name: 'OwnerTradeMark', field: 'OwnerTradeMark', filter: { condition: uiGridCustomService.condition } },
             { name: 'Packer', field: 'Packer', filter: { condition: uiGridCustomService.condition } },
-            { name: 'Used', field: 'Used', type: 'boolean', enableCellEdit: userService.isInRole("ClassifierUsed")},
+            { name: 'Used', field: 'Used', type: 'boolean', enableCellEdit: userService.isInRole("ClassifierUsed") },
             { name: 'IsOther', field: 'IsOther', type: 'boolean' },
             { name: 'СТМ', field: 'IsSTM', type: 'boolean', enableCellEdit: true },
             { name: 'New', field: 'PriceNew', enableCellEdit: true, type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
@@ -73,23 +107,53 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         ];
 
         $scope.Grid_Checked.SetDefaults();
+
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/Checked/Checked_Init/',
             data: JSON.stringify({})
         }).then(function (response) {
-           // $scope.Checked_search();
             return 1;
         });
+        //--------------------
+        // таблица Бессмертные
+        //--------------------
+
+        //----------------------------
+        // таблица <Список исключений>
+        //----------------------------
+        $scope.Grid_CheckedExceptionList = uiGridCustomService.createGridClassMod($scope, "Grid_Checked");
+
+        $scope.Grid_CheckedExceptionList.Options.columnDefs = [
+            { name: 'Id', field: 'Id', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellFilter: formatConstants.FILTER_INT_COUNT },
+            { name: 'Description', displayName: 'МНН', field: 'Description', filter: { condition: uiGridCustomService.condition }, width: 600 },
+            { name: 'IsException', displayName: 'Исключение', field: 'IsException', type: 'boolean', enableCellEdit: true, width: 150 }
+        ];
+
+        $scope.Grid_CheckedExceptionList.SetDefaults();
+
+        $scope.ExceptionListInit();
+        //----------------------------
+        // таблица <Список исключений>
+        //----------------------------
     };
+
     $scope.Checked_search_AC = function () {
+
+        $scope.message.caption = `Пожалуйста, ожидайте. Загрузка данных...`;
+        $scope.message.params = [
+            `На блокирование : ${$scope.filter.ToBlock ? 'Да' : 'Нет'}`,
+            `ОФД без Аудита: ${$scope.filter.IsBrick ? 'Да' : 'Нет'}`,
+            `ДОП: ${$scope.filter.isOther ? 'Да' : 'Нет'}`
+        ]
+
         $scope.dataLoading =
             $http({
                 method: 'POST',
                 url: '/Checked/Checked_search/',
                 data: JSON.stringify({ IsBrick: $scope.filter.IsBrick, isOther: $scope.filter.isOther, ToBlock: $scope.filter.ToBlock })
             }).then(function (response) {
-                
+
                 var data = response.data;
 
                 if (data.Success) {
@@ -99,6 +163,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
                 errorHandlerService.showResponseError(response);
             });
     };
+
     $scope.Checked_search = function () {
         if ($scope.Grid_Checked.NeedSave === true) {
             messageBoxService.showConfirm('Есть несохранёные результаты. Сохранить?', 'Изменение')
@@ -119,8 +184,8 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         else {
             $scope.Checked_search_AC();
         }
-
     };
+
     $scope.Checked_save = function (action) {
         $scope.dataLoading =
             $http({
@@ -162,4 +227,78 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
 
         });
     };
+
+    // сохранение списка исключений
+    $scope.ExceptionListSave = function (action) {
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/Checked/ExceptionListSave/',
+                data: JSON.stringify({
+                    array_UPD: $scope.Grid_CheckedExceptionList.GetArrayModify()
+                })
+            }).then(function (response) {
+                var data = response.data;
+
+                if (data.Success) {
+                    messageBoxService.showInfo("Сохранено записей: " + $scope.Grid_CheckedExceptionList.GetArrayModify().length);
+
+                    if (action === "search") {
+                        $scope.ExceptionListInit();
+                    }
+
+                    $scope.Grid_CheckedExceptionList.ClearModify();
+                }
+
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+    // обновить список исключений
+    $scope.ExceptionListRefresh = function () {
+        if ($scope.Grid_CheckedExceptionList.NeedSave === true) {
+
+            messageBoxService.showConfirm('Есть несохранённые результаты. Сохранить?', 'Изменение')
+                .then(
+                    function (result) {
+                        $scope.ExceptionListSave("search");
+                    },
+                    function (result) {
+                        if (result === 'no') {
+                            $scope.ExceptionListInit();
+                        }
+                        else {
+                            var d = "отмена";
+                        }
+                    });
+
+        }
+        else {
+            $scope.ExceptionListInit();
+        }
+    };
+
+    // данные из списка исключений
+    $scope.ExceptionListInit = function () {
+
+        $scope.message.caption = `Пожалуйста, ожидайте. Загрузка списка исключений...`;
+        $scope.message.params = [];
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/Checked/ExceptionListInit/',
+            data: JSON.stringify({})
+        }).then(function (response) {
+            var data = response.data;
+
+            if (data.Success) {
+                $scope.Grid_CheckedExceptionList.Options.data = data.Data.ExceptionList;
+            }
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+
+    };
+
 }
