@@ -2243,6 +2243,7 @@
     <Content Include="Views\OFD\DailyRelease\Periods.html" />
     <Content Include="Views\OFD\EtalonPrice\Actions_context_menu.html" />
     <Content Include="Views\OFD\EtalonPrice\Index.html" />
+    <Content Include="Views\OFD\EtalonPrice\ClassifierInfo.html" />
     <Content Include="Views\OFD\GS_ToOFD_BlockReason.html" />
     <Content Include="Views\OFD\GS_ToOFD_Edit.html" />
     <Content Include="Views\OFD\4SC_Agreement_EditDates.html" />
