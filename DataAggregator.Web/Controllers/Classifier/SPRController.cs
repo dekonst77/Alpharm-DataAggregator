@@ -298,7 +298,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 System.IO.File.Delete(filename);
 
             file.SaveAs(filename);
-            var _context = new GSContext(APP);
+            var _context = new DrugClassifierContext(APP);
             _context.Database.CommandTimeout = 0;
             string command = "";
 
