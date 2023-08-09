@@ -218,5 +218,47 @@ namespace DataAggregator.Web.Controllers.OFD
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public ActionResult GetSourceInfo(int? id)
+        {
+            try
+            {
+                var result = new int[] { };
+
+                return Json(result.ToList(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SetForChecking(int? id)
+        {
+            try
+            {
+                if (id != null)
+                    using (_context)
+                    {
+                        var mainDataItem = _context.MainData.FirstOrDefault(x => x.Id == id);
+                        if (mainDataItem != null)
+                        {
+                            mainDataItem.ForChecking = true;
+                            _context.SaveChanges();
+                        }
+                    }
+
+                return new JsonNetResult
+                {
+                    Data = new JsonResult() { Data = null }
+                };
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

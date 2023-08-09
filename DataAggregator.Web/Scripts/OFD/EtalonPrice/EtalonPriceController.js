@@ -1,8 +1,8 @@
 ﻿angular
     .module('DataAggregatorModule')
-    .controller('EtalonPriceController', ['$scope', '$http', 'uiGridCustomService', 'messageBoxService', 'errorHandlerService', 'formatConstants', 'uiGridPinningService', EtalonPriceController]);
+    .controller('EtalonPriceController', ['$scope', '$http', 'uiGridCustomService', 'messageBoxService', 'errorHandlerService', 'formatConstants', 'uiGridPinningService', '$uibModal', EtalonPriceController]);
 
-function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxService, errorHandlerService, formatConstants, uiGridPinningService) {
+function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxService, errorHandlerService, formatConstants, uiGridPinningService, $uibModal) {
 
     /*фильтр*/
     var today = new Date();
@@ -26,6 +26,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.Grid.Options.enableSelectAll = true;
     $scope.Grid.Options.enableFiltering = true;
 
+    let skuTemplateHint = '<div class="ui-grid-cell-contents" ng-click="grid.appScope.showClassifierInfo($event, row, col)">{{COL_FIELD}}</div>';
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>';
     let sumCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
     let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
@@ -35,7 +36,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.Grid.Options.columnDefs = [
         {
             cellTooltip: true, enableCellEdit: false, width: 80, visible: true, nullable: false, name: 'ClassifierId',
-            field: 'ClassifierId', type: 'number', filter: { condition: uiGridCustomService.condition }, pinnedLeft: true
+            field: 'ClassifierId', type: 'number', filter: { condition: uiGridCustomService.condition }, cellTemplate: skuTemplateHint, pinnedLeft: true
         },
         {
             cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Торговое наименование',
@@ -261,6 +262,44 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         }
     }
 
+    $scope.showClassifierInfo = function ($event, row, col) {
+        var id = row.entity.Id;
+
+        $http({
+            method: 'GET',
+            url: '/EtalonPrice/GetSourceInfo?id=' + id,
+            async: false
+        }).then(function (response) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: '/Views/OFD/EtalonPrice/ClassifierInfo.html',
+                size: 'lg',
+                controller: 'ClassifierInfoController',
+                windowClass: 'center-modal',
+                backdrop: 'static',
+                resolve: {
+                    data: function () {
+                        return response.data
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.loading = $http({
+                    method: 'POST',
+                    url: '/EtalonPrice/SetForChecking/',
+                    data: JSON.stringify({
+                        id: id
+                    })
+                }).then(function () {
+                    messageBoxService.showInfo("Сохранено");
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+                });
+            });
+        });
+    }
+
     $scope.Grid.SetDefaults();
 
     $scope.Grid.afterCellEdit = function (rowEntity, colDef, newValue, oldValue) {
@@ -442,4 +481,19 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             element.classList.remove(priceSelectedClass);
         });
     }
+}
+
+angular
+    .module('DataAggregatorModule')
+    .controller('ClassifierInfoController', [
+        '$scope', '$uibModalInstance', ClassifierInfoController]);
+
+function ClassifierInfoController($scope, $modalInstance) {
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    $scope.save = function () {
+        $modalInstance.close();
+    };
 }
