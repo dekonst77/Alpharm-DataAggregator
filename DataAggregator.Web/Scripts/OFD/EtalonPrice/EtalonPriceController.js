@@ -264,19 +264,24 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
 
     $scope.showClassifierInfo = function ($event, row, col) {
         var id = row.entity.Id;
+        var classifierId = row.entity.ClassifierId;
 
         $http({
-            method: 'GET',
-            url: '/EtalonPrice/GetSourceInfo?id=' + id,
+            method: 'POST',
+            url: '/EtalonPrice/GetSourceInfo',
+            data: JSON.stringify({
+                year: $scope.filter.date.getFullYear(), month: $scope.filter.date.getMonth() + 1,
+                classifierId: classifierId
+            }),
             async: false
         }).then(function (response) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: '/Views/OFD/EtalonPrice/ClassifierInfo.html',
-                size: 'lg',
                 controller: 'ClassifierInfoController',
                 windowClass: 'center-modal',
                 backdrop: 'static',
+                size: 'giant',
                 resolve: {
                     data: function () {
                         return response.data
@@ -486,9 +491,65 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
 angular
     .module('DataAggregatorModule')
     .controller('ClassifierInfoController', [
-        '$scope', '$uibModalInstance', ClassifierInfoController]);
+        '$scope', '$uibModalInstance', 'uiGridCustomService', ClassifierInfoController]);
 
-function ClassifierInfoController($scope, $modalInstance) {
+function ClassifierInfoController($scope, $modalInstance, uiGridCustomService) {
+    $scope.currentTabIndex = 0;
+    $scope.classifierData = null;
+
+    let numberCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD | number:2}}</div>';
+
+    $scope.InitialGrid = uiGridCustomService.createGridClassMod($scope, "InitialGrid");
+
+    $scope.InitialGrid.Options.columnDefs = [
+        { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate  }
+    ];
+
+    $scope.DownloadedGrid = uiGridCustomService.createGridClassMod($scope, "DownloadedGrid");
+
+    $scope.DownloadedGrid.Options.columnDefs = [
+        { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate  }
+    ];
+
+    $scope.OfdGrid = uiGridCustomService.createGridClassMod($scope, "OfdGrid");
+
+    $scope.OfdGrid.Options.columnDefs = [
+        { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition } }
+    ];
+
+    $scope.init = function () {
+        if ($scope.$resolve.data != null && $scope.$resolve.data.length > 0) {
+            let data = $scope.$resolve.data;
+
+            $scope.classifierData = {
+                PeriodShort: data[0].PeriodShort,
+                ClassifierId: data[0].ClassifierId,
+                TradeName: data[0].TradeName,
+                DrugDescription: data[0].DrugDescription,
+                OwnerTradeMark: data[0].OwnerTradeMark,
+            };
+
+            $scope.InitialGrid.Options.data = data.filter(x => x.SourceTypeId === 1);
+            $scope.DownloadedGrid.Options.data = data.filter(x => x.SourceTypeId === 2);
+            $scope.OfdGrid.Options.data = data.filter(x => x.SourceTypeId === 3);
+        }
+    }
+
+    $scope.init();
+
+    $scope.setTabIndex = function (index) {
+        $scope.currentTabIndex = index;
+    };
+
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };

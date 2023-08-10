@@ -219,14 +219,18 @@ namespace DataAggregator.Web.Controllers.OFD
             }
         }
 
-        [HttpGet]
-        public ActionResult GetSourceInfo(int? id)
+        [HttpPost]
+        public ActionResult GetSourceInfo(int year, int month, long classifierId)
         {
             try
             {
-                var result = new int[] { };
-
-                return Json(result.ToList(), JsonRequestBehavior.AllowGet);
+                _context.Database.CommandTimeout = 10 * 60;
+                var result = _context.SourceInfoView_SP(year, month, classifierId).ToList();
+                return new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = result
+                };
             }
             catch (Exception ex)
             {

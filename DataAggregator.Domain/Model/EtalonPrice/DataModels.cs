@@ -23,10 +23,11 @@ namespace DataAggregator.Domain.Model.EtalonPrice
         public decimal? TransferPrice { get; set; }
         public DateTime? DateModified { get; set; }
         public Guid? UserId { get; set; }
-        public string UserName { get; set; }
         public decimal? DeviationPercent { get; set; }
         public int? PriceDiff { get; set; }
         public bool ForChecking { get; set; }
+        [NotMapped]
+        public string UserName { get; set; }
     }
 
     [Table("LinkedUserData", Schema = "EtalonPrice")]
