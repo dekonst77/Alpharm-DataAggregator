@@ -284,5 +284,19 @@ namespace DataAggregator.Domain.DAL
                 command.ExecuteNonQuery();
             }
         }
+
+        /// <summary>
+        /// Вывод эталонных цен для блока эталонных цен new 
+        /// </summary>
+        /// <param name="month">месяц</param>
+        /// <param name="year">год</param>
+        /// <param name="classifierId">SKU (если не указан, то все по периоду, у которых стоит галочка ForChecking - отправить на перепривязку)</param>
+        public IEnumerable<SourceInfoView_SP_Result> SourceInfoView_SP(int year, int month, long? classifierId)
+        {
+            return Database.SqlQuery<SourceInfoView_SP_Result>("[EtalonPrice].[SourceInfoView_SP] @PeriodShort, @ClassifierId",
+               new SqlParameter { ParameterName = "@PeriodShort", SqlDbType = SqlDbType.Int, Value = year * 100 + month },
+               new SqlParameter { ParameterName = "@ClassifierId", SqlDbType = SqlDbType.BigInt, Value = (object)classifierId ?? DBNull.Value }
+               );
+        }
     }
 }

@@ -1,12 +1,60 @@
 ﻿<div class="modal-header">
-    <p class="modal-title">Дополнительная информация</p>
+    <h3>Дополнительная информация</h3>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="height:550px">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                
+        <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-4">
+                        Классифер
+                    </div>
+                    <div class="col-md-6">
+                        {{classifierData.ClassifierId}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        ТН
+                    </div>
+                    <div class="col-md-6">
+                        {{classifierData.TradeName}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Описание
+                    </div>
+                    <div class="col-md-6">
+                        {{classifierData.DrugDescription}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Правообладатель
+                    </div>
+                    <div class="col-md-6">
+                        {{classifierData.OwnerTradeMark}}
+                    </div>
+                </div>
             </div>
+            <uib-tabset active="active" style="margin-top:10px;">
+                <uib-tab heading="ОФД" select="setTabIndex(0)"></uib-tab>
+                <uib-tab heading="Исходники" select="setTabIndex(1)"></uib-tab>
+                <uib-tab heading="Интернет-аптеки" select="setTabIndex(2)"></uib-tab>
+            </uib-tabset>
+
+            <div ng-if="currentTabIndex == 0" class="auto-item-panel">
+                <ui-grid-control options="OfdGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+            <div ng-if="currentTabIndex == 1" class="auto-item-panel">
+                <ui-grid-control options="InitialGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+
+            <div ng-if="currentTabIndex == 2" class="auto-item-panel">
+                <ui-grid-control options="DownloadedGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+
         </div>
     </div>
 </div>
