@@ -810,7 +810,11 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 { enableCellEdit: false, visible: false, width: 50, name: 'Код округа', field: 'L2_id', filter: { condition: uiGridCustomService.condition } },
                 { enableCellEdit: false, width: 300, name: 'Федеральный округ', field: 'L2_label', filter: { condition: uiGridCustomService.condition } },
                 { enableCellEdit: false, visible: false, width: 50, name: 'L1_id', field: 'L1_id', filter: { condition: uiGridCustomService.condition } },
-                { enableCellEdit: false, width: 300, name: 'L1_label', field: 'L1_label', filter: { condition: uiGridCustomService.condition } }
+                { enableCellEdit: false, width: 300, name: 'L1_label', field: 'L1_label', filter: { condition: uiGridCustomService.condition } },
+                { enableCellEdit: true, width: 300, name: 'Населенный пункт(новое написание)', field: 'City', filter: { condition: uiGridCustomService.condition } },
+                { enableCellEdit: true, width: 300, name: 'Тип нас.пункта(новое написание)', field: 'CityTypeNew', filter: { condition: uiGridCustomService.condition } },
+                { enableCellEdit: true, width: 300, name: 'Населенный пункт(сокращенное)', field: 'CityTypeShort', filter: { condition: uiGridCustomService.condition } }
+
             ];
 
             $scope.Bricks_Grid.SetDefaults();
