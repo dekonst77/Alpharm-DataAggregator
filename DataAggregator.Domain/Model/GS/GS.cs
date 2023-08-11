@@ -399,6 +399,9 @@ namespace DataAggregator.Domain.Model.GS
         public string post_index { get; set; }
         public string comment { get; set; }
         public string Description { get; set; }
+        public string City { get; set; }
+        public string CityTypeNew { get; set; }
+        public string CityTypeShort { get; set; }
 
     }
 
@@ -428,6 +431,9 @@ namespace DataAggregator.Domain.Model.GS
         public int L7_id { get; set; }
         public string post_index { get; set; }
         public string comment { get; set; }
+        public string City { get; set; }
+        public string CityTypeNew { get; set; }
+        public string CityTypeShort { get; set; }
 
     }
 

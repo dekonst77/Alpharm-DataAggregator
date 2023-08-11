@@ -1064,6 +1064,14 @@ GS_Brick*/
                         if (item.Description == null)
                             item.Description = "";
 
+                        if (item.City == "")
+                            item.City = null;
+                        if (item.CityTypeNew == "")
+                            item.CityTypeNew = null;
+                        if (item.CityTypeShort == "")
+                            item.CityTypeShort = null;
+
+
                         var upd = _context.Bricks.Where(w => w.Id == item.Id).FirstOrDefault();
                         if (upd == null)//новая
                         {
@@ -1074,6 +1082,21 @@ GS_Brick*/
                         {
                             upd.comment = item.comment;
                         }
+
+                        if (upd.City != item.City)
+                        {
+                            upd.City = item.City;
+                        }
+                        if (upd.CityTypeNew != item.CityTypeNew)
+                        {
+                            upd.CityTypeNew = item.CityTypeNew;
+                        }
+                        if (upd.CityTypeShort != item.CityTypeShort)
+                        {
+                            upd.CityTypeShort = item.CityTypeShort;
+                        }
+
+
 
                         if (upd.L1_label != item.L1_label)
                         {
