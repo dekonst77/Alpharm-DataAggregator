@@ -17,6 +17,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     };
     $scope.commentStatuses = [];
     $scope.selectedPrices = [];
+    $scope.isSourceInfoLoading = false;
 
     /*Grid*/
     $scope.Grid = uiGridCustomService.createGridClassMod($scope, 'EtalonPrice_Grid');
@@ -26,7 +27,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.Grid.Options.enableSelectAll = true;
     $scope.Grid.Options.enableFiltering = true;
 
-    let skuTemplateHint = '<div class="ui-grid-cell-contents" ng-click="grid.appScope.showClassifierInfo($event, row, col)">{{COL_FIELD}}</div>';
+    let skuTemplateHint = '<div class="ui-grid-cell-contents" ng-dblclick="javascript:void(0);" ng-click="grid.appScope.toggleClassifierClick($event, row, col)"><a href="javascript:void(0);">{{COL_FIELD}}</a></div>';
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>';
     let sumCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
     let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
@@ -262,47 +263,57 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         }
     }
 
-    $scope.showClassifierInfo = function ($event, row, col) {
+    $scope.toggleClassifierClick = function ($event, row, col) {
+        $event.stopPropagation();
+        $event.preventDefault();
+
         var id = row.entity.Id;
         var classifierId = row.entity.ClassifierId;
+        $scope.showClassifierInfo(id, classifierId);
+    }
 
-        $http({
-            method: 'POST',
-            url: '/EtalonPrice/GetSourceInfo',
-            data: JSON.stringify({
-                year: $scope.filter.date.getFullYear(), month: $scope.filter.date.getMonth() + 1,
-                classifierId: classifierId
-            }),
-            async: false
-        }).then(function (response) {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: '/Views/OFD/EtalonPrice/ClassifierInfo.html',
-                controller: 'ClassifierInfoController',
-                windowClass: 'center-modal',
-                backdrop: 'static',
-                size: 'giant',
-                resolve: {
-                    data: function () {
-                        return response.data
+    $scope.showClassifierInfo = function (id, classifierId) {
+        if (!$scope.isSourceInfoLoading) {
+            $scope.isSourceInfoLoading = true;
+            $scope.loading = $http({
+                method: 'POST',
+                url: '/EtalonPrice/GetSourceInfo',
+                data: JSON.stringify({
+                    year: $scope.filter.date.getFullYear(), month: $scope.filter.date.getMonth() + 1,
+                    classifierId: classifierId
+                }),
+                async: false
+            }).then(function (response) {
+                $scope.isSourceInfoLoading = false;
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: '/Views/OFD/EtalonPrice/ClassifierInfo.html',
+                    controller: 'ClassifierInfoController',
+                    windowClass: 'center-modal',
+                    backdrop: 'static',
+                    size: 'giant',
+                    resolve: {
+                        data: function () {
+                            return response.data
+                        }
                     }
-                }
-            });
+                });
 
-            modalInstance.result.then(function () {
-                $scope.loading = $http({
-                    method: 'POST',
-                    url: '/EtalonPrice/SetForChecking/',
-                    data: JSON.stringify({
-                        id: id
-                    })
-                }).then(function () {
-                    messageBoxService.showInfo("Сохранено");
-                }, function (response) {
-                    errorHandlerService.showResponseError(response);
+                modalInstance.result.then(function () {
+                    $scope.loading = $http({
+                        method: 'POST',
+                        url: '/EtalonPrice/SetForChecking/',
+                        data: JSON.stringify({
+                            id: id
+                        })
+                    }).then(function () {
+                        messageBoxService.showInfo("Сохранено");
+                    }, function (response) {
+                        errorHandlerService.showResponseError(response);
+                    });
                 });
             });
-        });
+        }
     }
 
     $scope.Grid.SetDefaults();
@@ -505,7 +516,7 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService) {
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
-        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate  }
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate }
     ];
 
     $scope.DownloadedGrid = uiGridCustomService.createGridClassMod($scope, "DownloadedGrid");
@@ -514,7 +525,7 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService) {
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
-        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate  }
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate }
     ];
 
     $scope.OfdGrid = uiGridCustomService.createGridClassMod($scope, "OfdGrid");
