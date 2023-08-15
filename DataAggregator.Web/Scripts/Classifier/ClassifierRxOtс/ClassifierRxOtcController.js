@@ -45,12 +45,12 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         $scope.RxOtcGrid.Options.showGridFooter = true;
         $scope.RxOtcGrid.Options.showColumnFooter = false;
         $scope.RxOtcGrid.Options.multiSelect = true;
-        $scope.RxOtcGrid.Options.enableSelectAll = true;
+     //   $scope.RxOtcGrid.Options.enableSelectAll = true;
         $scope.RxOtcGrid.Options.enableFiltering = true;
-        $scope.RxOtcGrid.Options.modifierKeysToMultiSelect = false;
+        $scope.RxOtcGrid.Options.modifierKeysToMultiSelect = true;
         $scope.RxOtcGrid.Options.noUnselect = false;
-        $scope.RxOtcGrid.Options.enableRowSelection = true;
-        $scope.RxOtcGrid.Options.enableRowHeaderSelection = true;
+     //   $scope.RxOtcGrid.Options.enableRowSelection = true;
+      //  $scope.RxOtcGrid.Options.enableRowHeaderSelection = true;
 
         $scope.RxOtcGrid.Options.columnDefs = [
             { headerTooltip: true, name: 'Used', field: 'Used', type: 'boolean', cellTemplate: '_icon.html', width: 60, visible: true, nullable: false },
@@ -109,10 +109,9 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
             url: '/ClassifierRxOtc/Init/',
             data: JSON.stringify($scope.filter)
         }).then(function (response) {
-
+            $scope.RxOtcGrid.gridApi.selection.clearSelectedRows();
             if (response.status === 200) {
                 $scope.RxOtcGrid.Options.data = response.data.Data.RxOtc;
-
                 $scope.RxOtcGrid.Options.data.forEach((value, index) => {
                     origdata[index] = deepClone(value);
                 });
@@ -179,6 +178,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         }).then(function (response) {
 
             if (response.status === 200) {
+                $scope.RxOtcGrid.gridApi.selection.clearSelectedRows();
                 $scope.RxOtcGrid.ClearModify();
 
                 var data = response.data.Data.Data.ClassifierRxOtcRecord;
@@ -215,6 +215,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         }).then(function (response) {
 
             if (response.status === 200) {
+                $scope.RxOtcGrid.gridApi.selection.clearSelectedRows();
                 $scope.RxOtcGrid.ClearModify();
 
                 var data = response.data.Data.Data.ClassifierRxOtcRecord;
@@ -252,6 +253,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         }).then(function (response) {
 
             if (response.status === 200) {
+                $scope.RxOtcGrid.gridApi.selection.clearSelectedRows();
                 $scope.RxOtcGrid.ClearModify();
 
                 var data = response.data.Data.Data.ClassifierRxOtcRecord;
@@ -288,6 +290,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         }).then(function (response) {
 
             if (response.status === 200) {
+                $scope.RxOtcGrid.gridApi.selection.clearSelectedRows();
                 $scope.RxOtcGrid.ClearModify();
 
                 var data = response.data.Data.Data.ClassifierRxOtcRecord;
