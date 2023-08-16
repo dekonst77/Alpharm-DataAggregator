@@ -11,6 +11,9 @@
             $scope.Status = "";
             $scope.StatusId = 0;
             $scope.Go = function (Fl1) {
+                if (Fl1 == 1 && !window.confirm("Вы уверены, что хотите запустить джоб?")) {
+                    return;
+                }
                 $scope.loading = $http({
                     method: "POST",
                     url: "/Global/Job",
