@@ -12,5 +12,6 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierRxOtc
         public bool IsRx { get; set; }
         public Nullable<bool> IsChecked { get; set; }
         public bool IsException { get; set; }
+        public string Comment { get; set; }
     }
 }

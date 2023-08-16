@@ -108,8 +108,11 @@ namespace DataAggregator.Web
                  .Include("~/Scripts/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOffByCategoryController.js")
                  .Include("~/Scripts/Classifier/AddingDOPMonitoringDatabase/DialogSetPlugOnByCategoryController.js")
 
-                 // Модуль для простановки RX OTC
+                 // Модуль для простановки RX, OTC
                  .Include("~/Scripts/Classifier/ClassifierRxOtс/ClassifierRxOtcController.js")
+
+                 // история изменеий в модуле для простановки RX, OTC
+                 .Include("~/Scripts/Classifier/ClassifierRxOtс/ClassifierRxOtcHistoryController.js")
                 );
 
             bundles.Add(new ComplexStyleBundle("~/Content/Classifier/css")

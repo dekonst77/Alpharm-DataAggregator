@@ -740,6 +740,7 @@
     <Content Include="Scripts\Classifier\ClassifierRelease\ClassifierReleaseController.js" />
     <Content Include="Scripts\Classifier\ClassifierRelease\ClassifierJobInfoController.js" />
     <Content Include="Scripts\Classifier\ClassifierRxOtс\ClassifierRxOtcController.js" />
+    <Content Include="Scripts\Classifier\ClassifierRxOtс\ClassifierRxOtcHistoryController.js" />
     <Content Include="Scripts\Classifier\DataChangeExcelController.js" />
     <Content Include="Scripts\Classifier\DDDController.js" />
     <Content Include="Scripts\Classifier\Generic\ClassificationGenericController.js" />
@@ -2155,6 +2156,7 @@
     <Content Include="Views\Classifier\Checkeds\CheckedsBusyTemplate.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc_context_menu.html" />
+    <Content Include="Views\Classifier\ClassifierRxOtc\_ClassifierRxOtcHistory.html" />
     <Content Include="Views\Classifier\GoodsClassifierReport\GoodsClassifierReport.html" />
     <Content Include="Views\Classifier\Mask.html" />
     <Content Include="Views\Classifier\Checkeds\Checkeds.html" />

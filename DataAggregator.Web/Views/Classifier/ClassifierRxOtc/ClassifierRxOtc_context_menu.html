@@ -16,6 +16,8 @@
                     <button type="button" class="btn btn-default btn_ok" ng-click="SetOtc();" ng-disabled="selectedCount <= 0">Поставить всем Otc</button>
                     <button type="button" class="btn btn-default btn_ok" ng-click="SetChecked();" ng-disabled="selectedCount <= 0">Поставить всем Проверено</button>
                     <button type="button" class="btn btn-default btn_ok" ng-click="SetException();" ng-disabled="selectedCount <= 0">Поставить всем Исключено</button>
+
+                    <button class="btn btn-success btn-sm" ng-click="ShowHistory()" ng-disabled="selectedCount != 1" data-translate="BUTTONS.HISTORY"></button>
                 </div>
             </div>
         </div>

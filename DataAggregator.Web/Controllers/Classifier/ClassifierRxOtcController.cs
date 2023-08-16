@@ -1,5 +1,6 @@
 ﻿using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.DrugClassifier.Classifier.ClassifierRxOtc;
+using DataAggregator.Web.Models.Classifier;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,8 @@ namespace DataAggregator.Web.Controllers.Classifier
                         Classifierid = item.ClassifierInfoId,
                         IsRx = item.Rx,
                         IsChecked = item.IsChecked,
-                        IsException = item.IsException.Value
+                        IsException = item.IsException ?? false,
+                        Comment = item.Comment
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
@@ -73,6 +75,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                     record.IsRx = item.Rx;
                     record.IsChecked = item.IsChecked;
                     record.IsException = item.IsException.Value;
+                    record.Comment = item.Comment;
                 }
 
                 if (_context.SaveChanges() > 0)
@@ -109,14 +112,14 @@ namespace DataAggregator.Web.Controllers.Classifier
                     {
                         Classifierid = item.ClassifierInfoId,
                         IsRx = true,
-                       // IsException = true
+                        // IsException = true
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
                 else
                 {
                     record.IsRx = true;
-                //    record.IsException = true;
+                    //    record.IsException = true;
                 }
 
                 if (_context.SaveChanges() > 0)
@@ -153,14 +156,14 @@ namespace DataAggregator.Web.Controllers.Classifier
                     {
                         Classifierid = item.ClassifierInfoId,
                         IsRx = false,
-                    //    IsException = true
+                        //    IsException = true
                     };
                     _context.ClassifierRxOtc.Add(record);
                 }
                 else
                 {
                     record.IsRx = false;
-                  //  record.IsException = true;
+                    //  record.IsException = true;
                 }
 
                 if (_context.SaveChanges() > 0)
@@ -264,6 +267,26 @@ namespace DataAggregator.Web.Controllers.Classifier
                 Data = new JsonResult() { Data = Data }
             };
             return jsonNetResult;
+        }
+
+        /// <summary>
+        /// История изменеий Rx, Otc
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult LoadHistory(HistoryFilter filter)
+        {
+            try
+            {
+                var history = _context.ClassifierRxOtcLog.Where(r => r.ClassifierId == filter.ClassifierId).OrderBy(r => r.When).ToList();
+                return ReturnData(history);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
         }
 
     }

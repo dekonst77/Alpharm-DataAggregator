@@ -45,12 +45,12 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
         $scope.RxOtcGrid.Options.showGridFooter = true;
         $scope.RxOtcGrid.Options.showColumnFooter = false;
         $scope.RxOtcGrid.Options.multiSelect = true;
-     //   $scope.RxOtcGrid.Options.enableSelectAll = true;
+        //   $scope.RxOtcGrid.Options.enableSelectAll = true;
         $scope.RxOtcGrid.Options.enableFiltering = true;
         $scope.RxOtcGrid.Options.modifierKeysToMultiSelect = true;
         $scope.RxOtcGrid.Options.noUnselect = false;
-     //   $scope.RxOtcGrid.Options.enableRowSelection = true;
-      //  $scope.RxOtcGrid.Options.enableRowHeaderSelection = true;
+        //   $scope.RxOtcGrid.Options.enableRowSelection = true;
+        //  $scope.RxOtcGrid.Options.enableRowHeaderSelection = true;
 
         $scope.RxOtcGrid.Options.columnDefs = [
             { headerTooltip: true, name: 'Used', field: 'Used', type: 'boolean', cellTemplate: '_icon.html', width: 60, visible: true, nullable: false },
@@ -70,7 +70,9 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
             { headerTooltip: true, name: 'Otc', enableCellEdit: true, field: 'Otc', type: 'boolean', nullable: false },
             { headerTooltip: true, name: 'RURx', displayName: 'RURx', enableCellEdit: false, field: 'RURx', type: 'boolean', nullable: false },
             { headerTooltip: true, name: 'Проверено', enableCellEdit: true, field: 'IsChecked', type: 'boolean' },
-            { headerTooltip: true, name: 'Исключение', enableCellEdit: true, field: 'IsException', type: 'boolean' }
+            { headerTooltip: true, name: 'Исключение', enableCellEdit: true, field: 'IsException', type: 'boolean' },
+
+            { name: 'Комментарий', enableCellEdit: true, width: 600, field: 'Comment', filter: { condition: uiGridCustomService.condition } }
         ];
 
         $scope.RxOtcGrid.SetDefaults();
@@ -110,6 +112,7 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
             data: JSON.stringify($scope.filter)
         }).then(function (response) {
             $scope.RxOtcGrid.gridApi.selection.clearSelectedRows();
+
             if (response.status === 200) {
                 $scope.RxOtcGrid.Options.data = response.data.Data.RxOtc;
                 $scope.RxOtcGrid.Options.data.forEach((value, index) => {
@@ -143,17 +146,23 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
                     if (response.status === 200) {
                         console.log('успешно записаны данные в БД');
 
-                        $scope.RxOtcGrid.ClearModify();
+                        var array_upd = $scope.RxOtcGrid.GetArrayModify(); // источник в таблице
+                        var data = response.data.Data.Data.ClassifierRxOtcRecord; // обновлённые записи
 
-                        var data = response.data.Data.Data.ClassifierRxOtcRecord;
-
-                        // корректируем оригинал
                         data.forEach(el => {
-                            var index = origdata.findIndex(item => item.Classifierid === el.Classifierid);
-                            origdata.splice(index, 1, el);
+                            var index = array_upd.findIndex(item => item.ClassifierInfoId === el.Classifierid);
+
+                            if (index >= 0) {
+                                array_upd[index].Rx = el.IsRx;
+                                array_upd[index].Otc = !el.IsRx;
+                                array_upd[index].IsChecked = el.IsChecked;
+                                array_upd[index].IsException = el.IsException;
+                                array_upd[index].Comment = el.Comment;
+                            }
                         });
 
-                        //alert("Сохранено");
+                        $scope.RxOtcGrid.ClearModify();
+
                         messageBoxService.showInfo("Сохранено записей: " + data.length);
 
                         $scope.clearAll();
@@ -312,5 +321,25 @@ function ClassifierRxOtcController($scope, $route, $http, $uibModal, $timeout, u
 
     };
 
+    // История редактирования
+    $scope.ShowHistory = function () {
+
+        if ((selectedRows === null) || (selectedRows.length !== 1)) {
+            return;
+        }
+
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'Views/Classifier/ClassifierRxOtc/_ClassifierRxOtcHistory.html',
+            controller: 'ClassifierRxOtcHistoryController',
+            size: 'lg',
+            backdrop: 'static',
+            resolve: {
+                filter: {
+                    ClassifierId: selectedRows[0].ClassifierInfoId
+                },
+            }
+        });
+    };
 
 }

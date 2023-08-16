@@ -184,6 +184,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<ClassifierRxOtc> ClassifierRxOtc { get; set; }
 
+        public DbSet<ClassifierRxOtcLog> ClassifierRxOtcLog { get; set; }
+
         public virtual IList<GetLocalizationByManufacturerTable_Result> GetLocalizationByManufacturerTable(Nullable<long> iD)
         {
             SqlParameter param = new SqlParameter("@Id", iD);
