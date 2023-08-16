@@ -320,8 +320,9 @@ namespace DataAggregator.Web.Controllers.LPU
             var Dep2 = _context.LPUView.Where(l => l.ParentId == Dep.ParentId).ToList();
             try
             {
-              
-                 _context.LPU.Remove(Dep);
+                //#12527 Договорились для филиалов при удалении проставлять в ActualId значение Parent
+                Dep.ActualId = Dep.ParentId;
+                // _context.LPU.Remove(Dep);
                 _context.SaveChanges();
               
                

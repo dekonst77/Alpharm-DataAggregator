@@ -13,7 +13,7 @@ function LPUPointController($scope, $http, messageBoxService, errorHandlerServic
     };
     $scope.GridLPUPoint.Options.columnDefs = [
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'PointId', field: 'PointId', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Коммент', field: 'Comment', filter: { condition: uiGridCustomService.condition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Адрес из лицензии', width: 300, field: 'Address', filter: { condition: uiGridCustomService.condition } },
         { headerTooltip: true, name: 'ФО', width: 100, field: 'Bricks_FederalDistrict', headerCellClass: 'LightCyan', filter: { condition: uiGridCustomService.condition } },

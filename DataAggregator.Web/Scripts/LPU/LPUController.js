@@ -83,7 +83,7 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
     $scope.Grid.Options.columnDefs = [
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'LPUId', field: 'LPUId', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ParentId', field: 'ParentId', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
         {
             headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Отделения', field: 'DepartmentCnt', filter: { condition: uiGridCustomService.numberCondition }
             , cellTemplate: '<button ng-disabled="{{row.entity.IsDepartment}} >=1 || {{row.entity.ParentId}}-1 >0"  style="width:100%; {{row.entity.DepartmentCnt >0 ? \'background-color: #A3F06C;\' : (row.entity.IsDepartment>0? \'background-color: #00BFFF;\'  :\'\') }} " class="btn btn-sm"  id="{{row.entity.LPUId}}"  onclick="LPUID_Val= this.id;GetDepartments();"  data-toggle="modal" data-target="#DepModal" ><b>{{COL_FIELD}}</b></button>'
