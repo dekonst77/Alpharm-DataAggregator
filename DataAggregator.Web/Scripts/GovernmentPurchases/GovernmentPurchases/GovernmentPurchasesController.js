@@ -465,6 +465,7 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
     
 
     $scope.getIsLaterPurchases = function () {
+        $scope.canGetPurchases = false;
         $scope.purchasesInWorkLoading = $http({
             method: 'POST',
             url: '/GovernmentPurchases/GetIsLaterPurchases/'
@@ -480,6 +481,7 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
     };
 
     $scope.getPurchasesSupplierResult = function () {
+        $scope.canGetPurchases = false;
         $scope.purchasesInWorkLoading = $http({
             method: 'POST',
             url: '/GovernmentPurchases/GetPurchasesSupplierResult/'
@@ -524,6 +526,7 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
     };
 
     $scope.getPurchases = function () {
+        $scope.canGetPurchases = false;
         $scope.purchasesInWorkLoading = $http({
             method: 'POST',
             url: '/GovernmentPurchases/GetPurchases/'
@@ -539,6 +542,7 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
     };
 
     $scope.getPurchasesWithContracts = function (KK) {
+        $scope.canGetPurchases = false;
         $scope.purchasesInWorkLoading = $http({
             method: 'POST',
             url: '/GovernmentPurchases/GetPurchasesWithContracts/',
