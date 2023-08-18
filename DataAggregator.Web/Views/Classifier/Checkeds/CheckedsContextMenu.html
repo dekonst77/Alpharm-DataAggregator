@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <style>
+        .context-menu-body .context-menu button {
+            width: 110px;
+        }
+
+        .context-menu-body {
+            height: 40px;
+        }
+
+        .label_category {
+            margin: 0px;
+            width: 100px;
+            white-space: nowrap;
+        }
+
+        .context-menu-body .row label {
+            margin-top: 7px;
+        }
+
+        .btn_ok {
+            width: 50px !important;
+        }
+
+        .btn_cancel {
+            width: 70px !important;
+        }
+
+        .context-menu-body .contextMenu {
+            position: absolute;
+            list-style-type: none;
+            z-index: 1000;
+            background-color: white;
+        }
+
+        .padding1 {
+            padding: 1px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="panel panel-primary context-menu" style="width: 400px;">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Меню <span class="badge">{{selectedCount}}</span>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true"> &times;</span>
+                </button>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-8 padding1" style="top:10px;">
+                    <label>Дробить по МНН</label>
+                </div>
+
+                <div class="col-md-4 padding1">
+                    <div class="input-group">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn_ok" ng-click="SplitByINN(true)" data-translate="YES" ng-disabled="selectedCount <= 0"></button>
+                            <button type="button" class="btn btn-default right-button btn_cancel" ng-click="SplitByINN(false)" data-translate="BUTTONS.DISCARD" ng-disabled="selectedCount <= 0"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8 padding1" style="top:10px;">
+                    <label>Проверено дробить по МНН</label>
+                </div>
+
+                <div class="col-md-4 padding1">
+                    <div class="input-group">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn_ok" ng-click="SplitByINNSigned(true)" data-translate="YES" ng-disabled="selectedCount <= 0"></button>
+                            <button type="button" class="btn btn-default right-button btn_cancel" ng-click="SplitByINNSigned(false)" data-translate="BUTTONS.DISCARD" ng-disabled="selectedCount <= 0"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>

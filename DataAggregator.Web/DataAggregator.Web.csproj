@@ -2154,6 +2154,7 @@
     <Content Include="Views\Classifier\Certificate\MnfWay.html" />
     <Content Include="Views\Classifier\Certificate\Subtance.html" />
     <Content Include="Views\Classifier\Checkeds\CheckedsBusyTemplate.html" />
+    <Content Include="Views\Classifier\Checkeds\CheckedsContextMenu.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\ClassifierRxOtc_context_menu.html" />
     <Content Include="Views\Classifier\ClassifierRxOtc\_ClassifierRxOtcHistory.html" />

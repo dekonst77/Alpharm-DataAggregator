@@ -227,6 +227,35 @@ namespace DataAggregator.Domain.DAL
                 new SqlParameter { ParameterName = "@Excluded", SqlDbType = SqlDbType.Bit, Value = Excluded }
                 );
         }
+
+        /// <summary>
+        /// Проставить (снять) дробление по МНН, поле [ToSplitMnn]
+        /// </summary>
+        /// <param name="array_UPD"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IEnumerable<SplitByINN_Result> SplitByINN_SP(string array_UPD, Boolean value)
+        {
+            return Database.SqlQuery<SplitByINN_Result>("[Classifier].[SplitByINN] @ClassifireId, @value",
+                new SqlParameter { ParameterName = "@ClassifireId", SqlDbType = SqlDbType.VarChar, Value = array_UPD },
+                new SqlParameter { ParameterName = "@value", SqlDbType = SqlDbType.Bit, Value = value }
+                );
+        }
+
+        /// <summary>
+        /// Проставить (снять) проверку на дробление по МНН, поле [ToSplitMnn_Signed]
+        /// </summary>
+        /// <param name="array_UPD"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IEnumerable<SplitByINN_Result> SplitByINN_Signed_SP(string array_UPD, Boolean value)
+        {
+            return Database.SqlQuery<SplitByINN_Result>("[Classifier].[SplitByINN_Signed] @ClassifireId, @value",
+                new SqlParameter { ParameterName = "@ClassifireId", SqlDbType = SqlDbType.VarChar, Value = array_UPD },
+                new SqlParameter { ParameterName = "@value", SqlDbType = SqlDbType.Bit, Value = value }
+                );
+        }
+
         #endregion
 
         #region FederalBenefit
@@ -668,7 +697,7 @@ namespace DataAggregator.Domain.DAL
         public IEnumerable<ClassifierInfo_Report> ClassifierInfo_GetReport(bool IsBrick, bool isOther)
         {
             Database.CommandTimeout = 0;
-            var ret = Database.SqlQuery<ClassifierInfo_Report>("dbo.ClassifierInfo_GetReport @IsBrick,@isOther",
+            var ret = Database.SqlQuery<ClassifierInfo_Report>("dbo.ClassifierInfo_GetReport @IsBrick, @isOther",
                 new SqlParameter { ParameterName = "@IsBrick", SqlDbType = SqlDbType.Bit, Value = IsBrick },
                 new SqlParameter { ParameterName = "@isOther", SqlDbType = SqlDbType.Bit, Value = isOther });
             return ret;

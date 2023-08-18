@@ -6,6 +6,9 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
     $scope.message = {};
     $scope.user = userService.getUser();
 
+    var selectedRows = null;
+    $scope.selectedCount = 0;
+
     $scope.currentTabIndex = 0;
 
     $scope.setTabIndex = function (index) {
@@ -63,7 +66,12 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         //--------------------
         // таблица Бессмертные
         //--------------------
-        $scope.Grid_Checked = uiGridCustomService.createGridClassMod($scope, "Grid_Checked");
+        var Grid_Checked_onSelectionChanged = function (row) {
+            selectedRows = $scope.Grid_Checked.gridApi.selection.getSelectedRows();
+            $scope.selectedCount = selectedRows.length;
+        }
+
+        $scope.Grid_Checked = uiGridCustomService.createGridClassMod($scope, "Grid_Checked", Grid_Checked_onSelectionChanged);
 
         let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>'
 
@@ -76,7 +84,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
             { name: 'ToRetail', enableCellEdit: true, field: 'ToRetail', type: 'boolean' },
             { name: 'ToOFD', displayName: 'To OFD', enableCellEdit: true, field: 'ToOFD', type: 'boolean' },
             { name: 'дробить по МНН', enableCellEdit: true, field: 'ToSplitMnn', width: 160, type: 'boolean' },
-            { name: 'ToSplitMnn_Signed', displayName: 'Проверено дробить по МНН', width: 240, enableCellEdit: true, field: 'ToSplitMnn_Signed', type: 'boolean' },
+            { name: 'Проверено дробить по МНН', displayName: 'Проверено дробить по МНН', width: 240, enableCellEdit: true, field: 'ToSplitMnn_Signed', type: 'boolean' },
 
             { name: 'на блокирование', enableCellEdit: true, field: 'ToBlockUsed', type: 'boolean' },
 
@@ -301,4 +309,75 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
 
     };
 
+    // Множественная простановка всем "дробить по МНН", поле [Classifier].[ClassifierInfo].[ToSplitMnn]
+    $scope.SplitByINN = function (value) {
+
+        if (selectedRows === null) {
+            return;
+        }
+
+        let classifireIdArray = selectedRows.map(item => item.Id);
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/Checked/SplitByINN',
+            data: JSON.stringify({ array_UPD: classifireIdArray, value: value })
+        }).then(function (response) {
+
+            if (response.status === 200) {
+
+                var data = response.data.Data.Data.ClassifierCheckedRecords;
+
+                // корректируем оригинал
+                data.forEach(el => {
+                    var index = $scope.Grid_Checked.Options.data.findIndex(item => item.Id === el.Id);
+                    $scope.Grid_Checked.Options.data[index].ToSplitMnn = el.ToSplitMnn;
+                });
+
+                messageBoxService.showInfo("Сохранено записей: " + data.length);
+
+                $scope.Grid_Checked.gridApi.selection.clearSelectedRows();
+                $scope.Grid_Checked.ClearModify();
+            }
+
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    };
+
+    // Проставить (снять) проверку на дробление по МНН, поле [Classifier].[ClassifierInfo].[ToSplitMnn_Signed]
+    $scope.SplitByINNSigned = function (value) {
+
+        if (selectedRows === null) {
+            return;
+        }
+
+        let classifireIdArray = selectedRows.map(item => item.Id);
+
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/Checked/SplitByINN_Signed',
+            data: JSON.stringify({ array_UPD: classifireIdArray, value: value })
+        }).then(function (response) {
+
+            if (response.status === 200) {
+
+                var data = response.data.Data.Data.ClassifierCheckedRecords;
+
+                // корректируем оригинал
+                data.forEach(el => {
+                    var index = $scope.Grid_Checked.Options.data.findIndex(item => item.Id === el.Id);
+                    $scope.Grid_Checked.Options.data[index].ToSplitMnn_Signed = el.ToSplitMnn_Signed;
+                });
+
+                messageBoxService.showInfo("Сохранено записей: " + data.length);
+
+                $scope.Grid_Checked.gridApi.selection.clearSelectedRows();
+                $scope.Grid_Checked.ClearModify();
+            }
+
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    };
 }

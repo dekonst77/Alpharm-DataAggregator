@@ -209,5 +209,87 @@ namespace DataAggregator.Web.Controllers.Classifier
             }
         }
 
+        /// <summary>
+        /// Множественная простановка всем "дробить по МНН"
+        /// </summary>
+        /// <param name="array_UPD">список Id классификаторов</param>
+        /// <param name="value">дробить или снять дробление</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SplitByINN(IEnumerable<long> array_UPD, Boolean value)
+        {
+            if (array_UPD == null)
+                return BadRequest("Нет входных данных");
+
+            var ClassifireList = array_UPD.Select(item => item.ToString()).ToList();
+            try
+            {
+                using (var _context = new DrugClassifierContext(APP))
+                {
+                    var result = _context.SplitByINN_SP(String.Join(",", ClassifireList), value);
+                    ViewData["ClassifierCheckedRecords"] = result.ToArray();
+                    var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResult() { Data = Data }
+                    };
+                    return jsonNetResult;
+                }
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
+        }
+
+        /// <summary>
+        /// Проставить (снять) проверку на дробление по МНН, поле [ToSplitMnn_Signed]
+        /// </summary>
+        /// <param name="array_UPD">список Id классификаторов</param>
+        /// <param name="value">поставить или снять проверку</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SplitByINN_Signed(IEnumerable<long> array_UPD, Boolean value)
+        {
+            if (array_UPD == null)
+                return BadRequest("Нет входных данных");
+
+            var ClassifireList = array_UPD.Select(item => item.ToString()).ToList();
+            try
+            {
+                using (var _context = new DrugClassifierContext(APP))
+                {
+                    var result = _context.SplitByINN_Signed_SP(String.Join(",", ClassifireList), value);
+                    ViewData["ClassifierCheckedRecords"] = result.ToArray();
+                    var Data = new JsonResultData() { Data = ViewData, status = "ок", Success = true };
+
+                    JsonNetResult jsonNetResult = new JsonNetResult
+                    {
+                        Formatting = Formatting.Indented,
+                        Data = new JsonResult() { Data = Data }
+                    };
+                    return jsonNetResult;
+                }
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    msg += e.Message;
+                }
+                return BadRequest(msg);
+            }
+        }
+
     }
 }
