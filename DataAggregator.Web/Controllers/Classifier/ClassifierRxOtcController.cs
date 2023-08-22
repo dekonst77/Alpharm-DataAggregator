@@ -14,10 +14,11 @@ namespace DataAggregator.Web.Controllers.Classifier
     [Authorize(Roles = "SBoss")]
     public class ClassifierRxOtcController : BaseController
     {
-        private readonly DrugClassifierContext _context;
+        private DrugClassifierContext _context;
 
-        public ClassifierRxOtcController()
+        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
+            base.Initialize(requestContext);
             _context = new DrugClassifierContext(APP);
         }
 
