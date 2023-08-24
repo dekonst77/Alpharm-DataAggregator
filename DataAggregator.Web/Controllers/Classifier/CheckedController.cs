@@ -66,6 +66,9 @@ namespace DataAggregator.Web.Controllers.Classifier
         [HttpPost]
         public ActionResult Checked_save(ICollection<ClassifierInfo_Report> array_UPD)
         {
+            if (array_UPD == null)
+                return BadRequest("Нет изменеий");
+
             try
             {
                 var _context = new DrugClassifierContext(APP);
@@ -146,7 +149,7 @@ namespace DataAggregator.Web.Controllers.Classifier
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
-                    Data = new JsonResultData() { Data = null, count = 0, status = "ок", Success = true }
+                    Data = new JsonResultData() { Data = null, count = array_UPD.Count, status = "ок", Success = true }
                 };
                 return jsonNetResult;
             }

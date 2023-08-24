@@ -210,7 +210,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
                     }
                     else {
                         $scope.Grid_Checked.ClearModify();
-                        alert("Сохранил");
+                        messageBoxService.showInfo("Сохранено записей: " + data.count);
                     }
                 }
             }, function (response) {
@@ -316,6 +316,15 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
             return;
         }
 
+        selectedRows.forEach(function (item) {
+            item.ToSplitMnn = value;
+            item["@modify"] = true;
+        });
+
+        $scope.Grid_Checked.NeedSave = true;
+
+        return;
+        /*
         let classifireIdArray = selectedRows.map(item => item.Id);
 
         $scope.dataLoading = $http({
@@ -343,6 +352,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         }, function (response) {
             errorHandlerService.showResponseError(response);
         });
+        */
     };
 
     // Проставить (снять) проверку на дробление по МНН, поле [Classifier].[ClassifierInfo].[ToSplitMnn_Signed]
@@ -352,6 +362,15 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
             return;
         }
 
+        selectedRows.forEach(function (item) {
+            item.ToSplitMnn_Signed = value;
+            item["@modify"] = true;
+        });
+
+        $scope.Grid_Checked.NeedSave = true;
+
+        return;
+        /*
         let classifireIdArray = selectedRows.map(item => item.Id);
 
         $scope.dataLoading = $http({
@@ -379,5 +398,6 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         }, function (response) {
             errorHandlerService.showResponseError(response);
         });
+        */
     };
 }
