@@ -37,4 +37,15 @@ namespace DataAggregator.Domain.Model.EtalonPrice
         public string Id { get; set; }
         public string Name { get; set; }
     }
+
+    [Table("SourceInfo", Schema = "EtalonPrice")]
+    public class SourceInfo
+    {
+        [Key]
+        public long Id { get; set; }
+        public bool ForChecking { get; set; }
+        public DateTime? DateModify { get; set; }
+        public Guid? UserModify { get; set; }
+
+    }
 }

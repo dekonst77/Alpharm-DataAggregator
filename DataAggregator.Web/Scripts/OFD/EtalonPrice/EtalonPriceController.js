@@ -27,11 +27,12 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.Grid.Options.enableSelectAll = true;
     $scope.Grid.Options.enableFiltering = true;
 
-    let skuTemplateHint = '<div class="ui-grid-cell-contents" ng-dblclick="javascript:void(0);" ng-click="grid.appScope.toggleClassifierClick($event, row, col)"><a href="javascript:void(0);">{{COL_FIELD}}</a></div>';
+    let skuTemplateHint = '<div class="ui-grid-cell-contents" ng-click="grid.appScope.toggleClassifierClick($event, row, col)"><a href="javascript:void(0);">{{COL_FIELD}}</a></div>';
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>';
     let sumCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
-    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
-    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-click="grid.appScope.togglePriceSelection($event, row, col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
+    let sellOutCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
+    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-dblclick="grid.appScope.transferPrice($event, row,col)" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
+    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-dblclick="grid.appScope.transferPrice($event, row,col)" ng-click="grid.appScope.togglePriceSelection($event, row, col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
     let diffCellTemplateHint = '<div class="ui-grid-cell-contents" ng-class="{\'red\' : row.entity.PriceDiff < 0, \'green\' : row.entity.PriceDiff >= 0}">{{COL_FIELD}}</div>';
 
     $scope.Grid.Options.columnDefs = [
@@ -78,8 +79,8 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         },
         // расчетная цена SellOut (или установленная через контектное меню цена из другого столбца)
         {
-            cellTooltip: true, enableCellEdit: false, width: 100, visible: true, nullable: true, name: 'Расч. цена SellOut',
-            field: 'PriceCalc', type: 'number', headerCellClass: 'avg_sellout_pricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: avgCellTemplateHint
+            cellTooltip: true, enableCellEdit: true, width: 100, visible: true, nullable: true, name: 'Расч. цена SellOut',
+            field: 'PriceCalc', type: 'number', headerCellClass: 'avg_sellout_pricedata', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: sellOutCellTemplateHint
         },
         // отклонение эталонной цены прошлого месяца
         {
@@ -236,7 +237,10 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     const priceSelectedClass = 'price_selected';
 
     $scope.togglePriceSelection = function ($event, row, col) {
-        var item = { ClassifierId: row.entity.ClassifierId, PriceField: col.field, TransferPrice: row.entity[col.field] };
+        $event.stopPropagation();
+        $event.preventDefault();
+
+        var item = { Id: row.entity.Id, ClassifierId: row.entity.ClassifierId, PriceField: col.field, TransferPrice: row.entity[col.field] };
         var elm = angular.element($event.target);
 
         if (parseFloat(item.TransferPrice) > 0) {
@@ -261,6 +265,18 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             else
                 elm.addClass(priceSelectedClass);
         }
+    }
+
+    $scope.transferPrice = function ($event, row, col) {
+        $event.stopPropagation();
+        $event.preventDefault();
+
+        messageBoxService.showConfirm('Подставить значение в Расчетная цена sell out?', 'Перенос цены')
+            .then(function () {
+                var item = { Id: row.entity.Id, ClassifierId: row.entity.ClassifierId, PriceField: col.field, TransferPrice: row.entity[col.field] };
+                $scope.selectedPrices.push(item);
+                $scope.savePrices();
+            });
     }
 
     $scope.toggleClassifierClick = function ($event, row, col) {
@@ -298,20 +314,6 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                         }
                     }
                 });
-
-                modalInstance.result.then(function () {
-                    $scope.loading = $http({
-                        method: 'POST',
-                        url: '/EtalonPrice/SetForChecking/',
-                        data: JSON.stringify({
-                            id: id
-                        })
-                    }).then(function () {
-                        messageBoxService.showInfo("Сохранено");
-                    }, function (response) {
-                        errorHandlerService.showResponseError(response);
-                    });
-                });
             });
         }
     }
@@ -322,7 +324,22 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         if (newValue === oldValue || newValue === undefined)
             return;
 
-        if (colDef.field == "CommentStatus" && rowEntity.CommentStatusId != null)
+        if (colDef.field == "PriceCalc" && parseFloat(rowEntity.PriceCalc) > 0) {
+            messageBoxService.showConfirm('Сохранить значение?', 'Перенос цены')
+                .then(function () {
+                    var item = { Id: rowEntity.Id, ClassifierId: rowEntity.ClassifierId, TransferPrice: newValue };
+                    $scope.selectedPrices.push(item);
+                    $scope.savePrices();
+                    $scope.Grid.NeedSave = false;
+
+                    $scope.Grid.Options.data.forEach(function (item) {
+                        if (item["@modify"] === true) {
+                            item["@modify"] = false;
+                        }
+                    });
+                });
+        }
+        else if (colDef.field == "CommentStatus" && rowEntity.CommentStatusId != null)
             return;
         else {
             rowEntity.CommentStatusId = null;
@@ -454,31 +471,35 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         if ($scope.selectedPrices.length > 0) {
             messageBoxService.showConfirm('Вставить выделенные (' + $scope.selectedPrices.length + ' шт.) цены?', 'Перенос цен')
                 .then(function () {
-                    $scope.loading =
-                        $http({
-                            method: 'POST',
-                            url: '/EtalonPrice/TransferPrice/',
-                            data: JSON.stringify({
-                                array: $scope.selectedPrices,
-                                year: $scope.filter.date.getFullYear(),
-                                month: $scope.filter.date.getMonth() + 1
-                            })
-                        }).then(function (response) {
-                            if (response.data.Data) {
-                                $scope.mergeGrid(response.data.Data);
-                                $scope.clearSelectedPrices();
-                            }
-                            messageBoxService.showInfo("Сохранено");
-                        }, function (response) {
-                            errorHandlerService.showResponseError(response);
-                        });
+                    $scope.savePrices();
                 });
         }
     }
 
+    $scope.savePrices = function () {
+        $scope.loading =
+            $http({
+                method: 'POST',
+                url: '/EtalonPrice/TransferPrice/',
+                data: JSON.stringify({
+                    array: $scope.selectedPrices,
+                    year: $scope.filter.date.getFullYear(),
+                    month: $scope.filter.date.getMonth() + 1
+                })
+            }).then(function (response) {
+                if (response.data) {
+                    $scope.mergeGrid(response.data);
+                    $scope.clearSelectedPrices();
+                }
+                messageBoxService.showInfo("Сохранено");
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    }
+
     $scope.mergeGrid = function (data) {
         $scope.Grid.Options.data.forEach(item => {
-            let index = data.findIndex(i => i.ClassifierId === item.ClassifierId);
+            let index = data.findIndex(i => i.Id === item.Id);
             if (index >= 0) {
                 let target = data[index];
                 item.PriceCalc = target.TransferPrice;
@@ -502,40 +523,67 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
 angular
     .module('DataAggregatorModule')
     .controller('ClassifierInfoController', [
-        '$scope', '$uibModalInstance', 'uiGridCustomService', ClassifierInfoController]);
+        '$scope', '$uibModalInstance', 'uiGridCustomService', '$http', 'messageBoxService', ClassifierInfoController]);
 
-function ClassifierInfoController($scope, $modalInstance, uiGridCustomService) {
+function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $http, messageBoxService) {
     $scope.currentTabIndex = 0;
     $scope.classifierData = null;
 
     let numberCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD | number:2}}</div>';
 
+    /*1 - Исходники*/
     $scope.InitialGrid = uiGridCustomService.createGridClassMod($scope, "InitialGrid");
 
     $scope.InitialGrid.Options.columnDefs = [
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
-        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate }
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate },
+        { name: 'PharmacyId', width: 125, enableCellEdit: false, field: 'PharmacyId', filter: { condition: uiGridCustomService.condition } },
+        {  name: 'Отправить на перепривязку',cellTooltip: true, enableCellEdit: true, width: 80, field: 'ForChecking', type: 'boolean', filter: { condition: uiGridCustomService.condition } },
     ];
 
+    $scope.InitialGrid.SetDefaults();
+
+    /*2 - Парсинг*/
     $scope.DownloadedGrid = uiGridCustomService.createGridClassMod($scope, "DownloadedGrid");
 
     $scope.DownloadedGrid.Options.columnDefs = [
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
-        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate }
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate },
+        { name: 'Отправить на перепривязку', width: 125, enableCellEdit: true, field: 'ForChecking', filter: { condition: uiGridCustomService.condition }, type: 'boolean' },
     ];
 
+    $scope.DownloadedGrid.SetDefaults();
+
+   /*3 - ОФД*/
     $scope.OfdGrid = uiGridCustomService.createGridClassMod($scope, "OfdGrid");
 
     $scope.OfdGrid.Options.columnDefs = [
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
-        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition } }
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition } },
+        { name: 'Отправить на перепривязку', width: 125, enableCellEdit: true, field: 'ForChecking', filter: { condition: uiGridCustomService.condition }, type: 'boolean' },
     ];
+
+    $scope.OfdGrid.SetDefaults();
+
+    /*4 - SellIn*/
+    $scope.SellInGrid = uiGridCustomService.createGridClassMod($scope, "SellInGrid");
+
+    $scope.SellInGrid.Options.columnDefs = [
+        { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate },
+        { name: 'PharmacyId', width: 125, enableCellEdit: false, field: 'PharmacyId', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Отправить на перепривязку', width: 125, enableCellEdit: true, field: 'ForChecking', filter: { condition: uiGridCustomService.condition }, type: 'boolean' },
+    ];
+
+    $scope.SellInGrid.SetDefaults();
 
     $scope.init = function () {
         if ($scope.$resolve.data != null && $scope.$resolve.data.length > 0) {
@@ -547,11 +595,13 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService) {
                 TradeName: data[0].TradeName,
                 DrugDescription: data[0].DrugDescription,
                 OwnerTradeMark: data[0].OwnerTradeMark,
+                IsSTM: data[0].IsSTM,
             };
 
             $scope.InitialGrid.Options.data = data.filter(x => x.SourceTypeId === 1);
             $scope.DownloadedGrid.Options.data = data.filter(x => x.SourceTypeId === 2);
             $scope.OfdGrid.Options.data = data.filter(x => x.SourceTypeId === 3);
+            $scope.SellInGrid.Options.data = data.filter(x => x.SourceTypeId === 4);
         }
     }
 
@@ -566,6 +616,60 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService) {
     };
 
     $scope.save = function () {
-        $modalInstance.close();
+        var model = [];
+        var array_upd = [];
+
+        array_upd = $scope.InitialGrid.GetArrayModify();
+        if (array_upd.length > 0)
+            model.push(...
+                array_upd.map(function (obj) {
+                    return { "Id": obj.Id, "ForChecking": obj.ForChecking }
+                })
+            );
+
+        array_upd = $scope.DownloadedGrid.GetArrayModify();
+        if (array_upd.length > 0)
+            model.push(...
+                array_upd.map(function (obj) {
+                    return { "Id": obj.Id, "ForChecking": obj.ForChecking }
+                })
+            );
+
+        array_upd = $scope.OfdGrid.GetArrayModify();
+        if (array_upd.length > 0)
+            model.push(...
+                array_upd.map(function (obj) {
+                    return { "Id": obj.Id, "ForChecking": obj.ForChecking }
+                })
+            );
+
+        array_upd = $scope.SellInGrid.GetArrayModify();
+        if (array_upd.length > 0)
+            model.push(...
+                array_upd.map(function (obj) {
+                    return { "Id": obj.Id, "ForChecking": obj.ForChecking }
+                })
+            );
+
+        if (model.length > 0) {
+            $scope.loading =
+                $http({
+                    method: 'POST',
+                    url: '/EtalonPrice/SetForChecking/',
+                    data: JSON.stringify({ array: model })
+                }).then(function () {
+                    messageBoxService.showInfo("Сохранено");
+                    $modalInstance.close();
+                }, function (response) {
+                    errorHandlerService.showResponseError(response);
+
+                    $scope.InitialGrid.ClearModify();
+                    $scope.DownloadedGrid.ClearModify();
+                    $scope.OfdGrid.ClearModify();
+                    $scope.SellInGrid.ClearModify();
+                });
+        }
+
+        
     };
 }

@@ -1,7 +1,7 @@
 ﻿<div class="modal-header">
     <h3>Дополнительная информация</h3>
 </div>
-<div class="modal-body" style="height:550px">
+<div class="modal-body" style="height:650px">
     <div class="container-fluid">
         <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
             <div class="panel-heading">
@@ -37,16 +37,26 @@
                         {{classifierData.OwnerTradeMark}}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        СТМ
+                    </div>
+                    <div class="col-md-6">
+                        <input type="checkbox" ng-model="classifierData.IsSTM" disabled />
+                    </div>
+                </div>
             </div>
             <uib-tabset active="active" style="margin-top:10px;">
                 <uib-tab heading="ОФД" select="setTabIndex(0)"></uib-tab>
                 <uib-tab heading="Исходники" select="setTabIndex(1)"></uib-tab>
                 <uib-tab heading="Интернет-аптеки" select="setTabIndex(2)"></uib-tab>
+                <uib-tab heading="SellIn" select="setTabIndex(3)"></uib-tab>
             </uib-tabset>
 
             <div ng-if="currentTabIndex == 0" class="auto-item-panel">
                 <ui-grid-control options="OfdGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
             </div>
+
             <div ng-if="currentTabIndex == 1" class="auto-item-panel">
                 <ui-grid-control options="InitialGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
             </div>
@@ -55,10 +65,14 @@
                 <ui-grid-control options="DownloadedGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
             </div>
 
+            <div ng-if="currentTabIndex == 3" class="auto-item-panel">
+                <ui-grid-control options="SellInGrid.Options" class="ui-grid-enable-content-selection ui-grid-header-wrap-text"></ui-grid-control>
+            </div>
+
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="save();"> <span class="glyphicon glyphicon-random"> Отправить на перепривязку</span> </button>
+    <button class="btn btn-info" type="button" ng-click="save();"><span class="glyphicon glyphicon-save"> Сохранить</span> </button>
     <button class="btn btn-warning" type="button" ng-click="cancel()" data-translate="BUTTONS.CANCEL"></button>
 </div>
