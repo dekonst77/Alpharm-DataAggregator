@@ -301,7 +301,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 async: false
             }).then(function (response) {
                 $scope.isSourceInfoLoading = false;
-                var modalInstance = $uibModal.open({
+                $uibModal.open({
                     animation: true,
                     templateUrl: '/Views/OFD/EtalonPrice/ClassifierInfo.html',
                     controller: 'ClassifierInfoController',
@@ -314,6 +314,9 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                         }
                     }
                 });
+            }, function (response) {
+                $scope.isSourceInfoLoading = false;
+                errorHandlerService.showResponseError(response);
             });
         }
     }
@@ -538,6 +541,7 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Производитель ', enableCellEdit: false, field: 'Manufacturer', filter: { condition: uiGridCustomService.condition } },
         { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate },
         { name: 'PharmacyId', width: 125, enableCellEdit: false, field: 'PharmacyId', filter: { condition: uiGridCustomService.condition } },
         {  name: 'Отправить на перепривязку',cellTooltip: true, enableCellEdit: true, width: 80, field: 'ForChecking', type: 'boolean', filter: { condition: uiGridCustomService.condition } },
@@ -552,6 +556,7 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $
         { name: 'Источник данных', width: 230, enableCellEdit: false, field: 'SourceName', filter: { condition: uiGridCustomService.condition } },
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
+        { name: 'Производитель ', enableCellEdit: false, field: 'Manufacturer', filter: { condition: uiGridCustomService.condition } },
         { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate },
         { name: 'Отправить на перепривязку', width: 125, enableCellEdit: true, field: 'ForChecking', filter: { condition: uiGridCustomService.condition }, type: 'boolean' },
     ];
@@ -579,6 +584,7 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $
         { name: 'DrugClearId', width: 125, enableCellEdit: false, field: 'DrugClearId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Исходные строки написание', enableCellEdit: false, field: 'OriginalDrugName', filter: { condition: uiGridCustomService.condition } },
         { name: 'Цена', cellTooltip: true, width: 100, enableCellEdit: false, field: 'Price', type: 'number', filter: { condition: uiGridCustomService.numberCondition }, cellTemplate: numberCellTemplate },
+        { name: 'Производитель ', enableCellEdit: false, field: 'Manufacturer', filter: { condition: uiGridCustomService.condition } },
         { name: 'PharmacyId', width: 125, enableCellEdit: false, field: 'PharmacyId', filter: { condition: uiGridCustomService.condition } },
         { name: 'Отправить на перепривязку', width: 125, enableCellEdit: true, field: 'ForChecking', filter: { condition: uiGridCustomService.condition }, type: 'boolean' },
     ];
