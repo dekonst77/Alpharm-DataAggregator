@@ -550,7 +550,7 @@
                             <input type="text"
                                    class="form-control"
                                    ng-model="classifier.Packer.Value"
-                                   ng-change="clearId(classifier.Packer); clearKey('PackerId');"
+                                   ng-change="clearId(classifier.Packer); clearId(classifier.ProductionStage);clearKey('PackerId');"
                                    uib-typeahead="data.Value for data in searchDictionary($viewValue,'packer')"
                                    typeahead-on-select="setId($item, classifier.Packer); setLocalization(classifier.Packer);"
                                    typeahead-select-on-exact="true">
