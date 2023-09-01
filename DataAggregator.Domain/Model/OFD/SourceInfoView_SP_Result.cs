@@ -25,5 +25,6 @@ namespace DataAggregator.Domain.Model.OFD
         public string OriginalDrugName  { get; set; }
         public long? PharmacyId { get; set; }
         public bool ForChecking { get; set; }
+        public string Manufacturer { get; set; }
     }
 }

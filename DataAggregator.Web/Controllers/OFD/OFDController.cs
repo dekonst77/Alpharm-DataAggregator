@@ -789,7 +789,7 @@ namespace DataAggregator.Web.Controllers.OFD
 
         [HttpPost]
         [Authorize(Roles = "OFD_Boss")]
-        public ActionResult D4SC_Agreement_save(int[] array, DateTime dateBegin, DateTime dateEnd)
+        public ActionResult D4SC_Agreement_save(int[] array, DateTime dateBegin, DateTime dateEnd, bool stop = false)
         {
             try
             {
@@ -806,24 +806,29 @@ namespace DataAggregator.Web.Controllers.OFD
                             if (UPD.Date_end >= beforeDatEnd)
                                 UPD.Date_end = beforeDatEnd;
 
-                            var ADD = new Domain.Model.OFD.Agreement
+                            if (!stop)
                             {
-                                SupplierId = UPD.SupplierId,
-                                Name = UPD.Name,
-                                NetworkName = UPD.NetworkName,
-                                EntityINN = UPD.EntityINN,
-                                OwnerAgrId = UPD.OwnerAgrId,
-                                OwnerAgr = UPD.OwnerAgr,
-                                Date_begin = dateBegin,
-                                Date_end = dateEnd
-                            };
-                            _context.Agreement_All.Add(ADD);
+                                var ADD = new Domain.Model.OFD.Agreement
+                                {
+                                    SupplierId = UPD.SupplierId,
+                                    Name = UPD.Name,
+                                    NetworkName = UPD.NetworkName,
+                                    EntityINN = UPD.EntityINN,
+                                    OwnerAgrId = UPD.OwnerAgrId,
+                                    OwnerAgr = UPD.OwnerAgr,
+                                    Date_begin = dateBegin,
+                                    Date_end = dateEnd
+                                };
+                                _context.Agreement_All.Add(ADD);
 
-                            var Classifiers = _context.AgreementClassifiers.Where(x => x.AgreementId == item).ToList();
-                            if (Classifiers != null && Classifiers.Any())
-                            {
-                                ADD.Classifiers = new List<Domain.Model.OFD.Classifier>();
-                                ADD.Classifiers.AddRange(Classifiers.Select(x => new Domain.Model.OFD.Classifier { AgreementId = 0, ClassifierId = x.ClassifierId }).ToList());
+                                var Classifiers = _context.AgreementClassifiers.Where(x => x.AgreementId == item).ToList();
+                                if (Classifiers != null && Classifiers.Any())
+                                {
+                                    ADD.Classifiers = new List<Domain.Model.OFD.Classifier>();
+                                    ADD.Classifiers.AddRange(Classifiers.Select(x => 
+                                        new Domain.Model.OFD.Classifier { AgreementId = 0, ClassifierId = x.ClassifierId }
+                                    ).ToList());
+                                }
                             }
                         }
                     }

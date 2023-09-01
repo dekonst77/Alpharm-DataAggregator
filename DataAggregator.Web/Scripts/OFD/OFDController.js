@@ -832,6 +832,7 @@ function OFDController($scope, $route, $http, $uibModal, messageBoxService, uiGr
         });
 
         modalInstance.result.then(function () {
+            $scope.isCurrent = false;
             $scope.D4SC_Agreement_search();
         });
     }
@@ -881,6 +882,7 @@ angular
 function AgreementEditDatesController($scope, $http, errorHandlerService, $modalInstance) {
     $scope.dateBegin = new Date();
     $scope.dateEnd = new Date();
+    $scope.stop = false;
 
     $scope.cancel = function () {
         $modalInstance.dismiss();
@@ -893,10 +895,11 @@ function AgreementEditDatesController($scope, $http, errorHandlerService, $modal
             data: JSON.stringify({
                 array: $scope.$resolve.AgreementIds,
                 dateBegin: $scope.dateBegin,
-                dateEnd: $scope.dateEnd
+                dateEnd: $scope.dateEnd,
+                stop: $scope.stop
             })
         }).then(function () {
-            $modalInstance.dismiss();
+            $modalInstance.close();
         }, function (response) {
             errorHandlerService.showResponseError(response);
         });
