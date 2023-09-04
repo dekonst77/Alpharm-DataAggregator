@@ -289,8 +289,10 @@
                             <label>Стадии производства</label>
                             <select name="ProductionStage"
                                     class="form-control"
+                                    ng-class="{'has-error': classifierEditor.ProductionStage.$invalid}"
                                     ng-options="item as item.Value for item in ProductionStageList track by item.Id"
                                     ng-model="classifier.ProductionStage"
+                                    required
                                     ng-change="selectProductionStage()">
                             </select>
                         </div>
@@ -550,7 +552,7 @@
                             <input type="text"
                                    class="form-control"
                                    ng-model="classifier.Packer.Value"
-                                   ng-change="clearId(classifier.Packer); clearId(classifier.ProductionStage);clearKey('PackerId');"
+                                   ng-change="clearId(classifier.Packer);clearId(classifier.ProductionStage);selectProductionStage();classifier.ProductionStage=null; clearKey('PackerId');"
                                    uib-typeahead="data.Value for data in searchDictionary($viewValue,'packer')"
                                    typeahead-on-select="setId($item, classifier.Packer); setLocalization(classifier.Packer);"
                                    typeahead-select-on-exact="true">
