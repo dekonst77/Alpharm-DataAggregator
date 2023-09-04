@@ -104,7 +104,7 @@ function DrugGoodClassifierController($scope, $http, $uibModal, $location, commo
             { name: 'Comment', field: 'Comment', filter: { condition: uiGridCustomService.condition } },
             { name: 'PrioritetWords', field: 'PrioritetWords', filter: { condition: uiGridCustomService.condition } },
             { name: 'OperatorComment', field: 'OperatorComment', filter: { condition: uiGridCustomService.condition }, enableCellEdit: true },
-            //{ name: 'HasEmptyClassfierId', field: 'HasEmptyClassfierId', filter: { condition: uiGridCustomService.condition } },
+            { name: 'HasEmptyClassfierId', field: 'HasEmptyClassfierId', filter: { condition: uiGridCustomService.condition } },
         ],
         rowTemplate: '_rowTemplate.html'
     };
