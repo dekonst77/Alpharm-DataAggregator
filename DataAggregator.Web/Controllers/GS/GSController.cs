@@ -2481,10 +2481,12 @@ group by inn having count(*) > 1
                 using (var _context = new GSContext(APP))
                 {
                     _context.Database.CommandTimeout = 0;
-                    var spr_Source_client = _context.Database.SqlQuery<sprItemst>(@"select [Source_client] code,
-                    [Source_client]+' - '+trim(str(sum(IIF(HC.GSid is null and DistrId is null and LPUId is null and status!=5,1,0)))) status from 
-                    [adr].[History] H inner join adr.History_coding HC on HC.Id=H.CodingId
-                    group by [Source_client] order by [Source_client]").ToList();
+                    var spr_Source_client = _context.Database.SqlQuery<sprItemst>(@"exec gs.adr.History_coding_Filter_Source_client").ToList();
+                    /*  var spr_Source_client = _context.Database.SqlQuery<sprItemst>(@"select [Source_client] code,
+                      [Source_client]+' - '+trim(str(sum(IIF(HC.GSid is null and DistrId is null and LPUId is null and status!=5,1,0)))) status from 
+                      [adr].[History] H inner join adr.History_coding HC on HC.Id=H.CodingId
+                      group by [Source_client] order by [Source_client]").ToList();
+                    */
                     spr_Source_client.Insert(0, new sprItemst() { Status = "все клиенты", code = "" });
                     List<sprItem> spr_Tops = new List<sprItem>
                 {
@@ -2493,13 +2495,18 @@ group by inn having count(*) > 1
                     new sprItem() { code = 50000000, Status = "все строки" }
                 };
 
-                    var spr_Comments = _context.Database.SqlQuery<sprItemst>("select Comments code,Comments+' - '+trim(str(COUNT(*))) status from [adr].History_coding where Comments<>'' group by Comments order by Comments").ToList();
+                    var spr_Comments = _context.Database.SqlQuery<sprItemst>(@"exec gs.adr.History_coding_Filter_Comments").ToList();
+                    //  var spr_Comments = _context.Database.SqlQuery<sprItemst>("select Comments code,Comments+' - '+trim(str(COUNT(*))) status from [adr].History_coding where Comments<>'' group by Comments order by Comments").ToList();
+
                     spr_Comments.Insert(0, new sprItemst() { Status = "<пусто>", code = "EmptyNull" });
                     spr_Comments.Insert(0, new sprItemst() { Status = "все комментарии", code = "" });
 
-                    var spr_Category = _context.Database.SqlQuery<sprItem>("select cast(Id as int) as code,Value as Status from [adr].[History_Category] order by Status").ToList();
+                    var spr_Category = _context.Database.SqlQuery<sprItem>(@"exec gs.adr.History_coding_Filter_Category").ToList();
+                    //  var spr_Category = _context.Database.SqlQuery<sprItem>("select cast(Id as int) as code,Value as Status from [adr].[History_Category] order by Status").ToList();
                     spr_Category.Insert(0, new sprItem() { code = 0, Status = "все категории" });
 
+                    var spr_Status = _context.Database.SqlQuery<sprItem>(@"exec gs.adr.History_coding_Filter_Status").ToList();
+                    /*
                     var spr_Status = _context.Database.SqlQuery<sprItem>(@"SELECT cast(HS.Id as int) as code, HS.Value+' - '+trim(str(COUNT(*))) AS Status
 FROM            adr.History_Status HS INNER JOIN
                          adr.History_coding HC ON HS.Id = HC.Status
@@ -2507,17 +2514,24 @@ GROUP BY HS.Id, HS.Value
 union
 select -5,'Не Мусор'
 ").ToList();
+                    */
+
                     spr_Status.Insert(0, new sprItem() { code = 255, Status = "все статусы" });
 
-                    var spr_DataSource = _context.Database.SqlQuery<sprItemst>("select [DataSource] as code,DataSource+' - '+trim(str(COUNT(*))) status from [adr].[History_coding] where DataSource<>'' group by [DataSource] order by [DataSource]").ToList();
+                    var spr_DataSource = _context.Database.SqlQuery<sprItemst>(@"exec gs.adr.History_coding_Filter_DataSource").ToList();
+                    // var spr_DataSource = _context.Database.SqlQuery<sprItemst>("select [DataSource] as code,DataSource+' - '+trim(str(COUNT(*))) status from [adr].[History_coding] where DataSource<>'' group by [DataSource] order by [DataSource]").ToList();
                     spr_DataSource.Insert(0, new sprItemst() { Status = "все источники", code = "" });
 
-                    var spr_DataSourceType = _context.Database.SqlQuery<sprItemst>("select [DataSourceType] as code,DataSourceType+' - '+trim(str(COUNT(*))) status from [adr].[History_coding] where DataSourceType<>'' group by [DataSourceType] order by [DataSourceType]").ToList();
+                    var spr_DataSourceType = _context.Database.SqlQuery<sprItemst>(@"exec gs.adr.History_coding_Filter_DataSourceType").ToList();
+                    // var spr_DataSourceType = _context.Database.SqlQuery<sprItemst>("select [DataSourceType] as code,DataSourceType+' - '+trim(str(COUNT(*))) status from [adr].[History_coding] where DataSourceType<>'' group by [DataSourceType] order by [DataSourceType]").ToList();
                     spr_DataSourceType.Insert(0, new sprItemst() { Status = "все DataSourceType", code = "" });
 
                     /*var spr_NetworkName = _context.Database.SqlQuery<sprItemst>("select [NetworkName] as code,NetworkName+' - '+trim(str(COUNT(*))) status from [adr].[History_coding] where NetworkName<>'' group by [NetworkName] order by [NetworkName]").ToList();
                     spr_NetworkName.Insert(0, new sprItemst() { Status = "все сети", code = "" });
                     */
+
+                    List<sprItemst> spr_Spec = _context.Database.SqlQuery<sprItemst>(@"exec gs.adr.History_coding_Filter_Spec").ToList();
+                    /*
                     List<sprItemst> spr_Spec = _context.Database.SqlQuery<sprItemst>(@"
 select 0 as id,cast('' as nvarchar(50)) as code,cast('без спец Фильтров' as nvarchar(50)) as Status
 union
@@ -2542,9 +2556,9 @@ union
 select 7,cast('badLPU' as nvarchar(50)) as code,cast('Плохие LPUId' as nvarchar(50)) +' - '+ltrim(str(count(*))) as Status
 from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo].[LPUId])
 ").ToList();
-
-
-                    var spr_userWork = _context.Database.SqlQuery<sprItemUser>("select [UserWork] code,[FullName]+' - '+trim(str(COUNT(*))) Status from [adr].[History_coding_inwork_View] group by [UserWork],[FullName]").ToList();
+*/
+                    var spr_userWork = _context.Database.SqlQuery<sprItemUser>(@"exec gs.adr.History_coding_Filter_userWork").ToList();
+                    // var spr_userWork = _context.Database.SqlQuery<sprItemUser>("select [UserWork] code,[FullName]+' - '+trim(str(COUNT(*))) Status from [adr].[History_coding_inwork_View] group by [UserWork],[FullName]").ToList();
                     JsonNetResult jsonNetResult = new JsonNetResult
                     {
                         Formatting = Formatting.Indented,
