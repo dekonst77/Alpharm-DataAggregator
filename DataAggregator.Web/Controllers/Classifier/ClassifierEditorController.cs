@@ -500,8 +500,7 @@ namespace DataAggregator.Web.Controllers
                 var history = _context.ClassifierHistoryView.Where(r => //(r.DrugId == filter.DrugId && r.OwnerTradeMarkId == filter.OwnerTradeMarkId && r.PackerId == filter.PackerId) 
                 //|| 
                 r.ClassifierId == filter.ClassifierId)
-                                                            .OrderBy(r => r.When).ToList().Select(ClassifierHistoryModel.Create);
-
+                .OrderBy(r => r.When).ToList().Select(ClassifierHistoryModel.Create);
 
                 return ReturnData(history);
 
