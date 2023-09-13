@@ -91,6 +91,7 @@
                             class="form-control" style="width:200px;display:inline-block;" ng-options="item as item.Status for item in spr_Users track by item.code" ng-model="UsersCL"></select>
                     <button class="btn btn-success btn-xs" ng-show="!IsOnline" ng-click="History_SetOtherData();"><span class="glyphicon glyphicon-backward">Сдать</span></button>
                     <button class="btn btn-danger btn-xs" ng-show="!IsOnline" ng-click="History_FreezeList();" data-toggle="modal" data-target="#FreezeModal" style="margin-left:10px;"><span class="glyphicon glyphicon-remove-sign">Заморозка</span></button>
+                    <button class="btn btn-danger btn-xs" ng-show="!IsOnline" ng-click="History_BlockedList();" data-toggle="modal" data-target="#BlockedModal" style="margin-left:10px;"><span class="glyphicon glyphicon-remove-sign">Исключения</span></button>
                 </div>
             </div>
         </div>
@@ -117,6 +118,30 @@
 
 
 
+    <!-- Modal -->
+    <div class="modal" id="BlockedModal" tabindex="-1" role="dialog" aria-labelledby="BlockedModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:85%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="BlockedModalLabel">Исключения</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid" style="height: 300px;" title="!">
+                        <button class="btn btn-warning btn-sm" ng-click="Blocked_SetData();" ng-disabled="!Grid_Blocked.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                        <div id="grid-sel-block" class="auto-item-panel">
+                            <ui-grid-control options="Grid_Blocked.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -140,12 +165,12 @@
                             <ui-grid-control options="Grid_Freeze.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
                         </div>
                     </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 

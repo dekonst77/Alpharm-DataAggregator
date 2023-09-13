@@ -2488,6 +2488,100 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             });
     };
 
+     ///Grid для блокировок
+    $scope.Grid_Blocked = uiGridCustomService.createGridClassMod($scope, 'Grid_Blocked');
+    $scope.Grid_Blocked.Options.showGridFooter = false;
+    $scope.Grid_Blocked.Options.multiSelect = false;
+    $scope.Grid_Blocked.Options.modifierKeysToMultiSelect = true;
+    $scope.Grid_Blocked.Options.customEnableRowSelection = true;
+    $scope.Grid_Blocked.Options.enableRowSelection = false;
+    $scope.Grid_Blocked.Options.enableRowHeaderSelection = false;
+    $scope.Grid_Blocked.Options.enableSelectAll = false;
+    $scope.Grid_Blocked.Options.selectionRowHeaderWidth = 20;
+    $scope.Grid_Blocked.Options.rowHeight = 20;
+    $scope.Grid_Blocked.Options.appScopeProvider = $scope;
+    $scope.Grid_Blocked.Options.enableFullRowSelection = true;
+    $scope.Grid_Blocked.Options.enableSelectionBatchEvent = true;
+    $scope.Grid_Blocked.Options.enableHighlighting = true;
+    $scope.Grid_Blocked.Options.noUnselect = false;
+    $scope.Grid_Blocked.Options.appScopeProvider = $scope;
+    $scope.Grid_Blocked.Options.columnDefs = [
+        { headerTooltip: true, name: 'Id', width: 100, field: 'Id' },
+
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'INN', field: 'INN', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'LegalName', field: 'LegalName', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, name: 'Comment', field: 'Comment', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Дата изменения', field: 'DtAdd', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Spark', field: 'Spark', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Spark2', field: 'Spark2', filter: { condition: uiGridCustomService.condition } }      
+       
+    ];
+
+
+    $('BlockedModal').on('show.bs.modal', function (event) {
+        History_BlockedList();
+    });
+    $scope.History_BlockedList = function () {
+
+        $scope.Grid_Blocked.Options.data = [];
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_BlockedGet/',
+            }).then(function (response) {
+
+                var data = response.data;
+                if (data.Success) {                 
+
+                    $scope.Grid_Blocked.Options.data = data.Data;                   
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+    };
+
+   
+    $scope.Blocked_SetData = function () {
+        var array_upd = $scope.Grid_Blocked.GetArrayModify();
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_BlockedUpdate/',
+                data: JSON.stringify({ values: array_upd })
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    $scope.Grid_Blocked.ClearModify();
+                    $scope.History_BlockedList();
+                   
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+                return;
+            });
+
+    };
+
+
+    $scope.Blocked_AddData = function () {
+        var array_upd = $scope.Grid.selectedRows();
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_BlockedAdd/',
+                data: JSON.stringify({ blockedvalues: array_upd, Comments:''})
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    alert('Данные записи добавлены в Блокировки');                   
+
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+                return;
+            });
+
+    };
 
 
     ///Grid для заморозки

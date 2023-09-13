@@ -3010,6 +3010,111 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             return jsonNetResult;
         }
 
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_BlockedGet()
+        {
+
+            using (var _context = new GSContext(APP))
+            {
+                _context.Database.CommandTimeout = 0;
+
+                var result = _context.Database.SqlQuery<Domain.Model.GS.History_coding_blockedList>("[adr].[History_coding_BlockedList] @user",
+                    new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                     ).ToList();
+
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = result, count = 0, status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+        }
+
+
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_BlockedAdd(ICollection<DataAggregator.Domain.Model.GS.History_coding_inwork_View> blockedvalues,string Comments)
+        {
+
+            using (var _context = new GSContext(APP))
+            {
+                _context.Database.CommandTimeout = 0;
+                foreach (var item in blockedvalues)
+                {
+                    _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Add] @Inn ,@Comments, @LegalName,@user",
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.INN },
+                   new System.Data.SqlClient.SqlParameter { ParameterName = "@Comments", SqlDbType = System.Data.SqlDbType.NVarChar, Value = Comments },
+                    new System.Data.SqlClient.SqlParameter { ParameterName = "@LegalName", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.LegalName },
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                   );
+                }                  
+            }
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
+        }
+
+
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_BlockedUpdate(ICollection<DataAggregator.Domain.Model.GS.History_coding_blockedList> values)
+        {
+
+            using (var _context = new GSContext(APP))
+            {
+                _context.Database.CommandTimeout = 0;
+                foreach (var item in values)
+                {
+                    _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Update] @Id, @Inn ,@Comments, @LegalName,@user",
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@Id", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.Id },
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.INN },
+                   new System.Data.SqlClient.SqlParameter { ParameterName = "@Comments", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.Comment },
+                    new System.Data.SqlClient.SqlParameter { ParameterName = "@LegalName", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.LegalName },
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                   );
+                }
+            }
+
+            JsonNetResult jsonNetResult = new JsonNetResult
+            {
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+            };
+            return jsonNetResult;
+        }
+
+
+        [Authorize(Roles = "GS_History")]
+        [HttpPost]
+        public ActionResult History_BlockedDelete(long Id)
+        {
+
+            using (var _context = new GSContext(APP))
+            {
+                _context.Database.CommandTimeout = 0;
+                _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Delete] @Id,@Inn ,@user",
+                 new System.Data.SqlClient.SqlParameter { ParameterName = "@Id", SqlDbType = System.Data.SqlDbType.NVarChar, Value = Id },
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = null },
+                 new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
+                  );
+
+                JsonNetResult jsonNetResult = new JsonNetResult
+                {
+                    Formatting = Formatting.Indented,
+                    Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+                };
+                return jsonNetResult;
+            }
+        }
+
+
         [Authorize(Roles = "GS_Summs")]
         public ActionResult SummsPeriod_Init()
         {

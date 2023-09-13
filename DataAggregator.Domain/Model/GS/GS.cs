@@ -1592,6 +1592,18 @@ namespace DataAggregator.Domain.Model.GS
     }
 
 
+    public class History_coding_blockedList
+    {
+        [Key]
+        public long Id { get; set; }
+        public string INN { get; set; }
+        public string LegalName { get; set; }
+        public string Comment { get; set; }
+        public DateTime DtAdd { get; set; }
+        public string Spark { get; set; }
+        public string Spark2 { get; set; }
+    }
+
     public class History_coding_FreezeList
     {
         [Key]
