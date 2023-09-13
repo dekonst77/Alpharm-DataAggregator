@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAggregator.Domain
+namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
 {
     [Table("ClassifierHistoryView", Schema = "Log")]
     public class ClassifierHistoryView

@@ -1,8 +1,5 @@
-﻿using DataAggregator.Domain;
+﻿using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace DataAggregator.Web.Models.Classifier
 {

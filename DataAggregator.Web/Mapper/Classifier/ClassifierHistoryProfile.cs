@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAggregator.Domain;
+using DataAggregator.Domain.Model.DrugClassifier.Classifier;
 using DataAggregator.Web.Models.Classifier;
 
 namespace DataAggregator.Web.Mapper.OFD
