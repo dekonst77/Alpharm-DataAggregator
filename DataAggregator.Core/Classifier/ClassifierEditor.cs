@@ -1429,8 +1429,9 @@ namespace DataAggregator.Core.Classifier
                         else
                         {
                             new_brand = _context.Brand.Add(new Brand() { Value = model.Brand.Value, UseClassifier = true });
-                            _context.SaveChanges();
+                            
                         }
+                        _context.SaveChanges();
                     }
                     model.Brand.Id = new_brand.Id;
                 }

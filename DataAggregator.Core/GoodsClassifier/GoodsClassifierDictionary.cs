@@ -181,7 +181,8 @@ namespace DataAggregator.Core.GoodsClassifier
                     //Если нету, то создадим
                     dbGoodsBrand = new Brand() { Value = model.GoodsBrand.Value, UseGoodsClassifier = true };
                     _context.Brand.Add(dbGoodsBrand);
-                }              
+                }
+                _context.SaveChanges();
             }
 
             return dbGoodsBrand;
