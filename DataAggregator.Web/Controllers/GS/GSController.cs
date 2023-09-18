@@ -3044,6 +3044,9 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
                 _context.Database.CommandTimeout = 0;
                 foreach (var item in blockedvalues)
                 {
+                    if (String.IsNullOrEmpty(item.INN)) item.INN = "";
+                    if (String.IsNullOrEmpty(item.Comments)) item.Comments = "";
+                    if (String.IsNullOrEmpty(item.LegalName)) item.LegalName ="";
                     _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Add] @Inn ,@Comments, @LegalName,@user",
                   new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.INN },
                    new System.Data.SqlClient.SqlParameter { ParameterName = "@Comments", SqlDbType = System.Data.SqlDbType.NVarChar, Value = Comments },
@@ -3072,6 +3075,9 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
                 _context.Database.CommandTimeout = 0;
                 foreach (var item in values)
                 {
+                    if (String.IsNullOrEmpty(item.LegalName)) item.LegalName = "";
+                    if (String.IsNullOrEmpty(item.INN)) item.INN = "";
+                    if (String.IsNullOrEmpty(item.Comment)) item.Comment = "";
                     _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Update] @Id, @Inn ,@Comments, @LegalName,@user",
                   new System.Data.SqlClient.SqlParameter { ParameterName = "@Id", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.Id },
                   new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.INN },
