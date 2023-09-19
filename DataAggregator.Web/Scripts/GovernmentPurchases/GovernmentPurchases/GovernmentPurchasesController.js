@@ -1609,6 +1609,10 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
                         editDropdownOptionsArray: $scope.PaymentType,
                         editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Name'
                     },
+
+                    { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Год', field: 'StageYear', filter: { condition: uiGridCustomService.condition } },
+                    { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, type: 'number', name: 'Уровень', field: 'StageLevel', filter: { condition: uiGridCustomService.numberCondition } },
+
                     { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 200, name: 'дата создания', field: 'Date', filter: { condition: uiGridCustomService.condition } },
                 ];
                 $scope.ContractPaymentStageGrid_new.Options.columnDefs = [
@@ -1624,6 +1628,10 @@ function GovernmentPurchasesController(messageBoxService, $scope, $route, $http,
                         editDropdownOptionsArray: $scope.PaymentType,
                         editDropdownIdLabel: 'Id', editDropdownValueLabel: 'Name'
                     },
+
+                    { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Год', field: 'StageYear', filter: { condition: uiGridCustomService.condition } },
+                    { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, type: 'number', name: 'Уровень', field: 'StageLevel', filter: { condition: uiGridCustomService.numberCondition } },
+
                     { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 200, name: 'дата создания', field: 'Date', filter: { condition: uiGridCustomService.condition } },
                 ];
             }
