@@ -1410,6 +1410,14 @@ namespace DataAggregator.Core.Classifier
                 FTGId = model.FTG.Id;
             if (model.Brand.Id > 0)
             {
+                // Выбираем Бренд по Id
+                var IssetBrand = _context.Brand.SingleOrDefault(b => b.Id == model.Brand.Id);
+                //Если в Бренде проставлено значение используется в Goods но не проставлено использовать в ЛС то проставляем это поле
+                if (IssetBrand != null && model.DrugId>0) {
+                    if(IssetBrand.UseClassifier !=true && IssetBrand.UseGoodsClassifier == true)
+                        IssetBrand.UseClassifier = true;
+                        _context.SaveChanges();
+                }
             }
             else
             {
