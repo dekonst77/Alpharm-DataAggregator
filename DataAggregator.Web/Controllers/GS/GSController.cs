@@ -3099,18 +3099,20 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
 
         [Authorize(Roles = "GS_History")]
         [HttpPost]
-        public ActionResult History_BlockedDelete(long Id)
+        public ActionResult History_BlockedDelete(ICollection<DataAggregator.Domain.Model.GS.History_coding_blockedList> values)
         {
 
             using (var _context = new GSContext(APP))
             {
                 _context.Database.CommandTimeout = 0;
-                _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Delete] @Id,@Inn ,@user",
-                 new System.Data.SqlClient.SqlParameter { ParameterName = "@Id", SqlDbType = System.Data.SqlDbType.NVarChar, Value = Id },
-                  new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = null },
+                foreach (var item in values)
+                {
+                    _context.Database.ExecuteSqlCommand(" [adr].[History_coding_blocked_Delete] @Id,@Inn ,@user",
+                 new System.Data.SqlClient.SqlParameter { ParameterName = "@Id", SqlDbType = System.Data.SqlDbType.NVarChar, Value = item.Id },
+                  new System.Data.SqlClient.SqlParameter { ParameterName = "@Inn", SqlDbType = System.Data.SqlDbType.NVarChar, Value = "" },
                  new System.Data.SqlClient.SqlParameter { ParameterName = "@user", SqlDbType = System.Data.SqlDbType.NVarChar, Value = User.Identity.GetUserId().ToString() }
                   );
-
+                }
                 JsonNetResult jsonNetResult = new JsonNetResult
                 {
                     Formatting = Formatting.Indented,
