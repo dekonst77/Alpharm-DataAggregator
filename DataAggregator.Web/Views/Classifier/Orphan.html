@@ -1,0 +1,29 @@
+﻿<div ng-controller="OrphanController" cg-busy="{promise:loading, message:message}" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-4 padding3">
+                <label>
+                    Фильтры:
+                </label>
+                <label>
+                    <input name="filtercommon" type="checkbox" class="" ng-model="ShowOnlyOrphan" ng-click="ShowOnlyOrphan = !ShowOnlyOrphan;" ng-change="">&nbspПоказать только орфанные
+                </label>
+                <label>
+                    <input name="filtercommon" type="checkbox" class="" ng-model="ShowOnlyOrphan" ng-true-value="false" ng-false-value="true" ng-click="ShowOnlyOrphan = !ShowOnlyOrphan;" ng-change="">&nbspПоказать все
+                </label>
+                <button class="btn btn-success btn-sm" ng-click="Orphan_search();"><span class="glyphicon glyphicon-search">&nbspВыбрать</span></button>
+            </div>
+
+            <div class="col-md-3 padding3">
+                <button class="btn btn-warning btn-sm" ng-click="OrphanListSave();" ng-disabled="!Grid_Orphan.NeedSave"><span class="glyphicon glyphicon-save">&nbspСохранить</span></button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="auto-item-panel" style="height: 90%; width:100%">
+        <ui-grid-control options="Grid_Orphan.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+    </div>
+
+</div>

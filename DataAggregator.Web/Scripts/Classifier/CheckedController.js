@@ -174,7 +174,7 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
 
     $scope.Checked_search = function () {
         if ($scope.Grid_Checked.NeedSave === true) {
-            messageBoxService.showConfirm('Есть несохранёные результаты. Сохранить?', 'Изменение')
+            messageBoxService.showConfirm('Есть несохранённые результаты. Сохранить?', 'Изменение')
                 .then(
                     function (result) {
                         $scope.Checked_save("search");

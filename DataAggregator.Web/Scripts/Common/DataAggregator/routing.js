@@ -485,12 +485,12 @@
                     isEditor: true
                 })
             .when('/GS/BookOfChange',
-             {
-                 templateUrl: 'Views/GS/BookOfChange.html',
-                 title: 'Книга перемен',
-                 authorize: true,
-                 isEditor: true
-             });
+                {
+                    templateUrl: 'Views/GS/BookOfChange.html',
+                    title: 'Книга перемен',
+                    authorize: true,
+                    isEditor: true
+                });
     }
     //ЛПУ
     function setupLPURouting() {
@@ -541,7 +541,7 @@
                     templateUrl: 'Views/Classifier/GTIN/GTIN.html',
                     title: 'CLASSIFIER.CLASSIFIER_EDITOR.TITLE',
                     authorize: true
-                   
+
                 })
 
             // Редактор классификатора - изменение
@@ -699,6 +699,14 @@
                     authorize: true
                 })
 
+            // Список орфанных МНН
+            .when('/Classifier/Orphan',
+                {
+                    templateUrl: 'Views/Classifier/Orphan.html',
+                    title: 'CLASSIFIER.Orphan.TITLE',
+                    authorize: true
+                })
+
             // Редактор Дженерик
             .when('/Classifier/GENERIC',
                 {
@@ -803,7 +811,7 @@
 
             // Модуль для простановки RX OTC
             .when('/Classifier/ClassifierRxOtc', {
-                templateUrl: 'Views/Classifier/ClassifierRxOtc/ClassifierRxOtc.html', 
+                templateUrl: 'Views/Classifier/ClassifierRxOtc/ClassifierRxOtc.html',
                 title: 'CLASSIFIER.ClassifierRxOtc.TITLE',
                 authorize: true
             });

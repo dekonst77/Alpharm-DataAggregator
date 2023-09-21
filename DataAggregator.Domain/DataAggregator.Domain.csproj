@@ -140,6 +140,7 @@
     <Compile Include="Model\DrugClassifier\Classifier\Mask.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\NFC.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\ExternalViewAllPeriod.cs" />
+    <Compile Include="Model\DrugClassifier\Classifier\OrphanView.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\RegistrationCertificateClassification.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\SplitByINN_Result.cs" />
     <Compile Include="Model\DrugClassifier\Classifier\SQA.cs" />

@@ -755,6 +755,7 @@
     <Content Include="Scripts\Classifier\GoodsParametersEditor\AddParameterViewController.js" />
     <Content Include="Scripts\Classifier\GTINController.js" />
     <Content Include="Scripts\Classifier\Manufacturer\ManufacturerController.js" />
+    <Content Include="Scripts\Classifier\OrphanController.js" />
     <Content Include="Scripts\Classifier\RaspredelenieController.js" />
     <Content Include="Scripts\Classifier\Reports\CheckClassifireReportController.js" />
     <Content Include="Scripts\Classifier\Reports\CheckReportDialogController.js" />
@@ -2175,6 +2176,7 @@
     <Content Include="Views\Classifier\GoodsParametersEditor\Index.html" />
     <Content Include="Views\Classifier\GoodsParametersEditor\_AddParameterView.html" />
     <Content Include="Views\Classifier\Manufacturer\Index.html" />
+    <Content Include="Views\Classifier\Orphan.html" />
     <Content Include="Views\Classifier\Raspredelenie.html" />
     <Content Include="Views\Classifier\Reports\CheckReport\CheckReport.html" />
     <Content Include="Views\Classifier\Reports\CheckReport\_CheckReportDialog.html" />
@@ -2366,6 +2368,7 @@
     <Compile Include="Controllers\Classifier\DOPMonitoringDatabaseController.cs" />
     <Compile Include="Controllers\Classifier\GTINController.cs" />
     <Compile Include="Controllers\Classifier\MaskController.cs" />
+    <Compile Include="Controllers\Classifier\OrphanController.cs" />
     <Compile Include="Controllers\Classifier\Reports\CheckClassifireReportController.cs" />
     <Compile Include="Controllers\Classifier\Reports\GoodsClassifierReportController.cs" />
     <Compile Include="Controllers\Classifier\SQAController.cs" />
