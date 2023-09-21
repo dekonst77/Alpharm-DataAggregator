@@ -130,8 +130,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid" style="height: 300px;" title="!">
-                        <button class="btn btn-warning btn-sm" ng-click="Blocked_SetData();" ng-disabled="!Grid_Blocked.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
-                        <div id="grid-sel-block" class="auto-item-panel">
+                        <button class="btn btn-warning btn-sm" ng-click="Blocked_SetData();" ng-disabled="!Grid_Blocked.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>                        
+                             <div id="grid-block grid-sel-block" data-context-menu="Views/GS/History_Blocked_context_menu.html" class="auto-item-panel">
                             <ui-grid-control options="Grid_Blocked.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
                         </div>
                     </div>

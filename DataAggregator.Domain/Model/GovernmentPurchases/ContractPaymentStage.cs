@@ -15,6 +15,8 @@ namespace DataAggregator.Domain.Model.GovernmentPurchases
         public decimal Sum { get; set; }
         public long PaymentTypeId { get; set; }
         public DateTime Date { get; set; }
+        public string StageYear { get; set; }
+        public int? StageLevel { get; set; }
     }
     public class Contract_check_ContractPaymentStage
     {
@@ -25,5 +27,7 @@ namespace DataAggregator.Domain.Model.GovernmentPurchases
         public decimal Sum { get; set; }
         public long PaymentTypeId { get; set; }
         public DateTime Date { get; set; }
+        public string StageYear { get; set; }
+        public int? StageLevel { get; set; }
     }
 }

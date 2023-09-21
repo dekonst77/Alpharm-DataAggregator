@@ -2491,10 +2491,10 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
      ///Grid для блокировок
     $scope.Grid_Blocked = uiGridCustomService.createGridClassMod($scope, 'Grid_Blocked');
     $scope.Grid_Blocked.Options.showGridFooter = false;
-    $scope.Grid_Blocked.Options.multiSelect = false;
+    $scope.Grid_Blocked.Options.multiSelect = true;
     $scope.Grid_Blocked.Options.modifierKeysToMultiSelect = true;
     $scope.Grid_Blocked.Options.customEnableRowSelection = true;
-    $scope.Grid_Blocked.Options.enableRowSelection = false;
+    $scope.Grid_Blocked.Options.enableRowSelection = true;
     $scope.Grid_Blocked.Options.enableRowHeaderSelection = false;
     $scope.Grid_Blocked.Options.enableSelectAll = false;
     $scope.Grid_Blocked.Options.selectionRowHeaderWidth = 20;
@@ -2503,7 +2503,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
     $scope.Grid_Blocked.Options.enableFullRowSelection = true;
     $scope.Grid_Blocked.Options.enableSelectionBatchEvent = true;
     $scope.Grid_Blocked.Options.enableHighlighting = true;
-    $scope.Grid_Blocked.Options.noUnselect = false;
+    $scope.Grid_Blocked.Options.noUnselect = true;
     $scope.Grid_Blocked.Options.appScopeProvider = $scope;
     $scope.Grid_Blocked.Options.columnDefs = [
         { headerTooltip: true, name: 'Id', width: 100, field: 'Id' },
@@ -2562,6 +2562,27 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
 
     };
 
+    $scope.Blocked_DelData = function () {
+        var array_upd = $scope.Grid_Blocked.selectedRows();
+        $scope.dataLoading =
+            $http({
+                method: 'POST',
+                url: '/GS/History_BlockedDelete/',
+                data: JSON.stringify({ values: array_upd})
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    alert('Данные записи удалены из Исключений');
+
+
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+                return;
+            });
+
+    };
+
 
     $scope.Blocked_AddData = function () {
         var array_upd = $scope.Grid.selectedRows();
@@ -2573,7 +2594,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
             }).then(function (response) {
                 var data = response.data;
                 if (data.Success) {
-                    alert('Данные записи добавлены в Блокировки');                   
+                    alert('Данные записи добавлены в Исключения');                   
 
                 }
             }, function (response) {

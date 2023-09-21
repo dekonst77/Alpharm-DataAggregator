@@ -2333,6 +2333,7 @@
     <Content Include="Views\GovernmentPurchases\Reports\ContractAndStageObjectReport\Index.html" />
     <Content Include="Views\Classifier\GTIN\GTIN.html" />
     <Content Include="Views\Classifier\GTIN\GTINs_context_menu.html" />
+    <Content Include="Views\GS\History_Blocked_context_menu.html" />
     <None Include="Web.DebugOnProductDB.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
