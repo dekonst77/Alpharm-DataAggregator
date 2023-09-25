@@ -2398,6 +2398,7 @@
     <Compile Include="Controllers\GovernmentPurchases\Reports\ExecutionTerminatedContractReportController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\Reports\ReportsController.cs" />
     <Compile Include="Controllers\GS\GSController.cs" />
+    <Compile Include="Controllers\LPU\AlphavisionController.cs" />
     <Compile Include="Controllers\LPU\LPUController.cs" />
     <Compile Include="Controllers\LPU\LPUDictionariesController.cs" />
     <Compile Include="Controllers\LPU\LPULicensesController.cs" />
@@ -2756,6 +2757,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service References\App_Data\" />
+    <Folder Include="Views\Alphavision\" />
     <Folder Include="Views\CheckClassifireReport\" />
     <Folder Include="Views\ContractAndStageObject\" />
     <Folder Include="Views\DOPMonitoringDatabase\" />
