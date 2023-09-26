@@ -2573,8 +2573,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 var data = response.data;
                 if (data.Success) {
                     alert('Данные записи удалены из Исключений');
-
-
+                    $scope.History_BlockedList();
                 }
             }, function (response) {
                 errorHandlerService.showResponseError(response);
@@ -2595,7 +2594,7 @@ function GSController($scope, $route, $http, $q, $uibModal, commonService, messa
                 var data = response.data;
                 if (data.Success) {
                     alert('Данные записи добавлены в Исключения');                   
-
+                    $scope.History_BlockedList();
                 }
             }, function (response) {
                 errorHandlerService.showResponseError(response);
