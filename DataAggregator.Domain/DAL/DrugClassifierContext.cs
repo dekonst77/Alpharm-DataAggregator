@@ -52,6 +52,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<SQAView> SQAView { get; set; }
 
+        public DbSet<OrphanView> OrphanView { get; set; }
+
         public DbSet<SQA> SQA { get; set; }
 
         public DbSet<Equipment> Equipment { get; set; }
@@ -642,6 +644,21 @@ namespace DataAggregator.Domain.DAL
                 command.Connection = (SqlConnection)this.Database.Connection;
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = "[Classifier].[UpdateSQA]";
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void ClassifierUpdateOrphan()
+        {
+
+            using (var command = new SqlCommand())
+            {
+                command.CommandTimeout = 600;
+                command.Connection = (SqlConnection)this.Database.Connection;
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "[Classifier].[UpdateOrphan]";
                 command.Connection.Open();
                 command.ExecuteNonQuery();
             }

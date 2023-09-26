@@ -42,7 +42,7 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/Classifier/GTINController.js")
                 .Include("~/Scripts/Classifier/RaspredelenieController.js")
                 .Include("~/Scripts/Classifier/SQA/SQAController.js")
-                // .Include("~/Scripts/Classifier/ClassifierEditor/AskChangeController.js")
+                .Include("~/Scripts/Classifier/OrphanController.js")
 
                 // Редактор доп. ассортимента
                 .Include("~/Scripts/Classifier/GoodsClassifierEditor/GoodsClassifierEditorController.js")
