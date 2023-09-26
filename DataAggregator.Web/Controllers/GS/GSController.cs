@@ -2500,6 +2500,7 @@ group by inn having count(*) > 1
 
                     spr_Comments.Insert(0, new sprItemst() { Status = "<пусто>", code = "EmptyNull" });
                     spr_Comments.Insert(0, new sprItemst() { Status = "все комментарии", code = "" });
+                    spr_Comments.Insert(0, new sprItemst() { Status = "<не пусто>", code = "NotEmptyNull" });
 
                     var spr_Category = _context.Database.SqlQuery<sprItem>(@"exec gs.adr.History_coding_Filter_Category").ToList();
                     //  var spr_Category = _context.Database.SqlQuery<sprItem>("select cast(Id as int) as code,Value as Status from [adr].[History_Category] order by Status").ToList();
