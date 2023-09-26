@@ -142,7 +142,7 @@ namespace DataAggregator.Web.Controllers.Systematization
                     .Where(d => d.UserId == userGuid)
                     .OrderBy(d => d.DrugClearText)
                     .ToList();
-
+                /*
                 //выбираем все DrugId из списка
                 var drugIds = drugs.Where(x => x.DrugId != null).Select(x => x.DrugId.Value).ToList();
                 //выбираем все DrugClassifier по не пустым DrugId и пустым ClassifierId
@@ -164,7 +164,7 @@ namespace DataAggregator.Web.Controllers.Systematization
                         }
                     }
                 }
-
+                */
                 JsonResult jsonResult = Json(drugs, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
 
