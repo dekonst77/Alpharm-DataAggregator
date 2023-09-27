@@ -1,0 +1,311 @@
+﻿<div ng-controller="AlphaVisionController" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <script type="text/ng-template" id="_icon.html">
+        <div>
+            <img src="/Content/Icons/IsOther.png" class="img-rounded" />
+        </div>
+    </script>
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+                
+                <div class="col-md-2 padding3">
+
+                    <div class="row">
+                        <div class="col-md-2" style="vertical-align:central;">
+                            Тип
+                        </div>
+                        <div class="col-md-10 padding3" style="vertical-align:central;">
+                            <select name="TypeId"
+                                    ng-init="filter.TypeId = options[0].value"
+                                    class="form-control"
+                                    ng-options="item as item.Name for item in LPUType track by item.Id"
+                                    ng-model="filter.TypeIdModel">
+                                <option value="">-- Показать Все --</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="col-md-3 padding3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-success btn-sm" ng-click="Search();"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                        <!--<button class="btn btn-success btn-sm" type="button" ng-click="getTypeList()" data-toggle="modal" data-target="#TypeModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Тип подразделения</button>
+                        <button class="btn btn-success btn-sm" type="button" ng-click="getKindList()" data-toggle="modal" data-target="#KindModal" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1">Вид подразделения</button>-->
+
+                    </div>
+                </div>
+            </div>
+
+            </div>
+    </div>
+
+
+
+                         <!-- Modal -->
+                        <div class="modal" id="MergeModal" tabindex="-1" role="dialog" aria-labelledby="MergeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:85%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="MergeModalLabel">Объединение</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="container-fluid" style="height: 300px;" title="Выберите, к какой организации привязывать?">
+                                            <div id="grid-sel-block" class="auto-item-panel">
+                                                <ui-grid-control options="LPUToMergeGrid.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" ng-click="SelectActualMerge()" ng-disabled="LPUToMergeGridApi.selection.getSelectedRows() === undefined || LPUToMergeGridApi.selection.getSelectedRows() === null || LPUToMergeGridApi.selection.getSelectedRows().length < 1" data-dismiss="modal">Выбрать</button>
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal" id="KindModal" tabindex="-1" role="dialog" aria-labelledby="KindModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:85%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="KindModalLabel">Вид подразделения</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="container-fluid" style="height: 300px;" title="Выберите Вид подразделения">
+                                            <div id="grid-sel-block" class="auto-item-panel">
+                                                <ui-grid-control options="KindGrid.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" ng-click="SelectKind()" ng-disabled="KindGridApi.selection.getSelectedRows() === undefined || KindGridApi.selection.getSelectedRows() === null || KindGridApi.selection.getSelectedRows().length < 1" data-dismiss="modal">Выбрать</button>
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal" id="TypeModal" tabindex="-1" role="dialog" aria-labelledby="TypeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:85%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="TypeModalLabel">Тип подразделения</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="container-fluid" style="height: 300px;" title="Выберите Тип подразделения!">
+                                            <div id="grid-sel-block" class="auto-item-panel">
+                                                <ui-grid-control options="TypeGrid.Options" class="ui-grid-enable-content-selection  grid-block grid-block_sm"></ui-grid-control>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" ng-click="SelectType()" ng-disabled="TypeGridApi.selection.getSelectedRows() === undefined || TypeGridApi.selection.getSelectedRows() === null || TypeGridApi.selection.getSelectedRows().length < 1" data-dismiss="modal">Выбрать</button>
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Modal -->
+                        <div class="modal" id="DepModal" tabindex="-1" role="dialog" aria-labelledby="DepModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:600px; min-width:80%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="DepModalLabel">Отделения</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+
+                                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#AddDepModal" ng-disabled="Grid.NeedSave||Grid.selectedRows() == undefined || Grid.selectedRows().length > 1 || Grid.selectedRows()[0].IsDepartment>0" data-translate="BUTTONS.ADD"></button>
+                                        <button type="button" class="btn btn-danger" ng-click="removeDept()" ng-disabled="selectedDept == null" data-translate="BUTTONS.DELETE"></button>
+
+                                        <br />
+                                        <div class="container-fluid" style="height: 400px;" title="">
+                                            <ui-grid-control options="Dep_GridOptions" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal" id="AddDepModal" tabindex="-1" role="dialog" aria-labelledby="AddDepModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:300px; min-width:60%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="AddDepModalLabel">Добавление Отделения</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <br />
+                                        <div class="container-fluid" style="height: 250px;" title="">
+                                            <div class="row">
+                                                <div class="col-md-2 padding3">
+                                                    <label>Id</label>
+                                                    <input type="text" class="form-control" value=" {{Grid.selectedRows()[0].LPUId}}" disabled="disabled">
+                                                </div>
+                                                <div class="col-md-4 padding3">
+                                                    <label>Юр. лицо</label>
+                                                    <input type="text" class="form-control" value=" {{Grid.selectedRows()[0].EntityName}}" disabled="disabled">
+                                                </div>
+                                                <div class="col-md-6 padding3">
+                                                    <label>Адрес из лицензии</label>
+                                                    <input type="text" class="form-control" value=" {{Grid.selectedRows()[0].Address}}" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 padding3">
+                                                    <br />
+                                                    <label>Введите название Отделения:</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 padding3">
+                                                    <input name="DepartmentNameValue" id="DepartmentNameValue" type="text" placeholder="Отделение" style="width:100%">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" ng-click="AddDept()" data-translate="BUTTONS.ADD" data-dismiss="modal"></button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal" id="AddLPUModal" tabindex="-1" role="dialog" aria-labelledby="AddLPUModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:400px; min-width:60%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="AddLPUModalLabel">Добавление ЛПУ</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <br />
+                                        <div class="container-fluid" style="height: 400px;" title="">
+                                            <div class="row">
+                                                <div class="col-md-4 padding3">
+                                                    <label>ИНН</label>
+                                                    <input type="text" ng-model="AddLPUForm.EntityINN" class="form-control" placeholder="ИНН" value="" style="width:100%">
+                                                </div>
+                                                <div class="col-md-4 padding3">
+                                                    <label>ОГРН</label>
+                                                    <input type="text" ng-model="AddLPUForm.Entityogrn" class="form-control" placeholder="ОГРН" value="" style="width:100%">
+                                                </div>
+                                                <div class="col-md-4 padding3">
+                                                    <label>Форма собственности</label>
+                                                    <input type="text" ng-model="AddLPUForm.form" class="form-control" placeholder="Форма собственности" value="" style="width:100%">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4 padding3">
+                                                    <label>Полное наименование</label>
+                                                    <input type="text" ng-model="AddLPUForm.full_name" class="form-control" placeholder="Полное наименование" value="" style="width:100%">
+                                                </div>
+                                                <div class="col-md-4 padding3">
+                                                    <label>Короткое наименование</label>
+                                                    <input type="text" ng-model="AddLPUForm.name" class="form-control" placeholder="Короткое наименование" value="" style="width:100%">
+                                                </div>
+                                                <div class="col-md-4 padding3">
+                                                    <label>Юр. лицо</label>
+                                                    <input type="text" ng-model="AddLPUForm.EntityName" class="form-control" placeholder="Наименование ГС" value="" style="width:100%">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 padding3">
+                                                    <label>Адрес</label>
+                                                    <input type="text" ng-model="AddLPUForm.Address" class="form-control" placeholder="Адрес" value="" style="width:100%">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 padding3">
+                                                    <label>Тип Учреждения</label>
+                                                    <select name="TypeId"
+                                                            class="form-control"
+                                                            ng-options="item as item.Name for item in LPUType track by item.Id"
+                                                            required
+                                                            ng-model="AddLPUForm.TypeId"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 padding3">
+                                                    <label>Вид Учреждения</label>
+                                                    <select name="KindId"
+                                                            class="form-control"
+                                                            ng-options="item as item.Name for item in LPUKind track by item.Id"
+                                                            required
+                                                            ng-model="AddLPUForm.KindId"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" ng-click="AddLPU()" data-translate="BUTTONS.ADD" data-dismiss="modal"></button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div id="grid-block" class="auto-item-panel">
+                            <!--data-context-menu="Views/LPU/lpu_context_menu.html"-->
+                            <!--  <div class="size_row" resizable r-directions="['bottom']" r-flex="true">-->
+                            <div id="grid-lpupoint-block" data-context-menu="Views/LPU/lpu_context_menu.html" class="auto-item-panel" style="width:100%">
+                                <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+                            </div>
+
+                            <!-- </div>-->
+                        </div>
+
+
+
+
+
+
+
+
+
+
+    </div>

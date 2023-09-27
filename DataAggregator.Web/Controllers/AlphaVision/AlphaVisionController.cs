@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.LPU
 {
-    public class AlphavisionController : BaseController
+    public class AlphaVisionController : BaseController
     {
         private AlphaVisionContext _context;
 
@@ -25,13 +25,13 @@ namespace DataAggregator.Web.Controllers.LPU
             _context = new AlphaVisionContext(APP);
         }
 
-        ~AlphavisionController()
+        ~AlphaVisionController()
         {
             _context.Dispose();
         }
 
-        [HttpPost]
-        [Authorize(Roles = "AlphaVision_view")]
+        [HttpGet]
+        [Authorize(Roles = "AV_UserAdmin")]
         public ActionResult Users()
         {
             try
@@ -41,13 +41,12 @@ namespace DataAggregator.Web.Controllers.LPU
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message); ;
+                return BadRequest(ex.Message);
             }
         }
-        //
 
         [HttpPost]
-        [Authorize(Roles = "AlphaVision_admin")]
+        [Authorize(Roles = "AV_UserAdmin")]
         public async Task<ActionResult> CreateUser(RegisterUserModel user)
         {
             try

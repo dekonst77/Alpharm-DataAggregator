@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAggregator.Domain.Model.LPU.Alphavision
 {
+    [Table("AspNetUsers", Schema = "dbo")]
     public class AspNetUser
     {
         [Key]
@@ -11,10 +13,10 @@ namespace DataAggregator.Domain.Model.LPU.Alphavision
         public string Name { get; set; } = string.Empty;
         public string Surname { get; set; } = string.Empty;
         public string Patronymic { get; set; } = string.Empty;
-        public DateTime Birthday { get; set; }
-        public int PostId { get; set; } 
+        public DateTime? Birthday { get; set; }
+        public int? PostId { get; set; } 
         public bool ApiEnabled { get; set; } = false;
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public virtual AspNetUserRole[] Roles { get; set; } = new AspNetUserRole[0];

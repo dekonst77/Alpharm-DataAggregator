@@ -271,6 +271,7 @@
     <Content Include="Content\Icons\shit.png" />
     <Content Include="Content\GoodsSystematization\GoodsSystematization.scss" />
     <Content Include="Content\loading-bar.min.css" />
+    <None Include="Content\AlphaVision\AlphaVision.scss" />
     <Content Include="Content\LPU\LPU.css" />
     <Content Include="Content\Retail\RetailReport.css" />
     <Content Include="Content\select.css" />
@@ -1800,6 +1801,7 @@
     <Content Include="Scripts\lib\ui-grid\ui-grid.module.js" />
     <Content Include="Scripts\lib\ui-grid\ui-grid.ru-RU.js" />
     <Content Include="Scripts\loading-bar.min.js" />
+    <Content Include="Scripts\AlphaVision\AlphaVisionController.js" />
     <Content Include="Scripts\LPU\LPULicensesController.js" />
     <Content Include="Scripts\LPU\LPUMergeController.js" />
     <Content Include="Scripts\LPU\LPUPointController.js" />
@@ -2238,6 +2240,7 @@
     <Content Include="Views\GS\SummsPeriod.html" />
     <Content Include="Views\GS\SummsPeriod_context_menu.html" />
     <Content Include="Views\GS\SummsRegion.html" />
+    <Content Include="Views\AlphaVision\users.html" />
     <Content Include="Views\LPU\LpuLicenses.html" />
     <Content Include="Views\LPU\lpuPoint.html" />
     <Content Include="Views\LPU\lpu_point_context_menu.html" />
@@ -2343,6 +2346,7 @@
     <Compile Include="App_Start\BundleConfig\AdditionalComponentsBundles.cs" />
     <Compile Include="App_Start\BundleConfig\ClientsBundles.cs" />
     <Compile Include="App_Start\BundleConfig\DistrRepBundles.cs" />
+    <Compile Include="App_Start\BundleConfig\AlphaVisionBundles.cs" />
     <Compile Include="App_Start\BundleConfig\LPUBundles.cs" />
     <Compile Include="App_Start\BundleConfig\MainBundles.cs" />
     <Compile Include="App_Start\BundleConfig\BundleConfig.cs" />
@@ -2398,7 +2402,7 @@
     <Compile Include="Controllers\GovernmentPurchases\Reports\ExecutionTerminatedContractReportController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\Reports\ReportsController.cs" />
     <Compile Include="Controllers\GS\GSController.cs" />
-    <Compile Include="Controllers\LPU\AlphavisionController.cs" />
+    <Compile Include="Controllers\AlphaVision\AlphaVisionController.cs" />
     <Compile Include="Controllers\LPU\LPUController.cs" />
     <Compile Include="Controllers\LPU\LPUDictionariesController.cs" />
     <Compile Include="Controllers\LPU\LPULicensesController.cs" />
@@ -2757,7 +2761,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service References\App_Data\" />
-    <Folder Include="Views\Alphavision\" />
     <Folder Include="Views\CheckClassifireReport\" />
     <Folder Include="Views\ContractAndStageObject\" />
     <Folder Include="Views\DOPMonitoringDatabase\" />

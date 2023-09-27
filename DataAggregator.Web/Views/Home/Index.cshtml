@@ -76,7 +76,14 @@
     {
         @Scripts.Render("~/bundles/LPU")
         @Scripts.Render("~/Content/LPU/css")
-        
+
+    }
+
+    @if (User.IsInRole("AV_UserAdmin") || User.IsInRole("AV_Modify") || User.IsInRole("AV_View"))
+    {
+        @Styles.Render("~/Content/AlphaVision/css")
+        @Scripts.Render("~/bundles/AlphaVision")
+        @Scripts.Render("~/Views/AlphaVision/markup")
     }
 
 }
