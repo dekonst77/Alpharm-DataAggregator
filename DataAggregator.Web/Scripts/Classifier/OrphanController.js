@@ -8,9 +8,9 @@ function OrphanController($scope, $http, messageBoxService, uiGridCustomService,
 
     $scope.ShowOnlyOrphan = false;
 
-    //---------------------
-    //Задаём свойства грида
-    //---------------------
+    //----------------------
+    // Задаём свойства грида
+    //----------------------
     $scope.Grid_Orphan = uiGridCustomService.createGridClassMod($scope, "Grid_Orphan");
 
     $scope.Grid_Orphan.Options.columnDefs = [
@@ -21,40 +21,44 @@ function OrphanController($scope, $http, messageBoxService, uiGridCustomService,
             width: '100'
         },
         {
-            displayName: 'InnGroup Id',
+            displayName: 'Inn Group Id',
             name: 'InnGroupId',
             field: 'INNGroupId',
             type: 'number',
             width: '100'
         },
         {
-            name: 'МНН',
+            displayName: 'Inn Group',
+            name: 'Inn Group',
             field: 'INNGroup',
-            width: '500'
+            width: '300'
         },
         {
-            displayName: 'FormProduct Id',
+            displayName: 'Form Product Id',
             name: 'FormProductId',
             field: 'FormProductId',
             type: 'number',
-            width: '100'
+            width: '200'
         },
         {
+            displayName: 'Form Product',
             name: 'Форма выпуска',
-            field: 'FormProduct'
+            field: 'FormProduct',
+            width: '200'
         },
         {
-            displayName: 'DosageGroup Id',
+            displayName: 'Dosage Group Id',
             name: 'DosageGroupId',
             field: 'DosageGroupId',
             type: 'number',
-            width: '100'
+            width: '200'
         },
         {
+            displayName: 'Dosage Group',
             name: 'Дозировка',
-            field: 'DosageGroup'
+            field: 'DosageGroup',
+            width: '200'
         },
-
         {
             name: 'Орфанный',
             field: 'IsOrphan',
@@ -121,9 +125,9 @@ function OrphanController($scope, $http, messageBoxService, uiGridCustomService,
             $scope.CurrentRow = row;
         }
     };
-    //---------------------
-    //Задаём свойства грида
-    //---------------------
+    //----------------------
+    // Задаём свойства грида
+    //----------------------
 
     function Load() {
         $scope.loading = $http({
