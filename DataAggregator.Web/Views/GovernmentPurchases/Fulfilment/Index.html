@@ -1,0 +1,27 @@
+﻿<div ng-controller="FulfilmentController" ng-cloak class="auto-grid-parent fulfilment" ng-style="{'padding-top': topPartSize.height}">
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2">
+                    <label data-translate="COMMON_GRID.REESTR_NUMBER"></label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" ng-model="filter.reestrNumber" />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-success btn-sm" ng-click="filter.fulfilment_search()"><span class="glyphicon glyphicon-search">Выбрать</span></button>
+                    <button class="btn btn-warning btn-sm" ng-click="filter.fulfilmentGrid_Save()" ng-disabled="!fulfilmentGrid.NeedSave"><span class="glyphicon glyphicon-save">Сохранить</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auto-item-panel">
+        <div id="fulfilmentGrid" cg-busy="fulfilmentLoading">
+            <ui-grid-control options="fulfilmentGrid.Options" class="ui-grid-enable-content-selection"></ui-grid-control>
+        </div>
+    </div>
+
+</div>
+

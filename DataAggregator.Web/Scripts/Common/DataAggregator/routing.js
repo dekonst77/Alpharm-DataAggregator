@@ -1066,6 +1066,13 @@
                     title: 'Организации Обработка',
                     authorize: true
                 })
+            //Корректировки по Исполнению
+            .when('/GovernmentPurchases/Fulfilment',
+                {
+                    templateUrl: 'Views/GovernmentPurchases/Fulfilment/Index.html',
+                    title: 'GOVERNMENT_PURCHASES.FULFILMENT.TITLE',
+                    authorize: true
+                })
             // Редактирование поставщиков
             .when('/GovernmentPurchases/Suppliers',
                 {

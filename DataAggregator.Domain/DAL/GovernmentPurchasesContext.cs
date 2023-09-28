@@ -111,6 +111,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<SelectionPurchaseLinkView> SelectionPurchaseLinkView { get; set; }
 
+        public DbSet<ContractAndFulfilmentObjectReplace> ContractAndFulfilmentObjectReplace { get; set; }
+
         #region Search
 
         public DbSet<ContractLink> ContractLink { get; set; }
@@ -191,6 +193,8 @@ namespace DataAggregator.Domain.DAL
         public DbSet<NotExportedToExternalContractsView> NotExportedToExternalContractsView { get; set; }
 
         public DbSet<MassFixesDataView> MassFixesDataView { get; set; }
+
+        public DbSet<ContractAndStageObjectGrls_View> ContractAndStageObjectGrls_View { get; set; }
 
         #region Report
         public DbSet<ExecutionTerminatedContractView> ExecutionTerminatedContractView { get; set; }

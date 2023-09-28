@@ -178,6 +178,7 @@
     <Compile Include="Model\GoodsData\GoodsClassifier\GoodsExternalView.cs" />
     <Compile Include="Model\GoodsData\RegionPM12View.cs" />
     <Compile Include="Model\GovernmentPurchasesLoader\proxy\ProxyErrorLog.cs" />
+    <Compile Include="Model\GovernmentPurchases\ContractAndFulfilmentObjectReplace.cs" />
     <Compile Include="Model\GovernmentPurchases\Contract_check_view.cs" />
     <Compile Include="Model\GovernmentPurchases\GovernmentPurchases.cs" />
     <Compile Include="Model\GovernmentPurchases\HandMadePosition.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Model\GovernmentPurchases\Source.cs" />
     <Compile Include="Model\GovernmentPurchases\StoredProcedures\NotExportedToExternalLots.cs" />
     <Compile Include="Model\GovernmentPurchases\TriggerLog.cs" />
+    <Compile Include="Model\GovernmentPurchases\View\ContractAndStageObjectGrls_View.cs" />
     <Compile Include="Model\GovernmentPurchases\View\ContractAndStageObjectReport.cs" />
     <Compile Include="Model\GovernmentPurchases\View\ExecutionTerminatedContractView.cs" />
     <Compile Include="Model\GovernmentPurchases\View\OrganizationView.cs" />

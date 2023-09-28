@@ -783,6 +783,7 @@
     <Content Include="Scripts\FileAPI.js" />
     <Content Include="Scripts\FileAPI.min.js" />
     <Content Include="Scripts\GovernmentPurchases\BudjetController.js" />
+    <Content Include="Scripts\GovernmentPurchases\Fulfilment\FulfilmentController.js" />
     <Content Include="Scripts\GovernmentPurchases\HandMadePositionController.js" />
     <Content Include="Scripts\GovernmentPurchases\OrganizationRawController.js" />
     <Content Include="Scripts\GovernmentPurchases\Check\CheckContractController.js" />
@@ -2207,6 +2208,7 @@
     <Content Include="Views\GovernmentPurchases\Budjet.html" />
     <Content Include="Views\GovernmentPurchases\Check\ContractPaymentStage.html" />
     <Content Include="Views\GovernmentPurchases\filters\_filtersView.html" />
+    <Content Include="Views\GovernmentPurchases\Fulfilment\Index.html" />
     <Content Include="Views\GovernmentPurchases\HandMadePosition.html" />
     <Content Include="Views\GovernmentPurchases\KBK.html" />
     <Content Include="Views\GovernmentPurchases\KBK_ContextMenu1.html" />
@@ -2397,6 +2399,7 @@
     <Compile Include="Controllers\GovernmentPurchases\CheckContractController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\DeliveryTimeController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\filtersController.cs" />
+    <Compile Include="Controllers\GovernmentPurchases\FulfilmentController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\GZController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\HandMadePositionController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\KBKController.cs" />
@@ -2459,6 +2462,8 @@
     <Compile Include="Models\Common\UserServiceModel.cs" />
     <Compile Include="Models\GoodsClassifier\ParameterGroupJson.cs" />
     <Compile Include="Models\GoodsClassifier\ParameterJson.cs" />
+    <Compile Include="Models\GovernmentPurchases\Fulfilment\FulfilmentFilterJson.cs" />
+    <Compile Include="Models\GovernmentPurchases\Fulfilment\FulfilmentJson.cs" />
     <Compile Include="Models\LPU\DepartmentModel.cs" />
     <Compile Include="Models\LPU\LPUFilter.cs" />
     <Compile Include="Models\LPU\LPULicensesModel.cs" />
@@ -2769,6 +2774,7 @@
     <Folder Include="Views\DOPMonitoringDatabase\" />
     <Folder Include="Views\EtalonPrice\" />
     <Folder Include="Views\ExecutionTerminatedContract\" />
+    <Folder Include="Views\Fulfilment\" />
     <Folder Include="Views\GTIN\" />
     <Folder Include="Views\LPUDictionaries\" />
     <Folder Include="Views\Mask\" />
