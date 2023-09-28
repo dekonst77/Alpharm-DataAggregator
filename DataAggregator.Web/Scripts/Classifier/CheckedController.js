@@ -404,6 +404,9 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
     // Экспорт в Excel.
     // Выгружать в отчет все данные, которые на данный момент присутствуют в блоке бессмертные.
     $scope.Checked_To_Excel = function () {
+        $scope.message.caption = `Пожалуйста, ожидайте. Идёт экспорт в excel всех данных, которые на данный момент присутствуют в блоке <Бессмертные>...`;
+        $scope.message.params = [];
+
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/Checked/Checked_To_Excel/',
