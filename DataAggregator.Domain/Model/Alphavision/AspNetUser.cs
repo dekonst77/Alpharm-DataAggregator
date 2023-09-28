@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAggregator.Domain.Model.LPU.Alphavision
+namespace DataAggregator.Domain.Model.Alphavision
 {
     [Table("AspNetUsers", Schema = "dbo")]
     public class AspNetUser
@@ -19,6 +20,9 @@ namespace DataAggregator.Domain.Model.LPU.Alphavision
         public DateTime? CreatedDate { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public virtual AspNetUserRole[] Roles { get; set; } = new AspNetUserRole[0];
+
+        public Supplier Supplier { get; set; }
+        public Post Post { get; set; }
+        public ICollection<AspNetUserRole> UserRoles { get; set; }
     }
 }

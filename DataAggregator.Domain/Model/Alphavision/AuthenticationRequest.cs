@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataAggregator.Domain.Model.LPU.Alphavision
+namespace DataAggregator.Domain.Model.Alphavision
 {
     public class AuthenticationRequest
     {

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAggregator.Domain.Model.LPU.Alphavision
+namespace DataAggregator.Domain.Model.Alphavision
 {
+    [Table("AspNetUserRoles", Schema = "dbo")]
     public class AspNetUserRole
     {
         [Key]
@@ -11,7 +12,9 @@ namespace DataAggregator.Domain.Model.LPU.Alphavision
         [Key]
         [Column(Order = 2)]
         public string UserId { get; set; }
-        public virtual AspNetRole Role { get; set; }
+
+        public AspNetUser User { get; set; }
+        public AspNetRole Role { get; set; }
     }
 
 }

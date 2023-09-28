@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAggregator.Domain.Model.LPU.Alphavision
+namespace DataAggregator.Domain.Model.Alphavision
 {
     public class AuthenticationResponse
     {

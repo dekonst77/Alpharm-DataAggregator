@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataAggregator.Domain.Model.LPU.Alphavision.User
+namespace DataAggregator.Domain.Model.Alphavision.User
 {
     public class RegisterUserModel
     {

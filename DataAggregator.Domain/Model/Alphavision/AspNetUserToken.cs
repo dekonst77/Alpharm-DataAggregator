@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAggregator.Domain.Model.LPU.Alphavision
+namespace DataAggregator.Domain.Model.Alphavision
 {
+    [Table("AspNetUserTokens", Schema = "dbo")]
     public class AspNetUserToken
     {
         [Key]

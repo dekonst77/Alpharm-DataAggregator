@@ -89,7 +89,35 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
     }
 
     $scope.LoadData();
-    
+
+    $scope.CreateUser = function () {
+        var user = 
+        {
+            "email": "test1@alpharm.ru",
+            "password": "1235678",
+            "SupplierId": 1,
+            "ApiEnabled": true,
+            "roles": ["SupplierAdmin", "User"]
+        }
+        ;
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/AlphaVision/CreateUser/',
+            data: JSON.stringify(user)
+        }).then(function (response) {
+            var data = response.data;
+            if (data.Success) {
+                $scope.Grid.Options.data = data.Data;
+            } else {
+                messageBoxService.showError(data.ErrorMessage);
+            }
+
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    }
+
+
     $scope.Search = function () {
 
         var SearchFilter = [];
