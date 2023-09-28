@@ -98,8 +98,7 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
             "SupplierId": 1,
             "ApiEnabled": true,
             "roles": ["SupplierAdmin", "User"]
-        }
-        ;
+        };
         $scope.dataLoading = $http({
             method: 'POST',
             url: '/AlphaVision/CreateUser/',
@@ -107,7 +106,7 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
         }).then(function (response) {
             var data = response.data;
             if (data.Success) {
-                $scope.Grid.Options.data = data.Data;
+                $scope.Grid.Options.data.push(data.Data[0]);
             } else {
                 messageBoxService.showError(data.ErrorMessage);
             }

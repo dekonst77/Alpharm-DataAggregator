@@ -8,8 +8,6 @@ namespace DataAggregator.Domain.DAL
     {
         public DbSet<AspNetUser> AspNetUsers { get; set; }
 
-        public DbSet<AspNetUsers_View> AspNetUsers_View { get; set; }
-
         public DbSet<AspNetRole> AspNetRoles { get; set; }
 
         public DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
@@ -40,6 +38,7 @@ namespace DataAggregator.Domain.DAL
         }
 
      
+
 
     }
 

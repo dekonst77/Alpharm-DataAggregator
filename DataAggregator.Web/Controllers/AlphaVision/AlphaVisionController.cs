@@ -3,9 +3,11 @@ using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.Alphavision;
 using DataAggregator.Domain.Model.Alphavision.User;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -41,23 +43,8 @@ namespace DataAggregator.Web.Controllers.LPU
         {
             try
             {
-                    var userList = await (from user in _context.AspNetUsers
-                                      
-                                     select new
-                                     {
-                                         user.Id,
-                                         user.SupplierId,
-                                         SupplierName = user.Supplier.Name,
-                                         user.UserName,
-                                         user.Email,
-                                         user.Post,
-                                         PostName = user.Post.Name,
-                                         RoleNames = (from userRole in user.UserRoles //[AspNetUserRoles]
-                                                      join role in _context.AspNetRoles //[AspNetRoles]
-                                                        on userRole.RoleId equals role.Id
-                                                      select role.Name).ToList()
-                                     }).ToListAsync();
 
+                var userList = await GetUsersList();
                 return ReturnData(userList);
             }
             catch (Exception ex)
@@ -72,18 +59,12 @@ namespace DataAggregator.Web.Controllers.LPU
         {
             try
             {
-                var authResponse = await Auth(adminLogin, adminPassword);
-                if (authResponse != null && authResponse.status == "Success")
-                {
-                    var tokenData = (TokenData)JsonSerializer.Deserialize<TokenData>(authResponse.data);
+                var tokendata = await AuthRequest(adminLogin, adminPassword);
+                var data = await CreateUserRequest(user, tokendata.access_token);
 
-                    return null;// ReturnData(users);
-                }
-                else
-                {
-                    return BadRequest("Не удалось прочитать данные для аутентификации");
-                }
+                var createduser = await GetUsersList(user.Email);
 
+                return ReturnData(createduser);
             }
             catch (Exception ex)
             {
@@ -91,28 +72,90 @@ namespace DataAggregator.Web.Controllers.LPU
             }
         }
 
-        private async Task<AuthenticationResponse> Auth(string login, string password)
+        private async Task<dynamic> GetUsersList(string email = "") {
+            var userList = await(from user in _context.AspNetUsers
+                                 where email == "" || user.Email == email
+                                 select new
+                                 {
+                                     user.Id,
+                                     user.SupplierId,
+                                     SupplierName = user.Supplier.Name,
+                                     user.UserName,
+                                     user.Email,
+                                     user.Name,
+                                     user.Surname,
+                                     user.Patronymic,
+                                     user.Post,
+                                     PostName = user.Post.Name,
+                                     user.ApiEnabled,
+                                     user.CreatedDate,
+                                     RoleNames = (from userRole in user.UserRoles //[AspNetUserRoles]
+                                                  join role in _context.AspNetRoles //[AspNetRoles]
+                                                    on userRole.RoleId equals role.Id
+                                                  select role.Name).ToList()
+                                 }).ToListAsync();
+            return userList;
+        }
+
+        private async Task<TokenData> AuthRequest(string login, string password)
         {
-            
-            var requestObject = new AuthenticationRequest() { Login = login, Password = password };
-            string requestBodyString = JsonSerializer.Serialize(requestObject);
+            var authResponse = await CreateRequest("auth", new AuthenticationRequest() { Login = login, Password = password });
+
+            if (authResponse != null && authResponse.status == ResponseStatus.Success)
+            {
+                return (TokenData)JsonSerializer.Deserialize<TokenData>(authResponse.data);
+            }
+            else
+            {
+                if (authResponse != null)
+                    throw new Exception(authResponse.message);
+                else
+                    throw new Exception("Не удалось прочитать данные для аутентификации");
+            }
+        }
+
+        private async Task<AuthenticationResponse> CreateUserRequest(RegisterUserModel user, string token)
+        {
+            var authResponse = await CreateRequest("user/create", user, token);
+
+            if (authResponse != null && authResponse.status == ResponseStatus.Success)
+            {
+                return authResponse;
+            }
+            else
+            {
+                if (authResponse != null)
+                    throw new Exception(authResponse.message);
+                else
+                    throw new Exception("Не удалось создать пользователя");
+            }
+        }
+
+        private async Task<AuthenticationResponse> CreateRequest<T>(string endpoint, T obj, string token = "")
+        {
+            System.Reflection.PropertyInfo[] Props = typeof(T).GetProperties();
+        
+            string requestBodyString = JsonSerializer.Serialize(obj);
             var request = new HttpRequestMessage
             {
                 Content = new StringContent(requestBodyString, Encoding.UTF8, "application/json"),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(baseUrlAPI + "auth")
+                RequestUri = new Uri(baseUrlAPI + endpoint)
             };
-            //request.Content.Headers.Add("Content-Type", "application/json");
-            //request.Properties.Add("login", login);
-            //request.Properties.Add("password", password);
-
-            var client = new HttpClient();
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            if (endpoint != "auth")
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
 
             AuthenticationResponse authResponse = null;
 
-            try { 
+            try
+            {
+                var client = new HttpClient();
+
+                var response = await client.SendAsync(request);
+                //response.EnsureSuccessStatusCode();
+           
                 var responseStream = await response.Content.ReadAsStreamAsync();
                 authResponse = await JsonSerializer.DeserializeAsync<AuthenticationResponse>(responseStream);
                 return authResponse;
@@ -121,7 +164,7 @@ namespace DataAggregator.Web.Controllers.LPU
             {
                 return authResponse;
             }
-
         }
+
     }
 }

@@ -20,7 +20,7 @@ namespace DataAggregator.Domain.Model.Alphavision.User
 
         public DateTime Birthday { get; set; } = DateTime.Now;
 
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
 
         public List<string> Roles { get; set; }
 

@@ -94,7 +94,6 @@
     <Compile Include="BulkInsert\BulkInsert.cs" />
     <Compile Include="BulkInsert\Extensions.cs" />
     <Compile Include="BulkInsert\GenericListDataReader.cs" />
-    <Compile Include="Model\Alphavision\AspNetUserView.cs" />
     <Compile Include="Model\Alphavision\Post.cs" />
     <Compile Include="Model\Alphavision\Supplier.cs" />
     <Compile Include="Model\Alphavision\User\TokenData.cs" />
