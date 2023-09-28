@@ -400,4 +400,25 @@ function CheckedController($scope, $window, $route, $http, $uibModal, commonServ
         });
         */
     };
+
+    // Экспорт в Excel.
+    // Выгружать в отчет все данные, которые на данный момент присутствуют в блоке бессмертные.
+    $scope.Checked_To_Excel = function () {
+        $scope.dataLoading = $http({
+            method: 'POST',
+            url: '/Checked/Checked_To_Excel/',
+            data: "",
+            headers: { 'Content-type': 'application/json' },
+            responseType: 'arraybuffer'
+        }).then(function (response) {
+            
+            var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var fileName = 'Дробить по МНН.xlsx';
+            saveAs(blob, fileName);
+
+        }, function (error) {
+            console.log(error);
+            messageBoxService.showError('Rejected:' + error);
+        });
+    }
 }

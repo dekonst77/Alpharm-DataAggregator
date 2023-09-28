@@ -41,7 +41,7 @@ namespace DataAggregator.Web.Controllers.Classifier.Reports
         }
 
         /// <summary>
-        /// импорт в Excel
+        /// экспорт в Excel
         /// </summary>
         /// <returns></returns>
         [HttpPost]

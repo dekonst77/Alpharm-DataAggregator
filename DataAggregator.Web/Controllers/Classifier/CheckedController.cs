@@ -83,10 +83,12 @@ namespace DataAggregator.Web.Controllers.Classifier
                         var ET_Price_v2 = _etalon_context.PriceCurrent_v2.Where(w => w.ClassifierId == item.Id).FirstOrDefault();
                         if (ET_Price == null)
                         {
-                            ET_Price = new Domain.Model.EtalonPrice.PriceCurrent();
-                            ET_Price.ClassifierId = (int)item.Id;
-                            ET_Price.ForChecking = false;
-                            ET_Price.PriceNew = item.PriceNew;
+                            ET_Price = new Domain.Model.EtalonPrice.PriceCurrent
+                            {
+                                ClassifierId = (int)item.Id,
+                                ForChecking = false,
+                                PriceNew = item.PriceNew
+                            };
                             _etalon_context.PriceCurrent.Add(ET_Price);
                         }
                         else
@@ -96,10 +98,12 @@ namespace DataAggregator.Web.Controllers.Classifier
 
                         if (ET_Price_v2 == null)
                         {
-                            ET_Price_v2 = new Domain.Model.EtalonPrice.PriceCurrent_v2();
-                            ET_Price_v2.ClassifierId = (int)item.Id;
-                            ET_Price_v2.ForChecking = false;
-                            ET_Price_v2.PriceNew = item.PriceNew;
+                            ET_Price_v2 = new Domain.Model.EtalonPrice.PriceCurrent_v2
+                            {
+                                ClassifierId = (int)item.Id,
+                                ForChecking = false,
+                                PriceNew = item.PriceNew
+                            };
                             _etalon_context.PriceCurrent_v2.Add(ET_Price_v2);
                         }
                         else
@@ -291,6 +295,28 @@ namespace DataAggregator.Web.Controllers.Classifier
                     msg += e.Message;
                 }
                 return BadRequest(msg);
+            }
+        }
+
+        /// <summary>
+        /// экспорт в Excel
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public FileContentResult Checked_To_Excel()
+        {
+            using (var _context = new DrugClassifierContext(APP))
+            {
+                var result = _context.ClassifierInfoExcel_GetReport(false, false).ToList();
+
+                Excel.Excel excel = new Excel.Excel();
+                excel.Create();
+
+                excel.InsertDataTable("Дробить по МНН", 1, 1, result, true, true, null);
+
+                byte[] bb = excel.SaveAsByte();
+
+                return File(bb, "application/vnd.ms-excel");
             }
         }
 
