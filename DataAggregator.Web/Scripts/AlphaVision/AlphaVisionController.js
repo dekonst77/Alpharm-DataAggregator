@@ -348,10 +348,10 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
         $scope.checkedRoles = []
         $scope.action = action;
         if (action == 1) {
-            $scope.UserModalLabel = "Регистрация нового пользователя";
+            $scope.UserModalLabel = "Создать пользователя";
         }
         else {
-            $scope.UserModalLabel = "Изменить текущего пользователя";
+            $scope.UserModalLabel = "Изменить пользователя";
             var row = $scope.Grid.getSelectedItem()[0];
             $scope.CreateUserForm.Email = row.Email;
             $scope.CreateUserForm.Name = row.Name;
