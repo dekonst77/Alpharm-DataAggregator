@@ -12,7 +12,7 @@
     setupGSRouting();
     setupDistrRepRouting();
     setupLPURouting();
-
+    setupAlphaVisionRouting();
 
     function setupOFDRouting() {
         //
@@ -516,6 +516,18 @@
                 })
     }
 
+    //Альфавижн
+    function setupAlphaVisionRouting() {
+        $routeProvider
+            //Пользователи
+            .when('/AlphaVision/Users',
+                {
+                    templateUrl: 'Views/AlphaVision/users.html',
+                    title: 'Пользователи AlphaVision',
+                    authorize: true
+                })
+            
+    }
 
     // Классификация
     function setupClassifierRouting() {

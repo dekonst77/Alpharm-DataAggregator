@@ -41,7 +41,7 @@
 
             $scope.MenuReportLoad = function () {
                 if ($scope.isAuthenticated()) {
-                    $scope.layoutLoading = $http.post('Global/GetReportList')
+                    $scope.layoutLoading = $http.post('/Global/GetReportList')
                         .then(function (response) {
                             if (response.data.Data.GZ_report !== undefined) {
                                 $scope.DAM_GZ_report.splice(0, $scope.DAM_GZ_report.length);

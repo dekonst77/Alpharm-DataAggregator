@@ -374,15 +374,6 @@ function LPUController($scope, $route, $http, $uibModal, commonService, messageB
     };
 
     
-
-
-    /*
-   
-    $('#DepModal').on('show.bs.modal', function (event) {
-
-    })
-    */
-
     //Блок Вид подразделения
     $scope.KindGrid = uiGridCustomService.createGridClassMod($scope, 'KindGrid');
  
