@@ -72,6 +72,71 @@ namespace DataAggregator.Web.Controllers.LPU
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "AV_UserAdmin,AV_Modify,AV_User")]
+        public async Task<ActionResult> Suppliers()
+        {
+            try
+            {
+                var suppliers = await (from supplier in _context.Suppliers
+                                       where supplier.IsActual == true
+                                       select new
+                                       {
+                                           supplier.Id,
+                                           supplier.Name
+                                       }).ToListAsync();
+
+                return ReturnData(suppliers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "AV_UserAdmin,AV_Modify,AV_User")]
+        public async Task<ActionResult> Roles()
+        {
+            try
+            {
+                var roles = await (from role in _context.AspNetRoles
+                                       select new
+                                       {
+                                           role.Id,
+                                           role.Name
+                                       }).ToListAsync();
+
+                return ReturnData(roles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "AV_UserAdmin,AV_Modify,AV_User")]
+        public async Task<ActionResult> Posts()
+        {
+            try
+            {
+                var posts = await (from post in _context.Posts
+                                       where post.IsActual == true
+                                       select new
+                                       {
+                                           post.Id,
+                                           post.Name
+                                       }).ToListAsync();
+
+                return ReturnData(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         private async Task<dynamic> GetUsersList(string email = "") {
             var userList = await(from user in _context.AspNetUsers
                                  where email == "" || user.Email == email
@@ -133,7 +198,7 @@ namespace DataAggregator.Web.Controllers.LPU
 
         private async Task<AuthenticationResponse> CreateRequest<T>(string endpoint, T obj, string token = "")
         {
-            System.Reflection.PropertyInfo[] Props = typeof(T).GetProperties();
+            //System.Reflection.PropertyInfo[] Props = typeof(T).GetProperties();
         
             string requestBodyString = JsonSerializer.Serialize(obj);
             var request = new HttpRequestMessage
@@ -160,7 +225,7 @@ namespace DataAggregator.Web.Controllers.LPU
                 authResponse = await JsonSerializer.DeserializeAsync<AuthenticationResponse>(responseStream);
                 return authResponse;
             }
-            catch
+            catch (Exception ex)
             {
                 return authResponse;
             }

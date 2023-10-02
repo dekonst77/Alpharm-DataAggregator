@@ -1,71 +1,218 @@
-﻿angular
-    .module('DataAggregatorModule')
-    .controller('AlphaVisionController', ['$scope', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'errorHandlerService', 'uiGridCustomService', 'uiGridConstants', 'formatConstants', 'userService', AlphaVisionController]);
+﻿var loginModule = angular.module('DataAggregatorModule')
+    .controller('AlphaVisionController', ['$scope', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'errorHandlerService', 'uiGridCustomService', 'uiGridConstants', 'formatConstants', 'userService', AlphaVisionController])
 
-function AlphaVisionController($scope, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, errorHandlerService, uiGridCustomService, uiGridConstants, formatConstants, userServic) {
+loginModule.constant('USERCONSTANTS', (function () {
+    return {
+        PASSWORD_LENGTH: 7
+    }
+})());
 
-    console.log(111111)
+loginModule.factory('myfactory', [function () {
+    return {
+        score: function () {
+            //console.log('arguments List : ', arguments);
+            var score = 0, value = arguments[0], passwordLength = arguments[1];
+            var containsLetter = /[a-zA-Z]/.test(value), containsDigit = /\d/.test(value), containsSpecial = /[^a-zA-Z\d]/.test(value);
+            var containsAll = containsLetter && containsDigit && containsSpecial;
 
+            //console.log(" containsLetter - ", containsLetter,
+            //    " : containsDigit - ", containsDigit,
+            //    " : containsSpecial - ", containsSpecial);
+
+            if (value.length == 0) {
+                score = 0;
+            } else {
+                if (containsAll) {
+                    score += 3;
+                } else {
+                    if (containsLetter) score += 1;
+                    if (containsDigit) score += 1;
+                    if (containsSpecial) score += 1;
+                }
+                if (value.length >= passwordLength) score += 1;
+            }
+            /*console.log('Factory Arguments : ', value, " « Score : ", score);*/
+            return score;
+        }
+    };
+}]);
+
+loginModule.directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', function (myfactory, USERCONSTANTS) {
+    return {
+        // restrict to only attribute and class [AC]
+        restrict: 'AC',
+        priority: 2000,
+        // use the NgModelController
+        require: 'ngModel',
+
+        // add the NgModelController as a dependency to your link function
+        link: function ($scope, $element, $attrs, ngPasswordModel) {
+            //console.log('Directive - USERCONSTANTS.PASSWORD_LENGTH : ', USERCONSTANTS.PASSWORD_LENGTH);
+
+            $element.on('blur change keydown', function (evt) {
+                $scope.$evalAsync(function ($scope) {
+                    var pwd = $scope.password = $element.val();
+                    // update the $scope.password with the element's value
+
+                    /*Password Strength Meter Conditions:
+                        valid password must be more than 7 characters
+                        Factory score must have a minimum score of 3. [Letter, Digit, Special Char, CharLength > 7]*/
+                    $scope.myModulePasswordMeter = pwd ? (pwd.length > USERCONSTANTS.PASSWORD_LENGTH
+                        && myfactory.score(pwd, USERCONSTANTS.PASSWORD_LENGTH) || 0) : null;
+                    ngPasswordModel.$setValidity('okPasswordController', $scope.myModulePasswordMeter > 3);
+                });
+                if (ngPasswordModel.$valid) {
+                    $scope.passwordVal = ngPasswordModel.$viewValue;
+                    //console.log('Updated Val : ', $scope.passwordVal);
+                    $scope.updatePass();
+                }
+            });
+        }
+    };
+}]);
+
+loginModule.filter('passwordCountFilter', [function () {
+    var passwordLengthDefault = 7;
+    return function (passwordModelVal) {
+        passwordModelVal = angular.isString(passwordModelVal) ? passwordModelVal : '';
+        var retrunVal = passwordModelVal &&
+            (passwordModelVal.length > passwordLengthDefault ? passwordLengthDefault + '+' : passwordModelVal.length);
+        return retrunVal;
+    };
+}]);
+
+loginModule.directive("compareTo", [function () {
+    return {
+        require: "ngModel",
+        priority: 2000,
+        // directive defines an isolate scope property (using the = mode) two-way data-binding
+        scope: {
+            passwordEleWatcher: "=compareTo"
+        },
+
+        link: function (scope, element, attributes, ngModel) {
+            //console.log('Confirm Password Link Function call.');
+
+            var pswd = scope.passwordEleWatcher;
+
+            ngModel.$validators.compareTo = function (compareTo_ModelValue) {
+                //console.log('scope:',scope);
+
+                if ((pswd != 'undefined' && pswd.$$rawModelValue != 'undefined') && (pswd.$touched)) {
+                    var pswdModelValue = pswd.$modelValue;
+                    var isVlauesEqual = ngModel.$viewValue == pswdModelValue;
+                    return isVlauesEqual;
+                } else {
+                    //console.log('Please enter valid password, before conforming the password.');
+                    return false;
+                }
+            };
+
+            scope.$watch("passwordEleWatcher", function () {
+                //console.log('$watch « Confirm-Password Element Watcher.')
+                ngModel.$validate();
+            });
+
+            scope.$parent.updatePass = function () {
+                //console.log('$watch « Password Element Watcher.')
+                //console.log('Pswd: ', scope.$parent.passwordVal, '\t Cnfirm:', ngModel.$modelValue);
+                //scope.registerForm.confirm.$invalid = true;
+            }
+        },
+    };
+}]);
+
+function AlphaVisionController($scope, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, errorHandlerService, uiGridCustomService, uiGridConstants, formatConstants, userServic)
+{
     $scope.Grid = uiGridCustomService.createGridClassMod($scope, 'AlphaVisionUsers_Grid');
     $scope.Grid.Options.showGridFooter = true;
     $scope.Grid.Options.multiSelect = true;
     $scope.Grid.Options.modifierKeysToMultiSelect = true;
 
-    $scope.Grid.Options.columnDefs = [
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Email', field: 'Email', filter: { condition: uiGridCustomService.numberCondition } },
-        //{
-        //    headerTooltip: true,
-        //    cellTooltip: true,
-        //    enableCellEdit: true,
-        //    width: 150,
-        //    name: 'Поставщик',
-        //    field: 'SupplierId',
-        //    headerCellClass: 'Edit',
-        //    cellFilter: 'griddropdownSSS:this',
-        //    editType: 'dropdown',
-        //    filter:
-        //    {
-        //        type: uiGridConstants.filter.SELECT,
-        //        selectOptions: $scope.LPUTypeLabel
+    $scope.Suppliers = [];/*{ "Id": null, "Name": "" }*/
+    $scope.Posts = [];
+    $scope.Roles = [];
 
-        //    },
-        //    editableCellTemplate: 'ui-grid/dropdownEditor',
-        //    editDropdownOptionsArray: $scope.LPUType,
-        //    editDropdownIdLabel: 'Id',
-        //    editDropdownValueLabel: 'Name'
-        //},
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Имя', field: 'Name', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Фамилия', field: 'Surname', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Отчество', field: 'Patronymic', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Организация', field: 'SupplierId', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Должность', field: 'PostId', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Доступ к API', field: 'ApiEnabled', filter: { condition: uiGridCustomService.condition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Дата создания', field: 'CreatedDate', filter: { condition: uiGridCustomService.condition } },
-        
-    ];
-
-    $scope.LPUType = [];
-    $scope.LPUTypeLabel = [];
-
-    $scope.GetLPUType = function () {
+    $scope.GetSuppliers = function () {
         $http({
-            method: "POST",
-            url: "/LPUDictionaries/GetLPUType/",
-
+            method: "GET",
+            url: "/AlphaVision/Suppliers/"
         }).then(function (response) {
-            Array.prototype.push.apply($scope.LPUType, response.data.Data);
-            Array.prototype.push.apply($scope.LPUTypeLabel, $scope.LPUType.map(function (obj) {
-                var rObj = { 'value': obj.Id, 'label': obj.Name };
-                return rObj;
-            }));
-
-
+            var data = response.data;
+            if (data.Success) {
+                Array.prototype.push.apply($scope.Suppliers, data.Data);
+            } else {
+                messageBoxService.showError(data.ErrorMessage);
+            }
         }, function () {
             $scope.message = "Unexpected Error";
         });
     };
 
+    $scope.GetPosts = function () {
+        $http({
+            method: "GET",
+            url: "/AlphaVision/Posts/"
+        }).then(function (response) {
+            var data = response.data;
+            if (data.Success) {
+                Array.prototype.push.apply($scope.Posts, data.Data);
+            } else {
+                messageBoxService.showError(data.ErrorMessage);
+            }
+        }, function () {
+            $scope.message = "Unexpected Error";
+        });
+    };
+
+    $scope.GetRoles = function () {
+        $scope.dataLoading = $http({
+            method: 'GET',
+            url: '/AlphaVision/roles/'
+        }).then(function (response) {
+            var data = response.data;
+            if (data.Success) {
+                Array.prototype.push.apply($scope.Roles, data.Data.map(function (item) { return item.Name; }));
+            } else {
+                messageBoxService.showError(data.ErrorMessage);
+            }
+        }, function (response) {
+            errorHandlerService.showResponseError(response);
+        });
+    }
+
+    $scope.checkedRoles = [];
+    $scope.toggleCheck = function (role) {
+        if ($scope.checkedRoles.indexOf(role) === -1) {
+            $scope.checkedRoles.push(role);
+            
+        } else {
+            $scope.checkedRoles.splice($scope.checkedRoles.indexOf(role), 1);
+        }
+        $scope.CreateUserForm.Roles = JSON.parse(JSON.stringify($scope.checkedRoles));
+    };
+
+    $scope.LoadData = function () {
+       $scope.GetSuppliers();
+        $scope.GetPosts();
+        $scope.GetRoles();
+    }
+
+    $scope.LoadData();
+   
+    $scope.Grid.Options.columnDefs = [
+        { headerTooltip: true, cellTooltip: false, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Email', field: 'Email', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Имя', field: 'Name', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Фамилия', field: 'Surname', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Отчество', field: 'Patronymic', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'День рождения', field: 'Birthday', type: 'Date', cellFilter: formatConstants.FILTER_DATE, filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Организация', field: 'SupplierName', filter: { condition: uiGridCustomService.conditionList } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Должность', field: 'PostName', filter: { condition: uiGridCustomService.conditionList } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Доступ к API', field: 'ApiEnabled', type: 'boolean', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Дата создания', field: 'CreatedDate', type: 'Date', cellFilter: formatConstants.FILTER_DATE_TIME, filter: { condition: uiGridCustomService.condition } },
+    ];
+ 
     $scope.GetUsers = function () {
         $scope.dataLoading = $http({
             method: 'GET',
@@ -83,57 +230,48 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
         });
     }
 
-    $scope.LoadData = function () {
-        $scope.GetLPUType();
-        $scope.GetUsers();
-    }
 
-    $scope.LoadData();
+    $scope.GetUsers();
+
+    $scope.CreateUserForm = {};
 
     $scope.CreateUser = function () {
-        var user = 
-        {
-            "email": "test1@alpharm.ru",
-            "password": "1235678",
-            "SupplierId": 1,
-            "ApiEnabled": true,
-            "roles": ["SupplierAdmin", "User"]
-        };
-        $scope.dataLoading = $http({
-            method: 'POST',
-            url: '/AlphaVision/CreateUser/',
-            data: JSON.stringify(user)
-        }).then(function (response) {
-            var data = response.data;
-            if (data.Success) {
-                $scope.Grid.Options.data.push(data.Data[0]);
-            } else {
-                messageBoxService.showError(data.ErrorMessage);
-            }
 
-        }, function (response) {
-            errorHandlerService.showResponseError(response);
-        });
+        var user = JSON.stringify($scope.CreateUserForm);
+
+        if (user && user.length > 0) {
+
+            //$('#CreateUserModal').modal('hide');
+
+            $scope.dataLoading = $http({
+                method: 'POST',
+                url: '/AlphaVision/CreateUser/',
+                data: user
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    //очищаем объект
+                    $scope.CreateUserForm = {};
+                    $scope.checkedRoles = []
+                    //
+                    $scope.Grid.Options.data.push(data.Data[0]);
+                } else {
+                    messageBoxService.showError(data.ErrorMessage);
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+        }
+        else
+            alert('Вы не заполнили ни одного поля. Пользователь не будет добавлен!');
     }
 
+    $scope.openPopupBirthday = function () {
+        $scope.popupBirthday.opened = true;
+    };
 
-    $scope.Search = function () {
-
-        var SearchFilter = [];
-        SearchFilter = $scope.filter;
-        if ($scope.filter.TypeIdModel != null)
-            SearchFilter["TypeId"] = $scope.filter.TypeIdModel.Id;
-        else SearchFilter["TypeId"] = null;
-        if ($scope.filter.KindIdModel != null)
-            SearchFilter["KindId"] = $scope.filter.KindIdModel.Id;
-        else SearchFilter["KindId"] = null;
-
-        if ($scope.filter.StatusModel != null)
-            SearchFilter["Status"] = $scope.filter.StatusModel.Id;
-        else SearchFilter["Status"] = null;
-        var json = JSON.stringify(SearchFilter);
-
-       
+    $scope.popupBirthday = {
+        opened: false
     };
 
     $scope.Save = function () {
@@ -224,402 +362,6 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
         } else alert('Вы не заполнили ни одного поля. ЛПУ не будет добавлено!');
 
     };
-
-
-
-
-    /*
-   
-    $('#DepModal').on('show.bs.modal', function (event) {
-
-    })
-    */
-
-    //Блок Вид подразделения
-    $scope.KindGrid = uiGridCustomService.createGridClassMod($scope, 'KindGrid');
-
-    $scope.KindGrid.Options.multiSelect = false;
-    $scope.KindGrid.Options.noUnselect = false;
-    $scope.KindGrid.Options.showGridFooter = true;
-    $scope.KindGrid.Options.columnDefs = [
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Вид отделения', field: 'Name', filter: { condition: uiGridCustomService.condition } }
-    ];
-    $scope.KindGrid.data = [];
-
-    $scope.KindGrid.Options.onRegisterApi = function (gridApi) {
-        $scope.KindGridApi = gridApi;
-    };
-
-    $('#KindModal').on('show.bs.modal', function (event) {
-        getKindList();
-    });
-
-
-
-    function getKindList() {
-        //очищаем выбор если был
-        if ($scope.KindGridApi.selection.getSelectedRows() != undefined && $scope.KindGridApi.selection.getSelectedRows() != null && $scope.KindGridApi.selection.getSelectedRows().length > 0) {
-            $scope.KindGridApi.selection.clearSelectedRows();
-        }
-        $scope.KindGrid.data = [];
-        $scope.KindGrid.Options.data = [];
-        $scope.KindGrid.Options.data = null;
-        $scope.KindGrid.Options.data = $scope.LPUKind;
-    };
-
-    $scope.SelectKind = function () {
-        if ($scope.Grid.selectedRows() === undefined || $scope.Grid.selectedRows().length < 1 || $scope.KindGridApi.selection.getSelectedRows() === undefined || $scope.KindGridApi.selection.getSelectedRows() === null || $scope.KindGridApi.selection.getSelectedRows().length < 1) {
-            return;
-        }
-        var Id = $scope.KindGridApi.selection.getSelectedRows()[0].Id
-        var selectedRows = $scope.Grid.selectedRows();
-        selectedRows.forEach(function (item) {
-            $scope.Grid.GridCellsMod(item, "KindId", Id);
-
-        });
-
-    };
-    //Конец Блок Вид подразделения
-
-
-    //Блок Тип подразделения
-    $scope.TypeGrid = uiGridCustomService.createGridClassMod($scope, 'TypeGrid');
-
-    $scope.TypeGrid.Options.multiSelect = false;
-    $scope.TypeGrid.Options.noUnselect = false;
-    $scope.TypeGrid.Options.showGridFooter = true;
-    $scope.TypeGrid.Options.columnDefs = [
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Тип подразделения', field: 'Name', filter: { condition: uiGridCustomService.condition } }
-    ];
-    $scope.TypeGrid.data = [];
-
-    $scope.TypeGrid.Options.onRegisterApi = function (gridApi) {
-        $scope.TypeGridApi = gridApi;
-    };
-
-    $('#TypeModal').on('show.bs.modal', function (event) {
-        getTypeList();
-    });
-
-
-
-    function getTypeList() {
-        //очищаем выбор если был
-        if ($scope.TypeGridApi.selection.getSelectedRows() != undefined && $scope.TypeGridApi.selection.getSelectedRows() != null && $scope.TypeGridApi.selection.getSelectedRows().length > 0) {
-            $scope.TypeGridApi.selection.clearSelectedRows();
-        }
-        $scope.TypeGrid.data = [];
-        $scope.TypeGrid.Options.data = [];
-        $scope.TypeGrid.Options.data = null;
-        $scope.TypeGrid.Options.data = $scope.LPUType;
-    };
-
-    $scope.SelectType = function () {
-        if ($scope.Grid.selectedRows() === undefined || $scope.Grid.selectedRows().length < 1 || $scope.TypeGridApi.selection.getSelectedRows() === undefined || $scope.TypeGridApi.selection.getSelectedRows() === null || $scope.TypeGridApi.selection.getSelectedRows().length < 1) {
-            return;
-        }
-        var Id = $scope.TypeGridApi.selection.getSelectedRows()[0].Id
-        var selectedRows = $scope.Grid.selectedRows();
-        selectedRows.forEach(function (item) {
-            $scope.Grid.GridCellsMod(item, "TypeId", Id);
-
-        });
-
-    };
-    //Конец Блок Тип подразделения
-
-
-
-    $scope.Dep_GridOptions = uiGridCustomService.createOptions('Dep_Grid');
-    var Dep_GridOptions = {
-        customEnableRowSelection: true,
-        multiSelect: false,
-        enableFullRowSelection: true,
-        enableRowHeaderSelection: false,
-        appScopeProvider: $scope,
-        enableRowSelection: true,
-        showGridFooter: false,
-        noUnselect: true,
-        columnDefs: [
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'LPUId', field: 'LPUId', filter: { condition: uiGridCustomService.numberCondition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ParentId', field: 'ParentId', filter: { condition: uiGridCustomService.numberCondition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'ActualId', field: 'ActualId', filter: { condition: uiGridCustomService.numberCondition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: 100, name: 'Название Отделения', headerCellClass: 'Yellow', field: 'Department', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'OrganizationId', field: 'OrganizationId', filter: { condition: uiGridCustomService.numberCondition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'PointId', field: 'PointId', filter: { condition: uiGridCustomService.numberCondition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Коммент', field: 'Comment', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 300, name: 'ИНН юр. лица', field: 'EntityINN', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 300, name: 'ОГРН юр. лица', field: 'EntityOGRN', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 300, name: 'Юр. лицо', field: 'EntityName', filter: { condition: uiGridCustomService.condition } },
-            //{ headerTooltip: true, enableCellEdit: true, width: 300, name: 'Бренд аптеки', field: 'PharmacyBrand', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'Адрес из лицензии', width: 300, field: 'Address', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, name: 'ФО', width: 100, field: 'Bricks_FederalDistrict', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'СФ', field: 'Address_region', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, name: 'МР/ГО', width: 100, field: 'Bricks_City', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Индекс', field: 'Address_index', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'НП', field: 'Address_city', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, cellTooltip: true, width: 100, name: 'Адрес', field: 'Address_street', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Ориентир', field: 'Address_comment', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Этаж', field: 'Address_float', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: '№ пом.', field: 'Address_room', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'S пом., кв. м', field: 'Address_room_area', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, width: 100, name: 'Тип НП', field: 'Bricks_CityType', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Координаты', field: 'Address_koor', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Брик', field: 'BricksId', filter: { condition: uiGridCustomService.condition }, cellTemplate: '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}"><a href="/#/GS/Bricks?ids={{COL_FIELD}}" target="_blank">{{COL_FIELD}}</a></div>' },
-            { headerTooltip: true, enableCellEdit: false, name: 'Дата Добавления', width: 100, field: 'Date_Create', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
-            { headerTooltip: true, enableCellEdit: false, name: 'Лицензия', width: 100, field: 'licencesNumber', filter: { condition: uiGridCustomService.condition }, type: 'date', cellFilter: formatConstants.FILTER_DATE },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Телефон', field: 'Phone', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'Web', field: 'Website', filter: { condition: uiGridCustomService.condition } },
-            { headerTooltip: true, enableCellEdit: false, width: 100, name: 'ФИО зав. аптеки', field: 'ContactPersonFullname', filter: { condition: uiGridCustomService.condition } },
-            //  { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: '100', name: 'DepartmentId', field: 'Id' },
-            //   { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'LPUId', field: 'LPUId_Id'},
-            //   { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: '500', name: 'Наименование', field: 'Name'},
-            //   { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: '500', name: 'Коммент', field: 'Comments' }
-        ]
-    };
-    $scope.Dep_GridOptions.data = [];
-    angular.extend($scope.Dep_GridOptions, Dep_GridOptions);
-
-    $scope.Dep_GridOptions.onRegisterApi = function (gridApi) {
-        gridApi.selection.on.rowSelectionChanged($scope, selectDepartment);
-        gridApi.edit.on.afterCellEdit($scope, editRowDepartment);
-    };
-    // $scope.Dep_Grid = uiGridCustomService.createGridClassMod($scope, 'Dep_Grid');
-    //  $scope.Dep_Grid.Options.showGridFooter = true;
-    //   $scope.Dep_Grid.Options.multiSelect = false;
-    //  $scope.Dep_Grid.Options.modifierKeysToMultiSelect = true;
-    // $scope.Dep_Grid.Options.rowHeight = 20;
-    // $scope.Dep_Grid.Options.appScopeProvider = $scope;
-    /* $scope.Dep_Grid.Options.columnDefs = [
-         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: '100', name: 'DepartmentId', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
-         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, name: 'LPUId', field: 'LPUId_Id', filter: { condition: uiGridCustomService.numberCondition } },
-         { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: '30%', name: 'Наименование', field: 'Name', filter: { condition: uiGridCustomService.condition } },
-         { headerTooltip: true, cellTooltip: true, enableCellEdit: true, width: '30%', name: 'Коммент', field: 'Comments', filter: { condition: uiGridCustomService.condition } },
- 
-     ];
-     */
-
-    function selectDepartment(row) {
-        if (row.isSelected) {
-            $scope.selectedDept = row.entity;
-        }
-    };
-
-
-    GetDepartments = function () {
-        //  alert(LPUID_Val);
-        // $scope.Dep_GridOptions.data = [];
-        // $scope.Dep_Grid.Options.data = [];
-        if (LPUID_Val == null)
-            return;
-        // $scope.Dep_Grid.Options.data = null;
-        $http({
-            method: "POST",
-            url: "/LPU/Get_LPU_Department_by_LPUId/",
-            data: JSON.stringify({ id: LPUID_Val }),
-        }).then(function (response) {
-            var data = response.data;
-            if (data.Success) {
-                $scope.Dep_GridOptions.data = response.data.Data;
-
-            } else {
-                messageBoxService.showError(data.ErrorMessage);
-            }
-
-
-        }, function () {
-            $scope.message = "Unexpected Error";
-        });
-    };
-
-    //Изменение департамента
-    function editRowDepartment(rowEntity, colDef, newValue, oldValue) {
-        //  str = JSON.stringify(rowEntity, null, 4); // (Optional) beautiful indented output.
-        //  console.log(str);
-        var json = JSON.stringify(rowEntity);
-        $scope.editRowDepartmentLoading = $http({
-            method: "POST",
-            url: "/LPU/Edit_LPU_Department_by_LPUId/",
-            data: json
-        }).then(function () {
-            return true;
-        }, function () {
-            $scope.message = "Unexpected Error";
-            rowEntity[colDef.field] = oldValue;
-            $scope.$apply();
-            return false;
-        });
-
-        //     $scope.DataSource = row.entity;
-        //  alert(row.entity);
-        //  $('#modal_DataSource_Header').val(row.entity);
-        //      $('#modal_DataSource').modal('show');
-
-    };
-
-
-    //добавляем департамент
-    $scope.AddDept = function () {
-        $scope.sourceLoading = $http({
-            method: "POST",
-            url: "/LPU/Add_LPU_Department_by_LPUId/",
-            data: JSON.stringify({ id: $scope.Grid.selectedRows()[0].LPUId, value: document.getElementById('DepartmentNameValue').value }),
-        }).then(function (response) {
-            // $scope.Dep_GridOptions.data = response.data.Data;
-            GetDepartments();
-        }, function () {
-            $scope.message = "Unexpected Error";
-        });
-
-    };
-
-
-    //Удаляем департамент
-    $scope.removeDept = function () {
-
-        if ($scope.selectedDept == null)
-            return;
-
-        var json = JSON.stringify({ id: $scope.selectedDept.LPUId });
-
-        $scope.sourceLoading = $http({
-            method: "POST",
-            url: "/LPU/Remove_LPU_Department_by_LPUId/",
-            data: json
-        }).then(function (response) {
-            //$scope.Dep_GridOptions.data = response.data.Data;
-            GetDepartments();
-            $scope.selectedDept = null;
-        }, function () {
-            $scope.message = "Unexpected Error";
-        });
-
-
-
-    };
-    $('#DepModal').on('show.bs.modal', function (event) {
-        GetDepartments();
-    });
-
-    /*
-
-    $scope.LPU_Merge = function () {
-
-        messageBoxService.showConfirm('Объединить LPU?', 'Объединение')
-            .then(
-                function () {
-                    var array_LPUID = [];
-                    var selectedRows = $scope.Grid.selectedRows();
-                    if (selectedRows.length >= 5 || selectedRows.length<2) {
-                        alert("Выделено больше 4 строк или меньше 2х, я так не буду объединять.");
-                        return;
-                    }
-                    selectedRows.forEach(function (item) {
-                        array_LPUID.push(item.LPUId);
-                    });
-                    $scope.dataLoading =
-                        $http({
-                            method: 'POST',
-                            url: '/LPU/Merge/',
-                            data: JSON.stringify({ LPUIds: array_LPUID })
-                        }).then(function (response) {
-                            var data = response.data;
-                            $scope.Search();
-                        }, function (response) {
-                            errorHandlerService.showResponseError(response);
-                        });
-
-                },
-                function (result) {
-
-                }
-            );
-    };
-    */
-
-
-
-
-    $scope.LPUToMergeGrid = uiGridCustomService.createGridClassMod($scope, 'LPUToMergeGrid');
-
-    $scope.LPUToMergeGrid.Options.multiSelect = false;
-    $scope.LPUToMergeGrid.Options.noUnselect = false;
-    $scope.LPUToMergeGrid.Options.showGridFooter = true;
-    $scope.LPUToMergeGrid.Options.columnDefs = [
-        { name: 'LPUId', field: 'LPUId', type: 'number' },
-        { name: 'Отделения', field: 'DepartmentCnt', type: 'number' },
-        { name: 'OrganizationId', field: 'OrganizationId', type: 'number' },
-        { name: 'PointId', field: 'PointId', type: 'number' },
-        { name: 'ИНН юр. лица', field: 'EntityINN' },
-        { name: 'ОГРН юр. лица', field: 'EntityOGRN' },
-        { name: 'Юр. лицо', field: 'EntityName' },
-        { name: 'Адрес из лицензии', field: 'Address' },
-        { name: 'Брик', field: 'BricksId' },
-        { name: 'Дата Добавления', field: 'Date_Create' },
-    ];
-    $scope.LPUToMergeGrid.data = [];
-
-    $scope.LPUToMergeGrid.Options.onRegisterApi = function (gridApi) {
-        $scope.LPUToMergeGridApi = gridApi;
-    };
-
-    $('#MergeModal').on('show.bs.modal', function (event) {
-        getMergeList();
-    });
-
-
-
-    function getMergeList() {
-        //очищаем выбор если был
-        if ($scope.LPUToMergeGridApi.selection.getSelectedRows() != undefined && $scope.LPUToMergeGridApi.selection.getSelectedRows() != null && $scope.LPUToMergeGridApi.selection.getSelectedRows().length > 0) {
-            $scope.LPUToMergeGridApi.selection.clearSelectedRows();
-        }
-        $scope.LPUToMergeGrid.data = [];
-        $scope.LPUToMergeGrid.Options.data = [];
-        $scope.LPUToMergeGrid.Options.data = null;
-        $scope.LPUToMergeGrid.Options.data = $scope.Grid.selectedRows();
-    };
-
-
-
-    $scope.SelectActualMerge = function () {
-        if ($scope.Grid.selectedRows() === undefined || $scope.Grid.selectedRows().length < 2 || $scope.LPUToMergeGridApi.selection.getSelectedRows() === undefined || $scope.LPUToMergeGridApi.selection.getSelectedRows() === null || $scope.LPUToMergeGridApi.selection.getSelectedRows().length < 1) {
-            return;
-        }
-        // alert($scope.Grid.selectedRows()[0].LPUId);
-        // alert($scope.LPUToMergeGridApi.selection.getSelectedRows()[0].LPUId);
-
-
-        var array_LPUID = [];
-        var selectedRows = $scope.Grid.selectedRows();
-
-        selectedRows.forEach(function (item) {
-            array_LPUID.push(item.LPUId);
-        });
-        var Actual_Id = $scope.LPUToMergeGridApi.selection.getSelectedRows()[0].LPUId
-
-        $scope.dataLoading =
-            $http({
-                method: 'POST',
-                url: '/LPU/Merge/',
-                data: JSON.stringify({ LPUIds: array_LPUID, Actual_Id: Actual_Id })
-            }).then(function (response) {
-
-                $scope.Search();
-            }, function (response) {
-                errorHandlerService.showResponseError(response);
-            });
-
-
-
-
-
-
-    };
-
-
 
 
 
