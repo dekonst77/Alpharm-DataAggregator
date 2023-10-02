@@ -57,14 +57,25 @@ loginModule.directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', func
                     /*Password Strength Meter Conditions:
                         valid password must be more than 7 characters
                         Factory score must have a minimum score of 3. [Letter, Digit, Special Char, CharLength > 7]*/
+                  
                     $scope.myModulePasswordMeter = pwd ? (pwd.length > USERCONSTANTS.PASSWORD_LENGTH
                         && myfactory.score(pwd, USERCONSTANTS.PASSWORD_LENGTH) || 0) : null;
+
                     ngPasswordModel.$setValidity('okPasswordController', $scope.myModulePasswordMeter > 3);
+
+                    if (ngPasswordModel.$touched && pwd.length == 0 && !ngPasswordModel.$valid && !ngPasswordModel.$$attr.required) {
+                        ngPasswordModel.$$attr.$removeClass('ng-invalid');
+                        ngPasswordModel.$valid = true;
+                        ngPasswordModel.$invalid = false;
+                        $scope.registerForm.$valid = true;
+                        $scope.registerForm.$invalid = false;
+                    }
                 });
+
                 if (ngPasswordModel.$valid) {
                     $scope.passwordVal = ngPasswordModel.$viewValue;
                     //console.log('Updated Val : ', $scope.passwordVal);
-                    $scope.updatePass();
+                    //$scope.updatePass();
                 }
             });
         }
@@ -126,7 +137,7 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
 {
     $scope.Grid = uiGridCustomService.createGridClassMod($scope, 'AlphaVisionUsers_Grid');
     $scope.Grid.Options.showGridFooter = true;
-    $scope.Grid.Options.multiSelect = true;
+    $scope.Grid.Options.multiSelect = false;
     $scope.Grid.Options.modifierKeysToMultiSelect = true;
 
     $scope.Suppliers = [];/*{ "Id": null, "Name": "" }*/
@@ -193,7 +204,7 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
     };
 
     $scope.LoadData = function () {
-       $scope.GetSuppliers();
+        $scope.GetSuppliers();
         $scope.GetPosts();
         $scope.GetRoles();
     }
@@ -202,15 +213,16 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
    
     $scope.Grid.Options.columnDefs = [
         { headerTooltip: true, cellTooltip: false, enableCellEdit: false, width: 100, name: 'Id', field: 'Id', filter: { condition: uiGridCustomService.numberCondition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Email', field: 'Email', filter: { condition: uiGridCustomService.numberCondition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 200, name: 'Email', field: 'Email', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Имя', field: 'Name', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Фамилия', field: 'Surname', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Отчество', field: 'Patronymic', filter: { condition: uiGridCustomService.numberCondition } },
         { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'День рождения', field: 'Birthday', type: 'Date', cellFilter: formatConstants.FILTER_DATE, filter: { condition: uiGridCustomService.condition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Организация', field: 'SupplierName', filter: { condition: uiGridCustomService.conditionList } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Должность', field: 'PostName', filter: { condition: uiGridCustomService.conditionList } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Доступ к API', field: 'ApiEnabled', type: 'boolean', filter: { condition: uiGridCustomService.condition } },
-        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 100, name: 'Дата создания', field: 'CreatedDate', type: 'Date', cellFilter: formatConstants.FILTER_DATE_TIME, filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 200, name: 'Организация', field: 'SupplierName', filter: { condition: uiGridCustomService.conditionList } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 200, name: 'Должность', field: 'PostName', filter: { condition: uiGridCustomService.conditionList } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 50, name: 'Доступ к API', field: 'ApiEnabled', type: 'boolean', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 150, name: 'Роли', field: 'Roles', filter: { condition: uiGridCustomService.condition } },
+        { headerTooltip: true, cellTooltip: true, enableCellEdit: false, width: 120, name: 'Дата создания', field: 'CreatedDate', type: 'Date', cellFilter: formatConstants.FILTER_DATE_TIME, filter: { condition: uiGridCustomService.condition } },
     ];
  
     $scope.GetUsers = function () {
@@ -229,7 +241,6 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
             errorHandlerService.showResponseError(response);
         });
     }
-
 
     $scope.GetUsers();
 
@@ -250,10 +261,6 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
             }).then(function (response) {
                 var data = response.data;
                 if (data.Success) {
-                    //очищаем объект
-                    $scope.CreateUserForm = {};
-                    $scope.checkedRoles = []
-                    //
                     $scope.Grid.Options.data.push(data.Data[0]);
                 } else {
                     messageBoxService.showError(data.ErrorMessage);
@@ -274,95 +281,96 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
         opened: false
     };
 
-    $scope.Save = function () {
-        var array_upd = $scope.Grid.GetArrayModify();
-        if (array_upd.length > 0) {
-            $scope.dataLoading =
-                $http({
-                    method: 'POST',
-                    url: '/LPU/Save/',
-                    data: JSON.stringify({ lpumodels: array_upd })
-                }).then(function (response) {
-                    if (response.data.Success) {
-                        $scope.Grid.ClearModify();
-                        alert("Сохранил");
-                    }
-                }, function (response) {
-                    errorHandlerService.showResponseError(response);
-                });
-        }
-    };
+    $scope.UpdateUser = function () {
 
-    $scope.ToExcel = function () {
-        var array_upd = [];
+        var user = JSON.stringify($scope.CreateUserForm);
 
-        $scope.Grid.Options.data.forEach(function (item, i, arr) {
-            array_upd.push(item.LPUId);
-        });
-
-        $scope.dataLoading = $scope.objectsLoading = $http({
-            method: 'POST',
-            url: '/LPU/ToExcel/',
-            data: JSON.stringify({ ids: array_upd }),
-            headers: {
-                'Content-type': 'application/json'
-            },
-            responseType: 'arraybuffer'
-        }).then(function (response) {
-            var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            var fileName = 'lpu.xlsx';
-            saveAs(blob, fileName);
-        }, function () {
-            $scope.message = 'Unexpected error';
-            messageBoxService.showError($scope.message);
-        });
-    };
-
-    $scope.FromExcel = function (files) {
-
-        if (files && files.length) {
-            var formData = new FormData();
-            files.forEach(function (item, i, arr) {
-                formData.append('uploads', item);
-            });
+        if (user && user.length > 0) {
             $scope.dataLoading = $http({
                 method: 'POST',
-                url: '/LPU/FromExcel/',
-                data: formData,
-                headers: {
-                    'Content-Type': undefined
-                },
+                url: '/AlphaVision/UpdateUser/',
+                data: user
             }).then(function (response) {
-                $scope.Search();
+                var data = response.data;
+                if (data.Success) {
+                    var index = $scope.Grid.Options.data.map(function (item) {
+                        return item.Email
+                    }).indexOf($scope.CreateUserForm.Email);
+                    if (index !== -1) {
+                        $scope.Grid.Options.data[index] = data.Data[0];
+                    }
+                } else {
+                    messageBoxService.showError(data.ErrorMessage);
+                }
             }, function (response) {
-                $scope.Grid.Options.data = [];
-                messageBoxService.showError(JSON.stringify(response));
+                errorHandlerService.showResponseError(response);
             });
         }
-    };
+        else
+            alert('Вы не заполнили ни одного поля. Пользователь не будет обновлен!');
+    }
 
-    $scope.AddLPU = function () {
-        var json = JSON.stringify($scope.AddLPUForm);
-        if (json && json.length > 0) {
-            $scope.dataLoading =
-                $http({
-                    method: 'POST',
-                    url: '/LPU/AddLPU/',
-                    data: json
-                }).then(function (response) {
-                    if (response.data.Success) {
-                        $scope.Grid.ClearModify();
-                        // $scope.Search();
-                        alert("Добавил");
+    $scope.RevokeUser = function () {
 
+        if (!window.confirm("Вы уверены, что хотите отключить пользователя от API?")) {
+            return;
+        }
+        var user = $scope.Grid.getSelectedItem()[0];
+
+        if (user) {
+            $scope.dataLoading = $http({
+                method: 'POST',
+                url: '/AlphaVision/RevokeUser/',
+                data: { Email: user.Email}
+            }).then(function (response) {
+                var data = response.data;
+                if (data.Success) {
+                    var index = $scope.Grid.Options.data.map(function (item) {
+                        return item.Email
+                    }).indexOf($scope.CreateUserForm.Email);
+                    if (index !== -1) {
+                        $scope.Grid.Options.data[index] = data.Data[0];
                     }
-                }, function (response) {
-                    errorHandlerService.showResponseError(response);
-                });
-        } else alert('Вы не заполнили ни одного поля. ЛПУ не будет добавлено!');
+                } else {
+                    messageBoxService.showError(data.ErrorMessage);
+                }
+            }, function (response) {
+                errorHandlerService.showResponseError(response);
+            });
+        }
+        else
+            alert('Вы не заполнили ни одного поля. Пользователь не будет добавлен!');
+    }
 
-    };
 
+    $scope.LoadDataForModal = function (action) {
+        $scope.CreateUserForm = {};
+        $scope.checkedRoles = []
+        $scope.action = action;
+        if (action == 1) {
+            $scope.UserModalLabel = "Регистрация нового пользователя";
+        }
+        else {
+            $scope.UserModalLabel = "Изменить текущего пользователя";
+            var row = $scope.Grid.getSelectedItem()[0];
+            $scope.CreateUserForm.Email = row.Email;
+            $scope.CreateUserForm.Name = row.Name;
+            $scope.CreateUserForm.SurName = row.Surname;
+            $scope.CreateUserForm.Patronymic = row.Patronymic;
+            $scope.CreateUserForm.Birthday = row.Birthday ? new Date(row.Birthday) : null;
+            $scope.CreateUserForm.SupplierId = row.SupplierId;
+            $scope.CreateUserForm.PostId = row.PostId;
+            $scope.CreateUserForm.ApiEnabled = row.ApiEnabled;
+
+            $scope.checkedRoles = JSON.parse(JSON.stringify(row.Roles));
+            $scope.CreateUserForm.Roles = JSON.parse(JSON.stringify(row.Roles));
+
+            if (!$scope.registerForm.$valid && $scope.registerForm.$error.length == 0) {
+                $scope.registerForm.$valid = true;
+                $scope.registerForm.$invalid = false;
+            }
+        }
+    }
 
 
 }

@@ -72,6 +72,44 @@ namespace DataAggregator.Web.Controllers.LPU
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "AV_UserAdmin")]
+        public async Task<ActionResult> UpdateUser(RegisterUserModel user)
+        {
+            try
+            {
+                var tokendata = await AuthRequest(adminLogin, adminPassword);
+                var data = await UpdateUserRequest(user, tokendata.access_token);
+
+                var createduser = await GetUsersList(user.Email);
+
+                return ReturnData(createduser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "AV_UserAdmin")]
+        public async Task<ActionResult> RevokeUser(RegisterUserModel user)
+        {
+            try
+            {
+                var tokendata = await AuthRequest(adminLogin, adminPassword);
+                var data = await RevokeUserRequest(user, tokendata.access_token);
+
+                var createduser = await GetUsersList(user.Email);
+
+                return ReturnData(createduser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Authorize(Roles = "AV_UserAdmin,AV_Modify,AV_User")]
         public async Task<ActionResult> Suppliers()
@@ -143,6 +181,7 @@ namespace DataAggregator.Web.Controllers.LPU
                                  select new
                                  {
                                      user.Id,
+                                     user.Supplier,
                                      user.SupplierId,
                                      SupplierName = user.Supplier.Name,
                                      user.UserName,
@@ -150,11 +189,13 @@ namespace DataAggregator.Web.Controllers.LPU
                                      user.Name,
                                      user.Surname,
                                      user.Patronymic,
+                                     user.Birthday,
                                      user.Post,
+                                     user.PostId,
                                      PostName = user.Post.Name,
                                      user.ApiEnabled,
                                      user.CreatedDate,
-                                     RoleNames = (from userRole in user.UserRoles //[AspNetUserRoles]
+                                     Roles = (from userRole in user.UserRoles //[AspNetUserRoles]
                                                   join role in _context.AspNetRoles //[AspNetRoles]
                                                     on userRole.RoleId equals role.Id
                                                   select role.Name).ToList()
@@ -193,6 +234,40 @@ namespace DataAggregator.Web.Controllers.LPU
                     throw new Exception(authResponse.message);
                 else
                     throw new Exception("Не удалось создать пользователя");
+            }
+        }
+
+        private async Task<AuthenticationResponse> UpdateUserRequest(RegisterUserModel user, string token)
+        {
+            var authResponse = await CreateRequest("user/update", user, token);
+
+            if (authResponse != null && authResponse.status == ResponseStatus.Success)
+            {
+                return authResponse;
+            }
+            else
+            {
+                if (authResponse != null)
+                    throw new Exception(authResponse.message);
+                else
+                    throw new Exception("Не удалось обновить пользователя");
+            }
+        }
+
+        private async Task<AuthenticationResponse> RevokeUserRequest(RegisterUserModel user, string token)
+        {
+            var authResponse = await CreateRequest("user/revoke", user, token);
+
+            if (authResponse != null && authResponse.status == ResponseStatus.Success)
+            {
+                return authResponse;
+            }
+            else
+            {
+                if (authResponse != null)
+                    throw new Exception(authResponse.message);
+                else
+                    throw new Exception("Не удалось отключить пользователя от API");
             }
         }
 

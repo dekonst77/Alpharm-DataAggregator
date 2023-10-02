@@ -14,9 +14,15 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
 
 
-                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal">Регистрация нового пользователя</button>
-                        <!--<button class="btn btn-success btn-sm" type="button" ng-click="getKindList()" ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length == 1">Запретить доступ в API</button>-->
-
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal" 
+                                ng-click="LoadDataForModal(1)">Добавить</button>
+                        <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal" 
+                                ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1"
+                                ng-click="LoadDataForModal(2)">Изменить</button>
+                        <button class="btn btn-danger btn-sm" type="button" 
+                                ng-disabled="(Grid.selectedRows() == undefined || Grid.selectedRows().length < 1) || !(Grid.selectedRows()[0].ApiEnabled || false)"
+                                ng-click="RevokeUser()">
+                                Отключить</button>
                     </div>
 
                 </div>
@@ -40,7 +46,7 @@
                     <div class="row">
 
                         <div class="col-md-10 col-xs-10">
-                            <h4 class="form-label">Регистрация нового пользователя</h4>
+                            <h4 class="form-label">{{UserModalLabel}}</h4>
                         </div>
                         <div class="col-md-2 col-xs-2">
                             <button type="button" class="close right" data-dismiss="modal" aria-label="Close">
@@ -62,10 +68,12 @@
                                         {{"Нельзя оставить это поле пустым"}}
                                     </div>
                                     <div class="error form-hint"
+                                         
                                          data-ng-show="registerForm.email.$dirty && registerForm.email.$error.email"
                                          data-ng-cloak>{{"Указанный вами адрес электронной почты недействителен"}}</div>
-
-                                    <input type="email" class="form-control" name="email" placeholder="Email адрес"
+                                    <label ng-show="action==2">{{CreateUserForm.Email}}</label>
+                                    <input ng-show="action==1"
+                                           type="email" class="form-control" name="email" placeholder="Email адрес"
                                            data-ng-class="(registerForm.email.$dirty && registerForm.email.$invalid) ? 'error' : ''"
                                            data-ng-required="true" data-ng-model="CreateUserForm.Email">
                                 </div>
@@ -78,9 +86,9 @@
                                     <div class="form-hint">
                                         Чтобы соответствовать нашей политике защиты паролей, используйте по крайней мере одну букву, одну цифру, один специальный символ и семь символов
                                     </div>
-
+       
                                     <input type="text" class="form-control" data-ok-password-directive
-                                           name="password" placeholder="Пароль" data-ng-required="true"
+                                           name="password" placeholder="Пароль" data-ng-required="{{action==1 || (action==2 && CreateUserForm.Password.length > 0)}}"
                                            data-ng-class="(registerForm.password.$dirty && registerForm.confirm.$dirty
 			                            && registerForm.confirm.$valid &&
 			                            ( registerForm.password.$viewValue != registerForm.confirm.$viewValue ) ) ? 'error' : ''"
@@ -96,7 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="action==1 || (action==2 && CreateUserForm.Password.length > 0)">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="error form-hint"
@@ -111,7 +119,7 @@
                                     </div>
 
                                     <div class="error form-hint" data-ng-show="
-			                    ( registerForm.password.$dirty && registerForm.password.$invalid && !(registerForm.password.$error.required || false))" data-ng-cloak>
+			                            ( registerForm.password.$dirty && registerForm.password.$invalid && !(registerForm.password.$error.required || false))" data-ng-cloak>
                                         {{"Несоответствие пароля"}}
                                     </div>
 
@@ -218,6 +226,7 @@
                             <div class="row">
 
                                 <div class="col-md-12">
+                                    <label>Роли</label>
                                     <p class="input-group">
                                         <label ng-repeat="role in Roles" style="padding-right:5px;">
                                             <input type='checkbox'
@@ -234,63 +243,18 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" ng-click="CreateUser()"
+                        <button ng-if="action == 1" type="button" class="btn btn-success" ng-click="CreateUser()"
                                 data-ng-disabled="!(!registerForm.$invalid && checkedRoles.length > 0) || ( registerForm.confirm.$dirty && registerForm.confirm.$valid && !registerForm.confirm.$invalid)
                                     && ( registerForm.password.$modelValue != registerForm.confirm.$modelValue )"
                                 data-translate="BUTTONS.ADD" data-dismiss="modal"></button>
+                        <!--<span>registerForm.$invalid: {{registerForm.$invalid}}</span>-->
+                        <button ng-if="action == 2" type="button" class="btn btn-warning" ng-click="UpdateUser()"
+                                data-ng-disabled="!(!registerForm.$invalid && checkedRoles.length > 0)" data-translate="BUTTONS.CHANGE" data-dismiss="modal"></button>
                         <button type="button" class="btn btn-secondary" data-translate="BUTTONS.CLOSE" data-dismiss="modal"></button>
                     </div>
 
                 </form>
 
-                <!--<form name="addForm">
-        <div class="modal-body">
-            <br />
-            <div class="container-fluid" style="height: 400px;" title="">
-                <div class="row">
-                    <div class="col-md-4 padding3">
-                        <label>Email</label>
-                        <input type="text" ng-model="CreateUserForm.Email" class="form-control" placeholder="Email пользователя" value="" required style="width:100%">
-                        <span class="text-error" data-ng-show="addForm.Email.$dirty && addForm.Email.$error.required">Email is required</span>
-                    </div>
-
-
-                    <div class="col-md-4 padding3">
-                        <label>Пароль</label>
-                        <input type="text" ng-model="CreateUserForm.Password" name="uPassword" class="form-control" required placeholder='Password' ng-minlength="6" ng-maxlength="15" title="6 to 15 characters" />
-                        <span class="error" ng-show="addForm.uPassword.$dirty && addForm.uPassword.$error.minlength">Too short</span>
-                        <span ng-show="addForm.uPassword.$dirty && addForm.uPassword.$error.required">Password required.</span><br />
-                    </div>
-                    <div class="col-md-4 padding3">
-                        <input type="text" ng-model="CreateUserForm.ConfirmPassword" name="ucPassword" class="form-control" required placeholder='Confirm Password' ng-minlength="6" ng-maxlength="15" title="6 to 15 characters" />
-                        <span class="error" ng-show="addForm.ucPassword.$dirty && addForm.ucPassword.$error.minlength">Too short</span>
-                        <span ng-show="addForm.ucPassword.$dirty && addForm.ucPassword.$error.required">Retype password.</span>
-                        <span ng-show="(addForm.uPassword.$dirty && addForm.ucPassword.$dirty) && (CreateUserForm.Password != CreateUserForm.ConfirmPassword)">
-                            Password mismatched
-                        </span>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 padding3">
-                        <label>Имя</label>
-                        <input type="text" ng-model="CreateUserForm.Name" class="form-control" placeholder="Имя" value="" style="width:100%">
-                    </div>
-                    <div class="col-md-4 padding3">
-                        <label>Фамилия</label>
-                        <input type="text" ng-model="CreateUserForm.SurName" class="form-control" placeholder="Фамилия" value="" style="width:100%">
-                    </div>
-                    <div class="col-md-4 padding3">
-                        <label>Отчество</label>
-                        <input type="text" ng-model="CreateUserForm.Patronymic" class="form-control" placeholder="Отчество" value="" style="width:100%">
-                    </div>
-                </div>
-                
-
-            </div>
-        </div>
-
-    </form>-->
             </div>
         </div>
     </div>
