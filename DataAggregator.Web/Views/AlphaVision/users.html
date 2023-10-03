@@ -1,0 +1,275 @@
+﻿<div ng-controller="AlphaVisionController" cg-busy="dataLoading" ng-cloak class="auto-grid-parent base" ng-style="{'padding-top': topPartSize.height}">
+    <script type="text/ng-template" id="_icon.html">
+        <div>
+            <img src="/Content/Icons/IsOther.png" class="img-rounded" />
+        </div>
+    </script>
+
+    <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
+        <div class="panel-heading padding1">
+            <div class="row">
+
+                <div class="col-md-3 padding3">
+
+                    <div class="btn-group" role="group" aria-label="Basic example">
+
+
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal" 
+                                ng-click="LoadDataForModal(1)">Добавить</button>
+                        <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal" 
+                                ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1"
+                                ng-click="LoadDataForModal(2)">Изменить</button>
+                        <button class="btn btn-danger btn-sm" type="button" 
+                                ng-disabled="(Grid.selectedRows() == undefined || Grid.selectedRows().length < 1) || !(Grid.selectedRows()[0].ApiEnabled || false)"
+                                ng-click="RevokeUser()">
+                                Отключить</button>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 padding3">
+                   
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="grid-block" class="auto-item-panel">
+        <ui-grid-control options="Grid.Options" class="ui-grid-enable-content-selection grid-block grid-block_sm"></ui-grid-control>
+    </div>
+
+    <div class="modal" id="CreateUserModal" tabindex="-1" role="dialog" aria-labelledby="CreateUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered" role="document" style="min-height:400px; min-width:30%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+
+                        <div class="col-md-10 col-xs-10">
+                            <h4 class="form-label">{{UserModalLabel}}</h4>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            <button type="button" class="close right" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+               
+                <form name="registerForm" role="form">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="error form-hint"
+                                         data-ng-show="registerForm.email.$dirty && registerForm.email.$error.required"
+                                         data-ng-cloak>
+                                        {{"Нельзя оставить это поле пустым"}}
+                                    </div>
+                                    <div class="error form-hint"
+                                         
+                                         data-ng-show="registerForm.email.$dirty && registerForm.email.$error.email"
+                                         data-ng-cloak>{{"Указанный вами адрес электронной почты недействителен"}}</div>
+                                    <label ng-show="action==2">{{CreateUserForm.Email}}</label>
+                                    <input ng-show="action==1"
+                                           type="email" class="form-control" name="email" placeholder="Email адрес"
+                                           data-ng-class="(registerForm.email.$dirty && registerForm.email.$invalid) ? 'error' : ''"
+                                           data-ng-required="true" data-ng-model="CreateUserForm.Email">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-hint">
+                                        Чтобы соответствовать нашей политике защиты паролей, используйте по крайней мере одну букву, одну цифру, один специальный символ и семь символов
+                                    </div>
+       
+                                    <input type="text" class="form-control" data-ok-password-directive
+                                           name="password" placeholder="Пароль" data-ng-required="{{action==1 || (action==2 && CreateUserForm.Password.length > 0)}}"
+                                           data-ng-class="(registerForm.password.$dirty && registerForm.confirm.$dirty
+			                            && registerForm.confirm.$valid &&
+			                            ( registerForm.password.$viewValue != registerForm.confirm.$viewValue ) ) ? 'error' : ''"
+                                           data-ng-model="CreateUserForm.Password">
+
+                                    <div class="label password-count"
+                                         data-ng-class="passwordModel.length > 7 ? 'label-success' : 'label-danger'"
+                                         data-ng-cloak>{{ passwordModel | passwordCountFilter }}</div>
+
+                                    <div class="strength-meter">
+                                        <div class="strength-meter-fill" data-strength="{{myModulePasswordMeter}}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="action==1 || (action==2 && CreateUserForm.Password.length > 0)">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="error form-hint"
+                                         data-ng-show="registerForm.confirm.$dirty && !registerForm.confirm.$empty && registerForm.confirm.$error.required"
+                                         data-ng-cloak>
+                                        {{"Нельзя оставить это поле пустым"}}
+                                    </div>
+                                    <div class="error form-hint"
+                                         data-ng-show="registerForm.confirm.$dirty && registerForm.confirm.$invalid && !registerForm.confirm.$error.required"
+                                         data-ng-cloak>
+                                        {{"Эти пароли не совпадают. Пробовать снова?"}}
+                                    </div>
+
+                                    <div class="error form-hint" data-ng-show="
+			                            ( registerForm.password.$dirty && registerForm.password.$invalid && !(registerForm.password.$error.required || false))" data-ng-cloak>
+                                        {{"Несоответствие пароля"}}
+                                    </div>
+
+                                    <input type="text" class="form-control" name="confirm"
+                                           placeholder="Подтверждение пароля"
+                                           data-ng-required="true" data-ng-model="CreateUserForm.confirm"
+                                           data-ng-class="(registerForm.confirm.$dirty &&
+			                            ( registerForm.confirm.$invalid ||
+			                            ( registerForm.password.$modelValue != registerForm.confirm.$modelValue ) ) ) ? 'error' : ''"
+                                           data-compare-to="registerForm.password">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="error form-hint"
+                                         data-ng-show="registerForm.firstname.$dirty && registerForm.firstname.$error.required"
+                                         data-ng-cloak>
+                                        {{"Это поле является обзательным"}}
+                                    </div>
+                                    <input type="text" class="form-control" name="Name" placeholder="Имя"
+                                           data-ng-class="(registerForm.Name.$dirty && registerForm.Name.$invalid) ? 'error' : ''"
+                                           data-ng-required="true" data-ng-model="CreateUserForm.Name">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="error form-hint"
+                                         data-ng-show="registerForm.lastname.$dirty && registerForm.lastname.$error.required"
+                                         data-ng-cloak>
+                                        {{"Это поле является обзательным"}}
+                                    </div>
+                                    <input type="text" class="form-control" name="SurName" placeholder="Фамилия"
+                                           data-ng-class="(registerForm.SurName.$dirty && registerForm.SurName.$invalid) ? 'error' : ''"
+                                           data-ng-required="true" data-ng-model="CreateUserForm.SurName">
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="error form-hint"
+                                         data-ng-show="registerForm.lastname.$dirty && registerForm.lastname.$error.required"
+                                         data-ng-cloak>
+                                        {{"Это поле является обзательным"}}
+                                    </div>
+                                    <input type="text" class="form-control" name="Patronymic" placeholder="Отчество"
+                                           data-ng-class="(registerForm.Patronymic.$dirty && registerForm.Patronymic.$invalid) ? 'error' : ''"
+                                           data-ng-required="true" data-ng-model="CreateUserForm.Patronymic">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <label>Организация</label>
+                                    <select name="SupplierId"
+                                            class="form-control"
+                                            ng-options="item.Id as item.Name for item in Suppliers"
+                                            ng-required="true"
+                                            ng-model="CreateUserForm.SupplierId"></select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Должность</label>
+                                    <select name="PostId"
+                                            class="form-control"
+                                            ng-options="item.Id as item.Name for item in Posts"
+                                            ng-model="CreateUserForm.PostId"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <p class="input-group">
+                                        <input id="Birthday"
+                                               type="text"
+                                               class="form-control"
+                                               readonly
+                                               uib-datepicker-popup="dd.MM.yyyy"
+                                               ng-model="CreateUserForm.Birthday"
+                                               is-open="popupBirthday.opened"
+                                               placeholder="Дата рождения"
+                                               datetimepicker-neutral-timezone
+                                               close-text="Закрыть"
+                                               datepicker-options="{minMode: 'day'}"
+                                               datepicker-mode="'day'" />
+                                        <span class="input-group-btn" style="vertical-align: bottom;">
+                                            <button type="button" class="btn btn-default" ng-click="openPopupBirthday()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p class="input-group">
+                                        <label>Доступ к API</label>
+                                        <input type="checkbox" style="margin-left:5px;" ng-model="CreateUserForm.ApiEnabled" />
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <label>Роли</label>
+                                    <p class="input-group">
+                                        <label ng-repeat="role in Roles" style="padding-right:5px;">
+                                            <input type='checkbox'
+                                                   name="Roles"
+                                                   data-ng-class="checkedRoles.length == 0 ? 'ckeckbox-danger' : ''"
+                                                   ng-checked="checkedRoles.indexOf(role) != -1"
+                                                   ng-click="toggleCheck(role)">
+                                            {{role}}
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button ng-if="action == 1" type="button" class="btn btn-success" ng-click="CreateUser()"
+                                data-ng-disabled="!(!registerForm.$invalid && checkedRoles.length > 0) || ( registerForm.confirm.$dirty && registerForm.confirm.$valid && !registerForm.confirm.$invalid)
+                                    && ( registerForm.password.$modelValue != registerForm.confirm.$modelValue )"
+                                data-translate="BUTTONS.ADD" data-dismiss="modal"></button>
+                        <!--<span>registerForm.$invalid: {{registerForm.$invalid}}</span>-->
+                        <button ng-if="action == 2" type="button" class="btn btn-warning" ng-click="UpdateUser()"
+                                data-ng-disabled="!(!registerForm.$invalid && checkedRoles.length > 0)" data-translate="BUTTONS.CHANGE" data-dismiss="modal"></button>
+                        <button type="button" class="btn btn-secondary" data-translate="BUTTONS.CLOSE" data-dismiss="modal"></button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

@@ -711,13 +711,33 @@ namespace DataAggregator.Domain.DAL
             }
 
         }
+
         public IEnumerable<ClassifierInfo_Report> ClassifierInfo_GetReport(bool IsBrick, bool isOther)
         {
             Database.CommandTimeout = 0;
-            var ret = Database.SqlQuery<ClassifierInfo_Report>("dbo.ClassifierInfo_GetReport @IsBrick, @isOther",
+
+            return Database.SqlQuery<ClassifierInfo_Report>("dbo.ClassifierInfo_GetReport @IsBrick, @isOther, @isExcelExport",
                 new SqlParameter { ParameterName = "@IsBrick", SqlDbType = SqlDbType.Bit, Value = IsBrick },
-                new SqlParameter { ParameterName = "@isOther", SqlDbType = SqlDbType.Bit, Value = isOther });
-            return ret;
+                new SqlParameter { ParameterName = "@isOther", SqlDbType = SqlDbType.Bit, Value = isOther },
+                new SqlParameter { ParameterName = "@isExcelExport", SqlDbType = SqlDbType.Bit, Value = false }
+                );
+        }
+
+        /// <summary>
+        /// отчет "Дробить по МНН" в блоке бессмертные
+        /// </summary>
+        /// <param name="IsBrick"></param>
+        /// <param name="isOther"></param>
+        /// <returns></returns>
+        public IEnumerable<ClassifierInfoExcel_Report> ClassifierInfoExcel_GetReport(bool IsBrick, bool isOther)
+        {
+            Database.CommandTimeout = 0;
+
+            return Database.SqlQuery<ClassifierInfoExcel_Report>("dbo.ClassifierInfo_GetReport @IsBrick, @isOther, @isExcelExport",
+                new SqlParameter { ParameterName = "@IsBrick", SqlDbType = SqlDbType.Bit, Value = IsBrick },
+                new SqlParameter { ParameterName = "@isOther", SqlDbType = SqlDbType.Bit, Value = isOther },
+                new SqlParameter { ParameterName = "@isExcelExport", SqlDbType = SqlDbType.Bit, Value = true }
+            );
         }
 
         public void GetDrugs(string filter, Guid userId, int Count)

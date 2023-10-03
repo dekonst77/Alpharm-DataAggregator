@@ -170,7 +170,10 @@
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
@@ -271,6 +274,7 @@
     <Content Include="Content\Icons\shit.png" />
     <Content Include="Content\GoodsSystematization\GoodsSystematization.scss" />
     <Content Include="Content\loading-bar.min.css" />
+    <None Include="Content\AlphaVision\AlphaVision.scss" />
     <Content Include="Content\LPU\LPU.css" />
     <Content Include="Content\Retail\RetailReport.css" />
     <Content Include="Content\select.css" />
@@ -1800,6 +1804,7 @@
     <Content Include="Scripts\lib\ui-grid\ui-grid.module.js" />
     <Content Include="Scripts\lib\ui-grid\ui-grid.ru-RU.js" />
     <Content Include="Scripts\loading-bar.min.js" />
+    <Content Include="Scripts\AlphaVision\AlphaVisionController.js" />
     <Content Include="Scripts\LPU\LPULicensesController.js" />
     <Content Include="Scripts\LPU\LPUMergeController.js" />
     <Content Include="Scripts\LPU\LPUPointController.js" />
@@ -2238,6 +2243,7 @@
     <Content Include="Views\GS\SummsPeriod.html" />
     <Content Include="Views\GS\SummsPeriod_context_menu.html" />
     <Content Include="Views\GS\SummsRegion.html" />
+    <Content Include="Views\AlphaVision\users.html" />
     <Content Include="Views\LPU\LpuLicenses.html" />
     <Content Include="Views\LPU\lpuPoint.html" />
     <Content Include="Views\LPU\lpu_point_context_menu.html" />
@@ -2343,6 +2349,7 @@
     <Compile Include="App_Start\BundleConfig\AdditionalComponentsBundles.cs" />
     <Compile Include="App_Start\BundleConfig\ClientsBundles.cs" />
     <Compile Include="App_Start\BundleConfig\DistrRepBundles.cs" />
+    <Compile Include="App_Start\BundleConfig\AlphaVisionBundles.cs" />
     <Compile Include="App_Start\BundleConfig\LPUBundles.cs" />
     <Compile Include="App_Start\BundleConfig\MainBundles.cs" />
     <Compile Include="App_Start\BundleConfig\BundleConfig.cs" />
@@ -2398,6 +2405,7 @@
     <Compile Include="Controllers\GovernmentPurchases\Reports\ExecutionTerminatedContractReportController.cs" />
     <Compile Include="Controllers\GovernmentPurchases\Reports\ReportsController.cs" />
     <Compile Include="Controllers\GS\GSController.cs" />
+    <Compile Include="Controllers\AlphaVision\AlphaVisionController.cs" />
     <Compile Include="Controllers\LPU\LPUController.cs" />
     <Compile Include="Controllers\LPU\LPUDictionariesController.cs" />
     <Compile Include="Controllers\LPU\LPULicensesController.cs" />

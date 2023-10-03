@@ -58,4 +58,44 @@ namespace DataAggregator.Domain.Model.DrugClassifier.Classifier
 
         public string OperatorComments { get; set; }
     }
+
+    public class ClassifierInfoExcel_Report
+    {
+        [Key]
+        [Display(Name = "Classifier Id")]
+        public long Id { get; set; }
+
+        [Display(Name = "Certificate Number")]
+        public string RegistrationCertificateNumber { get; set; }
+
+        [Display(Name = "дробить по МНН")]        
+        public string ToSplitMnn { get; set; }
+
+        [Display(Name = "Проверено дробить по МНН")]
+        public string ToSplitMnn_Signed { get; set; }
+
+        [Display(Name = "Trade Name")]
+        public string TradeName { get; set; }
+
+        [Display(Name = "Drug Description")]
+        public string DrugDescription { get; set; }
+
+        [Display(Name = "INN Group Id")]
+        public long? INNGroupId { get; set; }
+
+        [Display(Name = "INNGroup")]
+        public string INNGroup { get; set; }
+
+        [Display(Name = "Drug Id")]
+        public int DrugId { get; set; }
+
+        [Display(Name = "Owner Trade Mark Id")]
+        public string OwnerTradeMark { get; set; }
+
+        public string Packer { get; set; }
+        public string Used { get; set; }
+
+        [Display(Name = "Is Other")]
+        public string IsOther { get; set; }     
+    }
 }

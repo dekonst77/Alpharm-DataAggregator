@@ -365,6 +365,13 @@
                         <li in-roles="LPU_view"><a ng-href="/#/LPU/LPULicenses" class="padding_menu_item"><span class="glyphicon" style="padding-right:10px;"></span>ЛПУ Лицензии</a></li>
                         <li in-roles="GS_View"><a ng-href="/#/GS/Organization_without_INN" class="padding_menu_item"><span class="glyphicon glyphicon-phone-alt" style="padding-right:10px;"></span>Организации без ИНН</a></li>
 
+                        <li in-roles="AV_UserAdmin,AV_Modify,AV_View" class="dropdown-submenu" ng-click="$event.stopPropagation()">
+                            <a tabindex="-1" data-translate="Альфавижн"></a>
+                            <ul class="dropdown-menu">
+                                <li in-roles="AV_UserAdmin"><a ng-href="/#/AlphaVision/Users">Пользователи</a></li>
+                            </ul>
+                        </li>
+
                         <!--разделитель-->
                         <li in-roles="GS_View" class="divider"></li>
 
