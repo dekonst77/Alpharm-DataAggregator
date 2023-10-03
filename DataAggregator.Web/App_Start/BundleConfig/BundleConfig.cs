@@ -25,10 +25,15 @@ namespace DataAggregator.Web
             ClientsBundles.Register(bundles);
             DistrRepBundles.Register(bundles);
 
+            //Альфавижн
+            AlphaVisionBundles.Register(bundles);
+
             //ЛПУ
             LPUBundles.Register(bundles);
 
             ADD_GS(bundles);
+
+
 
             bundles.Add(new ComplexScriptBundle("~/bundles/Projects")
                 .Include("~/Scripts/Management/ProjectController.js"));
