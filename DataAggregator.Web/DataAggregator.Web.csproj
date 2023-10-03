@@ -274,7 +274,7 @@
     <Content Include="Content\Icons\shit.png" />
     <Content Include="Content\GoodsSystematization\GoodsSystematization.scss" />
     <Content Include="Content\loading-bar.min.css" />
-    <None Include="Content\AlphaVision\AlphaVision.scss" />
+    <Content Include="Content\AlphaVision\AlphaVision.scss" />
     <Content Include="Content\LPU\LPU.css" />
     <Content Include="Content\Retail\RetailReport.css" />
     <Content Include="Content\select.css" />
