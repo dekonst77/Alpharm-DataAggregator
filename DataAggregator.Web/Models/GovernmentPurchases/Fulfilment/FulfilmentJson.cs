@@ -56,6 +56,7 @@ namespace DataAggregator.Web.Models.GovernmentPurchases.Fulfilment
         public long? oClassifierId { get; set; }
         public decimal? oObjectCalculatedAmount { get; set; }
         public decimal? oObjectCalculatedPrice { get; set; }
+        public decimal? oObjectCalculatedSum { get; set; }
         public string UserName { get; set; }
     }
 }

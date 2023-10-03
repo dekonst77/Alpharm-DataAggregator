@@ -45,6 +45,8 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
                         from x in gj.DefaultIfEmpty()
                         join u in _context.User on x.UserGuid equals u.Id into uj
                         from us in uj.DefaultIfEmpty()
+                        join c in _context.ExternalView_FULL on x.ClassifierId equals c.ClassifierId into cj
+                        from uc in cj.DefaultIfEmpty()
                         select new FulfilmentJson()
                         {
                             Type = (v.Ind == 0) ? "Контракт" : "Исполнение",
@@ -62,15 +64,19 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
                             Price = v.Price,
                             Sum = v.Sum,
                             ClassifierId = x == null ? v.ClassifierId : (x.ClassifierId == null ? v.ClassifierId : x.ClassifierId),
-                            INNGroup = v.INNGroup,
-                            TradeName = v.TradeName,
-                            DrugDescription = v.DrugDescription,
-                            Corporation = v.Corporation,
-                            Packer = v.Packer,
+
+                            INNGroup = uc == null ? v.INNGroup : uc.INNGroup,
+                            TradeName = uc == null ? v.TradeName : uc.TradeName,
+                            DrugDescription = uc == null ? v.DrugDescription : uc.DrugDescription,
+                            Corporation = uc == null ? v.Corporation : uc.Corporation,
+                            Packer = uc == null ? v.Packer : uc.Packer,
+
                             ObjectCalculatedAmount = x == null ? v.ObjectCalculatedAmount : (x.ObjectCalculatedAmount == null ? v.ObjectCalculatedAmount : x.ObjectCalculatedAmount),
                             ObjectCalculatedPrice = x == null ? v.ObjectCalculatedPrice : (x.ObjectCalculatedPrice == null ? v.ObjectCalculatedPrice : x.ObjectCalculatedPrice),
-                            ObjectCalculatedSum = v.ObjectCalculatedSum,
+                            ObjectCalculatedSum = x == null ? v.ObjectCalculatedSum : (x.ObjectCalculatedAmount == null ? v.ObjectCalculatedAmount : x.ObjectCalculatedAmount) 
+                                    * (x.ObjectCalculatedPrice == null ? v.ObjectCalculatedPrice : x.ObjectCalculatedPrice),
                             Seria = v.Seria,
+
                             INNGroupIsp = v.INNGroupIsp,
                             TradeNameIsp = v.TradeNameIsp,
                             DrugDescriptionIsp = v.DrugDescriptionIsp,
@@ -87,7 +93,8 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
 
                             oClassifierId = v.ClassifierId,
                             oObjectCalculatedAmount = v.ObjectCalculatedAmount,
-                            oObjectCalculatedPrice = v.ObjectCalculatedPrice
+                            oObjectCalculatedPrice = v.ObjectCalculatedPrice,
+                            oObjectCalculatedSum = v.ObjectCalculatedSum,
                         };
 
             return query
@@ -232,30 +239,35 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
         public ActionResult CheсkClassifierId(string ClassifierId)
         {
             string ret = "";
-            string error = "0";
-
+            List<ParamClassifierLoad> result = null;
+            bool isOk = true;
             try
             {
                 long cId = long.Parse(ClassifierId);                
-                var query = @"SELECT EV.TradeName FROM [DrugClassifier].[Classifier].[ExternalView_FULL] AS EV WHERE EV.ClassifierId = @ClassifierId";
+                var query = @"SELECT EV.ClassifierId, EV.INNGroup, EV.TradeName, EV.DrugDescription, EV.Corporation, EV.Packer FROM [DrugClassifier].[Classifier].[ExternalView_FULL] AS EV WHERE EV.ClassifierId = @ClassifierId";
 
-                var result = _context.Database.SqlQuery<string>(
+                result = _context.Database.SqlQuery<ParamClassifierLoad>(
                         query
                         , new SqlParameter { ParameterName = "@ClassifierId", SqlDbType = SqlDbType.BigInt, Value = cId }
                         ).ToList();
+
                 if ( result == null || result.Count == 0 || result[0] == null) 
-                { ret = "Нет "+ ClassifierId +" в классификаторе!"; error = "1"; }
+                {   ret = "Нет "+ ClassifierId +" в классификаторе!";
+                    ViewData["Ret"] = new ParamClassifierLoad();
+                    isOk = false;
+                }
                 else 
-                { ret = "ТН: "+result[0]; }
+                {   ret = "ТН: "+result[0].TradeName;
+                    ViewData["Ret"] = result[0];
+                }
             }
             catch (Exception e)
             {
                 ret = "Ошибка доступа";
-                error = "2";
+                isOk = false;
             }
-            ViewData["Ret"] = ret;
 
-            var Data = new JsonResultData() { Data = ViewData, status = error, Success = true };
+            var Data = new JsonResultData() { Data = ViewData, status = ret, Success = isOk };
 
             JsonNetResult jsonNetResult = new JsonNetResult
             {

@@ -196,6 +196,8 @@ namespace DataAggregator.Domain.DAL
 
         public DbSet<ContractAndStageObjectGrls_View> ContractAndStageObjectGrls_View { get; set; }
 
+        public DbSet<ExternalView_FULL> ExternalView_FULL { get; set; }
+
         #region Report
         public DbSet<ExecutionTerminatedContractView> ExecutionTerminatedContractView { get; set; }
         #endregion Report

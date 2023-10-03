@@ -88,7 +88,7 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
     $scope.fulfilmentGrid.Options.flatEntityAccess = true;
     $scope.fulfilmentGrid.Options.enableGridMenu = true;
 
-
+    $scope.fulfilmentGrid.Options.rowTemplate = '<div ng-class="{\'modify\' : row.entity[\'@modify\']==true,\'purchase\' : row.entity.Type == \'Контракт\' && !row.isSelected,\'purchaseSelected\' : row.entity.Type == \'Контракт\' && row.isSelected,\'contract\':row.entity.Type == \'Исполнение\' && !row.isSelected,\'contractSelected\':row.entity.Type == \'Исполнение\' && row.isSelected}"><div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name"  class="ui-grid-cell" ui-grid-cell></div></div>';
 
     $scope.fulfilmentGrid.Options.columnDefs = [
         { name: 'Тип', field: 'Type', filter: { condition: uiGridCustomService.conditionSpace } },
@@ -96,8 +96,12 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
         { name: 'Номер контракта', field: 'ReestrNumber', filter: { condition: uiGridCustomService.conditionSpace } },
 
         { name: 'Сумма контракта', field: 'ContractSum', enableHiding: false, filter: { condition: uiGridCustomService.numberCondition }, type: 'number', cellFilter: formatConstants.FILTER_PRICE },
-
         { name: 'Фактически оплачено', field: 'ActuallyPaid', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
+        {
+            name: 'Разница по оплате', filter: { condition: uiGridCustomService.conditionSpace }, type: 'number', enableCellEdit: true, cellFilter: formatConstants.FILTER_PRICE, 
+            cellTemplate: '<div class="ui-grid-cell-contents">{{grid.appScope.theRound(row.entity.ContractSum - row.entity.ActuallyPaid)}}</div>'
+        },
+
         { name: 'Сумма исполнения', field: 'SumIsp', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
         { name: 'Id об', field: 'ObjectId', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true },
         { name: 'Имя об', field: 'Name', filter: { condition: uiGridCustomService.conditionSpace } },
@@ -120,17 +124,26 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
             name: 'Кол-во расч', field: 'ObjectCalculatedAmount', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE, enableCellEdit: true, cellEditableCondition: function ($scope) { return $scope.row.entity.Type == 'Исполнение' },
             cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedAmount, row.entity.oObjectCalculatedAmount)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedAmount, row.entity.oObjectCalculatedAmount)"></span></div>' },
         {
-            name: 'Цена расч', field: 'ObjectCalculatedPrice', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE, enableCellEdit: true, cellEditableCondition: function ($scope) { return $scope.row.entity.Type == 'Исполнение' },
+            name: 'Цена расч', field: 'ObjectCalculatedPrice', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE, enableCellEdit: false, cellEditableCondition: function ($scope) { return $scope.row.entity.Type == 'Исполнение' },
             cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedPrice, row.entity.oObjectCalculatedPrice)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedPrice, row.entity.oObjectCalculatedPrice)"></span></div>' },
 
         {
             name: 'Сумма расч', field: 'ObjectCalculatedSum', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE,
-            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChangingSumm(row.entity)}}"><span ng-bind-html="grid.appScope.formatTheContentSumm(row.entity)"></span></div>' },
+            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedSum, row.entity.oObjectCalculatedSum)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedSum, row.entity.oObjectCalculatedSum)"></span></div>' },
 
         { name: 'Серия ЛП', field: 'Seria', filter: { condition: uiGridCustomService.conditionSpace } },
-        { name: 'МНН_Исполнение', field: 'INNGroupIsp', filter: { condition: uiGridCustomService.conditionSpace } },
-        { name: 'ТН_Исполнение', field: 'TradeNameIsp', filter: { condition: uiGridCustomService.conditionSpace } },
-        { name: 'Описание_Исполнение', field: 'DrugDescriptionIsp', filter: { condition: uiGridCustomService.conditionSpace } },
+
+        {
+            name: 'МНН_Исполнение', field: 'INNGroupIsp', filter: { condition: uiGridCustomService.conditionSpace },
+            cellTemplate: '<div class="ui-grid-cell-contents"><span ng-bind-html="grid.appScope.formatToExecutive(row.entity, row.entity.INNGroup, row.entity.INNGroupIsp)"></span></div>'
+        },
+        {
+            name: 'ТН_Исполнение', field: 'TradeNameIsp', filter: { condition: uiGridCustomService.conditionSpace },
+            cellTemplate: '<div class="ui-grid-cell-contents"><span ng-bind-html="grid.appScope.formatToExecutive(row.entity, row.entity.TradeName, row.entity.TradeNameIsp)"></span></div>' },
+        {
+            name: 'Описание_Исполнение', field: 'DrugDescriptionIsp', filter: { condition: uiGridCustomService.conditionSpace },
+            cellTemplate: '<div class="ui-grid-cell-contents"><span ng-bind-html="grid.appScope.formatToExecutive(row.entity, row.entity.DrugDescription, row.entity.DrugDescriptionIsp)"></span></div>' },
+
         { name: 'Provisor Action', field: 'ProvisorAction', filter: { condition: uiGridCustomService.conditionSpace } },
 
         { name: 'contractQuantityId', field: 'contractQuantityId', type: 'number', visible: false },
@@ -143,7 +156,8 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
         { name: 'uStatus', field: 'uStatus', type: 'number', visible: false, nullable: true },
         { name: 'oClassifierId', field: 'oClassifierId', type: 'number', visible: false, nullable: true },
         { name: 'oObjectCalculatedAmount', field: 'oObjectCalculatedAmount', type: 'number', visible: false, nullable: true },
-        { name: 'oObjectCalculatedPrice', field: 'oObjectCalculatedPrice', type: 'number', visible: false, nullable: true }
+        { name: 'oObjectCalculatedPrice', field: 'oObjectCalculatedPrice', type: 'number', visible: false, nullable: true },
+        { name: 'oObjectCalculatedSum', field: 'oObjectCalculatedSum', type: 'number', visible: false, nullable: true }
     ];
 
     $scope.formatChanging = function (entity, New, Old) {
@@ -156,23 +170,32 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
         if (entity.Type != 'Исполнение' || New === Old) return New;
         return '<strong><em>' + New + '</em></strong>';
     };
-    $scope.formatChangingSumm = function (entity) {
-        if ((entity.Type != 'Исполнение')
-            || (entity.ObjectCalculatedAmount === entity.oObjectCalculatedAmount && entity.ObjectCalculatedPrice === entity.oObjectCalculatedPrice)
-            || (entity.ObjectCalculatedSum === entity.ObjectCalculatedAmount * entity.ObjectCalculatedPrice)
-        )
-            return '';
-        var date = new Date(entity.uEditDate);
-        return 'Оригинальное значение: ' + entity.ObjectCalculatedSum + '; Изменение: ' + entity.UserName + ' ' + date.toLocaleString("ru");
+    //$scope.formatChangingSumm = function (entity) {
+    //    if ((entity.Type != 'Исполнение')
+    //        || (entity.ObjectCalculatedAmount === entity.oObjectCalculatedAmount && entity.ObjectCalculatedPrice === entity.oObjectCalculatedPrice)
+    //        || (entity.oObjectCalculatedSum === entity.ObjectCalculatedAmount * entity.ObjectCalculatedPrice)
+    //    )
+    //        return '';
+    //    var date = new Date(entity.uEditDate);
+    //    return 'Оригинальное значение: ' + entity.oObjectCalculatedSum + '; Изменение: ' + entity.UserName + ' ' + date.toLocaleString("ru");
+    //};
+    //$scope.formatTheContentSumm = function (entity) {
+    //    if ((entity.Type != 'Исполнение')
+    //        || (entity.ObjectCalculatedAmount === entity.oObjectCalculatedAmount && entity.ObjectCalculatedPrice === entity.oObjectCalculatedPrice)
+    //        || (entity.ObjectCalculatedSum === entity.ObjectCalculatedAmount * entity.ObjectCalculatedPrice)
+    //    )
+    //        return entity.ObjectCalculatedSum;
+    //    return '<strong><em>' + entity.ObjectCalculatedAmount * entity.ObjectCalculatedPrice + '</em></strong>';
+    //};
+    $scope.formatToExecutive = function (entity, Inn, InnIsp) {
+        if (entity.Type != 'Исполнение') return Inn;
+        return InnIsp;
     };
-    $scope.formatTheContentSumm = function (entity) {
-        if ((entity.Type != 'Исполнение')
-            || (entity.ObjectCalculatedAmount === entity.oObjectCalculatedAmount && entity.ObjectCalculatedPrice === entity.oObjectCalculatedPrice)
-            || (entity.ObjectCalculatedSum === entity.ObjectCalculatedAmount * entity.ObjectCalculatedPrice)
-        )
-            return entity.ObjectCalculatedSum;
-        return '<strong><em>' + entity.ObjectCalculatedAmount * entity.ObjectCalculatedPrice + '</em></strong>';
+
+    $scope.theRound = function (value) {
+        return Math.round(value * 100) / 100;
     };
+
 
     //Фильтр
     var filterClass = function (loadFunction) {
@@ -243,21 +266,30 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
                             ClassifierId: newValue
                         }
                     }).then(function (response) {
-                        let data = response.data.Data.Ret;
-                        let ret = response.data.status;
-                        if (ret === '0') {
-                            messageBoxService.showInfo(data);
-                            var deepClone = JSON.parse(JSON.stringify(rowEntity));
-                            deepClone[colDef.field] = oldValue;
-                            $scope.fulfilmentGrid.GridLogger(deepClone);
-                            rowEntity["@modify"] = true;
-                            $scope.fulfilmentGrid.NeedSave = true;
-                            rowEntity.uUserGuid = $scope.user.Id;
-                            rowEntity.UserName = $scope.user.Fullname;
-                            rowEntity.uEditDate = new Date();
-                        } else {
-                            rowEntity.ClassifierId = oldValue;
-                            messageBoxService.showError(data);
+                        let ret = response.data.Success;
+                        if (ret === true) {
+                            let mess = 'МНН: ' + response.data.Data.Ret.INNGroup + '. ТН: ' + response.data.Data.Ret.TradeName + '. Производитель: ' + response.data.Data.Ret.Corporation + '. Сохранить?';
+                            messageBoxService.showConfirm(mess, 'Изменение')
+                                .then(
+                                    function (result) {
+                                        var deepClone = JSON.parse(JSON.stringify(rowEntity));
+                                        deepClone[colDef.field] = oldValue;
+                                        $scope.fulfilmentGrid.GridLogger(deepClone);
+                                        rowEntity["@modify"] = true;
+                                        $scope.fulfilmentGrid.NeedSave = true;
+                                        rowEntity.uUserGuid = $scope.user.Id;
+                                        rowEntity.UserName = $scope.user.Fullname;
+                                        rowEntity.uEditDate = new Date();
+                                        rowEntity.INNGroup = response.data.Data.Ret.INNGroup;
+                                        rowEntity.TradeName = response.data.Data.Ret.TradeName;
+                                        rowEntity.DrugDescription = response.data.Data.Ret.DrugDescription;
+                                        rowEntity.Corporation = response.data.Data.Ret.Corporation;
+                                        rowEntity.Packer = response.data.Data.Ret.Packer;
+                                        return;
+                                    },
+                                    function (result) {
+                                        rowEntity.ClassifierId = oldValue;
+                                    });
                         }
                     }, function () {
                         $scope.fulfilmentGrid.Options.data = [];
@@ -265,7 +297,6 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
                         messageBoxService.showError($scope.message);
                     });
                 } else {
-                    messageBoxService.showInfo(data);
                     var deepClone = JSON.parse(JSON.stringify(rowEntity));
                     deepClone[colDef.field] = oldValue;
                     $scope.fulfilmentGrid.GridLogger(deepClone);
@@ -274,33 +305,12 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
                     rowEntity.uUserGuid = $scope.user.Id;
                     rowEntity.UserName = $scope.user.Fullname;
                     rowEntity.uEditDate = new Date();
+                    rowEntity.ObjectCalculatedPrice = rowEntity.ObjectCalculatedSum / rowEntity.ObjectCalculatedAmount;
+                    //rowEntity.ObjectCalculatedSum = rowEntity.ObjectCalculatedAmount * rowEntity.ObjectCalculatedPrice;
                 }
             }
         }
     }
-    function fulfilmentCheсkClassifierId(cId, oldValue) {
-        $scope.fulfilmentLoading = $http({
-            method: 'POST',
-            url: '/Fulfilment/CheсkClassifierId/',
-            data: {
-                ClassifierId: cId,
-                OldValue: oldValue
-            }
-        }).then(function (response) {
-            let data = response.data.Data.Ret;
-            let ret = response.data.status;
-            if(ret === '0')
-                messageBoxService.showInfo(data);
-            else
-                messageBoxService.showError(data);
-        }, function () {
-            $scope.fulfilmentGrid.Options.data = [];
-            $scope.message = 'Unexpected Error';
-            messageBoxService.showError($scope.message);
-        });
-    };
-
-
 
 
     $scope.$on('$destroy', function () {

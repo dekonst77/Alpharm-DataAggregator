@@ -1582,6 +1582,7 @@
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
     <Content Include="Content\select.min.css.map" />
     <Content Include="Content\AddToClassif.xlsx" />
+    <Content Include="Content\GovernmentPurchases\Fulfilment.scss" />
     <None Include="Properties\PublishProfiles\DataAggregatorWeb_Local.pubxml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
@@ -2464,6 +2465,7 @@
     <Compile Include="Models\GoodsClassifier\ParameterJson.cs" />
     <Compile Include="Models\GovernmentPurchases\Fulfilment\FulfilmentFilterJson.cs" />
     <Compile Include="Models\GovernmentPurchases\Fulfilment\FulfilmentJson.cs" />
+    <Compile Include="Models\GovernmentPurchases\Fulfilment\ParamClassifierLoad.cs" />
     <Compile Include="Models\LPU\DepartmentModel.cs" />
     <Compile Include="Models\LPU\LPUFilter.cs" />
     <Compile Include="Models\LPU\LPULicensesModel.cs" />
@@ -2774,7 +2776,6 @@
     <Folder Include="Views\DOPMonitoringDatabase\" />
     <Folder Include="Views\EtalonPrice\" />
     <Folder Include="Views\ExecutionTerminatedContract\" />
-    <Folder Include="Views\Fulfilment\" />
     <Folder Include="Views\GTIN\" />
     <Folder Include="Views\LPUDictionaries\" />
     <Folder Include="Views\Mask\" />

@@ -1,0 +1,31 @@
+﻿.fulfilment-editor {
+    &.base {
+        .ui-grid-row .ui-grid-cell {
+            background-color: inherit !important;
+        }
+
+        .purchase {
+            background-color: #E9FBFA;
+        }
+
+        .contract {
+            background-color: #FCFAD4;
+        }
+
+        .purchaseSelected {
+            background-color: #9BEDEA;
+        }
+
+        .contractSelected {
+            background-color: #F5F07A;
+        }
+
+        .Green4333 {
+            color: green;
+        }
+
+        .modify {
+            color: red;
+        }
+    }
+}

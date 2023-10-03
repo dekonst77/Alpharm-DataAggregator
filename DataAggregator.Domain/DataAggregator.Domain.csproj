@@ -180,6 +180,7 @@
     <Compile Include="Model\GovernmentPurchasesLoader\proxy\ProxyErrorLog.cs" />
     <Compile Include="Model\GovernmentPurchases\ContractAndFulfilmentObjectReplace.cs" />
     <Compile Include="Model\GovernmentPurchases\Contract_check_view.cs" />
+    <Compile Include="Model\GovernmentPurchases\ExternalView_FULL.cs" />
     <Compile Include="Model\GovernmentPurchases\GovernmentPurchases.cs" />
     <Compile Include="Model\GovernmentPurchases\HandMadePosition.cs" />
     <Compile Include="Model\GovernmentPurchases\KBK.cs" />
