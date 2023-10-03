@@ -2,10 +2,8 @@
 using DataAggregator.Domain.Model.EtalonPrice;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
-using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -82,7 +80,7 @@ namespace DataAggregator.Web.Controllers.OFD
         }
 
         [HttpPost]
-        public ActionResult SaveCommentStatuses(IEnumerable<Domain.Model.EtalonPrice.MainData> array)
+        public ActionResult SaveCommentStatuses(IEnumerable<MainData> array)
         {
             try
             {
@@ -95,10 +93,12 @@ namespace DataAggregator.Web.Controllers.OFD
                             var mainDataItem = _context.MainData.FirstOrDefault(x => x.Id == item.Id);
                             if (mainDataItem != null)
                             {
-                                if (!string.IsNullOrEmpty(item.CommentStatusManual))
-                                    mainDataItem.CommentStatusManual = item.CommentStatusManual;
                                 mainDataItem.CommentStatusId = item.CommentStatusId;
                                 mainDataItem.DateModified = DateTime.Now;
+                                if (item.CommentStatusId == null)
+                                    mainDataItem.CommentStatusManual = item.CommentStatusManual;
+                                else
+                                    mainDataItem.CommentStatusManual = null;
                                 if (mainDataItem.UserId != RobotUserId)
                                     mainDataItem.UserId = new Guid(User.Identity.GetUserId());
                             }
@@ -120,7 +120,7 @@ namespace DataAggregator.Web.Controllers.OFD
         }
 
         [HttpPost]
-        public ActionResult TransferPrice(int year, int month, IEnumerable<MainData> array) 
+        public ActionResult TransferPrice(IEnumerable<MainData> array) 
         {
             try
             {
@@ -135,6 +135,8 @@ namespace DataAggregator.Web.Controllers.OFD
                             mainDataItem.TransferPrice = item.TransferPrice;
                             mainDataItem.DateModified = DateTime.Now;
                             mainDataItem.UserId = userId;
+                            //после проставления цены менять статус на "Проверена"
+                            mainDataItem.CommentStatusId = 1;
                         }
                     }
                     _context.SaveChanges();
@@ -147,12 +149,12 @@ namespace DataAggregator.Web.Controllers.OFD
                                        on d.UserId equals new Guid(u.Id)
                                            select new 
                                            {
-                                               Id = d.Id,
-                                               ClassifierId = d.ClassifierId,
-                                               TransferPrice = d.TransferPrice,
-                                               DeviationPercent = d.DeviationPercent,
-                                               PriceDiff = d.PriceDiff,
-                                               DateModified = d.DateModified,
+                                               d.Id,
+                                               d.ClassifierId,
+                                               d.TransferPrice,
+                                               d.DeviationPercent,
+                                               d.PriceDiff,
+                                               d.DateModified,
                                                UserName = u.Name
                                            };
 

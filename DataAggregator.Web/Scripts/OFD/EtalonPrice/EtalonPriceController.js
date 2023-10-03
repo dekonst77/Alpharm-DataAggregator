@@ -342,9 +342,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                     });
                 });
         }
-        else if (colDef.field == "CommentStatus" && rowEntity.CommentStatusId != null)
-            return;
-        else {
+        else if (colDef.field == "CommentStatus") {
             rowEntity.CommentStatusId = null;
             rowEntity.CommentStatus = newValue;
             rowEntity.CommentStatusManual = newValue;
@@ -417,7 +415,6 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 }).then(function () {
                     $scope.Grid.ClearModify();
                     $scope.getList();
-                    messageBoxService.showInfo("Сохранено");
                 }, function (response) {
                     errorHandlerService.showResponseError(response);
                     $scope.Grid.ClearModify();
@@ -443,7 +440,6 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 },
                 transformRequest: angular.identity
             }).then(function () {
-                messageBoxService.showInfo("Сохранено");
                 $scope.getList();
             }, function (response) {
                 errorHandlerService.showResponseError(response);
@@ -485,16 +481,13 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 method: 'POST',
                 url: '/EtalonPrice/TransferPrice/',
                 data: JSON.stringify({
-                    array: $scope.selectedPrices,
-                    year: $scope.filter.date.getFullYear(),
-                    month: $scope.filter.date.getMonth() + 1
+                    array: $scope.selectedPrices
                 })
             }).then(function (response) {
                 if (response.data) {
                     $scope.mergeGrid(response.data);
                     $scope.clearSelectedPrices();
                 }
-                messageBoxService.showInfo("Сохранено");
             }, function (response) {
                 errorHandlerService.showResponseError(response);
             });
@@ -664,7 +657,6 @@ function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $
                     url: '/EtalonPrice/SetForChecking/',
                     data: JSON.stringify({ array: model })
                 }).then(function () {
-                    messageBoxService.showInfo("Сохранено");
                     $modalInstance.close();
                 }, function (response) {
                     errorHandlerService.showResponseError(response);
