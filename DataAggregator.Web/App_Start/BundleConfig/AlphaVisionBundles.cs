@@ -5,9 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Optimization;
 
+
 namespace DataAggregator.Web.App_Start.BundleConfig
 {
-    public class AlphaVisionBundles
+    public static class AlphaVisionBundles
     {
         /// <summary>
         /// Зарегистрировать bundles AlphaVision
@@ -18,9 +19,13 @@ namespace DataAggregator.Web.App_Start.BundleConfig
             bundles.Add(new ComplexScriptBundle("~/bundles/AlphaVision")
                 .IncludeDirectory("~/Scripts/AlphaVision", "*.js", true));
 
-            //Стили
+            //Стили          
             bundles.Add(new ComplexStyleBundle("~/Content/AlphaVision/css")
-                .IncludeDirectory("~/Content/AlphaVision", "*.scss", true));
+            //   .IncludeDirectory("~/Content/AlphaVision", "*.css", true)
+               .IncludeDirectory("~/Content/AlphaVision", "*.scss", true)
+               );
+
+
 
             //HTML
             bundles.Add(new PartialBundles.PartialBundle("DataAggregatorModule", "~/Views/AlphaVision/markup")
@@ -29,3 +34,5 @@ namespace DataAggregator.Web.App_Start.BundleConfig
             
     }
 }
+
+
