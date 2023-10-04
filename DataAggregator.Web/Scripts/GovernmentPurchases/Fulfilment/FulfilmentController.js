@@ -99,7 +99,7 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
         { name: 'Фактически оплачено', field: 'ActuallyPaid', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
         {
             name: 'Разница по оплате', filter: { condition: uiGridCustomService.conditionSpace }, type: 'number', enableCellEdit: true, cellFilter: formatConstants.FILTER_PRICE, 
-            cellTemplate: '<div class="ui-grid-cell-contents">{{grid.appScope.theRound(row.entity.ContractSum - row.entity.ActuallyPaid)}}</div>'
+            cellTemplate: '<div class="ui-grid-cell-contents">{{grid.appScope.theRound(row.entity.ContractSum - row.entity.ActuallyPaid) | number:2}}</div>'
         },
 
         { name: 'Сумма исполнения', field: 'SumIsp', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE },
@@ -122,14 +122,14 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
 
         {
             name: 'Кол-во расч', field: 'ObjectCalculatedAmount', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE, enableCellEdit: true, cellEditableCondition: function ($scope) { return $scope.row.entity.Type == 'Исполнение' },
-            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedAmount, row.entity.oObjectCalculatedAmount)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedAmount, row.entity.oObjectCalculatedAmount)"></span></div>' },
+            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedAmount, row.entity.oObjectCalculatedAmount)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedAmount, row.entity.oObjectCalculatedAmount) | number:2"></span></div>' },
         {
             name: 'Цена расч', field: 'ObjectCalculatedPrice', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE, enableCellEdit: false, cellEditableCondition: function ($scope) { return $scope.row.entity.Type == 'Исполнение' },
-            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedPrice, row.entity.oObjectCalculatedPrice)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedPrice, row.entity.oObjectCalculatedPrice)"></span></div>' },
+            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedPrice, row.entity.oObjectCalculatedPrice)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedPrice, row.entity.oObjectCalculatedPrice) | number:2"></span></div>' },
 
         {
             name: 'Сумма расч', field: 'ObjectCalculatedSum', filter: { condition: uiGridCustomService.numberCondition }, type: 'number', visible: true, nullable: true, cellFilter: formatConstants.FILTER_PRICE,
-            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedSum, row.entity.oObjectCalculatedSum)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedSum, row.entity.oObjectCalculatedSum)"></span></div>' },
+            cellTemplate: '<div class="ui-grid-cell-contents" title="{{grid.appScope.formatChanging(row.entity, row.entity.ObjectCalculatedSum, row.entity.oObjectCalculatedSum)}}"><span ng-bind-html="grid.appScope.formatTheContent(row.entity, row.entity.ObjectCalculatedSum, row.entity.oObjectCalculatedSum) | number:2"></span></div>' },
 
         { name: 'Серия ЛП', field: 'Seria', filter: { condition: uiGridCustomService.conditionSpace } },
 
