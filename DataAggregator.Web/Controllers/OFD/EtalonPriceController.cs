@@ -145,9 +145,9 @@ namespace DataAggregator.Web.Controllers.OFD
                     using (var _ctx = new OFDContext(APP))
                     {
                         var data = from d in _ctx.MainData.Where(x => ids.Contains(x.Id)) 
-                                   join u in _ctx.LinkedUserData
-                                       on d.UserId equals new Guid(u.Id)
-                                           select new 
+                                   join u in _ctx.LinkedUserData on d.UserId equals new Guid(u.Id)
+                                   join c in _ctx.CommentStatuses on d.CommentStatusId equals c.Id
+                                   select new 
                                            {
                                                d.Id,
                                                d.ClassifierId,
@@ -155,6 +155,7 @@ namespace DataAggregator.Web.Controllers.OFD
                                                d.DeviationPercent,
                                                d.PriceDiff,
                                                d.DateModified,
+                                               CommentStatus = d.CommentStatusManual ?? c.Name,
                                                UserName = u.Name
                                            };
 
