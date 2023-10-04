@@ -133,17 +133,9 @@ function FulfilmentController(messageBoxService, $scope, $http, $timeout, uiGrid
 
         { name: 'Серия ЛП', field: 'Seria', filter: { condition: uiGridCustomService.conditionSpace } },
 
-        {
-            name: 'МНН_Исполнение', field: 'INNGroupIsp', filter: { condition: uiGridCustomService.conditionSpace },
-            cellTemplate: '<div class="ui-grid-cell-contents"><span ng-bind-html="grid.appScope.formatToExecutive(row.entity, row.entity.INNGroup, row.entity.INNGroupIsp)"></span></div>'
-        },
-        {
-            name: 'ТН_Исполнение', field: 'TradeNameIsp', filter: { condition: uiGridCustomService.conditionSpace },
-            cellTemplate: '<div class="ui-grid-cell-contents"><span ng-bind-html="grid.appScope.formatToExecutive(row.entity, row.entity.TradeName, row.entity.TradeNameIsp)"></span></div>' },
-        {
-            name: 'Описание_Исполнение', field: 'DrugDescriptionIsp', filter: { condition: uiGridCustomService.conditionSpace },
-            cellTemplate: '<div class="ui-grid-cell-contents"><span ng-bind-html="grid.appScope.formatToExecutive(row.entity, row.entity.DrugDescription, row.entity.DrugDescriptionIsp)"></span></div>' },
-
+        { name: 'МНН_Исполнение', field: 'INNGroupIsp', filter: { condition: uiGridCustomService.conditionSpace } },
+        { name: 'ТН_Исполнение', field: 'TradeNameIsp', filter: { condition: uiGridCustomService.conditionSpace } },
+        { name: 'Описание_Исполнение', field: 'DrugDescriptionIsp', filter: { condition: uiGridCustomService.conditionSpace } },
         { name: 'Provisor Action', field: 'ProvisorAction', filter: { condition: uiGridCustomService.conditionSpace } },
 
         { name: 'contractQuantityId', field: 'contractQuantityId', type: 'number', visible: false },

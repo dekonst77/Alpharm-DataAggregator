@@ -73,13 +73,13 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
 
                             ObjectCalculatedAmount = x == null ? v.ObjectCalculatedAmount : (x.ObjectCalculatedAmount == null ? v.ObjectCalculatedAmount : x.ObjectCalculatedAmount),
                             ObjectCalculatedPrice = x == null ? v.ObjectCalculatedPrice : (x.ObjectCalculatedPrice == null ? v.ObjectCalculatedPrice : x.ObjectCalculatedPrice),
-                            ObjectCalculatedSum = x == null ? v.ObjectCalculatedSum : (x.ObjectCalculatedAmount == null ? v.ObjectCalculatedAmount : x.ObjectCalculatedAmount) 
+                            ObjectCalculatedSum = x == null ? v.ObjectCalculatedSum : (x.ObjectCalculatedAmount == null ? v.ObjectCalculatedAmount : x.ObjectCalculatedAmount)
                                     * (x.ObjectCalculatedPrice == null ? v.ObjectCalculatedPrice : x.ObjectCalculatedPrice),
                             Seria = v.Seria,
 
-                            INNGroupIsp = v.INNGroupIsp,
-                            TradeNameIsp = v.TradeNameIsp,
-                            DrugDescriptionIsp = v.DrugDescriptionIsp,
+                            INNGroupIsp = v.INNGroupIsp == null ? v.INNGroup : v.INNGroupIsp,
+                            TradeNameIsp = v.TradeNameIsp == null ? v.TradeName : v.TradeNameIsp,
+                            DrugDescriptionIsp = v.DrugDescriptionIsp == null ? v.DrugDescription : v.DrugDescriptionIsp,
                             ProvisorAction = v.ProvisorAction,
                             contractQuantityId = v.contractQuantityId,
 
@@ -96,7 +96,6 @@ namespace DataAggregator.Web.Controllers.GovernmentPurchases
                             oObjectCalculatedPrice = v.ObjectCalculatedPrice,
                             oObjectCalculatedSum = v.ObjectCalculatedSum,
                         };
-
             return query
                 .Where(cc => (cc.ReestrNumber == ReestrNumber));
         }
