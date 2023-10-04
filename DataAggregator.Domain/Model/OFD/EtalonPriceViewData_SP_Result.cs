@@ -72,6 +72,6 @@ namespace DataAggregator.Domain.Model.OFD
         public DateTime? DateModified { get; set; }
         public string UserName { get; set; }
         //выделение
-        public string ClassStyle { get; set; }
+        public string ColNameSelected { get; set; } = string.Empty;
     }
 }

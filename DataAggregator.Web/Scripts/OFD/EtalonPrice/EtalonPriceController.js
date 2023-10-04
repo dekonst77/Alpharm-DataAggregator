@@ -31,8 +31,8 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     let cellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD}}</div>';
     let sumCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:0}}</div>';
     let sellOutCellTemplateHint = '<div class="ui-grid-cell-contents" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
-    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-dblclick="grid.appScope.transferPrice($event, row,col)" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
-    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-dblclick="grid.appScope.transferPrice($event, row,col)" ng-click="grid.appScope.togglePriceSelection($event, row, col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
+    let avgCellTemplateHint = '<div class="ui-grid-cell-contents avg_price" ng-class="{\'price_selected\' : row.entity.ColNameSelected == col.field}" ng-dblclick="grid.appScope.transferPrice($event, row,col)" ng-click="grid.appScope.togglePriceSelection($event, row, col)">{{COL_FIELD | number:2}}</div>';
+    let priceCellTemplateHint = '<div class="ui-grid-cell-contents number" ng-class="{\'price_selected\' : row.entity.ColNameSelected == col.field}" ng-dblclick="grid.appScope.transferPrice($event, row,col)" ng-click="grid.appScope.togglePriceSelection($event, row, col)" title="{{COL_FIELD}}">{{COL_FIELD | number:2}}</div>';
     let diffCellTemplateHint = '<div class="ui-grid-cell-contents" ng-class="{\'red\' : row.entity.PriceDiff < 0, \'green\' : row.entity.PriceDiff >= 0}">{{COL_FIELD}}</div>';
 
     $scope.Grid.Options.columnDefs = [
@@ -41,7 +41,7 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             field: 'ClassifierId', type: 'number', filter: { condition: uiGridCustomService.condition }, cellTemplate: skuTemplateHint, pinnedLeft: true
         },
         {
-            cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Торговое наименование',
+            cellTooltip: true, enableCellEdit: false, width: 200, visible: true, nullable: true, name: 'Торговое наименование',
             field: 'TradeName', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint, pinnedLeft: true
         },
         {
@@ -49,11 +49,11 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
             field: 'INNGroup', filter: { condition: uiGridCustomService.condition }, pinnedLeft: true
         },
         {
-            cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Описание препарата',
+            cellTooltip: true, enableCellEdit: false, width: 200, visible: true, nullable: true, name: 'Описание препарата',
             field: 'DrugDescription', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint, pinnedLeft: true
         },
         {
-            cellTooltip: true, enableCellEdit: false, width: 300, visible: true, nullable: true, name: 'Правообладатель',
+            cellTooltip: true, enableCellEdit: false, width: 200, visible: true, nullable: true, name: 'Правообладатель',
             field: 'OwnerTradeMark', filter: { condition: uiGridCustomService.condition }, cellTemplate: cellTemplateHint, pinnedLeft: true
         },
         {
@@ -234,15 +234,13 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
         },
     ];
 
-    const priceSelectedClass = 'price_selected';
+   
 
     $scope.togglePriceSelection = function ($event, row, col) {
         $event.stopPropagation();
         $event.preventDefault();
 
         var item = { Id: row.entity.Id, ClassifierId: row.entity.ClassifierId, PriceField: col.field, TransferPrice: row.entity[col.field] };
-        var elm = angular.element($event.target);
-
         if (parseFloat(item.TransferPrice) > 0) {
             const index = $scope.selectedPrices.findIndex(i => i.ClassifierId === item.ClassifierId);
             if (index === -1)
@@ -253,17 +251,9 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 else {
                     $scope.selectedPrices[index].PriceField = item.PriceField;
                     $scope.selectedPrices[index].TransferPrice = item.TransferPrice;
-
-                    let elements = elm.parents('div[role="row"]:nth(0)').find('.' + priceSelectedClass);
-                    elements.each(function (index, element) {
-                        element.classList.remove(priceSelectedClass);
-                    });
                 }
             }
-            if (elm.hasClass(priceSelectedClass))
-                elm.removeClass(priceSelectedClass);
-            else
-                elm.addClass(priceSelectedClass);
+            row.entity.ColNameSelected = col.field == row.entity.ColNameSelected ? '' : col.field;
         }
     }
 
@@ -361,7 +351,6 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
     $scope.Init();
 
     $scope.getList = function () {
-        $scope.clearSelectedPrices();
         $scope.loading = $http({
             method: 'POST',
             url: '/EtalonPrice/GetList',
@@ -503,25 +492,19 @@ function EtalonPriceController($scope, $http, uiGridCustomService, messageBoxSer
                 item.DeviationPercent = target.DeviationPercent;
                 item.DateModified = target.DateModified;
                 item.UserName = target.UserName;
+                item.ColNameSelected = '';
+                item.CommentStatus = target.CommentStatus;
             }
         })
-    }
-
-    $scope.clearSelectedPrices = function () {
-        $scope.selectedPrices = [];
-        let elements = document.querySelectorAll('.' + priceSelectedClass);
-        elements.forEach((element) => {
-            element.classList.remove(priceSelectedClass);
-        });
     }
 }
 
 angular
     .module('DataAggregatorModule')
     .controller('ClassifierInfoController', [
-        '$scope', '$uibModalInstance', 'uiGridCustomService', '$http', 'messageBoxService', ClassifierInfoController]);
+        '$scope', '$uibModalInstance', 'uiGridCustomService', '$http', ClassifierInfoController]);
 
-function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $http, messageBoxService) {
+function ClassifierInfoController($scope, $modalInstance, uiGridCustomService, $http) {
     $scope.currentTabIndex = 0;
     $scope.classifierData = null;
 
