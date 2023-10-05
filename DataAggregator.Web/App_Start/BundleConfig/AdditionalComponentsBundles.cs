@@ -25,10 +25,11 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/angular-aria.js")
                 .Include("~/Scripts/angular-route.js")
                 .Include("~/Scripts/angular-animate.min.js")
+                .Include("~/Scripts/angular-animate.min.js")
                 .Include("~/Scripts/angular-touch.js")
                 .Include("~/Scripts/angular-sanitize.js")
                 .Include("~/Scripts/angular-resource.js")
-                .Include("~/Scripts/angular-messages.js")
+                .Include("~/Scripts/toaster.min.js")
                 .Include("~/Scripts/i18n/angular-locale_ru-ru.js")
 
                 .Include("~/Scripts/lib/jszip.min.js")
@@ -74,6 +75,7 @@ namespace DataAggregator.Web
                 .Include("~/Scripts/lib/bootstrap/3.3.7/css/bootstrap.min.css")
                 .Include("~/Scripts/lib/angular-busy/4.1.4/angular-busy.css")
                 .Include("~/Content/loading-bar.min.css")
+                .Include("~/Content/toaster.min.css")
                 .Include("~/Content/common/common.css")
                 .Include("~/Content/select.min.css")
             );

@@ -279,6 +279,7 @@
     <Content Include="Content\Retail\RetailReport.css" />
     <Content Include="Content\select.css" />
     <Content Include="Content\select.min.css" />
+    <Content Include="Content\toaster.min.css" />
     <Content Include="Scripts\Account\LoginController.js" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -2148,6 +2149,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\DatabaseManagerService\DatabaseManagerService1.disco" />
+    <Content Include="Scripts\toaster.min.js" />
     <Content Include="Scripts\ui-select-pagination-groups.js" />
     <Content Include="Scripts\ui-select-pagination.js" />
     <None Include="Service References\RetailFileInfoService\FileInfoService.disco" />

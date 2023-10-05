@@ -1,5 +1,5 @@
 ﻿var loginModule = angular.module('DataAggregatorModule')
-    .controller('AlphaVisionController', ['$scope', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'errorHandlerService', 'uiGridCustomService', 'uiGridConstants', 'formatConstants', 'userService', AlphaVisionController])
+    .controller('AlphaVisionController', ['$scope', '$route', '$http', '$uibModal', 'commonService', 'messageBoxService', 'hotkeys', '$timeout', 'errorHandlerService', 'uiGridCustomService', 'uiGridConstants', 'formatConstants', 'userService', 'toaster', AlphaVisionController])
 
 loginModule.constant('USERCONSTANTS', (function () {
     return {
@@ -133,7 +133,7 @@ loginModule.directive("compareTo", [function () {
     };
 }]);
 
-function AlphaVisionController($scope, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, errorHandlerService, uiGridCustomService, uiGridConstants, formatConstants, userServic)
+function AlphaVisionController($scope, $route, $http, $uibModal, commonService, messageBoxService, hotkeys, $timeout, errorHandlerService, uiGridCustomService, uiGridConstants, formatConstants, userService, toaster)
 {
     $scope.Grid = uiGridCustomService.createGridClassMod($scope, 'AlphaVisionUsers_Grid');
     $scope.Grid.Options.showGridFooter = true;
@@ -262,6 +262,11 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                 var data = response.data;
                 if (data.Success) {
                     $scope.Grid.Options.data.push(data.Data[0]);
+                    toaster.pop({
+                        type: 'success',
+                        title: 'Успешно',
+                        body: 'Добавление данных пользователя'
+                    });
                 } else {
                     messageBoxService.showError(data.ErrorMessage);
                 }
@@ -298,6 +303,11 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                     }).indexOf($scope.CreateUserForm.Email);
                     if (index !== -1) {
                         $scope.Grid.Options.data[index] = data.Data[0];
+                        toaster.pop({
+                            type: 'success',
+                            title: 'Успешно',
+                            body: 'Обновление данных пользователя'
+                        });
                     }
                 } else {
                     messageBoxService.showError(data.ErrorMessage);
@@ -330,6 +340,11 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                     }).indexOf($scope.CreateUserForm.Email);
                     if (index !== -1) {
                         $scope.Grid.Options.data[index] = data.Data[0];
+                        toaster.pop({
+                            type: 'success',
+                            title: 'Успешно',
+                            body: 'Отключения пользователя от API'
+                        });
                     }
                 } else {
                     messageBoxService.showError(data.ErrorMessage);

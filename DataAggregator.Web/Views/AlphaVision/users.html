@@ -5,6 +5,8 @@
         </div>
     </script>
 
+    <toaster-container></toaster-container>
+
     <div class="panel panel-default auto-item-top-part" auto-size-saver="topPartSize">
         <div class="panel-heading padding1">
             <div class="row">
@@ -14,21 +16,26 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
 
 
-                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal" 
-                                ng-click="LoadDataForModal(1)">Добавить</button>
-                        <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal" 
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal"
+                                ng-click="LoadDataForModal(1)">
+                            Добавить
+                        </button>
+                        <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#CreateUserModal"
                                 ng-disabled="Grid.selectedRows() == undefined || Grid.selectedRows().length < 1"
-                                ng-click="LoadDataForModal(2)">Изменить</button>
-                        <button class="btn btn-danger btn-sm" type="button" 
+                                ng-click="LoadDataForModal(2)">
+                            Изменить
+                        </button>
+                        <button class="btn btn-danger btn-sm" type="button"
                                 ng-disabled="(Grid.selectedRows() == undefined || Grid.selectedRows().length < 1) || !(Grid.selectedRows()[0].ApiEnabled || false)"
                                 ng-click="RevokeUser()">
-                                Отключить</button>
+                            Отключить
+                        </button>
                     </div>
 
                 </div>
 
                 <div class="col-md-3 padding3">
-                   
+
                 </div>
             </div>
 
@@ -55,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-               
+
                 <form name="registerForm" role="form">
                     <div class="modal-body">
 
@@ -68,7 +75,6 @@
                                         {{"Нельзя оставить это поле пустым"}}
                                     </div>
                                     <div class="error form-hint"
-                                         
                                          data-ng-show="registerForm.email.$dirty && registerForm.email.$error.email"
                                          data-ng-cloak>{{"Указанный вами адрес электронной почты недействителен"}}</div>
                                     <label ng-show="action==2">{{CreateUserForm.Email}}</label>
@@ -86,7 +92,7 @@
                                     <div class="form-hint">
                                         Чтобы соответствовать нашей политике защиты паролей, используйте по крайней мере одну букву, одну цифру, один специальный символ и семь символов
                                     </div>
-       
+
                                     <input type="text" class="form-control" data-ok-password-directive
                                            name="password" placeholder="Пароль" data-ng-required="{{action==1 || (action==2 && CreateUserForm.Password.length > 0)}}"
                                            data-ng-class="(registerForm.password.$dirty && registerForm.confirm.$dirty

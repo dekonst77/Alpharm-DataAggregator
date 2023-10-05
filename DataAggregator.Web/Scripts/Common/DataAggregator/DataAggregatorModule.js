@@ -18,7 +18,8 @@
         'ui.select',
         'ui.select.pagination.groups',
         'angularjs-dropdown-multiselect',
-        'angular-loading-bar'
+        'angular-loading-bar',
+        'toaster'
     ]).config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.includeSpinner = false;
     }])
