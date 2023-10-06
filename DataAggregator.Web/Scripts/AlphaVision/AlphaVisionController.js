@@ -264,8 +264,8 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                     $scope.Grid.Options.data.push(data.Data[0]);
                     toaster.pop({
                         type: 'success',
-                        title: 'Успешно',
-                        body: 'Добавление данных пользователя'
+                        title: 'Создание пользователя',
+                        body: 'Успешно'
                     });
                 } else {
                     messageBoxService.showError(data.ErrorMessage);
@@ -274,8 +274,13 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                 errorHandlerService.showResponseError(response);
             });
         }
-        else
-            alert('Вы не заполнили ни одного поля. Пользователь не будет добавлен!');
+        else {
+            toaster.pop({
+                type: 'error',
+                title: 'Создание пользователя',
+                body: 'Вы не заполнили ни одного поля. Пользователь не будет добавлен!'
+            });
+        }
     }
 
     $scope.openPopupBirthday = function () {
@@ -305,8 +310,8 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                         $scope.Grid.Options.data[index] = data.Data[0];
                         toaster.pop({
                             type: 'success',
-                            title: 'Успешно',
-                            body: 'Обновление данных пользователя'
+                            title: 'Обновление пользователя',
+                            body: 'Успешно'
                         });
                     }
                 } else {
@@ -316,45 +321,57 @@ function AlphaVisionController($scope, $route, $http, $uibModal, commonService, 
                 errorHandlerService.showResponseError(response);
             });
         }
-        else
-            alert('Вы не заполнили ни одного поля. Пользователь не будет обновлен!');
+        else {
+            toaster.pop({
+                type: 'error',
+                title: 'Обновление пользователя',
+                body: 'Вы не заполнили ни одного поля. Пользователь не будет обновлен!'
+            });
+        }
     }
 
     $scope.RevokeUser = function () {
 
-        if (!window.confirm("Вы уверены, что хотите отключить пользователя от API?")) {
-            return;
-        }
-        var user = $scope.Grid.getSelectedItem()[0];
+        messageBoxService.showConfirm(mess, 'Вы уверены, что хотите отключить пользователя от API?')
+            .then(function () {
 
-        if (user) {
-            $scope.dataLoading = $http({
-                method: 'POST',
-                url: '/AlphaVision/RevokeUser/',
-                data: { Email: user.Email}
-            }).then(function (response) {
-                var data = response.data;
-                if (data.Success) {
-                    var index = $scope.Grid.Options.data.map(function (item) {
-                        return item.Email
-                    }).indexOf($scope.CreateUserForm.Email);
-                    if (index !== -1) {
-                        $scope.Grid.Options.data[index] = data.Data[0];
-                        toaster.pop({
-                            type: 'success',
-                            title: 'Успешно',
-                            body: 'Отключения пользователя от API'
-                        });
-                    }
-                } else {
-                    messageBoxService.showError(data.ErrorMessage);
+                var user = $scope.Grid.getSelectedItem()[0];
+
+                if (user) {
+                    $scope.dataLoading = $http({
+                        method: 'POST',
+                        url: '/AlphaVision/RevokeUser/',
+                        data: { Email: user.Email }
+                    }).then(function (response) {
+                        var data = response.data;
+                        if (data.Success) {
+                            var index = $scope.Grid.Options.data.map(function (item) {
+                                return item.Email
+                            }).indexOf($scope.CreateUserForm.Email);
+                            if (index !== -1) {
+                                $scope.Grid.Options.data[index] = data.Data[0];
+                                toaster.pop({
+                                    type: 'success',
+                                    title: 'Отключения пользователя от API',
+                                    body: 'Успешно'
+                                });
+                            }
+                        } else {
+                            messageBoxService.showError(data.ErrorMessage);
+                        }
+                    }, function (response) {
+                        errorHandlerService.showResponseError(response);
+                    });
                 }
-            }, function (response) {
-                errorHandlerService.showResponseError(response);
+                else {
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Отключения пользователя от API',
+                        body: 'Вы не выбрали пользователя!'
+                    });
+                }
             });
-        }
-        else
-            alert('Вы не заполнили ни одного поля. Пользователь не будет добавлен!');
+        
     }
 
 
