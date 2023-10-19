@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAggregator.Domain", "DataAggregator.Domain\DataAggregator.Domain.csproj", "{E1FB4DB9-8D77-4DAF-9D8C-39B5698C4DC2}"
 EndProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAggregator.Web", "DataA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAggregator.Core", "DataAggregator.Core\DataAggregator.Core.csproj", "{A3A16111-69E1-497A-90CF-6BFCF54441E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "..\SQL_CLR\Excel\Excel.csproj", "{12217775-B3BD-4DDA-B2B3-47CB55B411D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "..\..\MSSQL_CLR\SQL_CLR\Excel\Excel.csproj", "{12217775-B3BD-4DDA-B2B3-47CB55B411D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
