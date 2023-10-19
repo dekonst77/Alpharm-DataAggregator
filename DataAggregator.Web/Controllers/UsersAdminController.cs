@@ -192,8 +192,8 @@ namespace DataAggregator.Web.Controllers
 
             if (!string.IsNullOrEmpty(editUser.Password))
             {
-                var token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var changePasswordResult = await UserManager.ResetPasswordAsync(user.Id, token, editUser.Password);
+                await UserManager.RemovePasswordAsync(user.Id);
+                var changePasswordResult = await UserManager.AddPasswordAsync(user.Id, editUser.Password);
                 if (!changePasswordResult.Succeeded)
                 {
                     ModelState.AddModelError("", changePasswordResult.Errors.First());

@@ -2444,7 +2444,6 @@
     <Compile Include="Controllers\Retail\SearchRawDataByGoodsClassifierController.cs" />
     <Compile Include="Controllers\Retail\SourceBrandBlackListController.cs" />
     <Compile Include="Controllers\Systematization\PrioritetWordsController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserServiceController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Managers\AggregatedErrorsException.cs" />
