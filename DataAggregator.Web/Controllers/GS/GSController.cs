@@ -1,14 +1,17 @@
 ﻿using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.GS;
+using DataAggregator.Web.Managers;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.GS
@@ -613,23 +616,31 @@ GS_Brick*/
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\ГС_up.xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                //string[] files = System.IO.Directory.GetFiles(@"\\10.30.10.59\Upload");
+                string filename = @"\\10.30.10.59\Upload\ГС_up.xlsx";
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
+
+            //string filename = @"\\s-sql2\Upload\ГС_up.xlsx";
+            //if (System.IO.File.Exists(filename))
+            //    System.IO.File.Delete(filename);
+            //file.SaveAs(filename);
 
             using (var _context = new GSContext(APP))
             {
-                _context.GS_from_Excel(@"S:\Upload\ГС_up.xlsx");
+                _context.GS_from_Excel(@"F:\Upload\ГС_up.xlsx");
             }
-            /*Excel.Excel excel = new Excel.Excel();
-            excel.Open(file.InputStream);
-            */
-            //var row_U = excel.ToList<Domain.Model.GS.GS_View_SP>("ГС", 1, 2, () => new Domain.Model.GS.GS_View_SP());
 
-            //return GS_save(row_U);
-            
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,
