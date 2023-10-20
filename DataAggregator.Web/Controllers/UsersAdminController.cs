@@ -1,5 +1,6 @@
 ﻿using DataAggregator.Web.App_Start;
 using DataAggregator.Web.Models;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -102,7 +103,13 @@ namespace DataAggregator.Web.Controllers
 
         public async Task<ActionResult> Create()
         {
-            ViewBag.RoleId = new SelectList(await RoleManager.Roles.ToListAsync(), "Name", "Name");
+            var roles = await RoleManager.Roles.ToListAsync();
+            ViewBag.RolesList = roles.Select(x => new AspNetRolesSelected
+            {
+                Name = x.Name,
+                Category = x.Category,
+                Description = x.Description
+            }).ToList();
             return View();
         }
 

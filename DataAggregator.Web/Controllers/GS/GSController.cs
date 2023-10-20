@@ -1,14 +1,17 @@
 ﻿using DataAggregator.Domain.DAL;
 using DataAggregator.Domain.Model.GS;
+using DataAggregator.Web.Managers;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace DataAggregator.Web.Controllers.GS
@@ -84,13 +87,33 @@ GS_Brick*/
                 using (var _context = new GSContext(APP))
                 {
                     _context.Database.CommandTimeout = 0;
-                    var result = _context.Database.SqlQuery<GS_View_SP>(@"dbo.GS_View_SP @filter,@IDS,@PHids,@OperationMode,@adress,@period,@BrickId,@NetworkName,@PharmacyBrand,@isNotChecked,@isNew,
-                            @isCloseOFD,@isCloseAlphaBit,@isDoubleA,@isLicExists,@isCall,@isDateAddLic,@dt,@BrickError,@isSameAddressDiffCoords,@isSameCoordsDiffAddress",
+                    var result = _context.Database.SqlQuery<GS_View_SP>(@"dbo.GS_View_SP @filter,
+                            @IDS,
+                            @PHids,
+                            @OperationMode,
+                            @adress,
+                            @period,
+                            @BrickId,
+                            @NetworkName,
+                            @PharmacyBrand,
+                            @isNotChecked,
+                            @isNew,
+                            @isCloseOFD,
+                            @isCloseAlphaBit,
+                            @isDoubleA,
+                            @isLicExists,
+                            @isCall,
+                            @isDateAddLic,
+                            @dt,
+                            @BrickError,
+                            @isSameAddressDiffCoords,
+                            @isSameCoordsDiffAddress",
                         new SqlParameter("@filter", filter.common),
                         new SqlParameter("@IDS", filter.IDS),
                         new SqlParameter("@PHids", filter.PHids),
                         new SqlParameter("@OperationMode", filter.OperationMode),
                         new SqlParameter("@adress", filter.adress),
+                        new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = currentperiod },
                         new SqlParameter("@BrickId", filter.BrickId),
                         new SqlParameter("@NetworkName", filter.NetworkName),
                         new SqlParameter("@PharmacyBrand", filter.PharmacyBrand),
@@ -103,7 +126,6 @@ GS_Brick*/
                         new SqlParameter("@isCall", filter.isCall),
                         new SqlParameter("@isDateAddLic", filter.isDateAddLic),
                         new SqlParameter { ParameterName = "@dt", SqlDbType = SqlDbType.Date, Value = filter.dt },
-                        new SqlParameter { ParameterName = "@period", SqlDbType = SqlDbType.Date, Value = currentperiod },
                         new SqlParameter("@BrickError", filter.BrickError),
                         new SqlParameter("@isSameAddressDiffCoords", filter.isSameAddressDiffCoords),
                         new SqlParameter("@isSameCoordsDiffAddress", filter.isSameCoordsDiffAddress)
@@ -594,23 +616,30 @@ GS_Brick*/
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\ГС_up.xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                string filename = String.Format(@"\\{0}\Upload\ГС_up.xlsx", domain);
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
+
+            //string filename = @"\\s-sql2\Upload\ГС_up.xlsx";
+            //if (System.IO.File.Exists(filename))
+            //    System.IO.File.Delete(filename);
+            //file.SaveAs(filename);
 
             using (var _context = new GSContext(APP))
             {
-                _context.GS_from_Excel(@"S:\Upload\ГС_up.xlsx");
+                _context.GS_from_Excel(@"F:\Upload\ГС_up.xlsx");
             }
-            /*Excel.Excel excel = new Excel.Excel();
-            excel.Open(file.InputStream);
-            */
-            //var row_U = excel.ToList<Domain.Model.GS.GS_View_SP>("ГС", 1, 2, () => new Domain.Model.GS.GS_View_SP());
 
-            //return GS_save(row_U);
-            
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,

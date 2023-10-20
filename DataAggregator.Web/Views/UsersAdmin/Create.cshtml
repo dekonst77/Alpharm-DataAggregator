@@ -1,4 +1,5 @@
 ﻿@model DataAggregator.Web.Models.RegisterViewModel
+@using DataAggregator.Web.Models
 
 @{
     ViewBag.Title = "Управление пользователями: новый пользователь";
@@ -15,58 +16,65 @@
         @Html.AntiForgeryToken()
         <hr />
         @Html.ValidationSummary("", new { @class = "text-error" })
+
+
         <div class="form-group">
-            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email, new {@class = "col-md-2 control-label"})
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Surname, new {@class = "col-md-2 control-label"})
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Surname, new {@class = "form-control"})
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.FirstName, new {@class = "col-md-2 control-label"})
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.FirstName, new {@class = "form-control"})
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.MiddleName, new {@class = "col-md-2 control-label"})
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.MiddleName, new {@class = "form-control"})
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">
-                Выберите роли пользователя
-            </label>
-            <div class="col-md-10">
-                @foreach (var item in (SelectList)ViewBag.RoleId)
-                {
-                    <input type="checkbox" name="SelectedRoles" value="@item.Value" class="checkbox-inline" />
-                    @Html.Label(item.Value, new { @class = "control-label" })
-                }
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    </div>
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                    @Html.LabelFor(model => model.Surname, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                    </div>
+                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                    </div>
+                    @Html.LabelFor(model => model.MiddleName, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+                    </div>
+
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    @{
+                        var roles = ViewBag.RolesList as List<AspNetRolesSelected>;
+                        var categories = roles.Select(c => c.Category).Distinct();
+
+                        foreach (var cat in categories)
+                        {
+                            <div class="row">
+                                @Html.Label((string)cat, new { @class = "control-label col-md-3" })
+                                <div class="col-md-10"></div>
+                                @foreach (var item in roles.Where(w => w.Category == (string)cat).OrderBy(o => o.Name))
+                                {
+                                    var disabled = item.Name == "Admin" || item.Name == "UserManager";
+                                    <label>
+                                        <input type="checkbox" name="SelectedRole" value="@item.Name" disabled="@disabled" class="checkbox-inline" />
+                                        @item.Name (@item.Description)
+                                    </label>
+                                }
+                            </div>
+                        }
+                    }
+
+                </div>
             </div>
         </div>
         <div class="form-group">
