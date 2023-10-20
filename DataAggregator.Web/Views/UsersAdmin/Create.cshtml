@@ -5,29 +5,64 @@
     ViewBag.Title = "Управление пользователями: новый пользователь";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <script>
+<script>
     angular.lowercase = angular.$$lowercase;
-    </script>
+</script>
+
+<style>
+    .field-validation-error {
+        color: #b94a48;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    input.input-validation-error {
+        border: 1px solid #b94a48;
+    }
+
+    input[type="checkbox"].input-validation-error {
+        border: 0 none;
+    }
+
+    .validation-summary-errors {
+        color: #b94a48;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
 <h4>Новый пользователь</h4>
+
 
 <div id="page-block" style="height: 95%; overflow-y: auto">
     @using (Html.BeginForm("Create", "UsersAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
         <hr />
-        @Html.ValidationSummary("", new { @class = "text-error" })
+        @*@Html.ValidationSummary("", new { @class = "text-error" })*@
 
 
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Name)
+                    </div>
                     @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email)
                     </div>
                     @Html.LabelFor(model => model.Surname, new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
                         @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Surname)
                     </div>
                     @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
@@ -37,17 +72,19 @@
                     <div class="col-md-9">
                         @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
                     </div>
-                  
                     @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
                     <div class="col-md-9">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password)
                     </div>
                     @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
                     <div class="col-md-9">
                         @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                     </div>
-                   
+                    <hr />
                 </div>
+
+
                 <div class="col-md-6">
                     @{
                         var roles = ViewBag.RolesList as List<AspNetRolesSelected>;
@@ -80,3 +117,6 @@
         </div>
     }
 </div>
+
+<script src="~/Scripts/lib/jquery-validate/jquery.validate.min.js"></script>
+<script src="~/Scripts/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

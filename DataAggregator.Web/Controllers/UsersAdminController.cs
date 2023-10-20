@@ -1,6 +1,5 @@
 ﻿using DataAggregator.Web.App_Start;
 using DataAggregator.Web.Models;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -103,6 +102,8 @@ namespace DataAggregator.Web.Controllers
 
         public async Task<ActionResult> Create()
         {
+            var newUser = new RegisterViewModel();
+
             var roles = await RoleManager.Roles.ToListAsync();
             ViewBag.RolesList = roles.Select(x => new AspNetRolesSelected
             {
@@ -110,7 +111,7 @@ namespace DataAggregator.Web.Controllers
                 Category = x.Category,
                 Description = x.Description
             }).ToList();
-            return View();
+            return View(newUser);
         }
 
         [HttpPost]
@@ -152,6 +153,8 @@ namespace DataAggregator.Web.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            
+
             ViewBag.RoleId = new SelectList(RoleManager.Roles, "Name", "Name");
             return View();
         }

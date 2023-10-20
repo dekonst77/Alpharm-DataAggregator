@@ -1586,10 +1586,11 @@
     <Content Include="Content\select.min.css.map" />
     <Content Include="Content\AddToClassif.xlsx" />
     <Content Include="Content\GovernmentPurchases\Fulfilment.scss" />
+    <Content Include="libman.json" />
     <None Include="Properties\PublishProfiles\DataAggregatorWeb_Local.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
-    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <None Include="Properties\PublishProfiles\IISProfileBeta.pubxml" />
+    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.js" />
@@ -1598,6 +1599,12 @@
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\lib\angularjs-dropdown-multiselect\angularjs-dropdown-multiselect.js" />
     <Content Include="Scripts\lib\angularjs-dropdown-multiselect\angularjs-dropdown-multiselect.min.js" />
+    <Content Include="Scripts\lib\jquery-validate\additional-methods.js" />
+    <Content Include="Scripts\lib\jquery-validate\additional-methods.min.js" />
+    <Content Include="Scripts\lib\jquery-validate\jquery.validate.js" />
+    <Content Include="Scripts\lib\jquery-validate\jquery.validate.min.js" />
+    <Content Include="Scripts\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lib\Multiselect\multiselect.js" />
     <Content Include="Scripts\lib\ui-grid\4.9.2\css\ui-grid.cellnav.css" />
     <Content Include="Scripts\lib\ui-grid\4.9.2\css\ui-grid.cellnav.min.css" />
@@ -2107,6 +2114,7 @@
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <Content Include="Scripts\select.min.js.map" />
+    <Content Include="Scripts\lib\jquery-validate\jquery-validation-sri.json" />
     <None Include="Service References\DatabaseManagerService\DatabaseManagerService1.wsdl" />
     <None Include="Service References\DatabaseManagerService\DatabaseManagerService1.xsd">
       <SubType>Designer</SubType>
