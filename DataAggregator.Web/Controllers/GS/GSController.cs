@@ -622,8 +622,7 @@ GS_Brick*/
 
             using (var impersonator = new Impersonator(user, password, domain))
             {
-                //string[] files = System.IO.Directory.GetFiles(@"\\10.30.10.59\Upload");
-                string filename = @"\\10.30.10.59\Upload\ГС_up.xlsx";
+                string filename = String.Format(@"\\{0}\Upload\ГС_up.xlsx", @domain);
                 if (System.IO.File.Exists(filename))
                     System.IO.File.Delete(filename);
 
