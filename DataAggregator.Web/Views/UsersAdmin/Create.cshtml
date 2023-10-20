@@ -21,6 +21,10 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    </div>
                     @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-3" })
                     <div class="col-md-9">
                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
@@ -37,7 +41,7 @@
                     <div class="col-md-9">
                         @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
                     </div>
-                  
+
                     @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
                     <div class="col-md-9">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
@@ -46,7 +50,7 @@
                     <div class="col-md-9">
                         @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                     </div>
-                   
+
                 </div>
                 <div class="col-md-6">
                     @{
