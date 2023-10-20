@@ -622,7 +622,7 @@ GS_Brick*/
 
             using (var impersonator = new Impersonator(user, password, domain))
             {
-                string filename = String.Format(@"\\{0}\Upload\ГС_up.xlsx", @domain);
+                string filename = String.Format(@"\\{0}\Upload\ГС_up.xlsx", domain);
                 if (System.IO.File.Exists(filename))
                     System.IO.File.Delete(filename);
 
