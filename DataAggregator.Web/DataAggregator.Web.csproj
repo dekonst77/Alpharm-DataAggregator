@@ -2106,10 +2106,6 @@
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <Content Include="Scripts\select.min.js.map" />
-    <None Include="Service References\DatabaseManagerService\DatabaseManagerService1.wsdl" />
-    <None Include="Service References\DatabaseManagerService\DatabaseManagerService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Scripts\Classifier\ATCBaaController.js" />
     <Content Include="Scripts\Classifier\NFCController.js" />
     <Content Include="Scripts\Classifier\ATCEphmraController.js" />
@@ -2125,12 +2121,6 @@
     <Content Include="Scripts\Classifier\DataTransfer\RightClassifierFilterController.js" />
     <Content Include="Scripts\Classifier\FtgController.js" />
     <Content Include="Scripts\Classifier\ClassifierEditor\SearchRegistrationCertificateController.js" />
-    <None Include="Service References\DatabaseManagerService\configuration91.svcinfo" />
-    <None Include="Service References\DatabaseManagerService\configuration.svcinfo" />
-    <None Include="Service References\DatabaseManagerService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Scripts\Common\Directives\datetimepicker-neutral-timezone.js" />
     <Content Include="Scripts\Classifier\FederalBenefit\FederalBenefitController.js" />
     <Content Include="Scripts\Classifier\FederalBenefit\FederalBenefitPeriodController.js" />
@@ -2151,7 +2141,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\DatabaseManagerService\DatabaseManagerService1.disco" />
     <Content Include="Scripts\toaster.min.js" />
     <Content Include="Scripts\ui-select-pagination-groups.js" />
     <Content Include="Scripts\ui-select-pagination.js" />
@@ -2643,11 +2632,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Retail\SearchRawDataByClassifier\DetailingType.cs" />
     <Compile Include="Models\Retail\SearchRawDataByClassifier\SearchRawDataByClassifierModel.cs" />
-    <Compile Include="Service References\DatabaseManagerService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Service References\RetailFileInfoService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2805,7 +2789,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\DatabaseManagerService\" />
     <WCFMetadataStorage Include="Service References\RetailFileInfoService\" />
   </ItemGroup>
   <PropertyGroup>
