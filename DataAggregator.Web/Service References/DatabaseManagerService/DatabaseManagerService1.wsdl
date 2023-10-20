@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DatabaseManagerService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://s-dev1:8095/DatabaseManagerService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IDatabaseManagerService_CreateExternalShipment_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateExternalShipment" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CreateExternalShipment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateExternalShipmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CreateGovernmentPurchases_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateGovernmentPurchases" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CreateGovernmentPurchases_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateGovernmentPurchasesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CreateFullGovernmentPurchases_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateFullGovernmentPurchases" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CreateFullGovernmentPurchases_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateFullGovernmentPurchasesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_RunGovernmentSegmentShipmentJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:RunGovernmentSegmentShipmentJob" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_RunGovernmentSegmentShipmentJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RunGovernmentSegmentShipmentJobResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CalcAveragePrice_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalcAveragePrice" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_CalcAveragePrice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalcAveragePriceResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IDatabaseManagerService">
+    <wsdl:operation name="CreateExternalShipment">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/CreateExternalShipment" message="tns:IDatabaseManagerService_CreateExternalShipment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/CreateExternalShipmentResponse" message="tns:IDatabaseManagerService_CreateExternalShipment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateGovernmentPurchases">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/CreateGovernmentPurchases" message="tns:IDatabaseManagerService_CreateGovernmentPurchases_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/CreateGovernmentPurchasesResponse" message="tns:IDatabaseManagerService_CreateGovernmentPurchases_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateFullGovernmentPurchases">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/CreateFullGovernmentPurchases" message="tns:IDatabaseManagerService_CreateFullGovernmentPurchases_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/CreateFullGovernmentPurchasesResponse" message="tns:IDatabaseManagerService_CreateFullGovernmentPurchases_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RunGovernmentSegmentShipmentJob">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/RunGovernmentSegmentShipmentJob" message="tns:IDatabaseManagerService_RunGovernmentSegmentShipmentJob_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/RunGovernmentSegmentShipmentJobResponse" message="tns:IDatabaseManagerService_RunGovernmentSegmentShipmentJob_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalcAveragePrice">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/CalcAveragePrice" message="tns:IDatabaseManagerService_CalcAveragePrice_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/CalcAveragePriceResponse" message="tns:IDatabaseManagerService_CalcAveragePrice_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IDatabaseManagerService" type="tns:IDatabaseManagerService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateExternalShipment">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/CreateExternalShipment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGovernmentPurchases">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/CreateGovernmentPurchases" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateFullGovernmentPurchases">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/CreateFullGovernmentPurchases" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RunGovernmentSegmentShipmentJob">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/RunGovernmentSegmentShipmentJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalcAveragePrice">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/CalcAveragePrice" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DatabaseManagerService">
+    <wsdl:port name="BasicHttpBinding_IDatabaseManagerService" binding="tns:BasicHttpBinding_IDatabaseManagerService">
+      <soap:address location="http://s-dev1:8095/DatabaseManagerService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
