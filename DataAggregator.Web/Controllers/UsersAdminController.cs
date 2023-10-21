@@ -103,15 +103,25 @@ namespace DataAggregator.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            var newUser = new RegisterViewModel();
+            var tempUser = TempData["user"];
+            var newUser = tempUser ?? new RegisterViewModel();
 
-            var roles = await RoleManager.Roles.ToListAsync();
-            ViewBag.RolesList = roles.Select(x => new AspNetRolesSelected
+            ViewBag.RolesList = TempData["RolesList"] as List<AspNetRolesSelected>;
+
+            if (ViewBag.RolesList == null)
             {
-                Name = x.Name,
-                Category = x.Category,
-                Description = x.Description
-            }).ToList();
+                var roles = await RoleManager.Roles.ToListAsync();
+                ViewBag.RolesList = roles.Select(x => new AspNetRolesSelected
+                {
+                    Name = x.Name,
+                    Category = x.Category,
+                    Description = x.Description,
+                    Selected = false
+                }).ToList();
+            }
+
+            ModelState.AddModelError("", TempData["Error"]?.ToString());
+
             return View("Create", newUser);
         }
 
@@ -151,14 +161,19 @@ namespace DataAggregator.Web.Controllers
                     ViewBag.RoleId = new SelectList(RoleManager.Roles, "Name", "Name");
 
                     var roles = await RoleManager.Roles.ToListAsync();
-                    ViewBag.RolesList = roles.Select(x => new AspNetRolesSelected
+                    var RolesList = roles.Select(x => new AspNetRolesSelected
                     {
                         Name = x.Name,
                         Category = x.Category,
-                        Description = x.Description
+                        Description = x.Description,
+                        Selected = selectedRole == null ? false : selectedRole.Contains(x.Name)
                     }).ToList();
 
-                    return View(userViewModel);
+                    TempData["user"] = userViewModel;
+                    TempData["RolesList"] = RolesList;
+                    TempData["Error"] = adminresult.Errors.First();
+
+                    return new RedirectResult("/#/CreateUser");
 
                 }
                 return RedirectToAction("Index");

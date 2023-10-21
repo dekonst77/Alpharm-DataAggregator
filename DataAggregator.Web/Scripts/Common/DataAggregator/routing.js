@@ -251,7 +251,8 @@
             .when('/CreateUser',
                 {
                     templateUrl: 'UsersAdmin/Create',
-                    title: 'MAIN.TITLE'
+                    title: 'MAIN.TITLE',
+                    authorize: true
                 })
             // redirect если ничего не найдено
             .otherwise('/')
