@@ -231,7 +231,7 @@
     // Main
     function setupMainRouting() {
         $routeProvider
-
+        
             // Главная страница
             .when('/',
                 {
@@ -247,6 +247,12 @@
                     title: 'MAIN.TITLE'
                 })
 
+            // добавить нового пользователя
+            .when('/CreateUser',
+                {
+                    templateUrl: 'UsersAdmin/Create',
+                    title: 'MAIN.TITLE'
+                })
             // redirect если ничего не найдено
             .otherwise('/')
 

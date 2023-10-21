@@ -14,7 +14,7 @@
 
 <div id="page-block" style="height: 95%; overflow-y: auto">
     <p>
-        @Html.ActionLink("Новый пользователь", "Create")
+        <a href="/#/CreateUser" data-translate="Новый пользователь"></a>
     </p>
     <div>
         <table class="table">
@@ -44,38 +44,38 @@
 
             @foreach (var item in Model)
             {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DepartmentName)
-            </td>
-            <td>
-                @if (item.LockDate == null)
-                {
-                    <span>Активен</span>
-                }
-                else
-                {
-                    var lockDate = ((DateTime)item.LockDate).ToString("dd.MM.yyyy");
-                    <span style="color: red">Заблокирован с @lockDate</span>
-                }
-            </td>
-            <td>
-                @String.Join(", ", item.Roles)
-            </td>
-            <td>
-                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { target = "_blank" }) |
-                @Html.ActionLink("Посмотреть", "Details", new { id = item.Id }, new { target = "_blank" })
-            </td>
-        </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Surname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartmentName)
+                    </td>
+                    <td>
+                        @if (item.LockDate == null)
+                        {
+                            <span>Активен</span>
+                        }
+                        else
+                        {
+                            var lockDate = ((DateTime)item.LockDate).ToString("dd.MM.yyyy");
+                            <span style="color: red">Заблокирован с @lockDate</span>
+                        }
+                    </td>
+                    <td>
+                        @String.Join(", ", item.Roles)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { target = "_blank" }) |
+                        @Html.ActionLink("Посмотреть", "Details", new { id = item.Id }, new { target = "_blank" })
+                    </td>
+                </tr>
             }
 
         </table>

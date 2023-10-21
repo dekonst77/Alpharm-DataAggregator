@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Управление пользователями: новый пользователь";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 <script>
     angular.lowercase = angular.$$lowercase;
@@ -33,6 +33,10 @@
     .validation-summary-valid {
         display: none;
     }
+
+    .brd {
+        border-bottom: 1px solid gray; /* Параметры границы */
+    }
 </style>
 
 <h4>Новый пользователь</h4>
@@ -43,78 +47,93 @@
     {
         @Html.AntiForgeryToken()
         <hr />
-        @*@Html.ValidationSummary("", new { @class = "text-error" })*@
+        @Html.ValidationSummary("", new { @class = "text-error" })
 
 
         <div class="form-group">
-            <div class="row">
-                <div class="col-md-6">
-                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Name)
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Name)
+                        </div>
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </div>
+                        @Html.LabelFor(model => model.Surname, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Surname)
+                        </div>
+                        @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.MiddleName, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        </div>
+                        <hr />
                     </div>
-                    @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email)
-                    </div>
-                    @Html.LabelFor(model => model.Surname, new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Surname)
-                    </div>
-                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-                    </div>
-                    @Html.LabelFor(model => model.MiddleName, new { @class = "control-label col-md-3" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
-                    </div>
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-9">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password)
-                    </div>
-                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-9">
-                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-                    </div>
-                    <hr />
-                </div>
 
 
-                <div class="col-md-6">
-                    @{
-                        var roles = ViewBag.RolesList as List<AspNetRolesSelected>;
-                        var categories = roles.Select(c => c.Category).Distinct();
+                    <div class="col-md-8">
+                        @{
+                            var roles = ViewBag.RolesList as List<AspNetRolesSelected>;
+                            var categories = roles.Select(c => c.Category).Distinct();
 
-                        foreach (var cat in categories)
-                        {
-                            <div class="row">
-                                @Html.Label((string)cat, new { @class = "control-label col-md-3" })
-                                <div class="col-md-10"></div>
-                                @foreach (var item in roles.Where(w => w.Category == (string)cat).OrderBy(o => o.Name))
-                                {
-                                    var disabled = item.Name == "Admin" || item.Name == "UserManager";
-                                    <label>
-                                        <input type="checkbox" name="SelectedRole" value="@item.Name" disabled="@disabled" class="checkbox-inline" />
-                                        @item.Name (@item.Description)
-                                    </label>
-                                }
-                            </div>
+                            foreach (var cat in categories)
+                            {
+                                <div class="row brd">
+                                    <div class="col-md-2">
+                                        @Html.Label((string)cat, new { @class = "control-label col-md-3" })
+                                    </div>
+
+
+                                    <div class="col-md-10">
+                                        @foreach (var item in roles.Where(w => w.Category == (string)cat).OrderBy(o => o.Name))
+                                        {
+                                            var disabled = item.Name == "Admin" || item.Name == "UserManager";
+
+                                            <label>
+                                                <input type="checkbox" name="SelectedRole" value="@item.Name" checked="@item.Selected" disabled="@disabled" class="checkbox-inline">
+                                                @item.Name (@item.Description)
+                                            </label>
+                                        }
+                                    </div>
+
+                                </div>
+                            }
                         }
-                    }
 
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Создать" />
+                    </div>
+                </div>
+
             </div>
+
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default" value="Создать" />
-            </div>
-        </div>
+
     }
 </div>
 

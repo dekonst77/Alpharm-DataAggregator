@@ -7,7 +7,7 @@ namespace DataAggregator.Web.Models
         [Display(Name = "Ћогин")]
         [Required(ErrorMessage = "¬ведите логин")]
         public string Name { get; set; }
-        
+
         [Required(ErrorMessage = "¬ведите фамилию")]
         [Display(Name = "‘амили€")]
         public string Surname { get; set; }
@@ -24,6 +24,7 @@ namespace DataAggregator.Web.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "¬ведите пароль")]
+        [StringLength(50, MinimumLength = 6,  ErrorMessage = "ѕароль должен быть не меньше 6 символов")]
         [DataType(DataType.Password)]
         [Display(Name = "ѕароль")]
         public string Password { get; set; }

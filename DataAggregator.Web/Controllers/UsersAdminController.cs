@@ -52,7 +52,7 @@ namespace DataAggregator.Web.Controllers
             Dictionary<long, Department> departments = GetAllDepartments().ToDictionary(s => s.Id);
             //var roles=RoleManager.Roles.ToList();
 
-            List<ViewUserViewModel> vm = users.Where(w=>w.LockDate==null).Select(s => new ViewUserViewModel
+            List<ViewUserViewModel> vm = users.Where(w => w.LockDate == null).Select(s => new ViewUserViewModel
             {
                 Id = s.Id,
                 UserName = s.UserName,
@@ -80,7 +80,7 @@ namespace DataAggregator.Web.Controllers
 
             Department department = null;
 
-            if(user.DepartmentId.HasValue)
+            if (user.DepartmentId.HasValue)
                 using (var context = new ApplicationDbContext())
                     department = context.Departments.FirstOrDefault(s => s.Id == user.DepartmentId.Value);
 
@@ -94,12 +94,13 @@ namespace DataAggregator.Web.Controllers
                 LockDate = user.LockDate,
                 DepartmentName = department != null ? department.Name : string.Empty,
                 Email = user.Email,
-                Roles= ViewBag.RoleNames
+                Roles = ViewBag.RoleNames
             };
 
             return View(vm);
         }
 
+        [HttpGet]
         public async Task<ActionResult> Create()
         {
             var newUser = new RegisterViewModel();
@@ -111,11 +112,11 @@ namespace DataAggregator.Web.Controllers
                 Category = x.Category,
                 Description = x.Description
             }).ToList();
-            return View(newUser);
+            return View("Create", newUser);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(RegisterViewModel userViewModel, params string[] selectedRoles)
+        public async Task<ActionResult> Create(RegisterViewModel userViewModel, params string[] selectedRole)
         {
             if (ModelState.IsValid)
             {
@@ -133,14 +134,14 @@ namespace DataAggregator.Web.Controllers
                 //Add User to the selected Roles 
                 if (adminresult.Succeeded)
                 {
-                    if (selectedRoles != null)
+                    if (selectedRole != null)
                     {
-                        var result = await UserManager.AddToRolesAsync(user.Id, selectedRoles.Except(new[] { "Admin", "UserManager" }).ToArray<string>());
+                        var result = await UserManager.AddToRolesAsync(user.Id, selectedRole.Except(new[] { "Admin", "UserManager" }).ToArray<string>());
                         if (!result.Succeeded)
                         {
                             ModelState.AddModelError("", result.Errors.First());
                             ViewBag.RoleId = new SelectList(await RoleManager.Roles.ToListAsync(), "Name", "Name");
-                            return View();
+                            return View(userViewModel);
                         }
                     }
                 }
@@ -148,12 +149,21 @@ namespace DataAggregator.Web.Controllers
                 {
                     ModelState.AddModelError("", adminresult.Errors.First());
                     ViewBag.RoleId = new SelectList(RoleManager.Roles, "Name", "Name");
-                    return View();
+
+                    var roles = await RoleManager.Roles.ToListAsync();
+                    ViewBag.RolesList = roles.Select(x => new AspNetRolesSelected
+                    {
+                        Name = x.Name,
+                        Category = x.Category,
+                        Description = x.Description
+                    }).ToList();
+
+                    return View(userViewModel);
 
                 }
                 return RedirectToAction("Index");
             }
-            
+
 
             ViewBag.RoleId = new SelectList(RoleManager.Roles, "Name", "Name");
             return View();
@@ -181,7 +191,7 @@ namespace DataAggregator.Web.Controllers
             ApplicationUser user = await UserManager.FindByIdAsync(editUser.Id);
             if (user == null)
                 return HttpNotFound();
-            
+
             EditUserViewModel rethrownModel = await CreateEditUserViewModelAsync(user);
 
             if (!ModelState.IsValid)
@@ -222,7 +232,7 @@ namespace DataAggregator.Web.Controllers
                 return View(rethrownModel);
             }
 
-            result = await UserManager.RemoveFromRolesAsync(user.Id, userRoles.Except(selectedRole).Except(new []{"Admin", "UserManager"}).ToArray<string>());
+            result = await UserManager.RemoveFromRolesAsync(user.Id, userRoles.Except(selectedRole).Except(new[] { "Admin", "UserManager" }).ToArray<string>());
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", result.Errors.First());
