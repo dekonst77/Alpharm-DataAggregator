@@ -2459,6 +2459,7 @@
     <Compile Include="Managers\ComplexHeaderDescription.cs" />
     <Compile Include="Managers\ComplexHeaderPeriod.cs" />
     <Compile Include="Managers\DateTimeExtensions.cs" />
+    <Compile Include="Managers\Impersonator.cs" />
     <Compile Include="Managers\StatusEventArgs.cs" />
     <Compile Include="Mapper\Classifier\ClassifierHistoryProfile.cs" />
     <Compile Include="Mapper\Classifier\ClassificationGenericModelProfile.cs" />
