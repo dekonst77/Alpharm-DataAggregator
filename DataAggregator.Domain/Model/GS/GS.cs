@@ -956,7 +956,7 @@ namespace DataAggregator.Domain.Model.GS
         public string Region { get; set; }
         public string Fed_ok { get; set; }
         public DateTime Period { get; set; }
-        public decimal Kof { get; set; }
+        public decimal? Kof { get; set; }
         public decimal? Kof_calc { get; set; }
         public decimal? Year_prev { get; set; }
         public decimal? Year_now { get; set; }

@@ -3431,9 +3431,6 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            if (uploads == null || !uploads.Any())
-                throw new ApplicationException("uploads not set");
-
             var file = uploads.First();
             string filename = @"\\s-sql2\Upload\SummsPeriod_from_Excel_" + User.Identity.GetUserId() + ".xlsx";
             if (System.IO.File.Exists(filename))
@@ -3527,7 +3524,8 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
                         var UPD_0 = _context.GS_Period_Region.Where(w => w.Region == item.Region && w.Period == item.Period).FirstOrDefault();
                         if (UPD_0 != null)
                         {
-                            UPD_0.Kof = item.Kof;
+                            if (item.Kof != null)
+                                UPD_0.Kof = (decimal)item.Kof;
                         }
                     }
                     _context.SaveChanges();
