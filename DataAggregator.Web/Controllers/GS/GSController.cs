@@ -619,10 +619,10 @@ GS_Brick*/
             var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
             var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
             var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\ГС_up.xlsx", domain);
 
             using (var impersonator = new Impersonator(user, password, domain))
             {
-                string filename = String.Format(@"\\{0}\Upload\ГС_up.xlsx", domain);
                 if (System.IO.File.Exists(filename))
                     System.IO.File.Delete(filename);
 
@@ -630,14 +630,9 @@ GS_Brick*/
                 file.SaveAs(filename);
             }
 
-            //string filename = @"\\s-sql2\Upload\ГС_up.xlsx";
-            //if (System.IO.File.Exists(filename))
-            //    System.IO.File.Delete(filename);
-            //file.SaveAs(filename);
-
             using (var _context = new GSContext(APP))
             {
-                _context.GS_from_Excel(@"F:\Upload\ГС_up.xlsx");
+                _context.GS_from_Excel(filename);
             }
 
             JsonNetResult jsonNetResult = new JsonNetResult
@@ -1757,15 +1752,23 @@ GS_Brick*/
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\_org_without_INN_up.xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\_org_without_INN_up.xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
 
             using (var _context = new GSContext(APP))
             {
-                _context.Organization_without_INN_FromExcel(@"S:\Upload\_org_without_INN_up.xlsx");
+                _context.Organization_without_INN_FromExcelfilename);
             }
 
             JsonNetResult jsonNetResult = new JsonNetResult
@@ -2006,14 +2009,23 @@ group by inn having count(*) > 1
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\_org_up.xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\_org_up.xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
+
             using (var _context = new GSContext(APP))
             {
-                _context.Organization_FromExcel(@"S:\Upload\_org_up.xlsx");
+                _context.Organization_FromExcel(filename);
             }
             JsonNetResult jsonNetResult = new JsonNetResult
             {
@@ -2477,15 +2489,22 @@ group by inn having count(*) > 1
                 if (uploads == null || !uploads.Any())
                     return null;
 
-                using (var _context = new GSContext(APP)) 
-                { 
-                    var file = uploads.First();
-                    string filename = @"\\s-sql2\Upload\AlphaBitSums_from_Excel_" + User.Identity.GetUserId() + ".xlsx";
+                var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+                var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+                var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+                string filename = String.Format(@"\\{0}\Upload\AlphaBitSums_from_Excel_.xlsx" + User.Identity.GetUserId() + ".xlsx", domain);
 
+                using (var impersonator = new Impersonator(user, password, domain))
+                {
                     if (System.IO.File.Exists(filename))
                         System.IO.File.Delete(filename);
-                    file.SaveAs(filename);
 
+                    var file = uploads.First();
+                    file.SaveAs(filename);
+                }
+
+                using (var _context = new GSContext(APP)) 
+                { 
                     _context.AlphaBitSums_from_Excel(filename, supplier, currentperiod);
                 }
 
@@ -2957,11 +2976,19 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\History_" + User.Identity.GetUserId() + ".xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\History_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
 
             using (var _context = new GSContext(APP))
             {
@@ -3431,11 +3458,20 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\SummsPeriod_from_Excel_" + User.Identity.GetUserId() + ".xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\SummsPeriod_from_Excel_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
 
             using (var _context = new GSContext(APP))
             {
@@ -3683,23 +3719,25 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\SummsAnket_FromTemplate.xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\SummsAnket_FromTemplate.xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
 
             using (var _context = new GSContext(APP))
             {
-                _context.SummsAnket_FromTemplate(@"S:\Upload\SummsAnket_FromTemplate.xlsx");
+                _context.SummsAnket_FromTemplate(filename);
             }
 
-            /*Excel.Excel excel = new Excel.Excel();
-            excel.Open(file.InputStream);
-            */
-            //var row_U = excel.ToList<Domain.Model.GS.GS_View_SP>("ГС", 1, 2, () => new Domain.Model.GS.GS_View_SP());
-
-            //return GS_save(row_U);
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,
@@ -3870,11 +3908,19 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\SummsOFD_" + User.Identity.GetUserId() + ".xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\SummsOFD_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
 
             using (var _context = new GSContext(APP))
             {
@@ -4032,14 +4078,19 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            if (uploads == null || !uploads.Any())
-                throw new ApplicationException("uploads not set");
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\DistributorBranch_from_Excel_" + aspUser.UserId.ToString() + ".xlsx", domain);
 
-            var file = uploads.First();
-            string filename = @"\\s-sql2\Upload\DistributorBranch_from_Excel_" + aspUser.UserId.ToString() + ".xlsx";
-            if (System.IO.File.Exists(filename))
-                System.IO.File.Delete(filename);
-            file.SaveAs(filename);
+            using (var impersonator = new Impersonator(user, password, domain))
+            {
+                if (System.IO.File.Exists(filename))
+                    System.IO.File.Delete(filename);
+
+                var file = uploads.First();
+                file.SaveAs(filename);
+            }
 
             using (var _context = new GSContext(APP))
             {
@@ -4300,17 +4351,22 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
                 if (uploads == null || !uploads.Any())
                     return null;
 
-                using (var _context = new GSContext(APP))
+                var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+                var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+                var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+                string filename = String.Format(@"\\{0}\Upload\Бренды сетей_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+                using (var impersonator = new Impersonator(user, password, domain))
                 {
-
-                    var file = uploads.First();
-                    string filename = @"\\s-sql2\Upload\Бренды сетей_" + User.Identity.GetUserId() + ".xlsx";
-
                     if (System.IO.File.Exists(filename))
                         System.IO.File.Delete(filename);
 
+                    var file = uploads.First();
                     file.SaveAs(filename);
-
+                }
+                
+                using (var _context = new GSContext(APP))
+                {
                     _context.NetworkBrands_from_Excel(filename);
                 }
 
@@ -4455,35 +4511,32 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
             if (uploads == null || !uploads.Any())
                 throw new ApplicationException("uploads not set");
 
-            string filename = @"\\s-sql2\Upload\Network_" + User.Identity.GetUserId() + ".xlsx";
-            try
+            var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+            var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+            var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+            string filename = String.Format(@"\\{0}\Upload\Network_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+            using (var impersonator = new Impersonator(user, password, domain))
             {
-                var file = uploads.First();
                 if (System.IO.File.Exists(filename))
                     System.IO.File.Delete(filename);
+
+                var file = uploads.First();
                 file.SaveAs(filename);
-
-                using (var _context = new GSContext(APP))
-                {
-                    _context.Network_FromExcel(User.Identity.GetUserId());
-                }
-
-                JsonNetResult jsonNetResult = new JsonNetResult
-                {
-                    Formatting = Formatting.Indented,
-                    Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
-                };
-
-                return jsonNetResult;
             }
-            catch (Exception e)
+           
+            using (var _context = new GSContext(APP))
             {
-                return BadRequest(e);
+                _context.Network_FromExcel(User.Identity.GetUserId());
             }
-            finally
+
+            JsonNetResult jsonNetResult = new JsonNetResult
             {
-                System.IO.File.Delete(filename);
-            }
+                Formatting = Formatting.Indented,
+                Data = new JsonResult() { Data = null, count = 0, status = "ок", Success = true }
+            };
+
+            return jsonNetResult;
         }
 
         [Authorize(Roles = "GS_View")]
@@ -4561,17 +4614,22 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
                 if (uploads == null || !uploads.Any())
                     return null;
 
-                using (var _context = new GSContext(APP))
+                var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+                var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+                var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+                string filename = String.Format(@"\\{0}\Upload\Книга перемен_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+                using (var impersonator = new Impersonator(user, password, domain))
                 {
-
-                    var file = uploads.First();
-                    string filename = @"\\s-sql2\Upload\Книга перемен_" + User.Identity.GetUserId() + ".xlsx";
-
                     if (System.IO.File.Exists(filename))
                         System.IO.File.Delete(filename);
 
+                    var file = uploads.First();
                     file.SaveAs(filename);
+                }
 
+                using (var _context = new GSContext(APP))
+                {
                     _context.BookOfChange_from_Excel(filename);
                 }
 
@@ -4625,17 +4683,22 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
 
                 period_key = int.Parse(periodKey.Replace("-", ""));
 
-                using (var _context = new GSContext(APP))
+                var domain = ConfigurationManager.AppSettings["MsSqlSharedFolderDomain"];
+                var user = ConfigurationManager.AppSettings["MsSqlSharedFolderUser"];
+                var password = ConfigurationManager.AppSettings["MsSqlSharedFolderPassword"];
+                string filename = String.Format(@"\\{0}\Upload\Сеть2Асна_" + User.Identity.GetUserId() + ".xlsx", domain);
+
+                using (var impersonator = new Impersonator(user, password, domain))
                 {
-
-                    var file = uploads.First();
-                    string filename = @"\\s-sql2\Upload\Сеть2Асна_" + User.Identity.GetUserId() + ".xlsx";
-
                     if (System.IO.File.Exists(filename))
                         System.IO.File.Delete(filename);
 
+                    var file = uploads.First();
                     file.SaveAs(filename);
+                }
 
+                using (var _context = new GSContext(APP))
+                {
                     _context.Network2Asna_from_Excel(filename, period_key);
                 }
 
