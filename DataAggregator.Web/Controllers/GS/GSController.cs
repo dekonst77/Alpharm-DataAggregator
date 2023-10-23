@@ -1768,7 +1768,7 @@ GS_Brick*/
 
             using (var _context = new GSContext(APP))
             {
-                _context.Organization_without_INN_FromExcelfilename);
+                _context.Organization_without_INN_FromExcel(filename);
             }
 
             JsonNetResult jsonNetResult = new JsonNetResult

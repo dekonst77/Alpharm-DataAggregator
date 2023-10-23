@@ -228,7 +228,7 @@ namespace DataAggregator.Web.Controllers
                 InnGroupNew = drugProperty.INNGroupNew;
                 DrugTypeId = drugProperty.DrugTypeId;
             }
-            catch (Exception e)
+            catch
             {
                 InnGroupId = null;
                 InnGroupNew = false;
