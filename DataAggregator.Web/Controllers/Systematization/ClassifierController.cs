@@ -159,9 +159,11 @@ namespace DataAggregator.Web.Controllers
                         RegistrationCertificateNumber = s.RegistrationCertificateNumber,
                         Price = s.Price.ToString()
                     });
-                    return Json(ret_2.ToList());
+                    var res = ret_2.ToList();
+                    return Json(res);
                 }
-                return Json(result.ToList());
+                var res1 = result.ToList();
+                return Json(res1);
             }
         }
 
@@ -278,8 +280,8 @@ namespace DataAggregator.Web.Controllers
         [HttpPost]
         public JsonResult SetClassifierToDrugs(ClassifierToDrugsJson parameters)
         {
-            var drug_PI = _context.ProductionInfo.SingleOrDefault(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
-            var good_PI = _context.GoodsProductionInfo.SingleOrDefault(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
+            var drug_PI = _context.SystematizationView.SingleOrDefault(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
+            var good_PI = _context.GoodsSystematizationView.SingleOrDefault(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
 
             if (parameters.DrugId > 0 && drug_PI == null)
                 throw new ApplicationException("Не обнаружен ЛП");
@@ -309,7 +311,7 @@ namespace DataAggregator.Web.Controllers
                     currentDrugInWork.GoodsCategoryId = null;
 
                     currentDrugInWork.RealPackingCount = parameters.RealPackingCount;
-                    currentDrugInWork.ConsumerPackingCount = drug_PI.Drug.ConsumerPackingCount;
+                    currentDrugInWork.ConsumerPackingCount = drug_PI.ConsumerPackingCount;
                 }
                 else
                 {
