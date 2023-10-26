@@ -7,7 +7,7 @@ namespace DataAggregator.Web
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserLogin, ApplicationUserRole, IdentityUserClaim>
     {
         public ApplicationDbContext()
-            : base("Membership")
+            : base("DataAggregatorContext")
         {
             
         }
