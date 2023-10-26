@@ -280,8 +280,13 @@ namespace DataAggregator.Web.Controllers
         [HttpPost]
         public JsonResult SetClassifierToDrugs(ClassifierToDrugsJson parameters)
         {
-            var drug_PI = _context.SystematizationView.SingleOrDefault(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
-            var good_PI = _context.GoodsSystematizationView.SingleOrDefault(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId);
+            var drug_PI = _context.SystematizationView
+                .Where(d => d.DrugId == parameters.DrugId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId)
+                .OrderByDescending(x => x.TradeNameId).FirstOrDefault();
+
+            var good_PI = _context.GoodsSystematizationView
+                .Where(d => d.GoodsId == parameters.GoodsId && d.OwnerTradeMarkId == parameters.OwnerTradeMarkId && d.PackerId == parameters.PackerId)
+                .OrderByDescending(x => x.GoodsTradeNameId).FirstOrDefault();
 
             if (parameters.DrugId > 0 && drug_PI == null)
                 throw new ApplicationException("Не обнаружен ЛП");
