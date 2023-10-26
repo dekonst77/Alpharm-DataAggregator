@@ -3520,7 +3520,7 @@ from [adr].[History_coding] where LPUId>0 and LPUId not in (select id from [dbo]
                     _context.Database.CommandTimeout = 0;
                     if (K_otkl > 0)
                     {
-                        var upd = _context.GS_Period_Region.Where(w => periods.Contains(w.Period));
+                        var upd = _context.GS_Period_Region.Where(w => periods.Contains(w.Period)).ToList();
                         foreach (var u1 in upd)
                         {
                             u1.K_otkl = K_otkl;

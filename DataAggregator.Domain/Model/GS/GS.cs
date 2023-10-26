@@ -946,7 +946,7 @@ namespace DataAggregator.Domain.Model.GS
         public int Id { get; set; }
         public string Region { get; set; }
         public DateTime Period { get; set; }
-        public decimal Kof { get; set; }
+        public decimal? Kof { get; set; }
         public decimal K_otkl { get; set; }
     }
     public class SummsPeriod_Region_SP
